@@ -86,3 +86,81 @@ Observaciones migracion v2 a V2.1
 -> remember_token: compatibilidad con passport.
 -> created_at: compatibilidad con eloquent.
 -> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva_adjunto
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva_estado
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva_proceso
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva_tarea
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva_tarea_adjunto
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva_tarea_responsable
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_correctiva_tarea_tipo
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_importancia
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_calidad
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_calidad_mapa_procesos
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_calidad_mapa_procesos_hijo
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_calidad_organigrama
+
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
