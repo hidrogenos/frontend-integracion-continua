@@ -1,15 +1,21 @@
-import {Component} from '@angular/core';
-import {trigger, state, transition, style, animate} from '@angular/animations';
+import { Component } from '@angular/core';
+import {
+    trigger,
+    state,
+    transition,
+    style,
+    animate
+} from '@angular/animations';
 
 @Component({
     selector: 'app-inline-profile',
     template: `
         <div class="profile" [ngClass]="{'profile-expanded':active}">
             <a href="#" (click)="onClick($event)">
-                <img class="profile-image" src="assets/layout/images/avatar.png" />
-                <span class="profile-name">Isabel Oliviera</span>
+                <!-- <img class="profile-image" src="assets/layout/images/avatar.png" /> -->
+                <span class="profile-name">Adriana Cardenas</span>
                 <i class="fa fa-fw fa-caret-down"></i>
-                <span class="profile-role">Marketing</span>
+                <span class="profile-role">Administrador</span>
             </a>
         </div>
 
@@ -58,19 +64,30 @@ import {trigger, state, transition, style, animate} from '@angular/animations';
     `,
     animations: [
         trigger('menu', [
-            state('hidden', style({
-                height: '0px'
-            })),
-            state('visible', style({
-                height: '*'
-            })),
-            transition('visible => hidden', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),
-            transition('hidden => visible', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
+            state(
+                'hidden',
+                style({
+                    height: '0px'
+                })
+            ),
+            state(
+                'visible',
+                style({
+                    height: '*'
+                })
+            ),
+            transition(
+                'visible => hidden',
+                animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')
+            ),
+            transition(
+                'hidden => visible',
+                animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')
+            )
         ])
     ]
 })
 export class AppProfileComponent {
-
     active: boolean;
 
     onClick(event) {

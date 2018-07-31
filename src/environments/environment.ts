@@ -9,7 +9,7 @@ export const environment = {
     apiUrl: 'http://localhost/api-base-5-6/public/api',
     auth: {
         urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
-        secret: 'FmHkt9kqxNu1JUCnbWjY6ODIHeb7J29Ds9im63Kp',
+        secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     }
 };

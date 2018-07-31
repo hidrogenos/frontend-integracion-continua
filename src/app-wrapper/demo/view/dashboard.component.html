@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <div class="ui-g">
+    <!-- <div class="ui-g">
         <div class="ui-g-12 ui-lg-6 global-sales">
             <p-panel>
                 <p-header>
@@ -230,9 +230,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="ui-g">
+    <!-- <div class="ui-g">
         <div class="ui-g-12 ui-md-6 ui-lg-4 task-list">
             <p-panel header="Tasks" [style]="{'min-height':'411px'}">
                 <ul>
@@ -369,11 +369,11 @@
                 </ul>
             </p-panel>
         </div>
-    </div>
+    </div> -->
 
     <div class="ui-g">
-        <div class="ui-g-12 ui-lg-8 chat">
-            <p-panel header="Chat" styleClass="no-pad">
+        <div class="ui-g-12 ui-lg-12 chat">
+            <!--<p-panel header="Chat" styleClass="no-pad">
                 <ul>
                     <li class="clearfix message-from">
                         <img src="assets/layout/images/avatar2.png">
@@ -411,12 +411,12 @@
                         <input type="text" placeholder="Write a message" class="ui-inputtext" />
                     </div>
                 </div>
-            </p-panel>
+            </p-panel> -->
 
-            <p-panel header="Recent Sales">
+            <p-panel header="Datos generales">
                 <p-table [columns]="cols" [value]="cars" selectionMode="single" dataKey="vin" [(selection)]="selectedCar">
                     <ng-template pTemplate="caption">
-                        Recent Sales
+                        Datos generales
                     </ng-template>
                     <ng-template pTemplate="header" let-columns>
                         <tr>
@@ -437,7 +437,7 @@
             </p-panel>
         </div>
 
-        <div class="ui-g-12 ui-lg-4">
+        <!-- <div class="ui-g-12 ui-lg-4">
             <div class="card timeline ui-fluid">
                 <div class="ui-g">
                     <div class="ui-g-3">
@@ -506,15 +506,15 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
-    <div class="ui-g">
+    <!-- <div class="ui-g">
         <div class="ui-g-12">
             <p-panel header="Calendar" [style]="{'height':'100%'}">
                 <p-schedule [events]="events" defaultDate="2016-01-12"></p-schedule>
             </p-panel>
         </div>
-    </div>
+    </div> -->
 
 </div>
