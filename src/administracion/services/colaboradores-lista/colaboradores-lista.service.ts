@@ -13,10 +13,22 @@ import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.
 import { CesantiaModel } from '../../../shared/models/cesantia.model';
 import { EpsModel } from '../../../shared/models/eps.model';
 import { PensionModel } from '../../../shared/models/pension.model';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
 
 @Injectable()
 export class ColaboradoresListaService {
     constructor(private http: HttpClient) {}
+
+    createUsuario(usuario: UsuarioModel): Observable<UsuarioModel> {
+        return this.http
+            .post<UsuarioModel>(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/lista/create-usuario`,
+                usuario
+            )
+            .pipe(catchError((error: any) => Observable.throw(error.json())));
+    }
 
     getArls(): Observable<ArlModel[]> {
         return this.http

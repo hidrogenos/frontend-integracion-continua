@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import { PerfilModel } from '../../../shared/models/perfil.model';
@@ -9,6 +9,7 @@ import { ArlModel } from '../../../shared/models/arl.model';
 import { PensionModel } from '../../../shared/models/pension.model';
 import { CesantiaModel } from '../../../shared/models/cesantia.model';
 import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.model';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
 
 @Component({
     selector: 'create-nuevo-colaborador-dialog',
@@ -23,7 +24,8 @@ import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.
                     [responsive]="true" 
                     [width]="800" 
                     [maximizable]="true" 
-                    [baseZIndex]="10000">
+                    [baseZIndex]="10000"
+                    (onHide)="onHideCreateNewColaborador()">
                     <div class="ui-g">
                         <div class="ui-g-4 ui-fluid">
                             <div>
@@ -164,7 +166,7 @@ import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.
                             <div>
                                 <label>Profesión</label>
                             </div>
-                            <input type="number" pInputText formControlName="profesion" />
+                            <input type="text" pInputText formControlName="profesion" />
                         </div>
                         <div class="ui-g-4 ui-fluid">
                             <div>
@@ -237,10 +239,10 @@ import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.
                             </p-dropdown>
                         </div>
                     </div>
-                    <pre>{{ form.value | json }}</pre>
+                    <!-- <pre>{{ form.value | json }}</pre> -->
                     <p-footer>
-                        <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Yes"></button>
-                        <button type="button" pButton icon="pi pi-close" (click)="display=false" label="No" class="ui-button-secondary"></button>
+                        <button type="button" pButton icon="pi pi-times" (click)="display=false" label="Cancelar" class="ui-button-danger"></button>
+                        <button type="submit" pButton icon="pi pi-save" label="Crear" class="ui-button-primary" [disabled]="!form.valid"></button>
                     </p-footer>
                 </p-dialog>
             </form>
@@ -251,6 +253,9 @@ export class CreateNuevoColaboradorDialogComponent implements OnInit {
     //atributos
     display: boolean;
     form: FormGroup;
+
+    //events
+    @Output() onCreateUsuario = new EventEmitter<UsuarioModel>();
 
     //properties
     @Input() arls: ArlModel[];
@@ -303,5 +308,39 @@ export class CreateNuevoColaboradorDialogComponent implements OnInit {
     onChangePais() {
         this.form.get('departamento').setValue(null);
         this.form.get('ciudad').setValue(null);
+    }
+
+    onHideCreateNewColaborador() {
+        this.createForm();
+    }
+
+    onSubmit() {
+        if (this.form.valid) {
+            const usuario: UsuarioModel = {
+                nombre: this.form.value.nombre,
+                apellido: this.form.value.apellido,
+                id_tipo_identificacion: this.form.value.tipo_identificacion.id,
+                identificacion: this.form.value.numero_identificacion,
+                email: this.form.value.email,
+                login: this.form.value.usuario,
+                id_perfil: this.form.value.perfil.id,
+                activo: true,
+                id_cargo: this.form.value.cargo.id,
+                es_jefe: this.form.value.es_jefe,
+                es_auditor: this.form.value.es_auditor,
+                fecha_ingreso: (this.form.value
+                    .fecha_ingreso as Date).valueOf(),
+                id_ciudad: this.form.value.ciudad.id,
+                telefono: this.form.value.telefono,
+                direccion: this.form.value.direccion,
+                profesion: this.form.value.profesion,
+                id_eps: this.form.value.eps.id,
+                id_arl: this.form.value.arl.id,
+                id_pension: this.form.value.pension.id,
+                id_cesantia: this.form.value.cesantia.id,
+                id_caja_compensacion: this.form.value.caja_compensacion.id
+            };
+            this.onCreateUsuario.emit(usuario);
+        }
     }
 }

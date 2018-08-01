@@ -15,7 +15,10 @@ import { Observable } from 'rxjs';
         <p-dialog 
             [header]="header$ | async" 
             [(visible)]="display"
-            [modal]="true">
+            [modal]="true"
+            [closable]="false"
+            [closeOnEscape]="false"
+            [baseZIndex]="20000">
             {{ body$ | async }}
         </p-dialog>
     `

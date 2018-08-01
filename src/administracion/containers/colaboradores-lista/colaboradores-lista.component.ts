@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 //models
 import { StoreModel } from '../../../shared/models/store.model';
@@ -6,7 +6,10 @@ import { StoreModel } from '../../../shared/models/store.model';
 //store
 import { Store } from '@ngrx/store';
 import * as fromShared from './../../../shared/store';
-import { TipoIdentificacionService } from '../../../shared/services';
+import {
+    TipoIdentificacionService,
+    UsuarioService
+} from '../../../shared/services';
 import { forkJoin } from 'rxjs';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import { ColaboradoresListaService } from '../../services';
@@ -18,6 +21,8 @@ import { ArlModel } from '../../../shared/models/arl.model';
 import { PensionModel } from '../../../shared/models/pension.model';
 import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.model';
 import { CesantiaModel } from '../../../shared/models/cesantia.model';
+import { CreateNuevoColaboradorDialogComponent } from '../../components';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
 
 @Component({
     selector: 'colaboradores-lista',
@@ -44,7 +49,8 @@ import { CesantiaModel } from '../../../shared/models/cesantia.model';
             [arls]="arls"
             [pensiones]="pensiones"
             [cajasCompensacion]="cajasCompensacion"
-            [cesantias]="cesantias">
+            [cesantias]="cesantias"
+            (onCreateUsuario)="createUsuario($event)">
         </create-nuevo-colaborador-dialog>
     `
 })
@@ -60,10 +66,14 @@ export class ColaboradoresListaComponent implements OnInit {
     perfilesActivos: PerfilModel[];
     tiposIdentificacion: TipoIdentificacionModel[];
 
+    //viewChild
+    @ViewChild('cncd') cncd: CreateNuevoColaboradorDialogComponent;
+
     constructor(
         private colaboradoresListaService: ColaboradoresListaService,
         private store: Store<StoreModel>,
-        private tipoIdentificacionService: TipoIdentificacionService
+        private tipoIdentificacionService: TipoIdentificacionService,
+        private usuarioService: UsuarioService
     ) {}
 
     ngOnInit() {
@@ -125,6 +135,16 @@ export class ColaboradoresListaComponent implements OnInit {
         });
 
         return aux;
+    }
+
+    createUsuario(usuario: UsuarioModel) {
+        this.showWaitDialog(
+            'Registrando nuevo colaborador, un momento por favor...'
+        );
+        let aux = this.usuarioService.transformRequestUsuario(usuario);
+        this.colaboradoresListaService
+            .createUsuario(aux)
+            .subscribe(response => this.hideWaitDialog());
     }
 
     getArls() {
