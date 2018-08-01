@@ -22,6 +22,11 @@ export const ROUTES: Routes = [
         component: AppWrapperComponent,
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            {
+                path: 'administracion',
+                loadChildren:
+                    './../administracion/administracion.module#AdministracionModule'
+            },
             { path: 'dashboard', component: DashboardDemoComponent },
             { path: 'sample', component: SampleDemoComponent },
             { path: 'forms', component: FormsDemoComponent },

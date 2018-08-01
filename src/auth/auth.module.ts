@@ -5,6 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 //containers
 import * as fromContainers from './containers';
 
+//guards
+import * as fromGuards from './guards';
+
 //routes
 import { AuthRoutes } from './auth.routing';
 
@@ -25,6 +28,6 @@ import { reducers, effects } from './store';
         ReactiveFormsModule
     ],
     declarations: [...fromContainers.containers],
-    providers: [...fromServices.services]
+    providers: [...fromServices.services, ...fromGuards.guards]
 })
 export class AuthModule {}

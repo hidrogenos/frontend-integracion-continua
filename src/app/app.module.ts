@@ -14,6 +14,10 @@ import * as fromContainers from './containers';
 //environment
 import { environment } from '../environments/environment';
 
+//modules
+import { AuthModule } from '../auth/auth.module';
+import { SharedModule } from './../shared/shared.module';
+
 //store
 import { StoreModule, MetaReducer } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -38,7 +42,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         StoreDevtoolsModule.instrument({
             maxAge: 25, // Retains last 25 states
             logOnly: environment.production // Restrict extension to log-only mode
-        })
+        }),
+        AuthModule,
+        SharedModule
     ],
     declarations: [...fromContainers.containers],
     providers: [
