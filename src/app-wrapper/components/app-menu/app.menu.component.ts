@@ -56,15 +56,16 @@ export class AppMenuComponent implements OnInit {
             { label: 'Inicio', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
             {
                 label: 'Administración',
-                icon: 'fa fa-fw fa-home',
+                icon: 'fa fa-fw fa-lock',
                 items: [
                     {
                         label: 'Colaboradores',
-                        icon: 'fa fa-fw fa-tag'
+                        icon: 'fa fa-fw fa-users',
+                        routerLink: ['/administracion/colaboradores']
                     },
                     {
                         label: 'Permisos',
-                        icon: 'fa fa-fw fa-tag'
+                        icon: 'fa fa-fw fa-unlock'
                     }
                 ]
             },

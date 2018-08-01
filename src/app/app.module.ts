@@ -16,6 +16,7 @@ import { environment } from '../environments/environment';
 
 //modules
 import { AuthModule } from '../auth/auth.module';
+import { SharedModule } from './../shared/shared.module';
 
 //store
 import { StoreModule, MetaReducer } from '@ngrx/store';
@@ -42,7 +43,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
             maxAge: 25, // Retains last 25 states
             logOnly: environment.production // Restrict extension to log-only mode
         }),
-        AuthModule
+        AuthModule,
+        SharedModule
     ],
     declarations: [...fromContainers.containers],
     providers: [
