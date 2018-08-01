@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
     template: `
         <div>
             <router-outlet></router-outlet>
+            <wait-dialog></wait-dialog>
         </div>
     `
 })

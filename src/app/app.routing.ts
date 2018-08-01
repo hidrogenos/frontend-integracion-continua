@@ -9,6 +9,7 @@ export const ROUTES: Routes = [
         loadChildren: './../app-wrapper/app-wrapper.module#AppWrapperModule',
         canActivate: [fromGuards.LoggedGuard]
     },
+
     {
         path: 'auth',
         loadChildren: './../auth/auth.module#AuthModule'
