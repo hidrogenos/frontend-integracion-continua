@@ -1,0 +1,13 @@
+<div>
+    <div class="estados-table">
+        <div class="btn-floating estadobtn" ></div>  Estados
+    </div>
+
+    <div *ngIf="estadoShow" class="estado">
+        <ul>
+            <ng-template ngFor let-item [ngForOf]="estados" let-ielementIndex="index" >                                   
+                <li><div class="btn-floating estadobtn" [ngStyle]="{'background':item.color} "  ></div>{{ item.nombre }}</li>                                    
+            </ng-template>
+        </ul>                          
+    </div>
+</div>

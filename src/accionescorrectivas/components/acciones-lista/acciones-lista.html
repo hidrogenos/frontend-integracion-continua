@@ -1,0 +1,35 @@
+<div>
+    <p-dataTable [value]="data" [rows]="rows" [lazy]="true" [paginator]="true" [rowsPerPageOptions]="[10,15,20]"[responsive]="true"
+    [sortField]="'id'" [totalRecords]="cantidadTotalAcciones" (onLazyLoad)="loadLazy($event)">
+
+        <p-column header="Ver" [style]="{'width':'45px'}">
+            <ng-template let-registro="rowData" pTemplate="body">
+                <button class="btn-floating" [ngStyle]="{'background': registro?.accion_estado?.color == null ? 'white':registro?.accion_estado?.color }" (click)="viewDetail(registro)"></button>
+            </ng-template>
+        </p-column>
+
+        <p-column field="id" header="No"  [style]="{'width':'40px'}" [filter]="true" filterMatchMode="contains"
+        [sortable]="true" >
+        </p-column>
+
+        <p-column field="codigo" header="Código" [style]="{'width':'100px'}" [filter]="true" filterMatchMode="contains"
+        [sortable]="true"></p-column>
+
+        <p-column field="accion_estado"  header="Estado" [filter]="true" filterMatchMode="contains"
+        [sortable]="true"></p-column>
+
+        <p-column field="titulo" header="Título" [style]="{'width':'27%'}" [filter]="true" filterMatchMode="contains"
+        [sortable]="true"></p-column>
+
+        <p-column field="importancia" header="Importancia" [filter]="true" filterMatchMode="contains"
+        [sortable]="true"></p-column>
+
+        <p-column field="responsable" header="Responsable" [style]="{'width':'120px'}" [filter]="true" filterMatchMode="contains"
+        [sortable]="true"></p-column>
+
+        <p-column field="fecha_creacion" header="Creación" [style]="{'width':'100px'}" [filter]="true" filterMatchMode="contains"
+        [sortable]="true"></p-column>
+    
+    </p-dataTable>
+
+</div>
