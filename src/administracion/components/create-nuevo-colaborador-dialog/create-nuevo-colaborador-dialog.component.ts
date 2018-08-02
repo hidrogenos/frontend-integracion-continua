@@ -26,6 +26,7 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                     [maximizable]="true" 
                     [baseZIndex]="10000"
                     (onHide)="onHideCreateNewColaborador()">
+                    
                     <div class="ui-g">
                         <div class="ui-g-4 ui-fluid">
                             <div>

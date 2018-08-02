@@ -1,6 +1,7 @@
 // Ng Modules
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // Structure Modules
 import * as fromServices from './services';
@@ -8,27 +9,41 @@ import * as fromContainers from './containers';
 import * as fromComponents from './components';
 
 // PrimeNg Module
-import { DataTableModule, PanelModule } from 'primeng/primeng';
+import { PanelModule, SharedModule, DialogModule, MultiSelectModule, DropdownModule, ButtonModule, InputTextModule, MessageService, GrowlModule } from 'primeng/primeng';
 import { RouterModule, Route } from '@angular/router';
+import { TableModule } from 'primeng/table';
+
 
 const ROUTES: Route[] = [
-    { path: '', component: fromContainers.AccionCorrectivaComponent }
+    { path: 'acciones-correctivas', component: fromContainers.AccionCorrectivaListaComponent }
 ];
+
 
 export const ngModules: any[] = [
     CommonModule,
+    ReactiveFormsModule,
     RouterModule.forChild(ROUTES)
 ]
 
 export const primeNgModules: any[] = [
-    DataTableModule,
-    PanelModule
+    ButtonModule,
+    TableModule,
+    PanelModule,
+    DialogModule,
+    MultiSelectModule,
+    DropdownModule,
+    InputTextModule,
+    GrowlModule
+]
+
+export const customModules: any[] = [
+    SharedModule
 ]
 
 @NgModule({
-    imports: [ ...ngModules, ...primeNgModules ],
+    imports: [ ...ngModules, ...primeNgModules, ...customModules ],
     declarations: [...fromContainers.container, ...fromComponents.container ],
-    providers : [ ...fromServices.container, DatePipe],    
+    providers : [ ...fromServices.container, DatePipe, MessageService],    
     exports : [ RouterModule ]
 })
 export class AccionesCorrectivasModule {

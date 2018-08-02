@@ -1,10 +1,15 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: "acciones-lista",
-    templateUrl: "acciones-lista.html"
+    templateUrl: "acciones-lista.component.html",
+    styleUrls: ["acciones-lista.component.scss"]
 })
 export class AccionesListaComponent {
+
+    //atributos
+    dateFormatAngular: string = environment.dateFormatAngular;
     
     @Input()
     data: any[];
@@ -13,10 +18,16 @@ export class AccionesListaComponent {
     rows: number;
 
     @Input()
+    loading: boolean;
+
+    @Input()
     cantidadTotalAcciones;
 
     @Output()
     onLazy: EventEmitter<any>;
+
+    @Input()
+    cols: any[]
 
     constructor() {
         this.onLazy = new EventEmitter();
@@ -24,7 +35,6 @@ export class AccionesListaComponent {
 
     loadLazy( event: Event)
     {
-        console.log("lazy load");
         this.onLazy.emit( event );
     }
     

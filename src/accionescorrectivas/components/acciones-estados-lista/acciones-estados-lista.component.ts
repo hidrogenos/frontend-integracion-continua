@@ -1,8 +1,8 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: "acciones-estados-lista",
-    templateUrl: "acciones-estados-lista.html"
+    templateUrl: "acciones-estados-lista.component.html"
 })
 export class AccionesEstadosListaComponent {
     

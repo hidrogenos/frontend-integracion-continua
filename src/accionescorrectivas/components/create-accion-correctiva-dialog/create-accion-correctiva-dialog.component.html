@@ -1,0 +1,70 @@
+<div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <p-dialog
+            header="Nueva Acción Correctiva" 
+            [(visible)]="display"
+            [modal]="true" 
+            [responsive]="true" 
+            [width]="800" 
+            [maximizable]="true" 
+            [baseZIndex]="10000"
+            (onHide)="onHideCreateAccionCorrectiva()">
+
+            <div class="ui-g">
+                <div class="ui-g-6 ui-fluid">       
+                    <div>
+                        <label>Código:*</label>
+                    </div>
+                    <input type="text" pInputText formControlName="codigo" />
+                </div>
+                <div class="ui-g-6 ui-fluid">       
+                    <div>
+                        <label>Procesos:</label>
+                    </div>
+                    <p-multiSelect  [options]="procesos"
+                                    [panelStyle]="{minWidth:'12em'}"
+                                    [(ngModel)]="selectedProcesos"
+                                    formControlName="proceso"
+                                    optionLabel="proceso"
+                                    defaultLabel="Seleccione múltiples..."></p-multiSelect>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Título:*</label>
+                    </div>
+                    <input type="text" pInputText formControlName="titulo" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Importancia:</label>
+                    </div>
+                    <p-dropdown [options]="importancias"
+                                [autoWidth]="false"
+                                formControlName="importancia"
+                                optionLabel="nombre"
+                                placeholder="Seleccione..."> ></p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Descripción:*</label>
+                    </div>
+                    <textarea formControlName="descripcion" [rows]="5" [cols]="30" 
+                    pInputTextarea autoResize="autoResize"></textarea>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <button type="button" pButton icon="pi pi-times" (click)="display=false" label="Cancelar" class="ui-button-danger"></button>
+                    <button type="submit" pButton icon="pi pi-save" label="Crear" class="ui-button-primary" [disabled]="!form.valid"></button>
+                </div>
+            </div>                
+                    
+        </p-dialog>
+    </form>
+</div>

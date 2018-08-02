@@ -75,7 +75,8 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {
                         label: 'Correctivas',
-                        icon: 'fa fa-fw fa-tag'
+                        icon: 'fa fa-fw fa-tag',
+                        routerLink: ['/acciones/acciones-correctivas']
                     },
                     {
                         label: 'Preventivas',
