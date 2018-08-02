@@ -27,6 +27,10 @@ export const ROUTES: Routes = [
                 loadChildren:
                     './../administracion/administracion.module#AdministracionModule'
             },
+            {   path: 'acciones',
+                loadChildren:
+                './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'
+            },
             { path: 'dashboard', component: DashboardDemoComponent },
             { path: 'sample', component: SampleDemoComponent },
             { path: 'forms', component: FormsDemoComponent },

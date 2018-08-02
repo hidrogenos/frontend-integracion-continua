@@ -11,5 +11,9 @@ export const environment = {
         urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
-    }
+    },
+    dateFormatAngular: 'yyyy-MM-dd',
+    dateFormatPrimeNg: 'yy-mm-dd'
+
+
 };
