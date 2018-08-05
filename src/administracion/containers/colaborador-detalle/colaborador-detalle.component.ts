@@ -57,7 +57,14 @@ import { DatosBasicosColaboradorComponent } from '../../components';
                         <div class="ui-g-12">
                             <p-tabView>
                                 <p-tabPanel header="Aptitudes y destrezas">
-                                Content 1
+                                    <p-fileUpload 
+                                        mode="basic" 
+                                        customUpload="true"
+                                        name="demo[]"
+                                        (uploadHandler)="uploadFiles($event)"
+                                        multiple="multiple"
+                                        auto="true">
+                                    </p-fileUpload>
                                 </p-tabPanel>
                                 <p-tabPanel header="Documentación y certificados">
                                     Content 2
@@ -163,5 +170,18 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     showWaitDialog(header: string, body?: string) {
         this.store.dispatch(new fromSahred.ShowWaitDialog({ header, body }));
+    }
+
+    uploadFiles(data) {
+        const files: File[] = data.files;
+        console.log(files);
+        const form: FormData = new FormData();
+        files.forEach(element =>
+            form.append('uploads[]', element, element.name)
+        );
+
+        this.colaboradorDetalleService
+            .pruebaUploadFiles(form)
+            .subscribe(response => console.log(response));
     }
 }

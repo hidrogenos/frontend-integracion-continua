@@ -81,4 +81,15 @@ export class ColaboradorDetalleService {
             )
             .pipe(catchError((error: any) => throwError(error)));
     }
+
+    pruebaUploadFiles(data) {
+        return this.http
+            .post(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/detalle/prueba-upload`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
 }
