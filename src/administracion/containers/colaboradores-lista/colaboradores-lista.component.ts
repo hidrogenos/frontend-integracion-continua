@@ -6,6 +6,7 @@ import { StoreModel } from '../../../shared/models/store.model';
 //store
 import { Store } from '@ngrx/store';
 import * as fromShared from './../../../shared/store';
+import * as fromRoot from './../../../app/store';
 import {
     TipoIdentificacionService,
     UsuarioService
@@ -23,6 +24,7 @@ import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.
 import { CesantiaModel } from '../../../shared/models/cesantia.model';
 import { CreateNuevoColaboradorDialogComponent } from '../../components';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
+import { DataTable } from 'primeng/primeng';
 
 @Component({
     selector: 'colaboradores-lista',
@@ -35,6 +37,64 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button pButton type="button" (click)="cncd.display=true" label="Crear nuevo colaborador" class="ui-button-success"></button>
+                        </div>
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-fluid">
+                            <p-table [value]="usuarios" [lazy]="true" (onLazyLoad)="loadUsuariosLazy($event)" [paginator]="true" 
+                                [rows]="10" [totalRecords]="totalRecords" [loading]="loading" sortField="full_name" #dt>
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th pSortableColumn="full_name">
+                                            Nombre
+                                            <p-sortIcon field="full_name" ></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="login">
+                                            usuario
+                                            <p-sortIcon field="login" ></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="identificacion">
+                                            Identificación
+                                            <p-sortIcon field="identificacion" ></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="perfil">
+                                            Perfil
+                                            <p-sortIcon field="perfil" ></p-sortIcon>
+                                        </th>
+                                        <th>
+                                            Acciones
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
+                                        </th>
+                                        <th>
+                                            <input pInputText type="text" (input)="dt.filter($event.target.value, 'usuario', 'contains')">
+                                        </th>
+                                        <th>
+                                            <input pInputText type="text" (input)="dt.filter($event.target.value, 'identificacion', 'contains')">
+                                        </th>
+                                        <th>
+                                            <input pInputText type="text" (input)="dt.filter($event.target.value, 'perfil', 'contains')">
+                                        </th>
+                                        <th>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-usuario>
+                                    <tr>
+                                        <td>{{ usuario.full_name }}</td>
+                                        <td>{{ usuario.login }}</td>
+                                        <td>{{ usuario.identificacion }}</td>
+                                        <td>{{ usuario.perfil }}</td>
+                                        <td style="text-align: center;">
+                                            <button style="margin-right: 10px;" pButton type="button" (click)="detalleUsuario(usuario.id)" icon="pi pi-search" class="ui-button-primary"></button>
+                                            <button pButton type="button" icon="pi pi-trash" class="ui-button-danger"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
                         </div>
                     </div>
                 </div>
@@ -61,13 +121,17 @@ export class ColaboradoresListaComponent implements OnInit {
     cargosActivos: CalidadOrganigramaModel[];
     cesantias: CesantiaModel[];
     epss: EpsModel[];
+    loading: boolean = true;
     paises: PaisModel[];
     pensiones: PensionModel[];
     perfilesActivos: PerfilModel[];
     tiposIdentificacion: TipoIdentificacionModel[];
+    totalRecords: number;
+    usuarios: any[];
 
     //viewChild
     @ViewChild('cncd') cncd: CreateNuevoColaboradorDialogComponent;
+    @ViewChild('dt') dt: DataTable;
 
     constructor(
         private colaboradoresListaService: ColaboradoresListaService,
@@ -78,6 +142,14 @@ export class ColaboradoresListaComponent implements OnInit {
 
     ngOnInit() {
         this.loadInitData();
+    }
+
+    detalleUsuario(idUsuario: number) {
+        this.store.dispatch(
+            new fromRoot.Go({
+                path: [`administracion/colaboradores/detalle/${idUsuario}`]
+            })
+        );
     }
 
     loadInitData() {
@@ -137,14 +209,28 @@ export class ColaboradoresListaComponent implements OnInit {
         return aux;
     }
 
+    loadUsuariosLazy(event) {
+        this.loading = true;
+        this.colaboradoresListaService
+            .getUsuariosLazy(event)
+            .subscribe(response => {
+                this.usuarios = response.data;
+                this.totalRecords = response.totalRows;
+                this.loading = false;
+            });
+    }
+
     createUsuario(usuario: UsuarioModel) {
-        this.showWaitDialog(
-            'Registrando nuevo colaborador, un momento por favor...'
-        );
+        // this.showWaitDialog(
+        //     'Registrando nuevo colaborador, un momento por favor...'
+        // );
         let aux = this.usuarioService.transformRequestUsuario(usuario);
         this.colaboradoresListaService
             .createUsuario(aux)
-            .subscribe(response => this.hideWaitDialog());
+            .subscribe(response => {
+                this.dt.reset();
+                this.hideWaitDialog();
+            });
     }
 
     getArls() {

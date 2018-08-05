@@ -16,6 +16,8 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
 const primeNgModules = [
     ButtonModule,
     CalendarModule,
@@ -23,7 +25,9 @@ const primeNgModules = [
     DialogModule,
     DropdownModule,
     InputTextModule,
-    RadioButtonModule
+    RadioButtonModule,
+    TableModule,
+    TabViewModule
 ];
 
 //routes

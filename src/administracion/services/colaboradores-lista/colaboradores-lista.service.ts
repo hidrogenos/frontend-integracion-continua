@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 //environment
@@ -27,7 +27,7 @@ export class ColaboradoresListaService {
                 }/administracion/colaborador/lista/create-usuario`,
                 usuario
             )
-            .pipe(catchError((error: any) => Observable.throw(error.json())));
+            .pipe(catchError((error: any) => throwError(error)));
     }
 
     getArls(): Observable<ArlModel[]> {
@@ -106,6 +106,17 @@ export class ColaboradoresListaService {
                 `${
                     environment.apiUrl
                 }/administracion/colaborador/lista/get-perfiles-activos`
+            )
+            .pipe(catchError((error: any) => Observable.throw(error.json())));
+    }
+
+    getUsuariosLazy(data): Observable<{ totalRows: number; data: any[] }> {
+        return this.http
+            .post<{ totalRows: number; data: any[] }>(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/lista/get-usuarios-lazy`,
+                data
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
     }

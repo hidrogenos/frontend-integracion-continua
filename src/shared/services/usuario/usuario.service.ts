@@ -17,4 +17,11 @@ export class UsuarioService {
             fecha_ingreso: usuario.fecha_ingreso / 1000
         };
     }
+
+    transformResponseUsuario(usuario: UsuarioModel): UsuarioModel {
+        return {
+            ...usuario,
+            fecha_ingreso: usuario.fecha_ingreso * 1000
+        };
+    }
 }

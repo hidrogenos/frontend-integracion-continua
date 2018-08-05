@@ -17,6 +17,10 @@ export const ROUTES: Routes = [
                 children: [
                     { path: '', redirectTo: 'lista', pathMatch: 'full' },
                     {
+                        path: 'detalle/:id',
+                        component: fromContainers.ColaboradorDetalleComponent
+                    },
+                    {
                         path: 'lista',
                         component: fromContainers.ColaboradoresListaComponent
                     }
