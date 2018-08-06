@@ -22,7 +22,10 @@ import { ArlModel } from '../../../shared/models/arl.model';
 import { PensionModel } from '../../../shared/models/pension.model';
 import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.model';
 import { CesantiaModel } from '../../../shared/models/cesantia.model';
-import { CreateNuevoColaboradorDialogComponent } from '../../components';
+import {
+    CreateNuevoColaboradorDialogComponent,
+    CreateAptitudDestrezaColaboradorComponent
+} from '../../components';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { DataTable } from 'primeng/primeng';
 

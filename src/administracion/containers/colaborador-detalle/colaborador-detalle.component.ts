@@ -19,8 +19,12 @@ import { PaisModel } from '../../../shared/models/pais.model';
 import { PensionModel } from '../../../shared/models/pension.model';
 import { PerfilModel } from '../../../shared/models/perfil.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
-import { UsuarioService } from '../../../shared/services';
+import {
+    UsuarioService,
+    UsuarioDestrezaService
+} from '../../../shared/services';
 import { DatosBasicosColaboradorComponent } from '../../components';
+import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
 
 @Component({
     selector: 'colaborador-detalle',
@@ -57,8 +61,13 @@ import { DatosBasicosColaboradorComponent } from '../../components';
                         <div class="ui-g-12">
                             <p-tabView>
                                 <p-tabPanel header="Aptitudes y destrezas">
-                                    <aptitudes-destrezas-colaborador>
-                                    </aptitudes-destrezas-colaborador>
+                                    <div class="ui-g">
+                                        <div class="ui-g-12">
+                                            <aptitudes-destrezas-colaborador
+                                                (onCreateDestreza)="createDestreza($event)">
+                                            </aptitudes-destrezas-colaborador>
+                                        </div>
+                                    </div>
                                     <p-fileUpload 
                                         mode="basic" 
                                         customUpload="true"
@@ -77,6 +86,7 @@ import { DatosBasicosColaboradorComponent } from '../../components';
                 </div>
             </div>
         </div>
+        
     `
 })
 export class ColaboradorDetalleComponent implements OnInit {
@@ -98,11 +108,37 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     constructor(
         private colaboradorDetalleService: ColaboradorDetalleService,
-        private store: Store<StoreModel>
+        private store: Store<StoreModel>,
+        private usuarioDestrezaService: UsuarioDestrezaService
     ) {}
 
     ngOnInit() {
         this.getInitialData();
+    }
+
+    createDestreza(data) {
+        console.log(data);
+
+        const auxDestreza: UsuarioDestrezaModel = {
+            ...data.destreza,
+            id_usuario: this.loadedUsuario.id
+        };
+        this.usuarioDestrezaService
+            .create(auxDestreza)
+            .pipe(
+                switchMap(destreza => {
+                    const files: File[] = data.files;
+                    const form: FormData = new FormData();
+                    files.forEach(element =>
+                        form.append('uploads[]', element, element.name)
+                    );
+                    return this.colaboradorDetalleService.uploadUsuarioDestrezaDocumentos(
+                        destreza.id,
+                        form
+                    );
+                })
+            )
+            .subscribe(response => console.log(response));
     }
 
     getAuxData() {

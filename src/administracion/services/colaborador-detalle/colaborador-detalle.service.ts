@@ -16,6 +16,7 @@ import { PensionModel } from '../../../shared/models/pension.model';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { UsuarioService } from '../../../shared/services';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
+import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
 
 @Injectable()
 export class ColaboradorDetalleService {
@@ -78,6 +79,17 @@ export class ColaboradorDetalleService {
                     environment.apiUrl
                 }/administracion/colaborador/detalle/update-usuario/${id}`,
                 aux
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    uploadUsuarioDestrezaDocumentos(idDestreza: number, data: any) {
+        return this.http
+            .post(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/detalle/upload-usuario-destreza-documento/${idDestreza}`,
+                data
             )
             .pipe(catchError((error: any) => throwError(error)));
     }

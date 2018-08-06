@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
     selector: 'aptitudes-destrezas-colaborador',
@@ -8,15 +8,20 @@ import { Component } from '@angular/core';
             <div class="ui-g-12 text-aling-right">
                 <button style="margin-right:10px;" pButton 
                     type="button" 
-                    icon="pi pi-plus"
                     label="Agregar aptitud o desterza" 
                     class="ui-button-warning"
-                    (click)="rcc.display = true">
+                    (click)="cpdc.display = true">
                 </button>
             </div>
         </div>
+        <create-aptitud-destreza-colaborador #cpdc
+            (onCreateDestreza)="onCreateDestreza.emit($event)">
+        </create-aptitud-destreza-colaborador>
+        
     `
 })
 export class AptitudesDestrezasColaboradorComponent {
+    //events
+    @Output() onCreateDestreza = new EventEmitter<any>();
     constructor() {}
 }
