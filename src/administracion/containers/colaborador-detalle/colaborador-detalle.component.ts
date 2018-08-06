@@ -57,6 +57,8 @@ import { DatosBasicosColaboradorComponent } from '../../components';
                         <div class="ui-g-12">
                             <p-tabView>
                                 <p-tabPanel header="Aptitudes y destrezas">
+                                    <aptitudes-destrezas-colaborador>
+                                    </aptitudes-destrezas-colaborador>
                                     <p-fileUpload 
                                         mode="basic" 
                                         customUpload="true"
