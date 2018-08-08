@@ -14,16 +14,22 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
 const primeNgModules = [
     ButtonModule,
     CalendarModule,
     CheckboxModule,
     DialogModule,
     DropdownModule,
+    FileUploadModule,
     InputTextModule,
-    RadioButtonModule
+    RadioButtonModule,
+    TableModule,
+    TabViewModule
 ];
 
 //routes

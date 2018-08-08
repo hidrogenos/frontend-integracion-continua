@@ -6,15 +6,29 @@ import { catchError } from 'rxjs/operators';
 //environment
 import { environment } from '../../../environments/environment';
 import { UsuarioModel } from '../../models/usuario.model';
+import { UsuarioDocumentoService } from '../usuario-documento/usuario-documento.service';
 
 @Injectable()
 export class UsuarioService {
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private usuarioDocumentoService: UsuarioDocumentoService
+    ) {}
 
     transformRequestUsuario(usuario: UsuarioModel): UsuarioModel {
         return {
             ...usuario,
             fecha_ingreso: usuario.fecha_ingreso / 1000
+        };
+    }
+
+    transformResponseUsuario(usuario: UsuarioModel): UsuarioModel {
+        return {
+            ...usuario,
+            fecha_ingreso: usuario.fecha_ingreso * 1000,
+            documentos: usuario.documentos.map(documento =>
+                this.usuarioDocumentoService.transformResponse(documento)
+            )
         };
     }
 }
