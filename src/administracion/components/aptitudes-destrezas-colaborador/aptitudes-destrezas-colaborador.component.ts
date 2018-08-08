@@ -29,6 +29,7 @@ import { EditAptitudDestrezaColaboradorComponent } from '../edit-aptitud-destrez
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Destreza / Aptitud</th>
+                            <th>Calificación</th>
                             <th>Descripción</th>
                             <th style="width: 400px;">Documentos</th>
                             <th>Acciones</th>
@@ -37,6 +38,7 @@ import { EditAptitudDestrezaColaboradorComponent } from '../edit-aptitud-destrez
                     <ng-template pTemplate="body" let-destreza>
                         <tr>
                             <td>{{destreza.destreza}}</td>
+                            <td>{{destreza.calificacion}}</td>
                             <td>{{destreza.descripcion}}</td>
                             <td>
                                 <p-table [value]="destreza.documentos">

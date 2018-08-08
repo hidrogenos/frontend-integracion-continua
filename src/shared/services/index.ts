@@ -10,9 +10,13 @@ export * from './usuario/usuario.service';
 import { AccionCorrectivaService } from './accioncorrectiva/accioncorrectiva.service';
 export * from './accioncorrectiva/accioncorrectiva.service';
 
+import { UsuarioDocumentoService } from './usuario-documento/usuario-documento.service';
+export * from './usuario-documento/usuario-documento.service';
+
 export const services: any[] = [
     TipoIdentificacionService,
     UsuarioDestrezaService,
     UsuarioService,
-    AccionCorrectivaService
+    AccionCorrectivaService,
+    UsuarioDocumentoService
 ];

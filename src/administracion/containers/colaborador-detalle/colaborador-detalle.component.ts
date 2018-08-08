@@ -23,9 +23,13 @@ import {
     UsuarioService,
     UsuarioDestrezaService
 } from '../../../shared/services';
-import { DatosBasicosColaboradorComponent } from '../../components';
+import {
+    DatosBasicosColaboradorComponent,
+    CreateDocumentoColaboradorComponent
+} from '../../components';
 import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
 import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
+import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.model';
 
 @Component({
     selector: 'colaborador-detalle',
@@ -77,7 +81,13 @@ import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-de
                                     </div>
                                 </p-tabPanel>
                                 <p-tabPanel header="Documentación y certificados">
-                                    Content 2
+                                    <create-documento-colaborador #cdc
+                                        *ngIf="loadedUsuario"
+                                        [documentos]="loadedUsuario.documentos"
+                                        (onCreateDocumentoColaborador)="createDocumentoColaborador($event)"
+                                        (onDeleteUsuarioDocumento)="deleteUsuarioDocumento($event)"
+                                        (onDownloadUsuarioDocumento)="downloadUsuarioDocumento($event)">
+                                    </create-documento-colaborador>
                                 </p-tabPanel>
                             </p-tabView>
                         </div>
@@ -103,6 +113,7 @@ export class ColaboradorDetalleComponent implements OnInit {
     tiposIdentificacion: TipoIdentificacionModel[];
 
     //viewChild
+    @ViewChild('cdc') cdc: CreateDocumentoColaboradorComponent;
     @ViewChild('dbc') dbc: DatosBasicosColaboradorComponent;
 
     constructor(
@@ -154,6 +165,25 @@ export class ColaboradorDetalleComponent implements OnInit {
             });
     }
 
+    createDocumentoColaborador(files: File[]) {
+        this.showWaitDialog('Adjuntando documentos, un momento por favor...');
+        const form: FormData = new FormData();
+        files.forEach(element =>
+            form.append('uploads[]', element, element.name)
+        );
+
+        this.colaboradorDetalleService
+            .uploadDocumentosColaborador(this.loadedUsuario.id, form)
+            .subscribe(response => {
+                this.loadedUsuario.documentos = [
+                    ...this.loadedUsuario.documentos,
+                    ...response
+                ];
+                this.cdc.fu.clear();
+                this.hideWaitDialog();
+            });
+    }
+
     deleteDestreza(destreza: UsuarioDestrezaModel) {
         this.showWaitDialog('Eliminando destreza, un momento por favor...');
         this.colaboradorDetalleService
@@ -176,6 +206,37 @@ export class ColaboradorDetalleComponent implements OnInit {
                         doc => doc.id != response.id
                     );
                 });
+                this.hideWaitDialog();
+            });
+    }
+
+    deleteUsuarioDocumento(event: UsuarioDocumentoModel) {
+        this.showWaitDialog('Eliminando documento, un momento por favor...');
+        this.colaboradorDetalleService
+            .deleteUsuarioDocumento(event.id)
+            .subscribe(response => {
+                this.loadedUsuario.documentos = this.loadedUsuario.documentos.filter(
+                    element => element.id != event.id
+                );
+                this.hideWaitDialog();
+            });
+    }
+
+    downloadUsuarioDocumento(event: UsuarioDocumentoModel) {
+        this.colaboradorDetalleService
+            .downloadUsuarioDestrezaDocumento({ path: event.path })
+            .subscribe(file => {
+                const blob = new Blob([file], { type: file.type });
+
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                document.body.appendChild(a);
+                a.setAttribute('style', 'display: none');
+                a.href = url;
+                a.download = event.titulo;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove(); // remove the element
                 this.hideWaitDialog();
             });
     }

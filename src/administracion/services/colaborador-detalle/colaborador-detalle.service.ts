@@ -14,17 +14,46 @@ import { CesantiaModel } from '../../../shared/models/cesantia.model';
 import { EpsModel } from '../../../shared/models/eps.model';
 import { PensionModel } from '../../../shared/models/pension.model';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
-import { UsuarioService } from '../../../shared/services';
+import {
+    UsuarioService,
+    UsuarioDestrezaService
+} from '../../../shared/services';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
 import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
+import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.model';
+import { UsuarioDocumentoService } from '../../../shared/services/usuario-documento/usuario-documento.service';
 
 @Injectable()
 export class ColaboradorDetalleService {
     constructor(
         private http: HttpClient,
+        private usuarioDocumentoService: UsuarioDocumentoService,
         private usuarioService: UsuarioService
     ) {}
+
+    uploadDocumentosColaborador(
+        id: number,
+        data
+    ): Observable<UsuarioDocumentoModel[]> {
+        return this.http
+            .post<UsuarioDocumentoModel[]>(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/detalle/upload-usuario-documento/${id}`,
+                data
+            )
+            .pipe(
+                map(documentos =>
+                    documentos.map(documento =>
+                        this.usuarioDocumentoService.transformResponse(
+                            documento
+                        )
+                    )
+                ),
+                catchError((error: any) => throwError(error))
+            );
+    }
 
     deleteDestreza(id: number): Observable<UsuarioDestrezaModel> {
         return this.http
@@ -44,6 +73,16 @@ export class ColaboradorDetalleService {
                 `${
                     environment.apiUrl
                 }/administracion/colaborador/detalle/delete-destreza-documento/${id}`
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    deleteUsuarioDocumento(id: number): Observable<UsuarioDocumentoModel> {
+        return this.http
+            .get<UsuarioDocumentoModel>(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/detalle/delete-usuario-documento/${id}`
             )
             .pipe(catchError((error: any) => throwError(error)));
     }
