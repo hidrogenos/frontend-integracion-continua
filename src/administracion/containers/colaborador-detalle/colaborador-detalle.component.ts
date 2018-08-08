@@ -5,7 +5,7 @@ import { StoreModel } from '../../../shared/models/store.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from './../../../app/store';
 import * as fromSahred from './../../../shared/store';
-import { take, switchMap } from 'rxjs/operators';
+import { take, switchMap, map, tap } from 'rxjs/operators';
 import { ColaboradorDetalleService } from '../../services';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
@@ -25,6 +25,7 @@ import {
 } from '../../../shared/services';
 import { DatosBasicosColaboradorComponent } from '../../components';
 import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
+import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
 
 @Component({
     selector: 'colaborador-detalle',
@@ -64,18 +65,16 @@ import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.mo
                                     <div class="ui-g">
                                         <div class="ui-g-12">
                                             <aptitudes-destrezas-colaborador
-                                                (onCreateDestreza)="createDestreza($event)">
+                                                *ngIf="loadedUsuario"
+                                                [destrezas]="loadedUsuario.destrezas"
+                                                (onCreateDestreza)="createDestreza($event)"
+                                                (onDownloadDestrezaDocumento)="downloadUsuarioDestrezaDocumento($event)"
+                                                (onUpdateDestreza)="updateDestreza($event)"
+                                                (onDeleteDestrezaDocumento)="deleteDestrezaDocumento($event)"
+                                                (onDeleteDestreza)="deleteDestreza($event)">
                                             </aptitudes-destrezas-colaborador>
                                         </div>
                                     </div>
-                                    <p-fileUpload 
-                                        mode="basic" 
-                                        customUpload="true"
-                                        name="demo[]"
-                                        (uploadHandler)="uploadFiles($event)"
-                                        multiple="multiple"
-                                        auto="true">
-                                    </p-fileUpload>
                                 </p-tabPanel>
                                 <p-tabPanel header="Documentación y certificados">
                                     Content 2
@@ -117,7 +116,9 @@ export class ColaboradorDetalleComponent implements OnInit {
     }
 
     createDestreza(data) {
-        console.log(data);
+        this.showWaitDialog(
+            'Regitsrando nueva aptitud o destreza, un momento por favor...'
+        );
 
         const auxDestreza: UsuarioDestrezaModel = {
             ...data.destreza,
@@ -132,13 +133,71 @@ export class ColaboradorDetalleComponent implements OnInit {
                     files.forEach(element =>
                         form.append('uploads[]', element, element.name)
                     );
-                    return this.colaboradorDetalleService.uploadUsuarioDestrezaDocumentos(
-                        destreza.id,
-                        form
-                    );
+                    return this.colaboradorDetalleService
+                        .uploadUsuarioDestrezaDocumentos(destreza.id, form)
+                        .pipe(
+                            map(documentos => {
+                                return {
+                                    ...destreza,
+                                    documentos: documentos
+                                };
+                            })
+                        );
                 })
             )
-            .subscribe(response => console.log(response));
+            .subscribe(response => {
+                this.loadedUsuario.destrezas = [
+                    ...this.loadedUsuario.destrezas,
+                    response
+                ];
+                this.hideWaitDialog();
+            });
+    }
+
+    deleteDestreza(destreza: UsuarioDestrezaModel) {
+        this.showWaitDialog('Eliminando destreza, un momento por favor...');
+        this.colaboradorDetalleService
+            .deleteDestreza(destreza.id)
+            .subscribe(response => {
+                this.loadedUsuario.destrezas = this.loadedUsuario.destrezas.filter(
+                    element => element.id != response.id
+                );
+                this.hideWaitDialog();
+            });
+    }
+
+    deleteDestrezaDocumento(destrezaDocumento: UsuarioDestrezaDocumentoModel) {
+        this.showWaitDialog('Eliminando documento, un momento por favor...');
+        this.colaboradorDetalleService
+            .deleteDestrezaDocumento(destrezaDocumento.id)
+            .subscribe(response => {
+                this.loadedUsuario.destrezas.forEach(element => {
+                    element.documentos = element.documentos.filter(
+                        doc => doc.id != response.id
+                    );
+                });
+                this.hideWaitDialog();
+            });
+    }
+
+    downloadUsuarioDestrezaDocumento(event: UsuarioDestrezaDocumentoModel) {
+        this.showWaitDialog('Descargando documento, un momento por favor...');
+        this.colaboradorDetalleService
+            .downloadUsuarioDestrezaDocumento({ path: event.path })
+            .subscribe(file => {
+                const blob = new Blob([file], { type: file.type });
+
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                document.body.appendChild(a);
+                a.setAttribute('style', 'display: none');
+                a.href = url;
+                a.download = event.titulo;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove(); // remove the element
+                this.hideWaitDialog();
+            });
     }
 
     getAuxData() {
@@ -210,16 +269,50 @@ export class ColaboradorDetalleComponent implements OnInit {
         this.store.dispatch(new fromSahred.ShowWaitDialog({ header, body }));
     }
 
-    uploadFiles(data) {
-        const files: File[] = data.files;
-        console.log(files);
-        const form: FormData = new FormData();
-        files.forEach(element =>
-            form.append('uploads[]', element, element.name)
-        );
-
+    updateDestreza(data: { destreza: UsuarioDestrezaModel; files: File[] }) {
+        this.showWaitDialog('Actualizando datos, un momento por favor...');
         this.colaboradorDetalleService
-            .pruebaUploadFiles(form)
-            .subscribe(response => console.log(response));
+            .updateDestreza(data.destreza.id, data.destreza)
+            .pipe(
+                switchMap(destreza => {
+                    const files: File[] = data.files;
+                    const form: FormData = new FormData();
+                    files.forEach(element =>
+                        form.append('uploads[]', element, element.name)
+                    );
+                    return this.colaboradorDetalleService
+                        .uploadUsuarioDestrezaDocumentos(data.destreza.id, form)
+                        .pipe(
+                            map(documentos => {
+                                const aux: UsuarioDestrezaModel = {
+                                    ...destreza,
+                                    documentos: documentos
+                                };
+
+                                return aux;
+                            })
+                        );
+                })
+            )
+            .subscribe(response => {
+                this.loadedUsuario.destrezas = this.loadedUsuario.destrezas.map(
+                    element => {
+                        if (element.id == response.id) {
+                            return {
+                                ...element,
+                                ...response,
+                                documentos: [
+                                    ...element.documentos,
+                                    ...response.documentos
+                                ]
+                            };
+                        }
+
+                        return element;
+                    }
+                );
+
+                this.hideWaitDialog();
+            });
     }
 }

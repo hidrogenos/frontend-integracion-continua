@@ -2,28 +2,27 @@ import {
     Component,
     OnInit,
     ViewChild,
-    Input,
-    EventEmitter,
-    Output
+    Output,
+    EventEmitter
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FileUpload } from 'primeng/primeng';
+import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
 import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
-import { UsuarioModel } from '../../../shared/models/usuario.model';
+import { FileUpload } from 'primeng/primeng';
 
 @Component({
-    selector: 'create-aptitud-destreza-colaborador',
-    styleUrls: ['create-aptitud-destreza-colaborador.component.scss'],
+    selector: 'edit-aptitud-desterza-colaborador',
+    styleUrls: ['edit-aptitud-desterza-colaborador.component.scss'],
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
             <p-dialog 
-                header="Nueva aptitud o destreza" 
+                header="Editar aptitud o destreza" 
                 [(visible)]="display" 
                 [modal]="true" 
                 [responsive]="true" 
                 [width]="800" 
                 [maximizable]="true" 
-                (onHide)="onHideCreateNewAptitudDestreza()">
+                (onHide)="onHideEditAptitudDestreza()">
                 <div class="ui-g">
                     <div class="ui-g-6 ui-fluid">
                         <div>
@@ -49,12 +48,30 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                 <div class="ui-g">
                     <div class="ui-g-12">
                         <div>
-                            <label>Adjuntos</label>
+                            <label>Archivos adjuntos</label>
+                        </div>
+                        <p-table [value]="loadedDestreza?.documentos">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Documento</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-documento>
+                                <tr>
+                                    <td>{{ documento.titulo }}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div>
+                            <label>Agregar documentos</label>
                         </div>
                         <p-fileUpload #fu
                             customUpload="true"
                             name="demo[]"
-                            (uploadHandler)="uploadFiles($event)"
                             multiple="multiple"
                             [showUploadButton]="false"
                             cancelLabel="Limpiar"
@@ -71,34 +88,38 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                         </button>
                         <button style="margin-right:10px;" pButton 
                             type="submit" 
-                            label="Crear" 
+                            label="Actualizar" 
                             class="ui-button-primary"
                             [disabled]="!form.valid">
                         </button>
                 </p-footer>
             </p-dialog>
         </form>
-            
     `
 })
-export class CreateAptitudDestrezaColaboradorComponent implements OnInit {
-    //atirbutos
+export class EditAptitudDestrezaColaboradorComponent implements OnInit {
+    //atributos
     display: boolean;
     form: FormGroup;
+    loadedDestreza: UsuarioDestrezaModel;
 
-    //events
-    @Output() onCreateDestreza = new EventEmitter<any>();
+    //eventos
+    @Output()
+    onUpdateDestreza = new EventEmitter<{
+        destreza: UsuarioDestrezaModel;
+        files: File[];
+    }>();
 
-    //viewchild
+    //viewChild
     @ViewChild('fu') fu: FileUpload;
 
     constructor(private fb: FormBuilder) {}
 
     ngOnInit() {
-        this.createform();
+        this.createForm();
     }
 
-    createform() {
+    createForm() {
         this.form = this.fb.group({
             destreza: ['', Validators.required],
             calificacion: ['', Validators.required],
@@ -106,25 +127,34 @@ export class CreateAptitudDestrezaColaboradorComponent implements OnInit {
         });
     }
 
-    onHideCreateNewAptitudDestreza() {
+    loadFormData(data: UsuarioDestrezaModel) {
+        this.loadedDestreza = data;
+        this.form.setValue({
+            destreza: data.destreza,
+            calificacion: data.calificacion,
+            descripcion: data.descripcion
+        });
+    }
+
+    onHideEditAptitudDestreza() {
         this.form.reset();
-        this.fu.clear();
     }
 
     onSubmit() {
         if (this.form.valid) {
-            const destreza = {
-                destreza: this.form.value.destreza,
+            const destreza: UsuarioDestrezaModel = {
+                id: this.loadedDestreza.id,
+                activo: true,
                 calificacion: this.form.value.calificacion,
                 descripcion: this.form.value.descripcion,
-                activo: true
+                destreza: this.form.value.destreza,
+                id_usuario: this.loadedDestreza.id_usuario
             };
 
-            const data = {
-                destreza,
-                files: this.fu.files
-            };
-            this.onCreateDestreza.emit(data);
+            const files = this.fu.files;
+
+            this.onUpdateDestreza.emit({ destreza, files });
+
             this.display = false;
         }
     }

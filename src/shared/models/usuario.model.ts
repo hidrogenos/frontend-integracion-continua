@@ -7,6 +7,7 @@ import { ArlModel } from './arl.model';
 import { PensionModel } from './pension.model';
 import { CesantiaModel } from './cesantia.model';
 import { CajaCompensacionModel } from './caja-compensacion.model';
+import { UsuarioDestrezaModel } from './usuario-destreza.model';
 
 export interface UsuarioModel {
     id?: number;
@@ -42,4 +43,5 @@ export interface UsuarioModel {
     pension?: PensionModel;
     cesantia?: CesantiaModel;
     caja_compensacion?: CajaCompensacionModel;
+    destrezas?: UsuarioDestrezaModel[];
 }
