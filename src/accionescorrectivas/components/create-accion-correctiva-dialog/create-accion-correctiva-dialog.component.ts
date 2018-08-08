@@ -54,7 +54,6 @@ export class CreateAccionCorrectivaDialogComponent implements OnInit {
                 descripcion: this.form.value.descripcion,
                 id_estado : 1,
                 id_importancia: this.form.value.importancia.id,
-                id_usuario_crea: 1,
                 procesos: this.selectedProcesos
             };
             this.onCreateAccionCorrectiva.emit(accionCorrectiva);
