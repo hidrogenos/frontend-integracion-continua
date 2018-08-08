@@ -1,0 +1,46 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <h2>
+            Procesos
+        </h2>
+    </div>
+    <form [formGroup]="form" novalidate>
+        <div class="ui-g">
+            <div class="ui-g-8">
+                <p-multiSelect
+                        [options]="procesos"
+                        formControlName="proceso"
+                        [(ngModel)]="selectedProcesos"
+                        optionLabel="proceso"
+                        defaultLabel="Seleccione múltiples..."></p-multiSelect>
+            </div>
+            <div class="ui-g-4">
+                <button pButton type="button" label="Relacionar proceso" (click)="relacionarProcesos()"
+                [disabled]="!form.valid"></button>
+            </div>
+        </div>
+    </form>
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <p-table #tableListaProcesos [columns]="cols" [value]="data" paginator="true" [rows]="rows" [rowsPerPageOptions]="[10,15,20]"
+             [loading]="loadingProcesos">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-accionproceso>
+                    <tr>
+                        <td> {{ accionproceso?.proceso?.proceso }} </td>
+                        <td>
+                            <button pButton icon="pi pi-trash" (click)="deleteProcesoFromAccionCorrectiva(accionproceso)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 import { AccionProcesoModel } from "./accion-proceso.model";
+import { AccionImportanciaModel } from "./accion-importancia.model";
 
 export interface AccionModel {
     id?: number,
@@ -11,9 +12,9 @@ export interface AccionModel {
     id_estado: number,
     accion_estado?: any,
     id_importancia: number,
-    importancia?: any,
+    importancia?: AccionImportanciaModel,
     id_responsable?: number,
     responsable?: any,
-    id_usuario_crea: number
+    id_usuario_crea?: number
     procesos?: AccionProcesoModel[],
 }

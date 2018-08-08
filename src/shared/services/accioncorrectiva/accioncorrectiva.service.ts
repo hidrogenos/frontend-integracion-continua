@@ -19,16 +19,23 @@ export class AccionCorrectivaService {
 
     createAccionCorrectiva( data:AccionModel ) : Observable<AccionModel> {   
         return this.http.post<AccionModel>(`${environment.apiUrl}${url_Point_Api}` ,data)
-        // .pipe(
-        //     catchError((error:any) => Observable.throw(error.json()))
-        // );
-    }
-
-    updateAccionCorrectiva( data:AccionModel ) : Observable<AccionModel> {      
-        return this.http.put<AccionModel>(`${environment.apiUrl}${url_Point_Api}` ,data)
         .pipe(
             catchError((error:any) => Observable.throw(error.json()))
         );
-    } 
+    }
+
+    updateAccionCorrectiva( data:AccionModel ) : Observable<AccionModel> {      
+        return this.http.put<AccionModel>(`${environment.apiUrl}${url_Point_Api}/${data.id}` ,data)
+        .pipe(
+            catchError((error:any) => Observable.throw(error.json()))
+        );
+    }
+
+    getAccionCorrectiva( id: number): Observable<AccionModel> {      
+        return this.http.get<AccionModel>(`${environment.apiUrl}${url_Point_Api}/${id}`)
+        .pipe(
+            catchError((error:any) => Observable.throw(error.json()))
+        );
+    }
 }
 

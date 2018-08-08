@@ -15,7 +15,8 @@ import { TableModule } from 'primeng/table';
 
 
 const ROUTES: Route[] = [
-    { path: 'acciones-correctivas', component: fromContainers.AccionCorrectivaListaComponent }
+    { path: 'acciones-correctivas', component: fromContainers.AccionCorrectivaListaComponent },
+    { path: 'acciones-correctivas/:id', component: fromContainers.AccionCorrectivaPanel}
 ];
 
 

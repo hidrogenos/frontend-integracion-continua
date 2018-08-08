@@ -1,0 +1,55 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <p-panel header="Información sobre acción correctiva  No. {{accionCorrectiva?.id}}" >
+                <div class="ui-g">
+                    <div class="ui-g-4 ui-fluid">
+                        <label>Fecha creación</label>
+                        <p>{{ accionCorrectiva?.fecha_creacion | date: dateFormatAngular }}</p>
+                    </div>
+                    <div class="ui-g-4 ui-fluid">
+                        <label>Importancia</label>
+                        <p-dropdown [options]="importancias"
+                                [autoWidth]="false"
+                                formControlName="importancia"
+                                optionLabel="nombre"
+                                placeholder="Seleccione..."></p-dropdown>
+                    </div>
+                    <div class="ui-g-4 ui-fluid">
+                        <label>Responsable</label>
+                        <p> {{ accionCorrectiva?.responsable?.nombre }}</p>
+                        <p *ngIf="!accionCorrectiva?.responsable">
+                            Aun no se ha asignado
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="ui-g">
+                    <div class="ui-g-4 ui-fluid">
+                        <label>Código</label>
+                        <input type="text" pInputText formControlName="codigo">
+                    </div>
+                    <div class="ui-g-8 ui-fluid">
+                        <label>Título</label>
+                        <input type="text" pInputText formControlName="titulo">
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                        <label>Descripción</label>
+                        <div class="ui-g-12 ui-fluid">
+                            <textarea formControlName="descripcion" [rows]="5" [cols]="30" 
+                            pInputTextarea autoResize="autoResize" style="width: 100%"></textarea>
+                        </div>
+                    </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-fluid">
+                        <button type="submit" icon="pi pi-save" pButton label="Editar información inicial"
+                        [disabled]="!form.valid"></button>
+                    </div>
+                </div>
+            </p-panel>
+        </form>
+    </div>
+</div>
