@@ -65,6 +65,5 @@ export class ListaPerfilesComponent {
     onRowSelect(event) {
         const selectedPerfil: PerfilModel = event.data;
         this.onSelectPerfil.emit(selectedPerfil);
-        console.log(selectedPerfil);
     }
 }

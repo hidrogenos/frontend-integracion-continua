@@ -134,7 +134,6 @@ export class PermisosComponent implements OnInit {
                     this.hideWaitDialog();
                 }, 10);
             });
-        console.log(data);
     }
 
     loadInitalInfo() {
@@ -143,7 +142,6 @@ export class PermisosComponent implements OnInit {
         );
         forkJoin([this.getPerfiles(), this.getModulos()]).subscribe(
             ([perfiles, modulos]) => {
-                console.log(modulos);
                 this.perfiles = perfiles;
                 this.modulos = modulos;
 

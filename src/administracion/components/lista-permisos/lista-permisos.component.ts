@@ -85,7 +85,6 @@ export class ListaPermisosComponent implements OnInit {
     ngOnInit() {}
 
     changePermiso(event: boolean, idPermiso: number) {
-        console.log(event, idPermiso);
         if (event) {
             this.onAddPermiso.emit(idPermiso);
         } else {
@@ -114,8 +113,6 @@ export class ListaPermisosComponent implements OnInit {
                 });
             }
         }
-
-        console.log(this.permisos);
 
         this.rowGroupMetadata = {};
         if (this.permisos) {
