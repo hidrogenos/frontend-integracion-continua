@@ -4,7 +4,11 @@ export * from './colaborador-detalle/colaborador-detalle.component';
 import { ColaboradoresListaComponent } from './colaboradores-lista/colaboradores-lista.component';
 export * from './colaboradores-lista/colaboradores-lista.component';
 
+import { PermisosComponent } from './permisos/permisos.component';
+export * from './permisos/permisos.component';
+
 export const containers: any[] = [
     ColaboradorDetalleComponent,
-    ColaboradoresListaComponent
+    ColaboradoresListaComponent,
+    PermisosComponent
 ];
