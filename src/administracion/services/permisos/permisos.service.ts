@@ -25,6 +25,15 @@ export class PermisosService {
             .pipe(catchError((error: any) => throwError(error)));
     }
 
+    editPerfil(id: number, data: { perfil: string }): Observable<PerfilModel> {
+        return this.http
+            .post<PerfilModel>(
+                `${environment.apiUrl}/administracion/perfil/edit-perfil/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
     createPerfil(data: PerfilModel) {
         return this.http
             .post<PerfilModel>(
@@ -48,6 +57,15 @@ export class PermisosService {
                 `${
                     environment.apiUrl
                 }/administracion/perfil/get-perfiles-activos`
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    removePermiso(data: { id_perfil: number; id_permiso: number }) {
+        return this.http
+            .post<PermisoModel>(
+                `${environment.apiUrl}/administracion/perfil/remove-permiso`,
+                data
             )
             .pipe(catchError((error: any) => throwError(error)));
     }

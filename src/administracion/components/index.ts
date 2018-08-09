@@ -19,6 +19,9 @@ export * from './datos-basico-colaborador/datos-basicos-colaborador.component';
 import { EditAptitudDestrezaColaboradorComponent } from './edit-aptitud-destreza-colaborador/edit-aptitud-destreza-colaborador.component';
 export * from './edit-aptitud-destreza-colaborador/edit-aptitud-destreza-colaborador.component';
 
+import { EditPerfilComponent } from './edit-perfil/edit-perfil.component';
+export * from './edit-perfil/edit-perfil.component';
+
 import { ListaPerfilesComponent } from './lista-perfiles/lista-perfiles.component';
 export * from './lista-perfiles/lista-perfiles.component';
 
@@ -36,6 +39,7 @@ export const components: any[] = [
     CreatePerfilComponent,
     DatosBasicosColaboradorComponent,
     EditAptitudDestrezaColaboradorComponent,
+    EditPerfilComponent,
     ListaPerfilesComponent,
     ListaPermisosComponent,
     ResetContrasenaColaboradorComponent

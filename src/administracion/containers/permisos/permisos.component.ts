@@ -1,7 +1,8 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import {
     CreatePerfilComponent,
-    ListaPermisosComponent
+    ListaPermisosComponent,
+    EditPerfilComponent
 } from '../../components';
 import { PerfilModel } from '../../../shared/models/perfil.model';
 import { PermisosService } from '../../services';
@@ -9,6 +10,7 @@ import { forkJoin } from 'rxjs';
 import { StoreModel } from '../../../shared/models/store.model';
 import { Store } from '@ngrx/store';
 import * as fromAuth from './../../../auth/store';
+import * as fromShared from './../../../shared/store';
 import { ModuloModel } from '../../../shared/models/modulo.model';
 
 @Component({
@@ -33,14 +35,16 @@ import { ModuloModel } from '../../../shared/models/modulo.model';
                         <div class="ui-g-6">
                             <lista-perfiles
                                 [perfiles]="perfiles"
-                                (onSelectPerfil)="selectPerfil($event)">
+                                (onSelectPerfil)="selectPerfil($event)"
+                                (onEditPerfil)="ep.setPerfil($event); ep.display = true;">
                             </lista-perfiles>
                         </div>
                         <div class="ui-g-6">
                             <lista-permisos #lp
                                 [modulos]="modulos"
                                 [selectedPerfil]="selectedPerfil"
-                                (onAddPermiso)="addPermiso($event)">
+                                (onAddPermiso)="addPermiso($event)"
+                                (onRemovePermiso)="removePermiso($event)">
                             </lista-permisos>
                         </div>
                     </div>
@@ -52,6 +56,11 @@ import { ModuloModel } from '../../../shared/models/modulo.model';
             [perfiles]="perfiles"
             (onCreatePerfil)="createPerfil($event)">
         </create-perfil>
+        <edit-perfil #ep
+            *ngIf="perfiles"
+            [perfiles]="perfiles"
+            (onEditPerfil)="editPerfil($event)">
+        </edit-perfil>
     `
 })
 export class PermisosComponent implements OnInit {
@@ -61,8 +70,12 @@ export class PermisosComponent implements OnInit {
     selectedPerfil: PerfilModel;
 
     //viewChild
-    @ViewChild('cp') cp: CreatePerfilComponent;
-    @ViewChild('lp') lp: ListaPermisosComponent;
+    @ViewChild('ep')
+    ep: EditPerfilComponent;
+    @ViewChild('cp')
+    cp: CreatePerfilComponent;
+    @ViewChild('lp')
+    lp: ListaPermisosComponent;
 
     constructor(
         private permisosService: PermisosService,
@@ -74,6 +87,7 @@ export class PermisosComponent implements OnInit {
     }
 
     addPermiso(id_permiso: number) {
+        this.showWaitDialog('Actualizando permiso, un momento por favor...');
         this.permisosService
             .addPermiso({ id_perfil: this.selectedPerfil.id, id_permiso })
             .subscribe(response => {
@@ -81,10 +95,12 @@ export class PermisosComponent implements OnInit {
                     ...this.selectedPerfil.permisos,
                     response
                 ];
+                this.hideWaitDialog();
             });
     }
 
     createPerfil(data: string) {
+        this.showWaitDialog('Creando nuevo perfil, un momento por favor...');
         this.store.select(fromAuth.getUser).subscribe(usuario => {
             const perfil: PerfilModel = {
                 nombre: data,
@@ -96,12 +112,35 @@ export class PermisosComponent implements OnInit {
                 this.perfiles = [...this.perfiles, response];
                 setTimeout(() => {
                     this.cp.createForm();
+                    this.ep.createForm();
+                    this.hideWaitDialog();
                 }, 1);
             });
         });
     }
 
+    editPerfil(data: { id: number; perfil: string }) {
+        this.showWaitDialog('Actualizando perfil, un momento por favor...');
+        this.permisosService
+            .editPerfil(data.id, { perfil: data.perfil })
+            .subscribe(response => {
+                this.perfiles = [
+                    ...this.perfiles.filter(perfil => perfil.id != data.id),
+                    response
+                ];
+                setTimeout(() => {
+                    this.cp.createForm();
+                    this.ep.createForm();
+                    this.hideWaitDialog();
+                }, 10);
+            });
+        console.log(data);
+    }
+
     loadInitalInfo() {
+        this.showWaitDialog(
+            'Consultado información requerida, un momento por favor...'
+        );
         forkJoin([this.getPerfiles(), this.getModulos()]).subscribe(
             ([perfiles, modulos]) => {
                 console.log(modulos);
@@ -110,6 +149,7 @@ export class PermisosComponent implements OnInit {
 
                 setTimeout(() => {
                     this.lp.updateRowGroupMetaData();
+                    this.hideWaitDialog();
                 }, 10);
             }
         );
@@ -123,8 +163,28 @@ export class PermisosComponent implements OnInit {
         return this.permisosService.getPerfiles();
     }
 
+    hideWaitDialog() {
+        this.store.dispatch(new fromShared.HideWaitDialog());
+    }
+
+    removePermiso(id_permiso: number) {
+        this.showWaitDialog('Actualizando permiso, un momento por favor...');
+        this.permisosService
+            .removePermiso({ id_perfil: this.selectedPerfil.id, id_permiso })
+            .subscribe(response => {
+                this.selectedPerfil.permisos = this.selectedPerfil.permisos.filter(
+                    permiso => permiso.id != id_permiso
+                );
+                this.hideWaitDialog();
+            });
+    }
+
     selectPerfil(perfil: PerfilModel) {
         this.selectedPerfil = perfil;
         this.lp.loadPermisos(perfil.permisos);
+    }
+
+    showWaitDialog(header: string, body?: string) {
+        this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
     }
 }
