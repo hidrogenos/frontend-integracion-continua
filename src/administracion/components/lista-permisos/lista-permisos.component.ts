@@ -23,7 +23,7 @@ import { PermisoModel } from '../../../shared/models/permiso.model';
                         <th>
                             Permisos
                         </th>
-                        <th>
+                        <th style="width: 70px;">
                             Estado
                         </th>
                     </tr>
@@ -48,7 +48,7 @@ import { PermisoModel } from '../../../shared/models/permiso.model';
                 <ng-template pTemplate="rowexpansion" let-rowData let-rowIndex="rowIndex">
                     <tr>
                         <td>{{rowData.nombre}}</td>
-                        <td>
+                        <td style="text-align: center;">
                             <p-checkbox 
                                 binary="true" 
                                 name="groupname" 
@@ -69,12 +69,16 @@ export class ListaPermisosComponent implements OnInit {
     rowGroupMetadata: any;
 
     //events
-    @Output() onAddPermiso = new EventEmitter<number>();
-    @Output() onRemovePermiso = new EventEmitter<number>();
+    @Output()
+    onAddPermiso = new EventEmitter<number>();
+    @Output()
+    onRemovePermiso = new EventEmitter<number>();
 
     //properties
-    @Input() modulos: ModuloModel[];
-    @Input() selectedPerfil: PerfilModel;
+    @Input()
+    modulos: ModuloModel[];
+    @Input()
+    selectedPerfil: PerfilModel;
 
     constructor() {}
 

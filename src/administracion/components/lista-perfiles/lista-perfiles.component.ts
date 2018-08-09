@@ -19,16 +19,30 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
                             Perfiles
                             <p-sortIcon field="nombre"></p-sortIcon>
                         </th>
+                        <th style="width: 80px;">
+                            Editar
+                        </th>
                     </tr>
                     <tr>
                         <th class="ui-fluid">
                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
+                        </th>
+                        <th>
+
                         </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData  let-perfil>
                     <tr [pSelectableRow]="rowData">
                         <td> {{ perfil.nombre }} </td>
+                        <td style="text-align: center;">
+                            <button style="margin-right:10px;" pButton 
+                                type="button" 
+                                icon="fa fa-pencil" 
+                                class="ui-button-primary"
+                                (click)="onEditPerfil.emit(perfil)">
+                            </button>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -37,10 +51,14 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
 })
 export class ListaPerfilesComponent {
     //properties
-    @Input() perfiles: PerfilModel[];
+    @Input()
+    perfiles: PerfilModel[];
 
     //events
-    @Output() onSelectPerfil = new EventEmitter<PerfilModel>();
+    @Output()
+    onEditPerfil = new EventEmitter<PerfilModel>();
+    @Output()
+    onSelectPerfil = new EventEmitter<PerfilModel>();
 
     constructor() {}
 

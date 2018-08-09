@@ -1,18 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
     Validators,
-    FormControl,
     ValidatorFn,
     AbstractControl
 } from '@angular/forms';
-import { of } from 'rxjs';
 import { PerfilModel } from '../../../shared/models/perfil.model';
+import { of } from 'rxjs';
 
 @Component({
-    selector: 'create-perfil',
-    styleUrls: ['create-perfil.component.scss'],
+    selector: 'edit-perfil',
+    styleUrls: ['edit-perfil.component.scss'],
     template: `
         <div>
             <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
@@ -23,7 +22,7 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
                     [responsive]="true" 
                     [width]="800" 
                     [maximizable]="true" 
-                    (onHide)="onHideCreateNewPerfil()">
+                    (onHide)="onHideEditPerfilPerfil()">
                     <div class="ui-g">
                         <div class="ui-g-12 ui-fluid">
                             <div>
@@ -38,21 +37,21 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
                     </div>
                     <p-footer>
                         <button type="button" pButton icon="pi pi-times" (click)="display=false" label="Cancelar" class="ui-button-danger"></button>
-                        <button type="submit" pButton icon="pi pi-save" label="Crear" class="ui-button-primary" [disabled]="!form.valid"></button>
+                        <button type="submit" pButton icon="pi pi-save" label="Actualizar" class="ui-button-primary" [disabled]="!form.valid"></button>
                     </p-footer>
                 </p-dialog>
             </form>
         </div>
     `
 })
-export class CreatePerfilComponent implements OnInit {
+export class EditPerfilComponent {
     //atributos
     display: boolean;
     form: FormGroup;
 
     //events
     @Output()
-    onCreatePerfil = new EventEmitter<string>();
+    onEditPerfil = new EventEmitter<{ id: number; perfil: string }>();
 
     //properties
     @Input()
@@ -66,19 +65,30 @@ export class CreatePerfilComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
+            id: null,
             perfil: ['', Validators.required, perfilExists(this.perfiles)]
         });
     }
 
-    onHideCreateNewPerfil() {
+    onHideEditPerfilPerfil() {
         this.form.reset();
     }
 
     onSubmit() {
         if (this.form.valid) {
-            this.onCreatePerfil.emit(this.form.value.perfil);
+            this.onEditPerfil.emit({
+                id: this.form.value.id,
+                perfil: this.form.value.perfil
+            });
             this.display = false;
         }
+    }
+
+    setPerfil(perfil: PerfilModel) {
+        this.form.setValue({
+            id: perfil.id,
+            perfil: perfil.nombre
+        });
     }
 }
 
