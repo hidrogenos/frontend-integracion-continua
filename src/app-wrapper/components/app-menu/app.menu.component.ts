@@ -65,7 +65,8 @@ export class AppMenuComponent implements OnInit {
                     },
                     {
                         label: 'Permisos',
-                        icon: 'fa fa-fw fa-unlock'
+                        icon: 'fa fa-fw fa-unlock',
+                        routerLink: ['/administracion/permisos']
                     }
                 ]
             },

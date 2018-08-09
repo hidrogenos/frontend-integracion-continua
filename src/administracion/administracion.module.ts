@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 //components
 import * as fromComponents from './components';
@@ -43,7 +43,8 @@ import * as fromServices from './services';
         AdministracionRoutes,
         CommonModule,
         ...primeNgModules,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FormsModule
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
     providers: [...fromServices.services]

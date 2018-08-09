@@ -25,6 +25,10 @@ export const ROUTES: Routes = [
                         component: fromContainers.ColaboradoresListaComponent
                     }
                 ]
+            },
+            {
+                path: 'permisos',
+                component: fromContainers.PermisosComponent
             }
         ]
     }
