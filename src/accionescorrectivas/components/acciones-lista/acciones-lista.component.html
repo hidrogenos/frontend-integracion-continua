@@ -1,4 +1,4 @@
-<p-table #tableListaAccionCorrectiva [columns]="cols" [value]="data" [lazy]="true" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="[10,15,20]" 
+<p-table #tableListaAccionCorrectiva [value]="data" [lazy]="true" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="[10,15,20]" 
 [totalRecords]="cantidadTotalAcciones" [loading]="loading" (onLazyLoad)="loadLazy($event)">
     <ng-template pTemplate="header" let-columns>
         <tr>

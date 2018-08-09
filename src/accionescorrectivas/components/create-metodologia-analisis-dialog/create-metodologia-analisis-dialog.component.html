@@ -1,0 +1,28 @@
+<p-dialog header="Acción correctiva - Crear metodología de análisis" 
+        [(visible)]="display"
+        [modal]="true" 
+        [responsive]="true" 
+        [width]="800" 
+        [maximizable]="true" 
+        [baseZIndex]="1">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div>
+                    <label>Tipo</label>
+                </div>
+                <p-dropdown placeholder="Seleccionar una metodología" optionLabel="nombre"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div>
+                    <label>Observación</label>
+                </div>
+                <textarea pInputTextarea [rows]="5" [cols]="30" autoResize="autoResize"></textarea>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+        

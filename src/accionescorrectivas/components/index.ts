@@ -13,6 +13,8 @@ export * from './edit-accion-correctiva/edit-accion-correctiva.component';
 import { RelacionarProcesoComponent } from './relacionar-proceso/relacionar-proceso.component';
 export * from './relacionar-proceso/relacionar-proceso.component';
 
+import { CreateDocumentoAccionCorrectivaComponent } from './create-accion-correctiva-documento/create-accion-correctiva-documento.component';
+export * from './create-accion-correctiva-documento/create-accion-correctiva-documento.component';
 
 
 
@@ -21,5 +23,6 @@ export const container: any[] = [
                                     AccionesEstadosListaComponent,
                                     CreateAccionCorrectivaDialogComponent,
                                     EditAccionCorrectivaComponent,
-                                    RelacionarProcesoComponent
+                                    RelacionarProcesoComponent,
+                                    CreateDocumentoAccionCorrectivaComponent
                                 ];

@@ -9,7 +9,7 @@ import * as fromContainers from './containers';
 import * as fromComponents from './components';
 
 // PrimeNg Module
-import { PanelModule, SharedModule, DialogModule, MultiSelectModule, DropdownModule, ButtonModule, InputTextModule, MessageService, GrowlModule } from 'primeng/primeng';
+import { PanelModule, SharedModule, DialogModule, MultiSelectModule, DropdownModule, ButtonModule, InputTextModule, MessageService, GrowlModule, FileUploadModule } from 'primeng/primeng';
 import { RouterModule, Route } from '@angular/router';
 import { TableModule } from 'primeng/table';
 
@@ -34,7 +34,8 @@ export const primeNgModules: any[] = [
     MultiSelectModule,
     DropdownModule,
     InputTextModule,
-    GrowlModule
+    GrowlModule,
+    FileUploadModule
 ]
 
 export const customModules: any[] = [

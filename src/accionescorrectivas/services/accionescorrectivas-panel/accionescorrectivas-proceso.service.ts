@@ -1,14 +1,11 @@
 import { environment } from '../../../environments/environment';
-import { AccionModel } from '../../../shared/models/accion.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs'
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { AccionImportanciaModel } from '../../../shared/models/accion-importancia.model';
 import { AccionProcesoModel } from '../../../shared/models/accion-proceso.model';
-import { AccionEstadoModel } from '../../../shared/models/accion-estado.model';
 
-const url_Point_Api = "/acciones/acciones-correctivas-procesos";
+const url_Point_Api = "/acciones/accion-correctiva-proceso";
 
 @Injectable()
 export class AccionesCorrectivasProcesoService{ 

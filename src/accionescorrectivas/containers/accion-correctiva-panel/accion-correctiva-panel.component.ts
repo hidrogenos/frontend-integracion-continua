@@ -2,18 +2,22 @@ import { Component, ViewChild, OnInit } from "@angular/core";
 import { AccionModel } from "../../../shared/models/accion.model";
 import { AccionImportanciaModel } from "../../../shared/models/accion-importancia.model";
 import { AccionCorrectivaService } from "../../../shared/services";
-import { AccionesCorrectivasService, AccionesCorrectivasProcesoService } from "../../services";
+import { AccionesCorrectivasService, AccionesCorrectivasProcesoService, AccionesCorrectivasDocumentoService } from "../../services";
 import { ComponenteCargado } from "./ComponenteCargado";
-import { EditAccionCorrectivaComponent, RelacionarProcesoComponent } from "../../components";
+import { EditAccionCorrectivaComponent, RelacionarProcesoComponent, CreateDocumentoAccionCorrectivaComponent } from "../../components";
+
+// store
 import { StoreModel } from "../../../shared/models/store.model";
 import { Store } from "@ngrx/store";
-import { forkJoin } from "rxjs";
-
 import * as fromRootStore from "./../../../app/store"; 
+import { forkJoin } from "rxjs";
 import { map } from "rxjs/operators";
+
+// models
 import { AccionProcesoModel } from "../../../shared/models/accion-proceso.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+import { AccionDocumentoModel } from "../../../shared/models/accion-documento.model";
+
 
 
 @Component({
@@ -28,23 +32,38 @@ import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-12">
-                        <relacionar-proceso #relate [data]="procesosAccionCorrectiva" 
-                                            [procesos]="procesos"
-                                            [loadingProcesos]="loadingProcesos"
-                                            [cols]="colsAccionCorrectivaProceso"
-                                            [rows]="10"
-                                            (onRelateProceso)="addProcesoToAccionCorrectiva($event)"
-                                            (onDeleteProcesoFromAccionCorrectiva)="deleteProcesoFromAccionCorrectiva($event)"
-                                            ></relacionar-proceso>
+                        <div class="card card-w-title">
+                            <relacionar-proceso #relate [data]="procesosAccionCorrectiva" 
+                                                [procesos]="procesos"
+                                                [loadingProcesos]="loadingProcesos"
+                                                [cols]="colsAccionCorrectivaProceso"
+                                                [rows]="10"
+                                                (onRelateProceso)="addProcesoToAccionCorrectiva($event)"
+                                                (onDeleteProcesoFromAccionCorrectiva)="deleteProcesoFromAccionCorrectiva($event)"
+                                                ></relacionar-proceso>
+                            </div>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <create-accion-correctiva-documento #documentos 
+                                                                [documentos]="documentosAccionCorrectiva"
+                                                                (onCreateDocumentoAccionCorrectiva)="uploadDocumentosToAccionCorrectiva($event)"
+                                                                (onDeleteDocumentoAccionCorrectiva)="deleteDocumentoFromAccionCorrectiva($event)"
+                                                                (onDownloadDocumentoAccionCorrectiva)="downloadDocumentoFromAccionCorrectiva($event)">
+                            </create-accion-correctiva-documento>
+                        </div>
                     </div>
                 </div>
                 `
 })
 export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
-o
+
     constructor(private accionCorrectivaService: AccionCorrectivaService,
                 private accionesCorrectivasService: AccionesCorrectivasService,
                 private accionesCorrectivasProcesoService: AccionesCorrectivasProcesoService,
+                private accionCorrectivaDocumentoService: AccionesCorrectivasDocumentoService,
                 private store: Store<StoreModel>){
         super(store);
     }
@@ -63,12 +82,16 @@ o
 
     procesosAccionCorrectiva: AccionProcesoModel[];
 
+    documentosAccionCorrectiva: AccionDocumentoModel[];
     
     @ViewChild('edit')
     editAccionCorrectivaComponent: EditAccionCorrectivaComponent;
 
     @ViewChild('relate')
     relateAccionCorrectivaComponent: RelacionarProcesoComponent;
+
+    @ViewChild('documentos')
+    documentComponent: CreateDocumentoAccionCorrectivaComponent;
 
     ngOnInit(){
         this.loadInitData();
@@ -101,15 +124,16 @@ o
                     this.getImportancias(),
                     this.getAccionCorrectiva(id),
                     this.getProcesos(),
-                    this.getProcesosByAccionCorrectiva(id)
+                    this.getProcesosByAccionCorrectiva(id),
+                    this.getDocumentosByAccionCorrectiva(id)
                 ]);
 
-                aux.subscribe(([ importancias, accionCorrectiva, procesos, procesosAccionCorrectiva]) => {
+                aux.subscribe(([ importancias, accionCorrectiva, procesos, procesosAccionCorrectiva, documentosAccionCorrectiva]) => {
 
                     this.importancias = importancias;
                     this.accionCorrectivaActual = accionCorrectiva;
                     this.procesos = procesos.filter(procesoActual => !procesosAccionCorrectiva.find(procesoAccionCorrectivaA => procesoAccionCorrectivaA.id_mapa_procesos == procesoActual.id));
-                    
+                    this.documentosAccionCorrectiva = documentosAccionCorrectiva;
                       
                     this.procesosAccionCorrectiva = procesosAccionCorrectiva;
 
@@ -142,18 +166,6 @@ o
             })
         )
         ;
-    }
-
-    getProcesosByAccionCorrectiva(id: number) {
-        return this.accionesCorrectivasProcesoService.getProcesosByAccionCorrectiva(id);
-    }
-
-    getImportancias() {
-        return this.accionesCorrectivasService.getImportancias();
-    }
-
-    getProcesos() {
-        return this.accionesCorrectivasService.getProcesos();
     }
 
     addProcesoToAccionCorrectiva( data: MapaProcesoHijoModel[]) {
@@ -222,6 +234,73 @@ o
         
             this.hideWaitDialog();
         });
+    }
+
+    uploadDocumentosToAccionCorrectiva(files: File[]) {
+        this.showWaitDialog(
+            'Acción en proceso',
+            'Realizando carga de documentos solicitados...'
+        );
+
+        const form: FormData = new FormData();
+        files.forEach( archivo => {
+            form.append('uploads[]',archivo, archivo.name);
+        });
+
+        this.accionCorrectivaDocumentoService
+        .uploadDocumentosByAccionCorrectiva( this.accionCorrectivaActual.id ,form )
+        .subscribe(response => {
+            this.documentosAccionCorrectiva = [
+                ...this.documentosAccionCorrectiva,
+                ...response
+            ]
+            this.documentComponent.fu.clear();
+            this.hideWaitDialog();
+        });
+    }
+
+    downloadDocumentoFromAccionCorrectiva(event: AccionDocumentoModel) {
+        this.accionCorrectivaDocumentoService
+            .downloadAccionCorrectivaDocumento({ path: event.path })
+            .subscribe(file => {
+                const blob = new Blob([file], { type: file.type });
+
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                document.body.appendChild(a);
+                a.setAttribute('style', 'display: none');
+                a.href = url;
+                a.download = event.titulo;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove(); // remove the element
+                this.hideWaitDialog();
+            });
+    }
+    
+    deleteDocumentoFromAccionCorrectiva(event: AccionDocumentoModel) {
+        this.accionCorrectivaDocumentoService.deleteDocumentoByAccionCorrectiva(event.id)
+        .subscribe(response => {
+            this.documentosAccionCorrectiva = this.documentosAccionCorrectiva.filter(
+                documentos => documentos.id != response.id
+            );
+        });
+    }
+
+    getProcesosByAccionCorrectiva(id: number) {
+        return this.accionesCorrectivasProcesoService.getProcesosByAccionCorrectiva(id);
+    }
+
+    getDocumentosByAccionCorrectiva(id: number) {
+        return this.accionCorrectivaDocumentoService.getDocumentosByAccionCorrectiva(id);
+    }
+
+    getImportancias() {
+        return this.accionesCorrectivasService.getImportancias();
+    }
+
+    getProcesos() {
+        return this.accionesCorrectivasService.getProcesos();
     }
 
 }
