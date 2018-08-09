@@ -7,8 +7,19 @@ export * from './acciones-estados-lista/acciones-estados-lista.component';
 import { CreateAccionCorrectivaDialogComponent } from './create-accion-correctiva-dialog/create-accion-correctiva-dialog.component';
 export * from './create-accion-correctiva-dialog/create-accion-correctiva-dialog.component';
 
+import { EditAccionCorrectivaComponent} from './edit-accion-correctiva/edit-accion-correctiva.component';
+export * from './edit-accion-correctiva/edit-accion-correctiva.component';
+
+import { RelacionarProcesoComponent } from './relacionar-proceso/relacionar-proceso.component';
+export * from './relacionar-proceso/relacionar-proceso.component';
+
+
+
+
 export const container: any[] = [ 
                                     AccionesListaComponent, 
                                     AccionesEstadosListaComponent,
-                                    CreateAccionCorrectivaDialogComponent
+                                    CreateAccionCorrectivaDialogComponent,
+                                    EditAccionCorrectivaComponent,
+                                    RelacionarProcesoComponent
                                 ];

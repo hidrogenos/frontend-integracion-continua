@@ -89,6 +89,9 @@ Observaciones migracion v2 a V2.1
 
 ## TABLA sgd_accion_correctiva
 
+-> se agrega la constraint unique al campo código para que no se pueda repetir y se encapsula
+el error si se repite el código
+-> se elimina el campo fecha_creación y se reemplaza por el created_at
 -> se gregan los campos
 -> created_at: compatibilidad con eloquent.
 -> updated_at: compatibilidad con eloquent.

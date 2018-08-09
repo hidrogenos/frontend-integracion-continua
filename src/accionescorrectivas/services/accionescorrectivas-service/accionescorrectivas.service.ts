@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { AccionImportanciaModel } from '../../../shared/models/accion-importancia.model';
 import { AccionProcesoModel } from '../../../shared/models/accion-proceso.model';
+import { AccionEstadoModel } from '../../../shared/models/accion-estado.model';
+import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
 
 const url_Point_Api = "/acciones/acciones-correctivas";
 
@@ -53,26 +55,36 @@ export class AccionesCorrectivasService {
            );;
      }
 
-    getProcesos(): Observable<AccionProcesoModel[]>  {
-        return this.http.get<AccionProcesoModel[]>(
+    getProcesos(): Observable<MapaProcesoHijoModel[]>  {
+        return this.http.get<MapaProcesoHijoModel[]>(
             `${
                 environment.apiUrl
             }${url_Point_Api}/get-procesos`)
             .pipe(
                 catchError((error: any) => Observable.throw(error.json()))
-           );;
+           );
+     }
+
+     getEstados(): Observable<AccionEstadoModel[]> {
+         return this.http.get<AccionEstadoModel[]>(
+            `${
+                environment.apiUrl
+            }${url_Point_Api}/get-estados`)
+            .pipe(
+                catchError((error: any) => Observable.throw(error.json()))
+           );
      }
 
 
-    /** transforma y ajusta los cambios de un response a una accion correctiva */
-    transformResponseAccion(accionCorrectiva: AccionModel): AccionModel {
-        return {
-            ...accionCorrectiva,
-            responsable : accionCorrectiva.responsable ?  accionCorrectiva.responsable.nombre : null,
-            accion_estado : accionCorrectiva.accion_estado ? accionCorrectiva.accion_estado.nombre : null,
-            importancia: accionCorrectiva.importancia ? accionCorrectiva.importancia.nombre : null
+    // /** transforma y ajusta los cambios de un response a una accion correctiva */
+    // transformResponseAccion(accionCorrectiva: AccionModel): AccionModel {
+    //     return {
+    //         ...accionCorrectiva,
+    //         responsable : accionCorrectiva.responsable ?  accionCorrectiva.responsable.nombre : null,
+    //         accion_estado : accionCorrectiva.accion_estado ? accionCorrectiva.accion_estado.nombre : null,
+    //         importancia: accionCorrectiva.importancia ? accionCorrectiva.importancia.nombre : null
 
-        }
-    }
+    //     }
+    // }
 
 }

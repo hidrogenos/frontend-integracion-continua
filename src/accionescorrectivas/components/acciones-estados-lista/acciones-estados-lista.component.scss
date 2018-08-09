@@ -1,0 +1,38 @@
+ul , li {
+    list-style: none;
+    text-decoration: none;
+}
+
+button {
+    float: left;
+    top: -5px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltip-button {
+    
+    visibility: hidden;
+    width: 300px;
+    background-color:#457fca;
+    opacity: 0.8;
+    color: white;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    top: -5px;
+    left: 100px;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltip-button {
+    visibility: visible;
+}
+
+
+

@@ -1,7 +1,7 @@
 <div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
         <p-dialog
-            header="Nueva Acción Correctiva" 
+            header="Nueva acción correctiva" 
             [(visible)]="display"
             [modal]="true" 
             [responsive]="true" 
@@ -13,13 +13,13 @@
             <div class="ui-g">
                 <div class="ui-g-6 ui-fluid">       
                     <div>
-                        <label>Código:*</label>
+                        <label>Código</label>
                     </div>
                     <input type="text" pInputText formControlName="codigo" />
                 </div>
                 <div class="ui-g-6 ui-fluid">       
                     <div>
-                        <label>Procesos:</label>
+                        <label>Procesos</label>
                     </div>
                     <p-multiSelect  [options]="procesos"
                                     [panelStyle]="{minWidth:'12em'}"
@@ -32,7 +32,7 @@
             <div class="ui-g">
                 <div class="ui-g-12 ui-fluid">
                     <div>
-                        <label>Título:*</label>
+                        <label>Título</label>
                     </div>
                     <input type="text" pInputText formControlName="titulo" />
                 </div>
@@ -40,26 +40,26 @@
             <div class="ui-g">
                 <div class="ui-g-12 ui-fluid">
                     <div>
-                        <label>Importancia:</label>
+                        <label>Importancia</label>
                     </div>
                     <p-dropdown [options]="importancias"
                                 [autoWidth]="false"
                                 formControlName="importancia"
                                 optionLabel="nombre"
-                                placeholder="Seleccione..."> ></p-dropdown>
+                                placeholder="Seleccione..."></p-dropdown>
                 </div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-12 ui-fluid">
                     <div>
-                        <label>Descripción:*</label>
+                        <label>Descripción</label>
                     </div>
                     <textarea formControlName="descripcion" [rows]="5" [cols]="30" 
-                    pInputTextarea autoResize="autoResize"></textarea>
+                    pInputTextarea autoResize="autoResize" style="width: 100%"></textarea>
                 </div>
             </div>
             <div class="ui-g">
-                <div class="ui-g-12">
+                <div class="ui-g-12 text-aling-right">
                     <button type="button" pButton icon="pi pi-times" (click)="display=false" label="Cancelar" class="ui-button-danger"></button>
                     <button type="submit" pButton icon="pi pi-save" label="Crear" class="ui-button-primary" [disabled]="!form.valid"></button>
                 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccionModel } from '../../../shared/models/accion.model';
 import { AccionesCorrectivasService } from '../../services';
 import { AccionCorrectivaService  } from "../../../shared/services";
@@ -7,6 +7,8 @@ import { AccionCorrectivaService  } from "../../../shared/services";
 import { Store } from '@ngrx/store';
 import { StoreModel } from '../../../shared/models/store.model';
 import * as fromShared from './../../../shared/store';
+import * as fromAuth from './../../../auth/store'; 
+import * as fromRootStore from './../../../app/store';
 import { forkJoin } from 'rxjs';
 
 //Modelos
@@ -16,30 +18,44 @@ import { AccionProcesoModel } from '../../../shared/models/accion-proceso.model'
 //Child
 import { CreateAccionCorrectivaDialogComponent } from '../../components';
 import { MessageService } from 'primeng/primeng';
+import { AccionEstadoModel } from '../../../shared/models/accion-estado.model';
+import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
 
 @Component({
     selector: "accion-correctiva-lista",
-    template: `<div cass="ui-g">
-                <p-growl [(value)]="msgs" life="5000"></p-growl>
-                    <div class="ui-g-12" class="card card-w-title">
-                        <h2> Acciones Correctivas </h2>
+    template: `<div class="ui-g">
+                    <div class="ui-g-12">                    
+                        <div class="card card-w-title" style="height: 100%">
+                            <h1> Acciones Correctivas </h1>
 
-                        <acciones-estados-lista></acciones-estados-lista>
-                        
-                        <div class="text-aling-right">
-                            <button pButton type="button" (click)="cacd.display=true" label="Crear Acción Correctiva" class="ui-button-success">
-                            </button>  
-                        </div>               
-                       
-                        <!-- Componente lista de acciones correctivas-->
-                        <acciones-lista [data]="accionesCorrectivas" [rows]="10" [loading]="estaCargando" [cols]="colsAccionCorrectiva"
-                        [cantidadTotalAcciones]="cantidadTotalAccionesCorrectivas" (onLazy)="loadLazyAccionesCorrectivas($event)"></acciones-lista>
+                             <acciones-estados-lista 
+                                [estados]="estados"> 
+                            </acciones-estados-lista> 
+                             <div cass="ui-g">
+                                <div class="ui-g-12 text-aling-right">
+                                    <button pButton type="button" (click)="cacd.display=true" label="Crear Acción Correctiva" class="ui-button-success">
+                                    </button>  
+                                </div>               
+                            </div> 
+                            <div cass="ui-g">
+                                <div class="ui-g-12">             
+                                    <acciones-lista 
+                                        [data]="accionesCorrectivas" [rows]="10" 
+                                        [loading]="estaCargando" [cols]="colsAccionCorrectiva"
+                                        [cantidadTotalAcciones]="cantidadTotalAccionesCorrectivas" 
+                                        (onLazy)="loadLazyAccionesCorrectivas($event)"
+                                        (onEdit)="selectAccionCorrectiva($event)">
+                                    </acciones-lista>
+                                </div>               
+                            </div>  
+                        </div>
                     </div>
                 </div>
                 
                 <create-accion-correctiva-dialog #cacd [procesos]="procesos" [importancias]="importancias" 
                 (onCreateAccionCorrectiva)="createAccionCorrectiva($event)" >
-                 </create-accion-correctiva-dialog>`
+                 </create-accion-correctiva-dialog>
+                `
 })
 export class AccionCorrectivaListaComponent implements OnInit {
     
@@ -62,7 +78,9 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     private importancias : AccionImportanciaModel[];
 
-    private procesos: AccionProcesoModel[];
+    private procesos: MapaProcesoHijoModel[];
+
+    private estados: AccionEstadoModel[];
 
     msgs = [];
 
@@ -83,7 +101,8 @@ export class AccionCorrectivaListaComponent implements OnInit {
             { field: 'titulo', header: 'Titulo' },
             { field: 'importancia', header: 'Importancia' },
             { field: 'responsable', header: 'Responsable' },
-            { field: 'fecha_creacion', header: 'Creación' }
+            { field: 'fecha_creacion', header: 'Creación' },
+            { field: 'none', header: 'Funciones'}
         ];
     }
 
@@ -99,16 +118,17 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
         let aux = forkJoin([
             this.getImportancias(),
-            this.getProcesos()
+            this.getProcesos(),
+            this.getEstados()
         ]);
 
-          aux.subscribe(([ importancias, procesos]) => {
+          aux.subscribe(([ importancias, procesos, estados]) => {
               this.importancias = importancias;
               this.procesos = procesos;
+              this.estados = estados;
               this.hideWaitDialog();
           });
 
-       return aux;
     }
 
     loadAccionesCorrectivas() {
@@ -138,26 +158,39 @@ export class AccionCorrectivaListaComponent implements OnInit {
         });
     }
 
-    createAccionCorrectiva(event) {
+    createAccionCorrectiva(event: AccionModel) {
         this.showWaitDialog(
             'Acción en proceso',
             'Registrando nueva Acción Correctiva, un momento por favor...'
         );
-        this.resourceAccionCorrectivaService.createAccionCorrectiva(event)
-        .subscribe(response => {
-            this.accionesCorrectivas = [
-                ...this.accionesCorrectivas,
-                response
-            ];
-            this.hideWaitDialog();
-            this.onCreateDialog.display = false;
-            this.msgs.push({severity:'success', summary:'Acción exitosa',
-             detail:'Enhorabuena!, Se ha creado una Acción correctiva'});
-        },
-        (error) => {
-            this.msgs.push({severity:'danger', summary:'Acción fallida',
-             detail:'No se puede crear una acción con un codigo repetido'});
-        })
+
+        this.store.select(fromAuth.getUser).subscribe(usuario => {
+            event.id_usuario_crea = usuario.id;
+                this.resourceAccionCorrectivaService.createAccionCorrectiva(event)
+                .subscribe(response => {
+                    this.accionesCorrectivas = [
+                        ...this.accionesCorrectivas,
+                        response
+                    ];
+                    this.hideWaitDialog();
+                    this.onCreateDialog.display = false;
+                    this.msgs.push({severity:'success', summary:'Acción exitosa',
+                    detail:'Enhorabuena!, Se ha creado una Acción correctiva'});
+                },
+                (error) => {
+                    this.hideWaitDialog();
+                    this.msgs.push({severity:'danger', summary:'Acción fallida',
+                    detail:'No se puede crear una acción con un codigo repetido'});
+                })
+            })
+    }
+
+    selectAccionCorrectiva(data: AccionModel) {
+        this.store.dispatch(
+            new fromRootStore.Go({
+                path: [`/acciones/acciones-correctivas/${data.id}`]
+            })
+        );
     }
 
     getImportancias() {
@@ -166,6 +199,10 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     getProcesos() {
         return this.accionesCorrectivasService.getProcesos();
+    }
+
+    getEstados() {
+        return this.accionesCorrectivasService.getEstados();
     }
 
     hideWaitDialog() {
