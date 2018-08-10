@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 //components
 import * as fromComponents from './components';
@@ -14,6 +14,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { EditorModule } from 'primeng/editor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -25,6 +26,7 @@ const primeNgModules = [
     CheckboxModule,
     DialogModule,
     DropdownModule,
+    EditorModule,
     FileUploadModule,
     InputTextModule,
     RadioButtonModule,
@@ -43,7 +45,8 @@ import * as fromServices from './services';
         CalidadRoutes,
         CommonModule,
         ...primeNgModules,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FormsModule
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
     providers: [...fromServices.services]

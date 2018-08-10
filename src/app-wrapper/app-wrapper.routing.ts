@@ -16,6 +16,8 @@ import { UtilsDemoComponent } from './demo/view/utilsdemo.component';
 import { DocumentationComponent } from './demo/view/documentation.component';
 import { AppWrapperComponent } from './containers';
 
+import * as fromSharedContainers from './../shared/containers';
+
 export const ROUTES: Routes = [
     {
         path: '',
@@ -35,6 +37,10 @@ export const ROUTES: Routes = [
                 path: 'acciones',
                 loadChildren:
                     './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'
+            },
+            {
+                path: 'visor-pdf/:id_tipo_documento/:id_documento/',
+                component: fromSharedContainers.PdfViewerComponent
             },
             { path: 'dashboard', component: DashboardDemoComponent },
             { path: 'sample', component: SampleDemoComponent },

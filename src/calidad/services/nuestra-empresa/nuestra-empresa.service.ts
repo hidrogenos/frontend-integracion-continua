@@ -38,6 +38,63 @@ export class NuestraEmpresaService {
             .pipe(catchError((error: any) => throwError(error)));
     }
 
+    updateManual(id: number, data: any): Observable<CalidadModel> {
+        return this.http
+            .post<CalidadModel>(
+                `${environment.apiUrl}/calidad/update-manual/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    updateMision(
+        id: number,
+        data: { mision: string }
+    ): Observable<CalidadModel> {
+        return this.http
+            .post<CalidadModel>(
+                `${environment.apiUrl}/calidad/update-mision/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    updatePolitica(
+        id: number,
+        data: { politica: string }
+    ): Observable<CalidadModel> {
+        return this.http
+            .post<CalidadModel>(
+                `${environment.apiUrl}/calidad/update-politica/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    updateValores(
+        id: number,
+        data: { valores: string }
+    ): Observable<CalidadModel> {
+        return this.http
+            .post<CalidadModel>(
+                `${environment.apiUrl}/calidad/update-valores/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    updateVision(
+        id: number,
+        data: { vision: string }
+    ): Observable<CalidadModel> {
+        return this.http
+            .post<CalidadModel>(
+                `${environment.apiUrl}/calidad/update-vision/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
     downloadAdjunto(data: { path: string }) {
         return this.http
             .post(`${environment.apiUrl}/utils/get-adjunto`, data, {

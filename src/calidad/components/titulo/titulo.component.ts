@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <div style="text-align: right;">
+                    <div style="text-align: right; color: #337ab7;">
                         <i 
                             *ngIf="!edit"
                             style="cursor: pointer;" 
@@ -66,7 +66,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
                                         name="demo[]"  
                                         accept="image/*"
                                         customUpload="true"
-                                        (uploadHandler)="uploadLogo($event)">
+                                        (uploadHandler)="uploadLogo($event)"
+                                        chooseLabel="Seleccione">
                                     </p-fileUpload>
                                 </div>
                             </div>
@@ -124,6 +125,5 @@ export class TituloComponent implements OnInit {
     uploadLogo(event) {
         const file = event.files[0];
         this.onUpdateEmpresaLogo.emit(file);
-        console.log(file);
     }
 }
