@@ -12,9 +12,16 @@ export const getLoginState = createSelector(
 
 export const getLogged = createSelector(getLoginState, fromLogin.getLogged);
 
+export const getLogging = createSelector(getLoginState, fromLogin.getLogging);
+
 export const getRequestUrl = createSelector(
     getLoginState,
     fromLogin.getRequestUrl
 );
 
 export const getUser = createSelector(getLoginState, fromLogin.getUser);
+
+export const getPermisions = createSelector(
+    getUser,
+    usuario => usuario.perfil.permisos
+);

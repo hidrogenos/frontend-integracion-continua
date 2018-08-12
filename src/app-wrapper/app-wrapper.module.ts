@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppWrapperRoutes } from './app-wrapper.routing';
+import { SharedModule } from './../shared/shared.module';
 
 //primeNg modules
 import { AccordionModule } from 'primeng/primeng';
@@ -16,7 +17,6 @@ import { CheckboxModule } from 'primeng/primeng';
 import { ChipsModule } from 'primeng/primeng';
 import { CodeHighlighterModule } from 'primeng/primeng';
 import { ConfirmDialogModule } from 'primeng/primeng';
-import { SharedModule } from 'primeng/primeng';
 import { ContextMenuModule } from 'primeng/primeng';
 import { DataGridModule } from 'primeng/primeng';
 import { DataListModule } from 'primeng/primeng';

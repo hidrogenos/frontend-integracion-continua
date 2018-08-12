@@ -23,7 +23,8 @@ import { AppWrapperComponent } from './../../containers/app-wrapper/app-wrapper.
     `
 })
 export class AppMenuComponent implements OnInit {
-    @Input() reset: boolean;
+    @Input()
+    reset: boolean;
 
     model: any[];
 
@@ -101,19 +102,23 @@ export class AppMenuComponent implements OnInit {
             },
             {
                 label: 'Calidad',
-                icon: 'fa fa-fw fa-home',
+                icon: 'fa fa-quora',
+                routerLink: ['/calidad/nuestra-empresa/inicio'],
                 items: [
                     {
                         label: 'Nuestra organización',
-                        icon: 'fa fa-fw fa-tag'
+                        icon: 'fa fa-building-o',
+                        routerLink: ['/calidad/nuestra-empresa/inicio']
                     },
                     {
                         label: 'Organigrama',
-                        icon: 'fa fa-fw fa-tag'
+                        icon: 'fa fa-puzzle-piece',
+                        routerLink: ['/calidad/nuestra-empresa/organigrama']
                     },
                     {
                         label: 'Mapa de procesos',
-                        icon: 'fa fa-fw fa-tag'
+                        icon: 'fa fa-map-signs',
+                        routerLink: ['/calidad/nuestra-empresa/mapa-procesos']
                     }
                 ]
             },
@@ -848,11 +853,14 @@ export class AppMenuComponent implements OnInit {
     ]
 })
 export class AppSubMenuComponent {
-    @Input() item: MenuItem;
+    @Input()
+    item: MenuItem;
 
-    @Input() root: boolean;
+    @Input()
+    root: boolean;
 
-    @Input() visible: boolean;
+    @Input()
+    visible: boolean;
 
     _reset: boolean;
 

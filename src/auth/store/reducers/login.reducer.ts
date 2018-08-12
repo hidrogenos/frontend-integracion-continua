@@ -29,6 +29,15 @@ export function reducer(
             };
         }
 
+        case fromActions.LOGIN_FAIL: {
+            return {
+                ...state,
+                user: null,
+                logged: false,
+                logging: false
+            };
+        }
+
         case fromActions.LOGIN_SUCCESS: {
             return {
                 ...state,
@@ -42,6 +51,15 @@ export function reducer(
             return {
                 ...state,
                 requestUrl: action.payload.requestUrl
+            };
+        }
+
+        case fromActions.LOGIN_LOGOUT: {
+            return {
+                ...state,
+                user: null,
+                logged: false,
+                logging: false
             };
         }
     }
