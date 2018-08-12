@@ -52,7 +52,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
                         </div>
                     </div>
                     <div class="ui-g">
-                        <div *ngIf="!edit" class="ui-g-12" style="text-align: center;">
+                        <div *ngIf="!edit && blobLogo" class="ui-g-12" style="text-align: center;">
                             <img [src]="blobLogo" />
                         </div>
                         <div *ngIf="edit" class="ui-g-12" style="text-align: center;">

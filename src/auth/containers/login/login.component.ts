@@ -7,6 +7,7 @@ import * as fromAuth from '../../store';
 //models
 import { StoreModel } from '../../../shared/models/store.model';
 import { environment } from '../../../environments/environment';
+import { Observable } from '../../../../node_modules/rxjs';
 
 @Component({
     selector: 'login',
@@ -26,7 +27,7 @@ import { environment } from '../../../environments/environment';
                                 <span class="guest-sign-in">Sign in to Avalon Network</span>
                             </div>
                             <div class="ui-g-12" style="text-align:left;">
-                                <label class="login-label">Username</label>
+                                <label class="login-label">Usuario</label>
                                 <div class="login-input">
                                     <input 
                                         type="text" 
@@ -36,7 +37,7 @@ import { environment } from '../../../environments/environment';
                                 </div>
                             </div>
                             <div class="ui-g-12" style="text-align:left;">
-                                <label class="login-label">Password</label>
+                                <label class="login-label">Contraseña</label>
                                 <div class="login-input">
                                     <input 
                                         type="password" 
@@ -47,7 +48,8 @@ import { environment } from '../../../environments/environment';
                             </div>
                             <div class="ui-g-12 ui-md-6 button-pane">
                                 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
-                                    <span class="ui-button-text ui-c">Sign In</span>
+                                    <span *ngIf="!(loggin$ | async) && !(loadingToken$ | async)" class="ui-button-text ui-c">Entrar</span>
+                                    <i *ngIf="(loggin$ | async) || (loadingToken$ | async)" class="pi pi-spin pi-spinner" style="font-size: 3em"></i>
                                 </button>
                             </div>
                             <div class="ui-g-12 ui-md-6 link-pane">
@@ -63,6 +65,8 @@ import { environment } from '../../../environments/environment';
 })
 export class LoginComponent implements OnInit {
     form: FormGroup;
+    loggin$: Observable<boolean> = this.store.select(fromAuth.getLogging);
+    loadingToken$: Observable<boolean> = this.store.select(fromAuth.getLoading);
 
     constructor(private fb: FormBuilder, private store: Store<StoreModel>) {}
 

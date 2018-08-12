@@ -27,10 +27,16 @@ export class LoginSetRequestUrl implements Action {
     constructor(public payload: { requestUrl: string }) {}
 }
 
+export class Logout implements Action {
+    readonly type = LOGIN_LOGOUT;
+    constructor() {}
+}
+
 //action types
 
 export type LoginAcction =
     | Login
     | LoginSuccess
     | LoginFail
-    | LoginSetRequestUrl;
+    | LoginSetRequestUrl
+    | Logout;

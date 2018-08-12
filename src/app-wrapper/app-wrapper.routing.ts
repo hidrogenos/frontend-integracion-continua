@@ -39,8 +39,11 @@ export const ROUTES: Routes = [
                     './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'
             },
             {
-                path: 'visor-pdf/:id_tipo_documento/:id_documento/',
-                component: fromSharedContainers.PdfViewerComponent
+                path: 'visor-pdf/:id_tipo_documento/:id_documento/:nombre_doc',
+                component: fromSharedContainers.PdfViewerComponent,
+                data: {
+                    permision: 35
+                }
             },
             { path: 'dashboard', component: DashboardDemoComponent },
             { path: 'sample', component: SampleDemoComponent },

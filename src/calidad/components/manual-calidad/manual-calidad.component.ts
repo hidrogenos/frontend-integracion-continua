@@ -3,7 +3,8 @@ import {
     OnInit,
     AfterViewInit,
     Output,
-    EventEmitter
+    EventEmitter,
+    Input
 } from '@angular/core';
 import { CalidadModel } from '../../../shared/models/calidad.model';
 
@@ -37,18 +38,20 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
                         </div>
                     </div>
                     <div *ngIf="!edit" class="ui-g">
-                        <div class="ui-g-4 ui-g-offset-4">
+                        <div class="ui-g-12" style="text-align: center;">
                             <button style="margin-right:10px;" pButton 
                                 type="button" 
                                 label="Consultar manual de calidad" 
                                 class="ui-button-primary"
-                                (click)="onConsultarManualCalidad.emit()">
+                                (click)="onConsultarManualCalidad.emit()"
+                                [disabled]="!loadedCalidad?.url_manual">
                             </button>
                             <button style="margin-right:10px;" pButton 
                                 type="button" 
                                 label="Descargar manual de calidad" 
                                 class="ui-button-success"
-                                (click)="onDescargarManualCalidad.emit()">
+                                (click)="!onDescargarManualCalidad.emit()"
+                                [disabled]="!loadedCalidad?.url_manual">
                             </button>
                         </div>
                     </div>
@@ -72,7 +75,6 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
 export class ManualCalidadComponent implements OnInit, AfterViewInit {
     //atributos
     edit: boolean;
-    loadedCalidad: CalidadModel;
 
     //events
     @Output()
@@ -81,6 +83,10 @@ export class ManualCalidadComponent implements OnInit, AfterViewInit {
     onDescargarManualCalidad = new EventEmitter<any>();
     @Output()
     onUpdateManual = new EventEmitter<File>();
+
+    //properties
+    @Input()
+    loadedCalidad: CalidadModel;
 
     constructor() {}
 

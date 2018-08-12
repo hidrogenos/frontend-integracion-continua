@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import {
     trigger,
     state,
@@ -6,6 +6,11 @@ import {
     style,
     animate
 } from '@angular/animations';
+import { StoreModel } from '../../../shared/models/store.model';
+import { Store } from '../../../../node_modules/@ngrx/store';
+import * as fromAuth from './../../../auth/store';
+import { Observable } from '../../../../node_modules/rxjs';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
 
 @Component({
     selector: 'app-inline-profile',
@@ -13,9 +18,9 @@ import {
         <div class="profile" [ngClass]="{'profile-expanded':active}">
             <a href="#" (click)="onClick($event)">
                 <!-- <img class="profile-image" src="assets/layout/images/avatar.png" /> -->
-                <span class="profile-name">Adriana Cardenas</span>
+                <span class="profile-name">{{ (loguedUser$ | async).nombre }} {{ (loguedUser$ | async).apellido }}</span>
                 <i class="fa fa-fw fa-caret-down"></i>
-                <span class="profile-role">Administrador</span>
+                <span class="profile-role">{{ (loguedUser$ | async).perfil.nombre }} </span>
             </a>
         </div>
 
@@ -51,9 +56,9 @@ import {
                 </div>
             </li>
             <li role="menuitem">
-                <a href="#" [attr.tabindex]="!active ? '-1' : null">
+                <a href="#" [attr.tabindex]="!active ? '-1' : null" (click)="logout($event)">
                     <i class="fa fa-fw fa-sign-out"></i>
-                    <span>Logout</span>
+                    <span>Cerrar sesion</span>
                 </a>
                 <div class="layout-menu-tooltip">
                     <div class="layout-menu-tooltip-arrow"></div>
@@ -89,6 +94,18 @@ import {
 })
 export class AppProfileComponent {
     active: boolean;
+    loguedUser$: Observable<UsuarioModel> = this.store.select(fromAuth.getUser);
+
+    //events
+    @Output()
+    onLogout = new EventEmitter<any>();
+
+    constructor(private store: Store<StoreModel>) {}
+
+    logout(event) {
+        event.preventDefault();
+        this.onLogout.emit();
+    }
 
     onClick(event) {
         this.active = !this.active;

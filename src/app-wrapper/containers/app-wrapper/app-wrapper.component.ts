@@ -7,6 +7,10 @@ import {
     OnDestroy
 } from '@angular/core';
 import { ScrollPanel } from 'primeng/primeng';
+import { Store } from '../../../../node_modules/@ngrx/store';
+import { StoreModel } from '../../../shared/models/store.model';
+import * as fromRoot from './../../../app/store';
+import * as fromAuth from './../../../auth/store';
 
 enum MenuOrientation {
     STATIC,
@@ -33,7 +37,8 @@ enum MenuOrientation {
             <div class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)">
                 <p-scrollPanel #layoutMenuScroller [style]="{height: '100%' }">
                     <div class="menu-scroll-content">
-                        <app-inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"></app-inline-profile>
+                        <app-inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"
+                            (onLogout)="logout()"></app-inline-profile>
                         <app-menu [reset]="resetMenu"></app-menu>
                     </div>
                 </p-scrollPanel>
@@ -79,14 +84,21 @@ export class AppWrapperComponent {
 
     menuHoverActive: boolean;
 
-    @ViewChild('layoutMenuScroller') layoutMenuScrollerViewChild: ScrollPanel;
+    @ViewChild('layoutMenuScroller')
+    layoutMenuScrollerViewChild: ScrollPanel;
 
-    constructor(public renderer: Renderer2) {}
+    constructor(public renderer: Renderer2, private store: Store<StoreModel>) {}
 
     ngAfterViewInit() {
         setTimeout(() => {
             this.layoutMenuScrollerViewChild.moveBar();
         }, 100);
+    }
+
+    logout() {
+        localStorage.clear();
+        this.store.dispatch(new fromRoot.Go({ path: ['auth/login'] }));
+        this.store.dispatch(new fromAuth.Logout());
     }
 
     onLayoutClick() {

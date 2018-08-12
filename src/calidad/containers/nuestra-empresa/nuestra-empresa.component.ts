@@ -13,6 +13,7 @@ import {
 import { StoreModel } from '../../../shared/models/store.model';
 import { Store } from '@ngrx/store';
 import * as fromShared from './../../../shared/store';
+import * as fromRoot from './../../../app/store';
 
 @Component({
     selector: 'nuestra-empresa',
@@ -21,7 +22,7 @@ import * as fromShared from './../../../shared/store';
         <div class="ui-g">
             <div class="ui-g-12">
                 <titulo #titulo
-                    *ngIf="loadedCalidad && blobLogo"
+                    *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
                     [blobLogo]="blobLogo"
                     (onUpdateEmpresaNombre)="updateEmpresaNombre($event)"
@@ -49,8 +50,10 @@ import * as fromShared from './../../../shared/store';
                 </valores>
                 <manual-calidad #manual
                     *ngIf="loadedCalidad"
+                    [loadedCalidad]="loadedCalidad"
                     (onUpdateManual)="updateManual($event)"
-                    (onDescargarManualCalidad)="descargarManual()">
+                    (onDescargarManualCalidad)="descargarManual()"
+                    (onConsultarManualCalidad)="consultarManual()">
                 </manual-calidad>
             </div>
         </div> 
@@ -89,14 +92,28 @@ export class NuestraEmpresaComponent implements OnInit {
         this.showWaitDialog('Consultado datos, un momento por favor...');
         forkJoin([this.getDetalleCalidad()]).subscribe(([calidad]) => {
             this.loadedCalidad = calidad;
-
             if (calidad.empresa_logo != null) {
                 this.getLogo();
+            } else {
+                this.hideWaitDialog();
             }
         });
     }
 
+    consultarManual() {
+        this.store.dispatch(
+            new fromRoot.Go({
+                path: [
+                    `visor-pdf/1/${this.loadedCalidad.id}/manual_calidad.pdf`
+                ]
+            })
+        );
+    }
+
     descargarManual() {
+        this.showWaitDialog(
+            'Descargando manual de calidad, un momento por favor...'
+        );
         this.nuestraEmpresaService
             .downloadAdjunto({ path: this.loadedCalidad.url_manual })
             .subscribe(file => {
@@ -152,6 +169,9 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     updateManual(file: File) {
+        this.showWaitDialog(
+            'Actualizando manual de calidad, un momento por favor...'
+        );
         const form: FormData = new FormData();
         form.append('upload', file, file.name);
         this.nuestraEmpresaService
@@ -163,6 +183,7 @@ export class NuestraEmpresaComponent implements OnInit {
                 };
                 setTimeout(() => {
                     this.manual.toggleEdit();
+                    this.hideWaitDialog();
                 }, 1);
             });
     }
