@@ -17,6 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
@@ -29,6 +30,7 @@ const primeNgModules = [
     EditorModule,
     FileUploadModule,
     InputTextModule,
+    OrganizationChartModule,
     RadioButtonModule,
     TableModule,
     TabViewModule

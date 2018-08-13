@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CalidadModel } from '../../../shared/models/calidad.model';
 import { environment } from '../../../environments/environment';
+import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
 
 @Injectable()
 export class NuestraEmpresaService {
@@ -13,6 +14,15 @@ export class NuestraEmpresaService {
         return this.http
             .get<CalidadModel>(
                 `${environment.apiUrl}/calidad/get-detalle-calidad`
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    createCargo(data: CalidadOrganigramaModel) {
+        return this.http
+            .post<CalidadOrganigramaModel>(
+                `${environment.apiUrl}/calidad/create-cargo`,
+                data
             )
             .pipe(catchError((error: any) => throwError(error)));
     }

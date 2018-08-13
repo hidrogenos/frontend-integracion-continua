@@ -3,7 +3,7 @@ export interface CalidadOrganigramaModel {
     id_calidad: number;
     id_padre: number;
     cargo: string;
-    id_url_manual_funciones: number;
-    descripción: string;
+    id_url_manual_funciones?: number;
+    descripcion: string;
     activo: boolean;
 }
