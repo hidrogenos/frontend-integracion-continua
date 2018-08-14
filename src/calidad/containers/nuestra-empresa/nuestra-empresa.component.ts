@@ -8,12 +8,15 @@ import {
     VisionComponent,
     PoliticaComponent,
     ValoresComponent,
-    ManualCalidadComponent
+    ManualCalidadComponent,
+    OrganigramaComponent
 } from '../../components';
 import { StoreModel } from '../../../shared/models/store.model';
 import { Store } from '@ngrx/store';
 import * as fromShared from './../../../shared/store';
 import * as fromRoot from './../../../app/store';
+import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
+import { element } from '../../../../node_modules/protractor';
 
 @Component({
     selector: 'nuestra-empresa',
@@ -55,6 +58,12 @@ import * as fromRoot from './../../../app/store';
                     (onDescargarManualCalidad)="descargarManual()"
                     (onConsultarManualCalidad)="consultarManual()">
                 </manual-calidad>
+                <organigrama #organigrama
+                    *ngIf="loadedCalidad"
+                    [loadedCalidad]="loadedCalidad"
+                    (onCreateNewCargo)="createCargo($event)"
+                    (onUpdateCargo)="updateCrago($event)">
+                </organigrama>
             </div>
         </div> 
         
@@ -70,10 +79,12 @@ export class NuestraEmpresaComponent implements OnInit {
     manual: ManualCalidadComponent;
     @ViewChild('mision')
     mision: MisionComponent;
-    @ViewChild('titulo')
-    titulo: TituloComponent;
+    @ViewChild('organigrama')
+    organigrama: OrganigramaComponent;
     @ViewChild('politica')
     politica: PoliticaComponent;
+    @ViewChild('titulo')
+    titulo: TituloComponent;
     @ViewChild('valores')
     valores: ValoresComponent;
     @ViewChild('vision')
@@ -91,6 +102,7 @@ export class NuestraEmpresaComponent implements OnInit {
     loadInitData() {
         this.showWaitDialog('Consultado datos, un momento por favor...');
         forkJoin([this.getDetalleCalidad()]).subscribe(([calidad]) => {
+            console.log(calidad);
             this.loadedCalidad = calidad;
             if (calidad.empresa_logo != null) {
                 this.getLogo();
@@ -108,6 +120,19 @@ export class NuestraEmpresaComponent implements OnInit {
                 ]
             })
         );
+    }
+
+    createCargo(cargo: CalidadOrganigramaModel) {
+        this.showWaitDialog('Registrando nuevo cargo, un momento por favor...');
+        this.nuestraEmpresaService.createCargo(cargo).subscribe(response => {
+            this.loadedCalidad.calidad_organigrama = [
+                ...this.loadedCalidad.calidad_organigrama,
+                response
+            ];
+
+            this.organigrama.orderOrganigrama();
+            this.hideWaitDialog();
+        });
     }
 
     descargarManual() {
@@ -134,6 +159,23 @@ export class NuestraEmpresaComponent implements OnInit {
 
     getDetalleCalidad() {
         return this.nuestraEmpresaService.getDetalleCalidad();
+    }
+
+    updateCrago(cargo: CalidadOrganigramaModel) {
+        this.showWaitDialog('Actualizando organigrama, un momento por favor..');
+        this.nuestraEmpresaService
+            .updateCargo(cargo.id, cargo)
+            .subscribe(response => {
+                this.loadedCalidad.calidad_organigrama = [
+                    ...this.loadedCalidad.calidad_organigrama.filter(
+                        element => element.id != cargo.id
+                    ),
+                    response
+                ];
+
+                this.organigrama.orderOrganigrama();
+                this.hideWaitDialog();
+            });
     }
 
     updateEmpresaNombre(empresa_nombre: string) {
