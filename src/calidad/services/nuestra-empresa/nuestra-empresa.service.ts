@@ -27,6 +27,14 @@ export class NuestraEmpresaService {
             .pipe(catchError((error: any) => throwError(error)));
     }
 
+    deleteCargo(id): Observable<CalidadOrganigramaModel> {
+        return this.http
+            .get<CalidadOrganigramaModel>(
+                `${environment.apiUrl}/calidad/delete-cargo/${id}`
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
     updateCargo(
         id: number,
         data: CalidadOrganigramaModel

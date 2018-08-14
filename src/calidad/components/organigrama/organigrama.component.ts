@@ -53,7 +53,8 @@ import { EditCalidadOrganigramaDialogComponent } from '../edit-calidad-organigra
         </create-calidad-organigrama-dialog>
         <edit-calidad-organigrama-dialog #ecod
             [cargos]="loadedCalidad?.calidad_organigrama"
-            (onUpdateCargo)="onUpdateCargo.emit($event)">
+            (onUpdateCargo)="onUpdateCargo.emit($event)"
+            (onDeleteCargo)="onDeleteCargo.emit($event)">
         </edit-calidad-organigrama-dialog>
     `
 })
@@ -64,6 +65,8 @@ export class OrganigramaComponent implements OnInit {
     //events
     @Output()
     onCreateNewCargo = new EventEmitter<CalidadOrganigramaModel>();
+    @Output()
+    onDeleteCargo = new EventEmitter<number>();
     @Output()
     onUpdateCargo = new EventEmitter<CalidadOrganigramaModel>();
 

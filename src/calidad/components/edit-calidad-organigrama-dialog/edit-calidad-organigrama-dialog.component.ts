@@ -51,6 +51,12 @@ import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigr
                 <p-footer>
                         <button style="margin-right:10px;" pButton 
                             type="button" 
+                            label="Eliminar" 
+                            class="ui-button-warning"
+                            (click)="deleteCargo()">
+                        </button>
+                        <button style="margin-right:10px;" pButton 
+                            type="button" 
                             label="Cancelar" 
                             class="ui-button-danger"
                             (click)="display = false">
@@ -72,6 +78,8 @@ export class EditCalidadOrganigramaDialogComponent implements OnInit {
     display: boolean;
 
     //events
+    @Output()
+    onDeleteCargo = new EventEmitter<number>();
     @Output()
     onUpdateCargo = new EventEmitter<CalidadOrganigramaModel>();
 
@@ -95,6 +103,11 @@ export class EditCalidadOrganigramaDialogComponent implements OnInit {
             activo: [null, Validators.required],
             id_calidad: [null, Validators.required]
         });
+    }
+
+    deleteCargo() {
+        this.onDeleteCargo.emit(this.form.value.id);
+        this.display = false;
     }
 
     loadFormData(cargo: CalidadOrganigramaModel) {

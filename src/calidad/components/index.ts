@@ -16,6 +16,9 @@ export * from './organigrama/organigrama.component';
 import { PoliticaComponent } from './politica/politica.component';
 export * from './politica/politica.component';
 
+import { ProcesosComponent } from './procesos/procesos.component';
+export * from './procesos/procesos.component';
+
 import { TituloComponent } from './titulo/titulo.component';
 export * from './titulo/titulo.component';
 
@@ -32,6 +35,7 @@ export const components: any[] = [
     MisionComponent,
     OrganigramaComponent,
     PoliticaComponent,
+    ProcesosComponent,
     TituloComponent,
     ValoresComponent,
     VisionComponent
