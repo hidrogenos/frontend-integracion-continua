@@ -1,6 +1,9 @@
 import { CreateCalidadOrganigramaDialogComponent } from './create-calidad-organigrama-dialog/create-calidad-organigrama-dialog.component';
 export * from './create-calidad-organigrama-dialog/create-calidad-organigrama-dialog.component';
 
+import { EditCalidadOrganigramaDialogComponent } from './edit-calidad-organigrama-dialog/edit-calidad-organigrama-dialog.component';
+export * from './edit-calidad-organigrama-dialog/edit-calidad-organigrama-dialog.component';
+
 import { ManualCalidadComponent } from './manual-calidad/manual-calidad.component';
 export * from './manual-calidad/manual-calidad.component';
 
@@ -24,6 +27,7 @@ export * from './vision/vision.component';
 
 export const components: any[] = [
     CreateCalidadOrganigramaDialogComponent,
+    EditCalidadOrganigramaDialogComponent,
     ManualCalidadComponent,
     MisionComponent,
     OrganigramaComponent,

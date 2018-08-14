@@ -16,6 +16,7 @@ import { Store } from '@ngrx/store';
 import * as fromShared from './../../../shared/store';
 import * as fromRoot from './../../../app/store';
 import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
+import { element } from '../../../../node_modules/protractor';
 
 @Component({
     selector: 'nuestra-empresa',
@@ -60,7 +61,8 @@ import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigr
                 <organigrama #organigrama
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
-                    (onCreateNewCargo)="createCargo($event)">
+                    (onCreateNewCargo)="createCargo($event)"
+                    (onUpdateCargo)="updateCrago($event)">
                 </organigrama>
             </div>
         </div> 
@@ -121,7 +123,7 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     createCargo(cargo: CalidadOrganigramaModel) {
-        console.log(cargo);
+        this.showWaitDialog('Registrando nuevo cargo, un momento por favor...');
         this.nuestraEmpresaService.createCargo(cargo).subscribe(response => {
             this.loadedCalidad.calidad_organigrama = [
                 ...this.loadedCalidad.calidad_organigrama,
@@ -129,6 +131,7 @@ export class NuestraEmpresaComponent implements OnInit {
             ];
 
             this.organigrama.orderOrganigrama();
+            this.hideWaitDialog();
         });
     }
 
@@ -156,6 +159,23 @@ export class NuestraEmpresaComponent implements OnInit {
 
     getDetalleCalidad() {
         return this.nuestraEmpresaService.getDetalleCalidad();
+    }
+
+    updateCrago(cargo: CalidadOrganigramaModel) {
+        this.showWaitDialog('Actualizando organigrama, un momento por favor..');
+        this.nuestraEmpresaService
+            .updateCargo(cargo.id, cargo)
+            .subscribe(response => {
+                this.loadedCalidad.calidad_organigrama = [
+                    ...this.loadedCalidad.calidad_organigrama.filter(
+                        element => element.id != cargo.id
+                    ),
+                    response
+                ];
+
+                this.organigrama.orderOrganigrama();
+                this.hideWaitDialog();
+            });
     }
 
     updateEmpresaNombre(empresa_nombre: string) {

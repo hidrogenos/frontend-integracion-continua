@@ -27,6 +27,18 @@ export class NuestraEmpresaService {
             .pipe(catchError((error: any) => throwError(error)));
     }
 
+    updateCargo(
+        id: number,
+        data: CalidadOrganigramaModel
+    ): Observable<CalidadOrganigramaModel> {
+        return this.http
+            .post<CalidadOrganigramaModel>(
+                `${environment.apiUrl}/calidad/update-cargo/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
     updateEmpresaNombre(
         id,
         data: { empresa_nombre: string }

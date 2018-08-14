@@ -1,8 +1,16 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnInit,
+    Output,
+    EventEmitter,
+    ViewChild
+} from '@angular/core';
 import { CalidadModel } from '../../../shared/models/calidad.model';
 
 import { TreeNode } from 'primeng/api';
 import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
+import { EditCalidadOrganigramaDialogComponent } from '../edit-calidad-organigrama-dialog/edit-calidad-organigrama-dialog.component';
 
 @Component({
     selector: 'organigrama',
@@ -43,6 +51,10 @@ import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigr
             [cargos]="loadedCalidad?.calidad_organigrama"
             (onCreateNewCargo)="onCreateNewCargo.emit($event)">
         </create-calidad-organigrama-dialog>
+        <edit-calidad-organigrama-dialog #ecod
+            [cargos]="loadedCalidad?.calidad_organigrama"
+            (onUpdateCargo)="onUpdateCargo.emit($event)">
+        </edit-calidad-organigrama-dialog>
     `
 })
 export class OrganigramaComponent implements OnInit {
@@ -52,39 +64,64 @@ export class OrganigramaComponent implements OnInit {
     //events
     @Output()
     onCreateNewCargo = new EventEmitter<CalidadOrganigramaModel>();
+    @Output()
+    onUpdateCargo = new EventEmitter<CalidadOrganigramaModel>();
 
     //properties
     @Input()
     loadedCalidad: CalidadModel;
 
+    //viewChild
+    @ViewChild('ecod')
+    ecod: EditCalidadOrganigramaDialogComponent;
+
     constructor() {}
 
     ngOnInit() {
         this.orderOrganigrama();
-        setTimeout(() => {
-            console.log(this.data);
-        }, 5000);
     }
 
     orderOrganigrama() {
-        const padre = this.loadedCalidad.calidad_organigrama.find(
-            element => element.id_padre == 0
-        );
-
-        this.loadedCalidad.calidad_organigrama.forEach(org => {
-            if (org.id_padre == 0) {
-                this.data = [
-                    {
-                        label: org.cargo,
-                        data: org,
-                        expanded: true,
-                        children: []
-                    }
-                ];
-            } else {
-                this.searchPadre(this.data[0], org);
-            }
+        this.data = this.loadedCalidad.calidad_organigrama.map(cargo => {
+            return {
+                label: cargo.cargo,
+                data: cargo,
+                expanded: true,
+                children: []
+            };
         });
+
+        let sinHijos: TreeNode[];
+
+        while (this.data.length > 1) {
+            let sinHijos = this.data.filter(cargo => {
+                return this.data.findIndex(
+                    e => e.data.id_padre == cargo.data.id
+                ) == -1
+                    ? true
+                    : false;
+            });
+
+            this.data = this.data
+                .filter(cargo => {
+                    return sinHijos.findIndex(
+                        e => e.data.id == cargo.data.id
+                    ) == -1
+                        ? true
+                        : false;
+                })
+                .map(cargo => {
+                    return {
+                        ...cargo,
+                        children: [
+                            ...cargo.children,
+                            ...sinHijos.filter(
+                                e => e.data.id_padre == cargo.data.id
+                            )
+                        ]
+                    };
+                });
+        }
     }
 
     searchPadre(padre: TreeNode, org: CalidadOrganigramaModel) {
@@ -106,6 +143,7 @@ export class OrganigramaComponent implements OnInit {
     }
 
     onNodeSelect(event) {
-        console.log(event);
+        const cargo: CalidadOrganigramaModel = event.node.data;
+        this.ecod.showDialog(cargo);
     }
 }
