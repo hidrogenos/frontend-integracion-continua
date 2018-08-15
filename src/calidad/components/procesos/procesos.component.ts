@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
 
 @Component({
@@ -17,7 +17,7 @@ import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-pro
                         <div class="ui-g-12" style="text-align: center;">
                             <div class="mapa">
                                 <div class="mapa-entrada">
-                                    <div class="vertical-text btn-mapa" (click)="eventClickEditMapa()">{{ mapa.entrada }}</div>
+                                    <div class="vertical-text btn-mapa" (click)="empd.showDialog()">{{ mapa.entrada }}</div>
                                 </div>
                                 <div class="mapa-procesos">
                                     <div class="chart-contenedor">
@@ -43,20 +43,44 @@ import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-pro
                                     </div>
                                 </div>
                                 <div class="mapa-salida">
-                                    <div class="vertical-text-r btn-mapa" (click)="eventClickEditMapa()" >{{ mapa.salida }} </div>
+                                    <div class="vertical-text-r btn-mapa" (click)="empd.showDialog()" >{{ mapa.salida }} </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-12 text-aling-right">
+                            <button style="margin-right:10px;" pButton 
+                                type="button" 
+                                label="Crear nuevo proceso" 
+                                class="ui-button-primary"
+                                (click)="cpd.display = true">
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div> 
+        <edit-mapa-procesos-dialog #empd
+            [mapa]="mapa"
+            (onUpdateMapaProcesos)="onUpdateMapaProcesos.emit($event)">
+        </edit-mapa-procesos-dialog>
+        <create-proceso-dialog #cpd
+            [procesos]="mapa.procesos">
+        </create-proceso-dialog>
     `
 })
 export class ProcesosComponent implements OnInit {
     //properties
     @Input()
     mapa: CalidadMapaProcesoModel;
+
+    //events
+    @Output()
+    onUpdateMapaProcesos = new EventEmitter<{
+        entrada: string;
+        salida: string;
+    }>();
 
     constructor() {}
 

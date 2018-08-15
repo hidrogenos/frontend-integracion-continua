@@ -1,8 +1,14 @@
 import { CreateCalidadOrganigramaDialogComponent } from './create-calidad-organigrama-dialog/create-calidad-organigrama-dialog.component';
 export * from './create-calidad-organigrama-dialog/create-calidad-organigrama-dialog.component';
 
+import { CreateProcesoDialogComponent } from './create-proceso-dialog/create-proceso-dialog.component';
+export * from './create-proceso-dialog/create-proceso-dialog.component';
+
 import { EditCalidadOrganigramaDialogComponent } from './edit-calidad-organigrama-dialog/edit-calidad-organigrama-dialog.component';
 export * from './edit-calidad-organigrama-dialog/edit-calidad-organigrama-dialog.component';
+
+import { EditMapaProcesosDialogComponent } from './edit-mapa-procesos-dialog/edit-mapa-procesos-dialog.component';
+export * from './edit-mapa-procesos-dialog/edit-mapa-procesos-dialog.component';
 
 import { ManualCalidadComponent } from './manual-calidad/manual-calidad.component';
 export * from './manual-calidad/manual-calidad.component';
@@ -30,7 +36,9 @@ export * from './vision/vision.component';
 
 export const components: any[] = [
     CreateCalidadOrganigramaDialogComponent,
+    CreateProcesoDialogComponent,
     EditCalidadOrganigramaDialogComponent,
+    EditMapaProcesosDialogComponent,
     ManualCalidadComponent,
     MisionComponent,
     OrganigramaComponent,

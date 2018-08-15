@@ -67,7 +67,8 @@ import { element } from '../../../../node_modules/protractor';
                 </organigrama>
                 <procesos
                     *ngIf="loadedCalidad"
-                    [mapa]="loadedCalidad.calidad_mapa_procesos">
+                    [mapa]="loadedCalidad.calidad_mapa_procesos"
+                    (onUpdateMapaProcesos)="updateMapaProcesos($event)">
                 </procesos>
             </div>
         </div> 
@@ -256,6 +257,24 @@ export class NuestraEmpresaComponent implements OnInit {
                     this.manual.toggleEdit();
                     this.hideWaitDialog();
                 }, 1);
+            });
+    }
+
+    updateMapaProcesos(data: { entrada: string; salida: string }) {
+        this.showWaitDialog(
+            'Actializando mapa de procesos, un momento por favor..'
+        );
+        this.nuestraEmpresaService
+            .updateMapaProcesos(
+                this.loadedCalidad.calidad_mapa_procesos.id,
+                data
+            )
+            .subscribe(response => {
+                this.loadedCalidad.calidad_mapa_procesos = {
+                    ...this.loadedCalidad.calidad_mapa_procesos,
+                    ...response
+                };
+                this.hideWaitDialog();
             });
     }
 

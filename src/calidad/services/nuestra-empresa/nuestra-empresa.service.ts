@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { CalidadModel } from '../../../shared/models/calidad.model';
 import { environment } from '../../../environments/environment';
 import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
+import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
 
 @Injectable()
 export class NuestraEmpresaService {
@@ -31,6 +32,21 @@ export class NuestraEmpresaService {
         return this.http
             .get<CalidadOrganigramaModel>(
                 `${environment.apiUrl}/calidad/delete-cargo/${id}`
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    updateMapaProcesos(
+        id: number,
+        data: {
+            entrada: string;
+            salida: string;
+        }
+    ): Observable<CalidadMapaProcesoModel> {
+        return this.http
+            .post<CalidadMapaProcesoModel>(
+                `${environment.apiUrl}/calidad/update-mapa-procesos/${id}`,
+                data
             )
             .pipe(catchError((error: any) => throwError(error)));
     }
