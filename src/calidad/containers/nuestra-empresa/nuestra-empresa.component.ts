@@ -62,8 +62,14 @@ import { element } from '../../../../node_modules/protractor';
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
                     (onCreateNewCargo)="createCargo($event)"
-                    (onUpdateCargo)="updateCrago($event)">
+                    (onUpdateCargo)="updateCrago($event)"
+                    (onDeleteCargo)="deleteCargo($event)">
                 </organigrama>
+                <procesos
+                    *ngIf="loadedCalidad"
+                    [mapa]="loadedCalidad.calidad_mapa_procesos"
+                    (onUpdateMapaProcesos)="updateMapaProcesos($event)">
+                </procesos>
             </div>
         </div> 
         
@@ -133,6 +139,30 @@ export class NuestraEmpresaComponent implements OnInit {
             this.organigrama.orderOrganigrama();
             this.hideWaitDialog();
         });
+    }
+
+    deleteCargo(id: number) {
+        if (
+            this.loadedCalidad.calidad_organigrama.findIndex(
+                cargo => cargo.id_padre == id
+            ) == -1
+        ) {
+            this.showWaitDialog('Eliminando cargo, un momento por favor...');
+            this.nuestraEmpresaService.deleteCargo(id).subscribe(response => {
+                this.loadedCalidad.calidad_organigrama = this.loadedCalidad.calidad_organigrama.filter(
+                    cargo => cargo.id != id
+                );
+
+                setTimeout(() => {
+                    this.organigrama.orderOrganigrama();
+                    this.hideWaitDialog();
+                }, 2);
+            });
+        } else {
+            alert(
+                'No es posible borrar un cargo con sub alternos, por favor elimine o reasigne los subalternos del cargo a eliminar'
+            );
+        }
     }
 
     descargarManual() {
@@ -227,6 +257,24 @@ export class NuestraEmpresaComponent implements OnInit {
                     this.manual.toggleEdit();
                     this.hideWaitDialog();
                 }, 1);
+            });
+    }
+
+    updateMapaProcesos(data: { entrada: string; salida: string }) {
+        this.showWaitDialog(
+            'Actializando mapa de procesos, un momento por favor..'
+        );
+        this.nuestraEmpresaService
+            .updateMapaProcesos(
+                this.loadedCalidad.calidad_mapa_procesos.id,
+                data
+            )
+            .subscribe(response => {
+                this.loadedCalidad.calidad_mapa_procesos = {
+                    ...this.loadedCalidad.calidad_mapa_procesos,
+                    ...response
+                };
+                this.hideWaitDialog();
             });
     }
 

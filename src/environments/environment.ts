@@ -13,7 +13,9 @@ export const environment = {
         clientId: 2
     },
     dateFormatAngular: 'yyyy-MM-dd',
-    dateFormatPrimeNg: 'yy-mm-dd'
-
-
+    dateFormatPrimeNg: 'yy-mm-dd',
+    ids_tipo_documento: {
+        manual_calidad: 1
+    },
+    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp']
 };

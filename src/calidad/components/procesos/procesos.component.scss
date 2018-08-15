@@ -1,0 +1,112 @@
+.mapa {
+    display: table;
+    height: 400px;
+    width: 100%;
+    overflow: auto;
+}
+
+.mapa-proceso {
+    background: gray;
+    width: 90%;
+}
+.mapa-entrada {
+    display: table-cell;
+    height: 400px;
+    width: 40px;
+    vertical-align: middle;
+    background: white;
+    cursor: pointer;
+}
+
+.vertical-text {
+    writing-mode: vertical-rl;
+}
+
+.mapa-salida {
+    display: table-cell;
+    height: 400px;
+    width: 40px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.vertical-text-r {
+    writing-mode: vertical-lr;
+}
+
+.btn-mapa {
+    background: #dcdcdc;
+    text-align: center;
+    min-height: 200px;
+    border-radius: 4px;
+    color: #3c4858;
+    font-weight: lighter;
+    opacity: 1;
+    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
+        0 7px 10px -5px rgba(60, 72, 88, 0.4);
+}
+
+.mapa-separator {
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.btn-mapa-proceso {
+    cursor: pointer;
+    cursor: hand;
+    display: inline-block;
+    padding: 17px;
+    background: #d0282b;
+    text-align: center;
+    min-width: 100px;
+    border-radius: 4px;
+    color: #ddd;
+    font-weight: lighter;
+    opacity: 1;
+    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
+        0 7px 10px -5px rgba(60, 72, 88, 0.4);
+    margin-right: 10px;
+}
+
+.mapa-proceso-titulo {
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.mapa-minitem {
+    display: inline-block;
+}
+
+.mapa-minitem img {
+    width: 70px;
+}
+
+.proceso {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 30px;
+}
+
+.fecha-dos {
+    width: 70px;
+    position: relative;
+    top: 13px;
+    cursor: pointer;
+}
+
+.flecha-der {
+    width: 70px;
+    position: relative;
+    top: 12px;
+    cursor: pointer;
+}
+
+.flecha-izq {
+    width: 70px;
+    position: relative;
+    top: 12px;
+    cursor: pointer;
+}

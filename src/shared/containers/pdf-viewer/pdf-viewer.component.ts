@@ -42,7 +42,6 @@ export class PdfViewerComponent implements OnInit {
         this.showWaitDialog('Consultado documento, un momento por favor...');
         this.store
             .select(fromRoot.getRouterState)
-            .pipe(take(1))
             .subscribe(routeState => {
                 console.log(routeState);
                 const params = routeState.state.params;

@@ -98,7 +98,6 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     }
 
     loadInitData() {
-
         this.showWaitDialog(
             'Acción en proceso',
             'Consultado datos requeridos, un momento por favor...'
@@ -108,8 +107,8 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
         this.colsAccionCorrectivaProceso = [
             { field: 'nombre', header: 'Nombre proceso' },
-            { field: 'acciones', header: 'Acciones'}
-        ]
+            { field: 'acciones', header: 'Acciones' }
+        ];
 
         let esperandoId = true;
         let id = 0;
@@ -138,34 +137,36 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                     this.procesosAccionCorrectiva = procesosAccionCorrectiva;
 
                     setTimeout(() => {
-                        this.editAccionCorrectivaComponent.setDataAccionCorrectiva(this.accionCorrectivaActual);
+                        this.editAccionCorrectivaComponent.setDataAccionCorrectiva(
+                            this.accionCorrectivaActual
+                        );
                         this.loadingProcesos = false;
-                }, 1);
+                    }, 1);
                     this.hideWaitDialog();
-                });
-            }  
-    }
-
- 
-    updateAccionCorrectiva(data: AccionModel) {
-        this.accionCorrectivaService.updateAccionCorrectiva(data)
-        .subscribe( (response) => {
-            this.accionCorrectivaActual = response;
-            this.hideWaitDialog();
-        });
-    }
-
-    getAccionCorrectiva(id: number){
-        return this.accionCorrectivaService.getAccionCorrectiva(id)
-        .pipe( map((response ) => {
-                const accionCorrectiva : AccionModel = {
-                    ...response,
-                    fecha_creacion : response.fecha_creacion * 1000
                 }
+            );
+        }
+    }
+
+    updateAccionCorrectiva(data: AccionModel) {
+        this.accionCorrectivaService
+            .updateAccionCorrectiva(data)
+            .subscribe(response => {
+                this.accionCorrectivaActual = response;
+                this.hideWaitDialog();
+            });
+    }
+
+    getAccionCorrectiva(id: number) {
+        return this.accionCorrectivaService.getAccionCorrectiva(id).pipe(
+            map(response => {
+                const accionCorrectiva: AccionModel = {
+                    ...response,
+                    fecha_creacion: response.fecha_creacion * 1000
+                };
                 return accionCorrectiva;
             })
-        )
-        ;
+        );
     }
 
     addProcesoToAccionCorrectiva( data: MapaProcesoHijoModel[]) {
@@ -174,7 +175,6 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             'Relacionando proceso a acción correctiva, un momento por favor...'
         );
         this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            
             let accionCorrectivaProcesos: AccionProcesoModel[] = [];
 
             data.forEach(mapaProcesoHijo => {
@@ -182,58 +182,62 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                     id_mapa_procesos: mapaProcesoHijo.id,
                     id_accion_correctiva: this.accionCorrectivaActual.id,
                     id_usuario: usuario.id
-                }
+                };
                 accionCorrectivaProcesos.push(accionCorrectivaProceso);
             });
 
-            this.accionesCorrectivasProcesoService.addProcesoToAccionCorrectiva(accionCorrectivaProcesos)
-            .subscribe( procesosAccionCorrectiva => {
-                this.procesosAccionCorrectiva = [
-                    ...this.procesosAccionCorrectiva,
-                    ...procesosAccionCorrectiva
-                ]
-                this.procesos = this.procesos.filter(procesoActual => {
-                     procesosAccionCorrectiva.forEach(procesoAccionCorrectivaActual=> {
-                         if(procesoActual.id != procesoAccionCorrectivaActual.id_mapa_procesos)
-                         {
-                            return procesoActual;
-                         }
-                     })                    
+            this.accionesCorrectivasProcesoService
+                .addProcesoToAccionCorrectiva(accionCorrectivaProcesos)
+                .subscribe(procesosAccionCorrectiva => {
+                    this.procesosAccionCorrectiva = [
+                        ...this.procesosAccionCorrectiva,
+                        ...procesosAccionCorrectiva
+                    ];
+                    this.procesos = this.procesos.filter(procesoActual => {
+                        procesosAccionCorrectiva.forEach(
+                            procesoAccionCorrectivaActual => {
+                                if (
+                                    procesoActual.id !=
+                                    procesoAccionCorrectivaActual.id_mapa_procesos
+                                ) {
+                                    return procesoActual;
+                                }
+                            }
+                        );
                     });
-                this.hideWaitDialog();
-            });
+                    this.hideWaitDialog();
+                });
         });
     }
 
-    deleteProcesoFromAccionCorrectiva( data: AccionProcesoModel) {
+    deleteProcesoFromAccionCorrectiva(data: AccionProcesoModel) {
         this.showWaitDialog(
             'Acción en proceso',
             'Eliminando proceso de acción correctiva, un momento por favor...'
         );
-        this.accionesCorrectivasProcesoService.deleteProcesoFromAccionCorrectiva(data.id)
-        .subscribe( procesoAccionCorrectiva => {
+        this.accionesCorrectivasProcesoService
+            .deleteProcesoFromAccionCorrectiva(data.id)
+            .subscribe(procesoAccionCorrectiva => {
+                this.procesosAccionCorrectiva = this.procesosAccionCorrectiva.filter(
+                    procesoActual => {
+                        if (procesoActual.id != procesoAccionCorrectiva.id) {
+                            return procesoActual;
+                        } else {
+                            // const proceso:  MapaProcesoHijoModel= {
+                            //     id: procesoActual.proceso.id,
+                            //     proceso: procesoActual.proceso.proceso
+                            // };
 
-            this.procesosAccionCorrectiva = this.procesosAccionCorrectiva
-            .filter(procesoActual => {
-                 if(procesoActual.id != procesoAccionCorrectiva.id)
-                 {
-                     return procesoActual;
+                            this.procesos = [
+                                ...this.procesos,
+                                procesoActual.proceso
+                            ];
+                        }
+                    }
+                );
 
-                 }else{
-                    const proceso:  MapaProcesoHijoModel= {
-                        id: procesoActual.proceso.id,
-                        proceso: procesoActual.proceso.proceso
-                    };
-                    
-                    this.procesos = [
-                        ...this.procesos, 
-                        proceso];
-
-                 }
+                this.hideWaitDialog();
             });
-        
-            this.hideWaitDialog();
-        });
     }
 
     uploadDocumentosToAccionCorrectiva(files: File[]) {
@@ -304,4 +308,3 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     }
 
 }
-
