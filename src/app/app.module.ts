@@ -30,6 +30,8 @@ import { reducers, effects, CustomSerializer } from './store';
 //dev tools store
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import {MessageService} from 'primeng/api'
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -53,7 +55,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
             provide: HTTP_INTERCEPTORS,
             useClass: AuthTokenInterceptor,
             multi: true
-        }
+        },        
+        MessageService
     ],
     bootstrap: [fromContainers.AppComponent]
 })

@@ -11,8 +11,14 @@ import * as fromContainers from './containers';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToastModule } from 'primeng/toast';
 
-const primeNgModules = [ButtonModule, DialogModule, DropdownModule];
+const primeNgModules = [
+    ButtonModule,
+    DialogModule,
+    DropdownModule,
+    ToastModule
+];
 
 //services
 import * as fromServices from './services';
@@ -29,7 +35,9 @@ import { reducers } from './store';
         StoreModule.forFeature('shared', reducers)
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
-    providers: [...fromServices.services],
+    providers: [
+        ...fromServices.services
+    ],
     exports: [...fromComponents.components]
 })
-export class SharedModule {}
+export class SharedModule { }
