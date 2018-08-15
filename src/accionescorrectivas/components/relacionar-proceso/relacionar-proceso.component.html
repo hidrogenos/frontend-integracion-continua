@@ -19,6 +19,7 @@
                     <button pButton type="button" label="Relacionar proceso" (click)="relacionarProcesos()"
                     [disabled]="!form.valid"></button>
                 </div>
+                {{ (procesos |json) + (selectedProcesos |json) }}
             </div>
         </form>
     </div>

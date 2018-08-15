@@ -167,3 +167,38 @@ el error si se repite el código
 -> se gregan los campos
 -> created_at: compatibilidad con eloquent.
 -> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_analisis_tipo
+
+-> se gregan los campos
+-> se eliminan los campos id_usuario y fecha
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+## TABLA sgd_accion_analisis
+
+Se elimino la tabla.
+Se segmento en acciones correctivas y preventivas
+
+## TABLA sgd_accion_analisis_hijo
+
+Se elimino la tabla.
+Se segmento en acciones correctivas y preventivas
+
+
+## TABLA sgd_accion_correctiva_analisis
+
+se creo la tabla en base a los campos de sgd_accion_analisis,
+solo para acciones correctivas
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.
+
+
+## TABLA sgd_accion_correctiva_analisis_hijo
+
+se creo la tabla en base a los campos de sgd_accion_analisis_hijo,
+solo para acciones correctivas
+-> se gregan los campos
+-> created_at: compatibilidad con eloquent.
+-> updated_at: compatibilidad con eloquent.

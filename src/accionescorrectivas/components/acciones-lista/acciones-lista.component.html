@@ -1,5 +1,5 @@
 <p-table #tableListaAccionCorrectiva [value]="data" [lazy]="true" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="[10,15,20]" 
-[totalRecords]="cantidadTotalAcciones" [loading]="loading" (onLazyLoad)="loadLazy($event)">
+[totalRecords]="cantidadTotalAcciones" [loading]="loading" (onLazyLoad)="loadLazy($event)" [columns]="cols">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -8,7 +8,7 @@
         </tr>
         <tr>
             <th *ngFor="let col of columns">
-                <input *ngIf="col.field != 'none'" pInputText type="text" (input)="tableListaAccionCorrectiva.filter($event.target.value, col.field, 'contains')" style="width: 100%">     
+                <input  pInputText type="text" (input)="tableListaAccionCorrectiva.filter($event.target.value, col.field, 'contains')" style="width: 100%">   
             </th>
         </tr>
     </ng-template>

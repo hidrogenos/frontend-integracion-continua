@@ -16,6 +16,8 @@ export * from './relacionar-proceso/relacionar-proceso.component';
 import { CreateDocumentoAccionCorrectivaComponent } from './create-accion-correctiva-documento/create-accion-correctiva-documento.component';
 export * from './create-accion-correctiva-documento/create-accion-correctiva-documento.component';
 
+import { CreateMetodologiaAnalisisComponent } from './create-metodologia-analisis/create-metodologia-analisis.component';
+export * from './create-metodologia-analisis/create-metodologia-analisis.component';
 
 
 export const container: any[] = [ 
@@ -24,5 +26,6 @@ export const container: any[] = [
                                     CreateAccionCorrectivaDialogComponent,
                                     EditAccionCorrectivaComponent,
                                     RelacionarProcesoComponent,
-                                    CreateDocumentoAccionCorrectivaComponent
+                                    CreateDocumentoAccionCorrectivaComponent,
+                                    CreateMetodologiaAnalisisComponent
                                 ];

@@ -145,6 +145,7 @@ export class AccionCorrectivaListaComponent implements OnInit {
      * Este método se encarga de hacer una petición cada vez que sea necesario hacer un lazy loading
      */
     loadLazyAccionesCorrectivas(event) {
+        console.log(event);
         this.estaCargando = true;
         this.accionesCorrectivasService.getLazyAccionesCorrectivas(event)
         .subscribe((response: { cantidad: number,  data: AccionModel[] }) => {

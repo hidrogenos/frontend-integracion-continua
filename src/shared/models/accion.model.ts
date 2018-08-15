@@ -1,5 +1,7 @@
 import { AccionProcesoModel } from "./accion-proceso.model";
 import { AccionImportanciaModel } from "./accion-importancia.model";
+import { AccionDocumentoModel } from "./accion-documento.model";
+import { AccionCorrectivaAnalisisModel } from "./accion-correctiva-analisis.model";
 
 export interface AccionModel {
     id?: number,
@@ -17,4 +19,6 @@ export interface AccionModel {
     responsable?: any,
     id_usuario_crea?: number
     procesos?: AccionProcesoModel[],
+    documentos?: AccionDocumentoModel[],
+    metodologia_analisis?: AccionCorrectivaAnalisisModel
 }
