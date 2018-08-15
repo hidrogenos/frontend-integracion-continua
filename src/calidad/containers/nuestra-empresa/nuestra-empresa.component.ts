@@ -17,6 +17,7 @@ import * as fromShared from './../../../shared/store';
 import * as fromRoot from './../../../app/store';
 import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
 import { element } from '../../../../node_modules/protractor';
+import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
 
 @Component({
     selector: 'nuestra-empresa',
@@ -68,7 +69,9 @@ import { element } from '../../../../node_modules/protractor';
                 <procesos
                     *ngIf="loadedCalidad"
                     [mapa]="loadedCalidad.calidad_mapa_procesos"
-                    (onUpdateMapaProcesos)="updateMapaProcesos($event)">
+                    (onUpdateMapaProcesos)="updateMapaProcesos($event)"
+                    (onCreateProceso)="createProceso($event)"
+                    (onUpdateProceso)="updateProceso($event)">
                 </procesos>
             </div>
         </div> 
@@ -139,6 +142,21 @@ export class NuestraEmpresaComponent implements OnInit {
             this.organigrama.orderOrganigrama();
             this.hideWaitDialog();
         });
+    }
+
+    createProceso(proceso: MapaProcesoHijoModel) {
+        this.showWaitDialog(
+            'Registrando nuevo proceso, un momento por favor...'
+        );
+        this.nuestraEmpresaService
+            .createProceso(proceso)
+            .subscribe(response => {
+                this.loadedCalidad.calidad_mapa_procesos.procesos = [
+                    ...this.loadedCalidad.calidad_mapa_procesos.procesos,
+                    response
+                ];
+                this.hideWaitDialog();
+            });
     }
 
     deleteCargo(id: number) {
@@ -307,6 +325,16 @@ export class NuestraEmpresaComponent implements OnInit {
                     this.politica.toggleEdit();
                     this.hideWaitDialog();
                 }, 1);
+            });
+    }
+
+    updateProceso(proceso: MapaProcesoHijoModel) {
+        this.nuestraEmpresaService
+            .updateProceso(proceso.id, proceso)
+            .subscribe(response => {
+                this.loadedCalidad.calidad_mapa_procesos.procesos = this.loadedCalidad.calidad_mapa_procesos.procesos.map(
+                    e => (e.id != proceso.id ? e : proceso)
+                );
             });
     }
 
