@@ -4,7 +4,7 @@ import { Message } from 'primeng/primeng';
 @Component({
     selector: 'alert-message',
     template: `
-        <p-toast key="global-toast"></p-toast>
+        <p-toast></p-toast>
     `
 })
 export class AlertMessageComponent {
