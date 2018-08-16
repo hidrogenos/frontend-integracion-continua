@@ -33,10 +33,10 @@ export class AuthTokenInterceptor implements HttpInterceptor {
         });
         return next.handle(modified).pipe(
             catchError(err => {
-                if (err instanceof HttpErrorResponse) {
-                    this.messageService.add({ key: 'global-toast', severity: 'error', summary: err.status.toString(), detail: err.statusText });
-                } else {
-                    this.messageService.add({ key: 'global-toast', severity: 'error', summary: 'Error', detail: 'Contacte con el administrador' });
+                if (err instanceof HttpErrorResponse && err.status !== 401) {
+                    this.messageService.add({ severity: 'error', summary: err.status.toString(), detail: err.statusText });
+                } else if (err.status !== 401) {
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Contacte con el administrador' });
                 }
                 return throwError(err);
             })
