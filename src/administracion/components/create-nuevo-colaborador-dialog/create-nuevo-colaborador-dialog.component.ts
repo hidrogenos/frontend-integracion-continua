@@ -143,7 +143,6 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                                 appendTo="body">
                             </p-dropdown>
                         </div>
-                        
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid">

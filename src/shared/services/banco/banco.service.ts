@@ -5,16 +5,16 @@ import { catchError } from 'rxjs/operators';
 
 //environment
 import { environment } from '../../../environments/environment';
-import { TipoIdentificacionModel } from '../../models/tipo-identificacion.model';
+import { BancoModel } from '../../../shared/models/banco.model';
 
 @Injectable()
-export class TipoIdentificacionService {
+export class BancoService {
     constructor(private http: HttpClient) {}
 
-    getTiposIdentificacion(): Observable<TipoIdentificacionModel[]> {
+    getBancos(): Observable<BancoModel[]> {
         return this.http
-            .get<TipoIdentificacionModel[]>(
-                `${environment.apiUrl}/tiposidentificacion`
+            .get<BancoModel[]>(
+                `${environment.apiUrl}/bancos`
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
     }
