@@ -15,33 +15,41 @@ import { RegimenModel } from '../../../shared/models/regimen.model';
 
 @Injectable()
 export class ProveedorListaService {
-    constructor(private http: HttpClient,
-                private proveedorService: ProveedorService) {}
+    constructor(
+        private http: HttpClient,
+        private proveedorService: ProveedorService
+    ) {}
 
     getProveedores(): Observable<ProveedorModel[]> {
         return this.http
-            .get<ProveedorModel[]>(`${environment.apiUrl}/administracion/proveedor/get-proveedores`)
+            .get<ProveedorModel[]>(
+                `${environment.apiUrl}/proveedor/get-proveedores`
+            )
             .pipe(catchError(error => Observable.throw(error.json())));
     }
 
     getProveedoresLazy(data): Observable<{ totalRows: number; data: any[] }> {
         return this.http
             .post<{ totalRows: number; data: any[] }>(
-                `${
-                    environment.apiUrl
-                }/administracion/proveedor/get-proveedores-lazy`,
+                `${environment.apiUrl}/proveedor/get-proveedores-lazy`,
                 data
             )
-            .pipe(catchError((error: any) => Observable.throw(error.json())));       
+            .pipe(catchError((error: any) => Observable.throw(error.json())));
     }
 
     getProveedor(id): Observable<ProveedorModel> {
         return this.http
-            .get<ProveedorModel>(`${environment.apiUrl}/administracion/proveedor/get-detalle-proveedor/${id}`)
+            .get<ProveedorModel>(
+                `${environment.apiUrl}/proveedor/get-detalle-proveedor/${id}`
+            )
             .pipe(
                 map(response => {
-                    return this.proveedorService.transformResponseProveedor(response)
-                }),catchError(error => Observable.throw(error.json())));
+                    return this.proveedorService.transformResponseProveedor(
+                        response
+                    );
+                }),
+                catchError(error => Observable.throw(error.json()))
+            );
     }
 
     getInitialData(): Observable<{
@@ -52,30 +60,25 @@ export class ProveedorListaService {
         regimen: RegimenModel[];
     }> {
         return this.http
-            .get<any>(
-                `${
-                    environment.apiUrl
-                }/administracion/proveedor/get-initial-data`
-            )
+            .get<any>(`${environment.apiUrl}/proveedor/get-initial-data`)
             .pipe(catchError((error: any) => throwError(error)));
     }
 
     onEliminar(event: ProveedorModel): Observable<ProveedorModel> {
         console.log(event);
         return this.http.delete<ProveedorModel>(
-            `${environment.apiUrl}/administracion/proveedor/delete-proveedor/${
-                event.id
-            }`
+            `${environment.apiUrl}/proveedor/delete-proveedor/${event.id}`
         );
     }
 
-    updateProveedor(id: number, data: ProveedorModel): Observable<ProveedorModel> {
+    updateProveedor(
+        id: number,
+        data: ProveedorModel
+    ): Observable<ProveedorModel> {
         let aux = this.proveedorService.transformRequestProveedor(data);
         return this.http
             .post<ProveedorModel>(
-                `${
-                    environment.apiUrl
-                }/administracion/proveedor/update-proveedor/${id}`,
+                `${environment.apiUrl}/proveedor/update-proveedor/${id}`,
                 aux
             )
             .pipe(catchError((error: any) => throwError(error)));

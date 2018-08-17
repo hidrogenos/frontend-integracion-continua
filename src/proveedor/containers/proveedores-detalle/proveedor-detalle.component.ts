@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    EventEmitter,
+    Output,
+    Input
+} from '@angular/core';
 import { StoreModel } from '../../../shared/models/store.model';
 
 //store
@@ -6,7 +13,14 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from './../../../app/store';
 import { forkJoin } from 'rxjs';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
-import { TipoCuentaService, TipoIdentificacionService, BancoService, RegimenService, CiudadService, ProveedorService } from '../../../shared/services';
+import {
+    TipoCuentaService,
+    TipoIdentificacionService,
+    BancoService,
+    RegimenService,
+    CiudadService,
+    ProveedorService
+} from '../../../shared/services';
 import { TipoCuentaModel } from '../../../shared/models/TipoCuenta.model';
 import { BancoModel } from '../../../shared/models/banco.model';
 import { RegimenModel } from '../../../shared/models/regimen.model';
@@ -41,9 +55,8 @@ import { take, switchMap } from 'rxjs/operators';
     `
 })
 export class ProveedorDetalleComponent implements OnInit {
-    
     //atributos
-    display:boolean;
+    display: boolean;
     proveedores: ProveedorModel[];
     proveedor: ProveedorModel;
     identificacion: TipoIdentificacionModel[];
@@ -53,10 +66,11 @@ export class ProveedorDetalleComponent implements OnInit {
     tipoCuenta: TipoCuentaModel[];
 
     //viewChild
-    @ViewChild('epd') epd: EditProveedorDetalComponent;
+    @ViewChild('epd')
+    epd: EditProveedorDetalComponent;
 
-     //properties
-     constructor(
+    //properties
+    constructor(
         private ciudadService: CiudadService,
         private regimenService: RegimenService,
         private bancosService: BancoService,
@@ -66,18 +80,17 @@ export class ProveedorDetalleComponent implements OnInit {
         private proveedorListaService: ProveedorListaService,
         private proveedorservice: ProveedorService,
         private proveedorListService: ProveedorListaService
-
     ) {}
-    
-    ngOnInit(){
+
+    ngOnInit() {
         this.getinitialData();
     }
 
-    getAuxData(){
+    getAuxData() {
         return this.proveedorListaService.getInitialData();
     }
 
-    getinitialData(){
+    getinitialData() {
         this.showWaitDialog(
             'Consultando datos del colaborador, un momento por favor'
         );
@@ -91,21 +104,22 @@ export class ProveedorDetalleComponent implements OnInit {
                 this.epd.identificacion = auxData.tiposIdentificacion;
 
                 setTimeout(() => {
-                    console.log(proveedor)
+                    console.log(proveedor);
                     this.epd.loadFormData(proveedor);
                     this.hideWaitDialog();
-                },1);
+                }, 1);
             }
-        )
+        );
     }
 
-    getProveedor(){
-        return this.store.select(fromRoot.getRouterState).pipe(take(1),
-        switchMap(routerState => {
-            return this.proveedorListService.getProveedor(
-                routerState.state.params.id
+    getProveedor() {
+        return this.store.select(fromRoot.getRouterState).pipe(
+            take(1),
+            switchMap(routerState => {
+                return this.proveedorListService.getProveedor(
+                    routerState.state.params.id
                 );
-             })
+            })
         );
     }
 
@@ -116,29 +130,29 @@ export class ProveedorDetalleComponent implements OnInit {
             })
         );
     }
-    
-    getProveedores(){
+
+    getProveedores() {
         return this.proveedorListaService.getProveedores();
     }
 
-    getTiposIdentificacion(){
-         return this.tipoIdentificacionservice.getTiposIdentificacion();
+    getTiposIdentificacion() {
+        return this.tipoIdentificacionservice.getTiposIdentificacion();
     }
 
-    getBancos(){
-         return this.bancosService.getBancos();
+    getBancos() {
+        return this.bancosService.getBancos();
     }
 
-    getCiudades(){
-         return this.ciudadService.getCiudades();
+    getCiudades() {
+        return this.ciudadService.getCiudades();
     }
 
-    getRegimen(){
+    getRegimen() {
         return this.regimenService.getRegimen();
     }
 
-    getTipoCuentas(){
-         return this.tipoCuentaService.getTiposCuentas();
+    getTipoCuentas() {
+        return this.tipoCuentaService.getTiposCuentas();
     }
 
     hideWaitDialog() {
@@ -158,7 +172,7 @@ export class ProveedorDetalleComponent implements OnInit {
                 setTimeout(() => {
                     this.epd.loadFormData(proveedor);
                     this.hideWaitDialog();
-            }, 1);
-        });
+                }, 1);
+            });
     }
 }

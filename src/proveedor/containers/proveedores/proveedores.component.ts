@@ -89,56 +89,53 @@ import * as fromRoot from './../../../app/store';
         </div>
     `
 })
-
-export class ProveedoresComponent implements OnInit{
-    
+export class ProveedoresComponent implements OnInit {
     //atributos
     loading: boolean = true;
     proveedores: ProveedorModel[];
     totalRecords: number;
 
     //properties
-    constructor( 
+    constructor(
         private proveedorListaService: ProveedorListaService,
         private proveedorService: ProveedorService,
         private store: Store<StoreModel>
-    ){
-
-    }
+    ) {}
 
     //viewchild
     @ViewChild('createProveedor')
     createProveedor: CreateProveedorDialogComponent;
     @ViewChild('detallesProveeddor')
-    detallesProveeddor: ProveedorService
+    detallesProveeddor: ProveedorService;
     @ViewChild('dt')
     dt: DataTable;
 
-    ngOnInit(){
+    ngOnInit() {
         this.loadInitData();
     }
 
     detalleProveedor(event: ProveedorModel) {
-        
         this.store.dispatch(
             new fromRoot.Go({
-                path: [`administracion/proveedores/detalle/${event.id}`]
+                path: [`proveedores/detalle/${event.id}`]
             })
         );
     }
 
     deleteProveedor(event: ProveedorModel) {
-        console.log(event)
+        console.log(event);
         this.proveedorListaService
-        .onEliminar(event)
-        .subscribe((data: ProveedorModel) => {
-        this.proveedores = this.proveedores.filter((proveedor: ProveedorModel) => {
-          return proveedor.id != event.id;
-             });
-        });
+            .onEliminar(event)
+            .subscribe((data: ProveedorModel) => {
+                this.proveedores = this.proveedores.filter(
+                    (proveedor: ProveedorModel) => {
+                        return proveedor.id != event.id;
+                    }
+                );
+            });
     }
 
-    getProveedores(){
+    getProveedores() {
         return this.proveedorListaService.getProveedores();
     }
 
@@ -146,24 +143,21 @@ export class ProveedoresComponent implements OnInit{
         this.store.dispatch(new fromShared.HideWaitDialog());
     }
 
-    loadInitData(){
-        this.showWaitDialog('Consultando datos requeridos, un momento por favor...');
-        forkJoin([this.loadInitDataUno()]).subscribe(
-            () => this.hideWaitDialog());
+    loadInitData() {
+        this.showWaitDialog(
+            'Consultando datos requeridos, un momento por favor...'
+        );
+        forkJoin([this.loadInitDataUno()]).subscribe(() =>
+            this.hideWaitDialog()
+        );
     }
 
     loadInitDataUno() {
-        let aux = forkJoin([
-            this.getProveedores(),
-        ]);
+        let aux = forkJoin([this.getProveedores()]);
 
-        aux.subscribe(
-            ([
-                proveedores,
-            ]) => {
-                this.proveedores = proveedores;
-            }
-        );
+        aux.subscribe(([proveedores]) => {
+            this.proveedores = proveedores;
+        });
         return aux;
     }
 
@@ -178,12 +172,9 @@ export class ProveedoresComponent implements OnInit{
             });
     }
 
-    onCreate($event){
+    onCreate($event) {
         this.proveedorService.createProveedor($event).subscribe(response => {
-            this.proveedores =[
-                ...this.proveedores,
-                response
-            ];
+            this.proveedores = [...this.proveedores, response];
         });
     }
 
@@ -191,5 +182,3 @@ export class ProveedoresComponent implements OnInit{
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
     }
 }
-
-
