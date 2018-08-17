@@ -13,11 +13,17 @@ export * from './create-nuevo-colaborador-dialog/create-nuevo-colaborador-dialog
 import { CreatePerfilComponent } from './create-perfil/create-perfil.component';
 export * from './create-perfil/create-perfil.component';
 
+import { CreateProveedorDialogComponent } from './create-proveedor-dialog/create-proveedor-dialog.component';
+export * from './create-proveedor-dialog/create-proveedor-dialog.component';
+
 import { DatosBasicosColaboradorComponent } from './datos-basico-colaborador/datos-basicos-colaborador.component';
 export * from './datos-basico-colaborador/datos-basicos-colaborador.component';
 
 import { EditAptitudDestrezaColaboradorComponent } from './edit-aptitud-destreza-colaborador/edit-aptitud-destreza-colaborador.component';
 export * from './edit-aptitud-destreza-colaborador/edit-aptitud-destreza-colaborador.component';
+
+import { EditProveedorDetalComponent } from './edit-proveedor-detail/edit-proveedor-detail.component';
+export * from './edit-proveedor-detail/edit-proveedor-detail.component';
 
 import { ListaPerfilesComponent } from './lista-perfiles/lista-perfiles.component';
 export * from './lista-perfiles/lista-perfiles.component';
@@ -38,5 +44,7 @@ export const components: any[] = [
     EditAptitudDestrezaColaboradorComponent,
     ListaPerfilesComponent,
     ListaPermisosComponent,
-    ResetContrasenaColaboradorComponent
+    ResetContrasenaColaboradorComponent,
+    CreateProveedorDialogComponent,
+    EditProveedorDetalComponent
 ];

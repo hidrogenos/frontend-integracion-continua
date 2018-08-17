@@ -29,7 +29,22 @@ export const ROUTES: Routes = [
             {
                 path: 'permisos',
                 component: fromContainers.PermisosComponent
-            }
+            },
+            { path: '', redirectTo: 'proveedores', pathMatch: 'full' },
+            {
+                path: 'proveedores',
+                children: [
+                    { path: '', redirectTo: 'lista', pathMatch: 'full' },
+                    {
+                        path: 'detalle/:id',
+                        component: fromContainers.ProveedorDetalleComponent
+                    },
+                    {
+                        path: 'lista',
+                        component: fromContainers.ProveedoresComponent
+                    }
+                ]
+            },
         ]
     }
 ];

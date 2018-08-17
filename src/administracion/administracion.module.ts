@@ -19,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
+
 const primeNgModules = [
     ButtonModule,
     CalendarModule,
@@ -37,6 +38,7 @@ import { AdministracionRoutes } from './administracion.routing';
 
 //services
 import * as fromServices from './services';
+
 
 @NgModule({
     imports: [
