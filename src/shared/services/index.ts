@@ -1,3 +1,9 @@
+import { AdjuntoService } from './utils/adjunto/adjunto.service';
+export * from './utils/adjunto/adjunto.service';
+
+import { CalidadService } from './calidad/calidad.service';
+export * from './calidad/calidad.service';
+
 import { HasPermisionService } from './utils/auth-has-permision/auth-has-permision.service';
 export * from './utils/auth-has-permision/auth-has-permision.service';
 
@@ -35,6 +41,8 @@ import { UsuarioDocumentoService } from './usuario-documento/usuario-documento.s
 export * from './usuario-documento/usuario-documento.service';
 
 export const services: any[] = [
+    AdjuntoService,
+    CalidadService,
     HasPermisionService,
     PdfViewerService,
     TipoIdentificacionService,
