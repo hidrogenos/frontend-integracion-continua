@@ -15,10 +15,12 @@ import { environment } from '../../../environments/environment';
 import {
     CalidadService,
     HasPermisionService,
-    AdjuntoService
+    AdjuntoService,
+    UsuarioDestrezaDocumentoService
 } from '../../services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PdfViewerComponent } from './../../components/pdf-viewer/pdf-viewer.component';
+import { ImageViewerComponentComponent } from '../../components';
 
 @Component({
     selector: 'visor-adjunto',
@@ -43,7 +45,8 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private resolver: ComponentFactoryResolver,
         private hasPermisionService: HasPermisionService,
         private sanitizer: DomSanitizer,
-        private store: Store<StoreModel>
+        private store: Store<StoreModel>,
+        private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService
     ) {}
 
     ngAfterContentInit() {
@@ -60,10 +63,30 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             });
     }
 
+    downloadFile(path: string, nombre: string) {
+        this.adjuntoService.getAdjunto({ path }).subscribe(file => {
+            const blob = new Blob([file], { type: file.type });
+
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            document.body.appendChild(a);
+            a.setAttribute('style', 'display: none');
+            a.href = url;
+            a.download = nombre;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove(); // remove the element
+            this.hideWaitDialog();
+        });
+    }
+
     getDocumento(idTipoDocumento: number, idDocumento: number) {
         switch (idTipoDocumento) {
             case environment.tipos_documento.manual_calidad.id:
                 this.getManualCalidad(idDocumento);
+                break;
+            case environment.tipos_documento.usuario_destreza_documento.id:
+                this.getUsuarioDestrezaDocumento(idDocumento);
                 break;
 
             default:
@@ -94,6 +117,67 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             .subscribe(response =>
                 this.showPdf(response.path, response.permisoImpresion)
             );
+    }
+
+    getUsuarioDestrezaDocumento(idDocumento: number) {
+        this.usuarioDestrezaDocumentoService
+            .getusuarioDestrezaDocumento(idDocumento)
+            .pipe(
+                switchMap(documento =>
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento
+                                .usuario_destreza_documento.permiso_impresion
+                        )
+                        .pipe(
+                            map(permisoImpresion => {
+                                return {
+                                    documento,
+                                    permisoImpresion
+                                };
+                            })
+                        )
+                )
+            )
+            .subscribe(response => {
+                if (response.documento.extension == 'pdf') {
+                    this.showPdf(
+                        response.documento.path,
+                        response.permisoImpresion
+                    );
+                } else if (
+                    environment.extensiones_imagen.findIndex(
+                        ext => ext == response.documento.extension
+                    ) != -1
+                ) {
+                    this.showImage(response.documento.path);
+                } else {
+                    this.downloadFile(
+                        response.documento.path,
+                        response.documento.titulo
+                    );
+                }
+            });
+    }
+
+    showImage(path: string) {
+        this.adjuntoService.getAdjunto({ path }).subscribe(response => {
+            const blob = new Blob([response], {
+                type: 'application/pdf'
+            });
+            const url = window.URL.createObjectURL(blob);
+            const URL = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+            let componentFactory = this.resolver.resolveComponentFactory(
+                ImageViewerComponentComponent
+            );
+
+            const component = this.container.createComponent(componentFactory);
+
+            component.instance.url = url;
+
+            this.hideWaitDialog();
+        });
     }
 
     showPdf(path: string, permisoImpresion: boolean) {

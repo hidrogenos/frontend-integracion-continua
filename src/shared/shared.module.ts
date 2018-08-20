@@ -37,6 +37,9 @@ import { reducers } from './store';
     declarations: [...fromContainers.containers, ...fromComponents.components],
     providers: [...fromServices.services],
     exports: [...fromComponents.components],
-    entryComponents: [fromComponents.PdfViewerComponent]
+    entryComponents: [
+        fromComponents.ImageViewerComponentComponent,
+        fromComponents.PdfViewerComponent
+    ]
 })
 export class SharedModule {}

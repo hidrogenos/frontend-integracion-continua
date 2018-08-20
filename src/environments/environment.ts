@@ -18,7 +18,11 @@ export const environment = {
         manual_calidad: {
             id: 1,
             permiso_impresion: 100
+        },
+        usuario_destreza_documento: {
+            id: 2,
+            permiso_impresion: 101
         }
     },
-    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp']
+    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg']
 };

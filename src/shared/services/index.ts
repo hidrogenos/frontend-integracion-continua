@@ -28,6 +28,9 @@ export * from './tipo-cuenta/tipo-cuenta.service';
 import { TipoIdentificacionService } from './tipo-identificacion/tipo-identificacion.service';
 export * from './tipo-identificacion/tipo-identificacion.service';
 
+import { UsuarioDestrezaDocumentoService } from './usuario-destreza-documento/usuario-destreza-documento.service';
+export * from './usuario-destreza-documento/usuario-destreza-documento.service';
+
 import { UsuarioDestrezaService } from './usuario-destreza/usuario-destreza.service';
 export * from './usuario-destreza/usuario-destreza.service';
 
@@ -54,5 +57,6 @@ export const services: any[] = [
     RegimenService,
     TipoCuentaService,
     BancoService,
-    ProveedorService
+    ProveedorService,
+    UsuarioDestrezaDocumentoService
 ];
