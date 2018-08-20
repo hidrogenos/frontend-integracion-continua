@@ -35,9 +35,11 @@ import { reducers } from './store';
         StoreModule.forFeature('shared', reducers)
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
-    providers: [
-        ...fromServices.services
-    ],
-    exports: [...fromComponents.components]
+    providers: [...fromServices.services],
+    exports: [...fromComponents.components],
+    entryComponents: [
+        fromComponents.ImageViewerComponentComponent,
+        fromComponents.PdfViewerComponent
+    ]
 })
-export class SharedModule { }
+export class SharedModule {}
