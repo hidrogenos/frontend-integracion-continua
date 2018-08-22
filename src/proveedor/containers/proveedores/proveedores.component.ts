@@ -123,7 +123,7 @@ export class ProveedoresComponent implements OnInit {
     }
 
     deleteProveedor(event: ProveedorModel) {
-        console.log(event);
+        this.showWaitDialog('Eliminando proveedor, un momento por favor...')
         this.proveedorListaService
             .onEliminar(event)
             .subscribe((data: ProveedorModel) => {
@@ -132,7 +132,9 @@ export class ProveedoresComponent implements OnInit {
                         return proveedor.id != event.id;
                     }
                 );
+                this.hideWaitDialog();
             });
+            
     }
 
     getProveedores() {
@@ -154,7 +156,6 @@ export class ProveedoresComponent implements OnInit {
 
     loadInitDataUno() {
         let aux = forkJoin([this.getProveedores()]);
-
         aux.subscribe(([proveedores]) => {
             this.proveedores = proveedores;
         });
@@ -173,9 +174,14 @@ export class ProveedoresComponent implements OnInit {
     }
 
     onCreate($event) {
+        this.showWaitDialog('Creando proveedor, un momento por favor...')
         this.proveedorService.createProveedor($event).subscribe(response => {
-            this.proveedores = [...this.proveedores, response];
+            this.proveedores = [
+                ...this.proveedores,
+                 response
+                ];
         });
+        this.hideWaitDialog();
     }
 
     showWaitDialog(header: string, body?: string) {

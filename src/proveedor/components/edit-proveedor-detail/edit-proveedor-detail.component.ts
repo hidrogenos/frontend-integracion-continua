@@ -301,7 +301,6 @@ export class EditProveedorDetalComponent implements OnInit {
     }
 
     loadFormData( proveedor : ProveedorModel){
-        console.log(proveedor);
         this.proveedor=proveedor;
         this.detailProveedor.setValue({
             id: this.proveedor.id,

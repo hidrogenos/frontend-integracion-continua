@@ -30,6 +30,8 @@ import { ProveedorListaService } from '../../services';
 import * as fromShared from './../../../shared/store';
 import { EditProveedorDetalComponent } from '../../components';
 import { take, switchMap } from 'rxjs/operators';
+import { FacturasProveedorComponent } from '../facturas-proveedor/facturas-proveedor.component';
+import { FacturtaProveedorModel } from '../../../shared/models/factura-proveedor.model';
 
 @Component({
     selector: 'proveedor-detalle',
@@ -41,17 +43,48 @@ import { take, switchMap } from 'rxjs/operators';
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <edit-proveedor-detail #epd
-                            [identificacion]="identificacion"
-                            [ciudades]="ciudades"
-                            [regimen]="regimen"
-                            [banco]="banco"
-                            (editProveedor)="updateProveedor($event)">
+                                                    [identificacion]="identificacion"
+                                                    [ciudades]="ciudades"
+                                                    [regimen]="regimen"
+                                                    [banco]="banco"
+                                                    (editProveedor)="updateProveedor($event)">
                             </edit-proveedor-detail>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="ui-g-12">
+                <div class="card card-w-title">
+                    <h1><i class="fa fa-address-book" aria-hidden="true"></i> Anexos del proveedor</h1>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p-tabView>
+                                <p-tabPanel header="Evaluación">
+                                    <div class="ui-g">
+                                        <div class="ui-g-12">
+                                            <evaluacion-proveedor></evaluacion-proveedor>
+                                        </div>
+                                    </div>
+                                </p-tabPanel>
+                                <p-tabPanel header="facturas">
+                                    <div class="ui-g">
+                                        <div class="ui-g-12">
+                                        <facturas-proveedor #fpc
+                                                            *ngIf="proveedor"
+                                                            [facturas]="proveedor.facturas"
+                                                            (onCreateFacturaProveedor)="createFacturaProveedor($event)"
+                                                            (onDeleteFacturaProveedor)="deletefacturaProveedor($event)"
+                                                            (onDownloadFacturaProveedor)="downloadFacturaProveedor($event)">
+                                        </facturas-proveedor>
+                                        </div>
+                                    </div>
+                                </p-tabPanel>
+                            </p-tabView>
+                        </div>
+                    </div>
+                </div>
+            </div>
     `
 })
 export class ProveedorDetalleComponent implements OnInit {
@@ -66,8 +99,9 @@ export class ProveedorDetalleComponent implements OnInit {
     tipoCuenta: TipoCuentaModel[];
 
     //viewChild
-    @ViewChild('epd')
-    epd: EditProveedorDetalComponent;
+    @ViewChild('epd') epd: EditProveedorDetalComponent;
+    @ViewChild('fpc') fpc: FacturasProveedorComponent;
+    
 
     //properties
     constructor(
@@ -78,7 +112,6 @@ export class ProveedorDetalleComponent implements OnInit {
         private tipoCuentaService: TipoCuentaService,
         private store: Store<StoreModel>,
         private proveedorListaService: ProveedorListaService,
-        private proveedorservice: ProveedorService,
         private proveedorListService: ProveedorListaService
     ) {}
 
@@ -92,7 +125,7 @@ export class ProveedorDetalleComponent implements OnInit {
 
     getinitialData() {
         this.showWaitDialog(
-            'Consultando datos del colaborador, un momento por favor'
+            'Consultando datos del colaborador, un momento por favor...'
         );
         forkJoin([this.getProveedor(), this.getAuxData()]).subscribe(
             ([proveedor, auxData]) => {
@@ -104,7 +137,6 @@ export class ProveedorDetalleComponent implements OnInit {
                 this.epd.identificacion = auxData.tiposIdentificacion;
 
                 setTimeout(() => {
-                    console.log(proveedor);
                     this.epd.loadFormData(proveedor);
                     this.hideWaitDialog();
                 }, 1);
@@ -164,7 +196,7 @@ export class ProveedorDetalleComponent implements OnInit {
     }
 
     updateProveedor(proveedor: ProveedorModel) {
-        this.showWaitDialog('Actualizando datos, un momento por favor');
+        this.showWaitDialog('Actualizando datos, un momento por favor...');
         this.proveedorListaService
             .updateProveedor(this.proveedor.id, proveedor)
             .subscribe(response => {
@@ -172,7 +204,56 @@ export class ProveedorDetalleComponent implements OnInit {
                 setTimeout(() => {
                     this.epd.loadFormData(proveedor);
                     this.hideWaitDialog();
-                }, 1);
+            }, 1);
+        });
+    }
+
+    createFacturaProveedor(files: File[]) {
+        this.showWaitDialog('Adjuntando documentos, un momento por favor...');
+        const form: FormData = new FormData();
+        files.forEach(element =>
+            form.append('uploads[]', element, element.name)
+        );
+        this.proveedorListaService
+            .uploadFacturasProveedor(this.proveedor.id, form)
+            .subscribe(response => {
+                this.proveedor.facturas = [
+                    ...this.proveedor.facturas,
+                    ...response
+                ];
+                this.fpc.fu.clear();
+                this.hideWaitDialog();
+            });
+    }
+
+    deleteFacturaProveedor(event: FacturtaProveedorModel) {
+        this.showWaitDialog('Eliminando documento, un momento por favor...');
+        this.proveedorListService
+            .deleteFacturaProveedor(event.id)
+            .subscribe(response => {
+                this.proveedor.facturas = this.proveedor.facturas.filter(
+                    element => element.id != event.id
+                );
+                this.hideWaitDialog();
+            });
+    }
+
+    downloadFacturaProveedor(event: FacturtaProveedorModel) {
+        this.proveedorListService
+            .downloadFacturaProveedor({ path: event.path })
+            .subscribe(file => {
+                const blob = new Blob([file], { type: file.type });
+
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                document.body.appendChild(a);
+                a.setAttribute('style', 'display: none');
+                a.href = url;
+                a.download = event.titulo;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove(); // remove the element
+                this.hideWaitDialog();
             });
     }
 }

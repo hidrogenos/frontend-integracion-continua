@@ -6,18 +6,20 @@ import { catchError, map } from 'rxjs/operators';
 //environment
 import { environment } from '../../../environments/environment';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
-import { ProveedorService } from '../../../shared/services';
+import { ProveedorService, FacturaProveedorService } from '../../../shared/services';
 import { BancoModel } from '../../../shared/models/banco.model';
 import { CiudadModel } from '../../../shared/models/ciudad.model';
 import { TipoCuentaModel } from '../../../shared/models/TipoCuenta.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import { RegimenModel } from '../../../shared/models/regimen.model';
+import { FacturtaProveedorModel } from '../../../shared/models/factura-proveedor.model';
 
 @Injectable()
 export class ProveedorListaService {
     constructor(
         private http: HttpClient,
-        private proveedorService: ProveedorService
+        private proveedorService: ProveedorService,
+        private facturaProveedorService: FacturaProveedorService
     ) {}
 
     getProveedores(): Observable<ProveedorModel[]> {
@@ -71,16 +73,53 @@ export class ProveedorListaService {
         );
     }
 
-    updateProveedor(
-        id: number,
-        data: ProveedorModel
-    ): Observable<ProveedorModel> {
+    updateProveedor(id: number,data: ProveedorModel): Observable<ProveedorModel> {
         let aux = this.proveedorService.transformRequestProveedor(data);
         return this.http
             .post<ProveedorModel>(
                 `${environment.apiUrl}/proveedor/update-proveedor/${id}`,
                 aux
             )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+
+    uploadFacturasProveedor(id: number,data): Observable<FacturtaProveedorModel[]> {
+        return this.http
+            .post<FacturtaProveedorModel[]>(
+                `${
+                    environment.apiUrl
+                }/proveedor/upload-proveedor-factura/${id}`,
+                data
+            )
+            .pipe(
+                map(facturas =>
+                    facturas.map(factura =>
+                        this.facturaProveedorService.transformResponse(
+                            factura
+                        )
+                    )
+                ),
+                catchError((error: any) => throwError(error))
+            );
+    }
+
+
+    deleteFacturaProveedor(id: number): Observable<FacturtaProveedorModel> {
+        return this.http
+            .get<FacturtaProveedorModel>(
+                `${
+                    environment.apiUrl
+                }/proveedor/delete-proveedor-factura/${id}`
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    downloadFacturaProveedor(data: { path: string }) {
+        return this.http
+            .post(`${environment.apiUrl}/utils/get-adjunto`, data, {
+                responseType: 'blob'
+            })
             .pipe(catchError((error: any) => throwError(error)));
     }
 }

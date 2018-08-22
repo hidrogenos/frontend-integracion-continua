@@ -10,6 +10,14 @@ export * from './banco/banco.service';
 import { CiudadService } from './ciudad/ciudad.service';
 export * from './ciudad/ciudad.service';
 
+import { EvaluacionProveedorService } from './evaluacion-proveedor/evaluacion-proveedor.service';
+export * from './evaluacion-proveedor/evaluacion-proveedor.service';
+
+
+import { FacturaProveedorService } from './proveedor-factura/proveedor-factura.service';
+export * from './proveedor-factura/proveedor-factura.service';
+
+
 import { ProveedorService } from './proveedor/proveedor.service';
 export * from './proveedor/proveedor.service';
 
@@ -46,5 +54,7 @@ export const services: any[] = [
     RegimenService,
     TipoCuentaService,
     BancoService,
-    ProveedorService
+    ProveedorService,
+    EvaluacionProveedorService,
+    FacturaProveedorService
 ];
