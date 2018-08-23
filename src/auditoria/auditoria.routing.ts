@@ -1,0 +1,25 @@
+import { Routes, RouterModule } from '@angular/router';
+import { ModuleWithProviders } from '@angular/core';
+
+//containers
+import * as fromContainers from './containers';
+
+//guards
+import * as fromGuards from './../auth/guards';
+
+export const ROUTES: Routes = [
+    {
+        path: '',
+        children: [
+            { path: '', redirectTo: 'administrador-listas', pathMatch: 'full' },
+            {
+                path: 'administrador-listas',
+                component: fromContainers.AdministradorListasComponent
+            }
+        ]
+    }
+];
+
+export const AuditoriaRoutes: ModuleWithProviders = RouterModule.forChild(
+    ROUTES
+);
