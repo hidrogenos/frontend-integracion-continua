@@ -6,11 +6,11 @@
 export const environment = {
     production: false,
     baseUrl: 'http://localhost:4200',
-    apiUrl: 'http://localhost/api-base-5-6/public/api',
+    apiUrl: 'http://localhost:8083/APISGDv2_1/public/api',
     auth: {
-        urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
-        secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
-        clientId: 2
+        urlToken: 'http://localhost:8083/APISGDv2_1/public/oauth/token',
+        secret: 'yr4UMVVPu73VVBv4ureOri14UpqZwASy2JKuXuNm',
+        clientId: 4
     },
     dateFormatAngular: 'yyyy-MM-dd',
     dateFormatPrimeNg: 'yy-mm-dd',

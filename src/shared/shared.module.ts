@@ -7,6 +7,9 @@ import * as fromComponents from './components';
 //containers
 import * as fromContainers from './containers';
 
+// pipes
+import * as fromPipes from './pipes';
+
 // primeng modules
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -27,17 +30,19 @@ import * as fromServices from './services';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducers } from './store';
+import { effects } from './store';
 
 @NgModule({
     imports: [
         CommonModule,
         ...primeNgModules,
-        StoreModule.forFeature('shared', reducers)
+        StoreModule.forFeature('shared', reducers),
+        EffectsModule.forFeature(effects),
     ],
-    declarations: [...fromContainers.containers, ...fromComponents.components],
+    declarations: [...fromContainers.containers, ...fromComponents.components, ...fromPipes.pipes],
     providers: [
         ...fromServices.services
     ],
-    exports: [...fromComponents.components]
+    exports: [...fromComponents.components, ...fromPipes.pipes]
 })
 export class SharedModule { }
