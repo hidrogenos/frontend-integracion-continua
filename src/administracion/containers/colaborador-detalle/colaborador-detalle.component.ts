@@ -30,6 +30,7 @@ import {
 import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
 import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
 import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'colaborador-detalle',
@@ -71,6 +72,7 @@ import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.
                                             <aptitudes-destrezas-colaborador
                                                 *ngIf="loadedUsuario"
                                                 [destrezas]="loadedUsuario.destrezas"
+                                                (onConsultarDestrezaDocumento)="consultarDestrezaDocumento($event)"
                                                 (onCreateDestreza)="createDestreza($event)"
                                                 (onDownloadDestrezaDocumento)="downloadUsuarioDestrezaDocumento($event)"
                                                 (onUpdateDestreza)="updateDestreza($event)"
@@ -113,8 +115,10 @@ export class ColaboradorDetalleComponent implements OnInit {
     tiposIdentificacion: TipoIdentificacionModel[];
 
     //viewChild
-    @ViewChild('cdc') cdc: CreateDocumentoColaboradorComponent;
-    @ViewChild('dbc') dbc: DatosBasicosColaboradorComponent;
+    @ViewChild('cdc')
+    cdc: CreateDocumentoColaboradorComponent;
+    @ViewChild('dbc')
+    dbc: DatosBasicosColaboradorComponent;
 
     constructor(
         private colaboradorDetalleService: ColaboradorDetalleService,
@@ -124,6 +128,20 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     ngOnInit() {
         this.getInitialData();
+    }
+
+    consultarDestrezaDocumento(documento: UsuarioDestrezaDocumentoModel) {
+        this.store.dispatch(
+            new fromRoot.Go({
+                path: [
+                    `visor-adjunto/${
+                        environment.tipos_documento.usuario_destreza_documento
+                            .id
+                    }/${documento.id}/${documento.titulo}`
+                ]
+            })
+        );
+        console.log(documento);
     }
 
     createDestreza(data) {

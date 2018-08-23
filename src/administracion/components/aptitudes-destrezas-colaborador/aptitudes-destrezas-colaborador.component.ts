@@ -45,18 +45,24 @@ import { EditAptitudDestrezaColaboradorComponent } from '../edit-aptitud-destrez
                                     <ng-template pTemplate="body" let-documento>
                                         <tr>
                                             <td>{{ documento.titulo }}</td>
-                                            <td>
-                                                <button style="margin-right:10px; float: right;" pButton 
+                                            <td style="text-align: center;">
+                                                <button style="margin-right:10px;" pButton 
                                                     type="button" 
-                                                    icon="fa fa-trash" 
-                                                    class="ui-button-danger"
-                                                    (click)="onDeleteDestrezaDocumento.emit(documento)">
+                                                    icon="fa fa-eye" 
+                                                    class="ui-button-primary"
+                                                    (click)="onConsultarDestrezaDocumento.emit(documento)">
                                                 </button>
-                                                <button style="margin-right:10px; float: right;" pButton 
+                                                <button style="margin-right:10px;" pButton 
                                                     type="button" 
                                                     icon="fa fa-download" 
                                                     (click)="onDownloadDestrezaDocumento.emit(documento)"
                                                     class="ui-button-success">
+                                                </button>
+                                                <button style="margin-right:10px;" pButton 
+                                                    type="button" 
+                                                    icon="fa fa-trash" 
+                                                    class="ui-button-danger"
+                                                    (click)="onDeleteDestrezaDocumento.emit(documento)">
                                                 </button>
                                             </td>
                                         </tr>
@@ -93,11 +99,16 @@ import { EditAptitudDestrezaColaboradorComponent } from '../edit-aptitud-destrez
 })
 export class AptitudesDestrezasColaboradorComponent {
     //properties
-    @Input() destrezas: UsuarioDestrezaModel[];
+    @Input()
+    destrezas: UsuarioDestrezaModel[];
 
     //events
-    @Output() onCreateDestreza = new EventEmitter<any>();
-    @Output() onDeleteDestreza = new EventEmitter<UsuarioDestrezaModel>();
+    @Output()
+    onConsultarDestrezaDocumento = new EventEmitter<UsuarioDestrezaModel>();
+    @Output()
+    onCreateDestreza = new EventEmitter<any>();
+    @Output()
+    onDeleteDestreza = new EventEmitter<UsuarioDestrezaModel>();
     @Output()
     onDownloadDestrezaDocumento = new EventEmitter<
         UsuarioDestrezaDocumentoModel
@@ -113,7 +124,8 @@ export class AptitudesDestrezasColaboradorComponent {
     >();
 
     //viewChild
-    @ViewChild('epdc') epdc: EditAptitudDestrezaColaboradorComponent;
+    @ViewChild('epdc')
+    epdc: EditAptitudDestrezaColaboradorComponent;
 
     constructor() {}
 

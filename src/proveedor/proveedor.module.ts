@@ -14,35 +14,37 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { EditorModule } from 'primeng/editor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
-
 const primeNgModules = [
     ButtonModule,
     CalendarModule,
     CheckboxModule,
     DialogModule,
     DropdownModule,
+    EditorModule,
     FileUploadModule,
     InputTextModule,
+    OrganizationChartModule,
     RadioButtonModule,
     TableModule,
     TabViewModule
 ];
 
 //routes
-import { AdministracionRoutes } from './administracion.routing';
+import { ProveedorRoutes } from './proveedor.routing';
 
 //services
 import * as fromServices from './services';
 
-
 @NgModule({
     imports: [
-        AdministracionRoutes,
+        ProveedorRoutes,
         CommonModule,
         ...primeNgModules,
         ReactiveFormsModule,
@@ -51,4 +53,4 @@ import * as fromServices from './services';
     declarations: [...fromContainers.containers, ...fromComponents.components],
     providers: [...fromServices.services]
 })
-export class AdministracionModule {}
+export class ProveedorModule {}

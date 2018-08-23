@@ -192,7 +192,7 @@ export class ColaboradoresListaComponent implements OnInit {
                 this.tiposIdentificacion = tiposIdentificacion;
             }
         );
-
+        
         return aux;
     }
 

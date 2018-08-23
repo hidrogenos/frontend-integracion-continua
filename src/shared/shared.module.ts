@@ -39,10 +39,12 @@ import { effects } from './store';
         StoreModule.forFeature('shared', reducers),
         EffectsModule.forFeature(effects),
     ],
-    declarations: [...fromContainers.containers, ...fromComponents.components, ...fromPipes.pipes],
-    providers: [
-        ...fromServices.services
-    ],
-    exports: [...fromComponents.components, ...fromPipes.pipes]
+    declarations: [...fromContainers.containers, ...fromComponents.components],
+    providers: [...fromServices.services],
+    exports: [...fromComponents.components],
+    entryComponents: [
+        fromComponents.ImageViewerComponentComponent,
+        fromComponents.PdfViewerComponent
+    ]
 })
-export class SharedModule { }
+export class SharedModule {}
