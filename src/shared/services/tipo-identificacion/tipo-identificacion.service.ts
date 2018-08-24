@@ -14,7 +14,7 @@ export class TipoIdentificacionService {
     getTiposIdentificacion(): Observable<TipoIdentificacionModel[]> {
         return this.http
             .get<TipoIdentificacionModel[]>(
-                `${environment.apiUrl}/tipos-identificacion`
+                `${environment.apiUrl}/tiposidentificacion`
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
     }

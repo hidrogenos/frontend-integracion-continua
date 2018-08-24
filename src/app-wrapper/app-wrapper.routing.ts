@@ -39,11 +39,13 @@ export const ROUTES: Routes = [
                     './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'
             },
             {
-                path: 'visor-pdf/:id_tipo_documento/:id_documento/:nombre_doc',
-                component: fromSharedContainers.PdfViewerComponent,
-                data: {
-                    permision: 35
-                }
+                path: 'proveedores',
+                loadChildren: './../proveedor/proveedor.module#ProveedorModule'
+            },
+            {
+                path:
+                    'visor-adjunto/:id_tipo_documento/:id_documento/:nombre_doc',
+                component: fromSharedContainers.VisorAdjuntoComponent
             },
             { path: 'dashboard', component: DashboardDemoComponent },
             { path: 'sample', component: SampleDemoComponent },

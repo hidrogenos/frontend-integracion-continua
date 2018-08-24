@@ -180,7 +180,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Proveedores',
                 icon: 'fa fa-fw fa-home',
-                routerLink: ['/']
+                routerLink: ['/proveedores']
             }
             // {
             //     label: 'Customization',

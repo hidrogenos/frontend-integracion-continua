@@ -1,0 +1,4 @@
+{
+    "prettier.breakBeforeElse": false,
+    "prettier.breakProperty": false
+}

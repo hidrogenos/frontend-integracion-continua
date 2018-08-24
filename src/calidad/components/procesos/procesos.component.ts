@@ -1,5 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    ViewChild
+} from '@angular/core';
 import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
+import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
+import { CreateProcesoDialogComponent } from '../create-proceso-dialog/create-proceso-dialog.component';
 
 @Component({
     selector: 'procesos',
@@ -23,12 +32,12 @@ import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-pro
                                     <div class="chart-contenedor">
                                         <ng-template ngFor let-item [ngForOf]="mapa.procesos" let-elementIndex="index" > 
                                             <div *ngIf = "item.id_padre == 0" >                 
-                                                <div class="mapa-proceso-titulo">{{item.proceso}}</div>
+                                                <div class="mapa-proceso-titulo" (click)="editProceso(item)">{{item.proceso}}</div>
                                                 
                                                 <div class="mapa-separator"><br></div>
                                             
                                                 <ng-template ngFor let-minitem [ngForOf]="mapa.procesos" let-minielementIndex="index" >                                   
-                                                    <div *ngIf = "minitem.id_padre == item.id" (click)="eventClickEditMapaProceso(minitem)" class="proceso" >
+                                                    <div *ngIf = "minitem.id_padre == item.id" (click)="editProceso(minitem)" class="proceso" >
                                                         <div class="btn-mapa-proceso">{{ minitem.proceso }}</div>
                                                         <img *ngIf = "minitem.flecha == 'der'" src="assets/soulsystem/flechader.png" alt="" class="flecha-der">
                                                         <img *ngIf = "minitem.flecha == 'izq'" src="assets/soulsystem/flechaizq2.png" alt="" class="flecha-izq">
@@ -66,7 +75,9 @@ import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-pro
             (onUpdateMapaProcesos)="onUpdateMapaProcesos.emit($event)">
         </edit-mapa-procesos-dialog>
         <create-proceso-dialog #cpd
-            [procesos]="mapa.procesos">
+            [mapa]="mapa"
+            (onCreateProceso)="onCreateProceso.emit($event)"
+            (onUpdateProceso)="onUpdateProceso.emit($event)">
         </create-proceso-dialog>
     `
 })
@@ -77,12 +88,24 @@ export class ProcesosComponent implements OnInit {
 
     //events
     @Output()
+    onCreateProceso = new EventEmitter<MapaProcesoHijoModel>();
+    @Output()
     onUpdateMapaProcesos = new EventEmitter<{
         entrada: string;
         salida: string;
     }>();
+    @Output()
+    onUpdateProceso = new EventEmitter<MapaProcesoHijoModel>();
+
+    //viewchild
+    @ViewChild('cpd')
+    cpd: CreateProcesoDialogComponent;
 
     constructor() {}
 
     ngOnInit() {}
+
+    editProceso(proceso: MapaProcesoHijoModel) {
+        this.cpd.editProceso(proceso);
+    }
 }

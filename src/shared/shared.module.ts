@@ -8,16 +8,20 @@ import * as fromComponents from "./components";
 import * as fromContainers from "./containers";
 
 // primeng modules
+import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
 import { DropdownModule } from "primeng/dropdown";
+import { FileUploadModule } from "primeng/primeng";
+import { TableModule } from "primeng/table";
 
 const primeNgModules = [
     ButtonModule,
     DialogModule,
     DropdownModule,
     FileUploadModule,
-    TableModule
+    TableModule,
+    ToastModule
 ];
 
 //services
@@ -27,8 +31,8 @@ import * as fromServices from "./services";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { reducers } from "./store";
-import { FileUploadModule } from "primeng/primeng";
-import { TableModule } from "primeng/table";
+
+// ng modules
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
@@ -40,6 +44,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
     providers: [...fromServices.services],
-    exports: [...fromComponents.components]
+    exports: [...fromComponents.components],
+    entryComponents: [
+        fromComponents.ImageViewerComponentComponent,
+        fromComponents.PdfViewerComponent
+    ]
 })
 export class SharedModule {}

@@ -6,6 +6,7 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
 import { environment } from '../../../environments/environment';
 import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
 import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
+import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
 
 @Injectable()
 export class NuestraEmpresaService {
@@ -23,6 +24,17 @@ export class NuestraEmpresaService {
         return this.http
             .post<CalidadOrganigramaModel>(
                 `${environment.apiUrl}/calidad/create-cargo`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    createProceso(
+        data: MapaProcesoHijoModel
+    ): Observable<MapaProcesoHijoModel> {
+        return this.http
+            .post<MapaProcesoHijoModel>(
+                `${environment.apiUrl}/calidad/create-proceso`,
                 data
             )
             .pipe(catchError((error: any) => throwError(error)));
@@ -112,6 +124,18 @@ export class NuestraEmpresaService {
         return this.http
             .post<CalidadModel>(
                 `${environment.apiUrl}/calidad/update-politica/${id}`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    updateProceso(
+        id: number,
+        data: MapaProcesoHijoModel
+    ): Observable<MapaProcesoHijoModel> {
+        return this.http
+            .post<MapaProcesoHijoModel>(
+                `${environment.apiUrl}/calidad/update-proceso/${id}`,
                 data
             )
             .pipe(catchError((error: any) => throwError(error)));
