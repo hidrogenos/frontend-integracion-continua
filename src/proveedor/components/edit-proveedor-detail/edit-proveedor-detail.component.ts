@@ -45,7 +45,7 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
                                         <div>
                                             <label>Fecha de ingreso:</label>
                                         </div>
-                                    <p-calendar showIcon="true" formControlName="fecha_inicio"></p-calendar>
+                                    <p-calendar appendTo="body" showIcon="true" formControlName="fecha_inicio"></p-calendar>
                                 </div>
                             </div>
                             <div class="ui-g">
@@ -251,6 +251,7 @@ export class EditProveedorDetalComponent implements OnInit {
     display:boolean;
     detailProveedor: FormGroup;
     msgs: Message[] = [];
+    proveedor: ProveedorModel;
     
     //events
     @Output() editProveedor = new EventEmitter<ProveedorModel>();
@@ -259,7 +260,7 @@ export class EditProveedorDetalComponent implements OnInit {
     @Input() regimen: RegimenModel[];
     @Input() banco: BancoModel[];
     @Input() tipoCuenta: TipoCuentaModel[];
-    proveedor: ProveedorModel;
+    
 
     //properties
     constructor(private fb: FormBuilder) {}
@@ -301,7 +302,6 @@ export class EditProveedorDetalComponent implements OnInit {
     }
 
     loadFormData( proveedor : ProveedorModel){
-        console.log(proveedor);
         this.proveedor=proveedor;
         this.detailProveedor.setValue({
             id: this.proveedor.id,

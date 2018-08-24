@@ -22,6 +22,10 @@ export const environment = {
         usuario_destreza_documento: {
             id: 2,
             permiso_impresion: 101
+        },
+        factura_proveedor_documento: {
+            id: 3,
+            permiso_impresion: 203
         }
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg']
