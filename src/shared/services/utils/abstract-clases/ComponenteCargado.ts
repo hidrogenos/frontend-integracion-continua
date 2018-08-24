@@ -1,15 +1,16 @@
 import { Store } from '@ngrx/store';
-import { StoreModel } from '../../../shared/models/store.model';
-import * as fromShared from './../../../shared/store';
-import * as fromAuth from './../../../auth/store';
+import { StoreModel } from '../../../models/store.model';
+import * as fromShared from '../../../store';
+import * as fromAuth from '../../../../auth/store';
 
-export class ComponenteCargado {
+export abstract class ComponenteCargado {
 
     fromAuth = fromAuth;
 
     constructor(private sharedStore: Store<StoreModel>){
 
     }
+    
 
     hideWaitDialog() {
         this.sharedStore.dispatch(new fromShared.HideWaitDialog());

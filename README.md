@@ -122,19 +122,23 @@ el error si se repite el código
 
 ## TABLA sgd_accion_correctiva_tarea_adjunto
 
--> se gregan los campos
+-> se agregan los campos
 -> created_at: compatibilidad con eloquent.
 -> updated_at: compatibilidad con eloquent.
 
 ## TABLA sgd_accion_correctiva_tarea_responsable
 
--> se gregan los campos
+-> se agregan los campos
 -> created_at: compatibilidad con eloquent.
 -> updated_at: compatibilidad con eloquent.
 
 ## TABLA sgd_accion_correctiva_tarea_tipo
 
--> se gregan los campos
+se eliminan los campos
+-> id_usuario
+-> fecha_creacion
+
+-> se agregan los campos
 -> created_at: compatibilidad con eloquent.
 -> updated_at: compatibilidad con eloquent.
 

@@ -1,27 +1,36 @@
-<p-table #tableListaAccionCorrectiva [value]="data" [lazy]="true" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="[10,15,20]" 
-[totalRecords]="cantidadTotalAcciones" [loading]="loading" (onLazyLoad)="loadLazy($event)" [columns]="cols">
+<!-- <pre>{{data | json}}</pre> -->
+<p-table #tableListaAccionCorrectiva [value]="data" [lazy]="true" [paginator]="true" [rows]="rows" [totalRecords]="cantidadTotalAcciones"
+    [loading]="loading" (onLazyLoad)="loadLazy($event)" [columns]="cols">
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns">
+            <th *ngFor="let col of columns; let i = index" [ngStyle]="{'width':(i == 0)?'50px':'auto'}">
                 {{col.header}}
             </th>
         </tr>
         <tr>
-            <th *ngFor="let col of columns">
-                <input  pInputText type="text" (input)="tableListaAccionCorrectiva.filter($event.target.value, col.field, 'contains')" style="width: 100%">   
+            <th *ngFor="let col of columns; let i = index">
+                <input *ngIf="i > 0 && i < columns.length-1" pInputText type="text" (input)="tableListaAccionCorrectiva.filter($event.target.value, col.field, 'contains')"
+                    style="width: 100%">
             </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-accionCorrectiva>
         <tr>
+            <td>
+                <button pButton class="ui-button-rounded shadow-box ui-shadow-2" [ngStyle]="{'background-color': accionCorrectiva?.accion_estado?.color ,'border-radius': '100%'}"
+                    (click)="selectAccionCorrectiva(accionCorrectiva)">
+                </button>
+            </td>
             <td> {{ accionCorrectiva?.codigo }} </td>
             <td> {{ accionCorrectiva?.accion_estado?.nombre }} </td>
             <td> {{ accionCorrectiva?.titulo }} </td>
             <td> {{ accionCorrectiva?.importancia?.nombre }} </td>
             <td> {{ accionCorrectiva?.responsable?.nombre }} </td>
             <td> {{ accionCorrectiva?.fecha_creacion | date: dateFormatAngular }} </td>
+            <td> {{ accionCorrectiva?.fecha_compromiso | date: dateFormatAngular }}</td>
             <td>
-                <button pButton icon="pi pi-search" (click)="selectAccionCorrectiva(accionCorrectiva)"></button>
+                <button pButton class="ui-button" icon="pi pi-search" (click)="selectAccionCorrectiva(accionCorrectiva)"></button>
+                <button pButton class="ui-button-danger" icon="pi pi-trash" (click)="deleteAccionCorrectiva(accionCorrectiva)" style="margin-left: 10px"></button>
             </td>
         </tr>
     </ng-template>

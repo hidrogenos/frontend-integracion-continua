@@ -1,14 +1,16 @@
 import { AccionProcesoModel } from "./accion-proceso.model";
 import { AccionImportanciaModel } from "./accion-importancia.model";
-import { AccionDocumentoModel } from "./accion-documento.model";
+import { AccionCorrectivaAdjuntoModel } from "./accion-correctiva-adjunto.model";
 import { AccionCorrectivaAnalisisModel } from "./accion-correctiva-analisis.model";
+import { AccionCorrectivaTareaModel } from "./accion-correctiva-tarea.model";
 
-export interface AccionModel {
+export interface AccionCorrectivaModel {
     id?: number,
     codigo: string,
     titulo: string,
     descripcion: string,
     fecha_creacion?: number,
+    fecha_compromiso?: number,
     fecha_inicio_analisis?: number,
     cierre_accion_fecha?: number,
     id_estado: number,
@@ -19,6 +21,8 @@ export interface AccionModel {
     responsable?: any,
     id_usuario_crea?: number
     procesos?: AccionProcesoModel[],
-    documentos?: AccionDocumentoModel[],
-    metodologia_analisis?: AccionCorrectivaAnalisisModel
+    documentos?: AccionCorrectivaAdjuntoModel[],
+    metodologia_analisis?: AccionCorrectivaAnalisisModel,
+    tareas?: AccionCorrectivaTareaModel[],
+    observacion?: string
 }
