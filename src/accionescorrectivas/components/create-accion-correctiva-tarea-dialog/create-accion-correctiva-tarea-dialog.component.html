@@ -1,0 +1,64 @@
+<div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <p-dialog #createTarea header="Nueva tarea" [(visible)]="display" [modal]="true" [responsive]="true" width="800" [maximizable]="true"
+            baseZIndex="10000" (onHide)="onHideCreateTarea()">
+
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <div>
+                        <label>Tipo</label>
+                    </div>
+                    <p-dropdown [options]="accionCorrectivaTareaTipos" optionLabel="nombre" placeholder="Seleccione..." formControlName="tipo"></p-dropdown>
+                </div>
+                <div class="ui-g-8">
+                    <div>
+                        <label>Responsables</label>
+                    </div>
+                    <p-multiSelect [options]="usuariosResponsables" formControlName="responsables" optionLabel="nombre" defaultLabel="Seleccione múltiples..."></p-multiSelect>
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <div>
+                        <label>Prioridad</label>
+                    </div>
+                    <input pInputText type="number" formControlName="prioridad">
+                </div>
+                <div class="ui-g-8">
+                    <div>
+                        <label>Fecha para cumplir de tarea</label>
+                    </div>
+                    <p-calendar showIcon="true" [dateFormat]="formatoFechaPrimeNg" formControlName="fecha_cumplimiento"></p-calendar>
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Tarea</label>
+                    </div>
+                    <textarea pInputTextArea formControlName="tarea" id="" cols="30" rows="5" style="width: 100%"></textarea>
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Responsables terceros</label>
+                    </div>
+                    <textarea pInputTextArea formControlName="responsables_terceros" id="" cols="30" rows="5" style="width: 100%"></textarea>
+                </div>
+            </div>
+            <p-footer>
+                <div class="ui-g text-aling-right">
+                    <div class="ui-g-12">
+                        <button pButton icon="pi pi-times" class="ui-button-danger" (click)="display=false" label="Cancelar"></button>
+                        <button pButton icon="pi pi-save" type="submit" class="ui-button-success" label="Crear" [disabled]="!form.valid"></button>
+                    </div>
+                </div>
+
+            </p-footer>
+        </p-dialog>
+    </form>
+</div>
