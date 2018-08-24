@@ -40,6 +40,6 @@ export interface ProveedorModel {
     regimen?: RegimenModel[];
     bancos?: BancoModel[];
     tipoCuenta?: TipoCuentaModel[];
-    facturas?: FacturtaProveedorModel[]; 
+    factura?: FacturtaProveedorModel[]; 
 
 }

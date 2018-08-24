@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { EvaluacionProveedorModel } from '../../../shared/models/evaluacion-proveedor.model';
 
 @Component({
@@ -60,7 +59,6 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
     id: number;
     evaluacion: Observable<EvaluacionProveedorModel>;
     msgs: Message[] = [];
-    idProveedor: number;
 
     //events
     @Output() edit = new EventEmitter<EvaluacionProveedorModel>();
@@ -70,6 +68,10 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
         private fb: FormBuilder,
         private messageService: MessageService,
     ) { }
+
+    ngOnInit() {
+        this.createForm();
+    }
 
     createForm() {
         this.editEvaluacionForm = this.fb.group({
@@ -83,7 +85,6 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
     }
 
     loadForm(evaluacion: EvaluacionProveedorModel) {
-        console.log(evaluacion)
         this.editEvaluacionForm.setValue({
             id: evaluacion.id,
             factura_servicio: evaluacion.factura_servicio,
@@ -92,10 +93,6 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
             observaciones:evaluacion.observaciones,
             activo: evaluacion.activo
         });
-    }
-
-    ngOnInit() {
-        this.createForm();
     }
 
     onSubmit() {
@@ -109,7 +106,6 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
             activo: this.editEvaluacionForm.value.activo
         };
         this.edit.emit(evaluacion);
-        console.log(evaluacion)
     }
 
     show(evaluacion: EvaluacionProveedorModel){
@@ -117,6 +113,5 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
         this.display= true;
         this.loadForm(evaluacion);
     }
-
 
 }

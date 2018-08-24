@@ -20,7 +20,7 @@ import { EvaluacionProveedorService } from './evaluacion-proveedor/evaluacion-pr
 export * from './evaluacion-proveedor/evaluacion-proveedor.service';
 
 
-import { FacturaProveedorService } from './proveedor-factura/proveedor-factura.service';
+import { ProveedorFacturaService } from './proveedor-factura/proveedor-factura.service';
 export * from './proveedor-factura/proveedor-factura.service';
 
 
@@ -67,7 +67,7 @@ export const services: any[] = [
     BancoService,
     ProveedorService,
     EvaluacionProveedorService,
-    FacturaProveedorService,
+    ProveedorFacturaService,
     ProveedorService,
     UsuarioDestrezaDocumentoService
 ];

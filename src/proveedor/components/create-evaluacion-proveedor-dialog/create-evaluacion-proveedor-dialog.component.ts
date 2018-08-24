@@ -30,7 +30,7 @@ import { EvaluacionProveedorModel } from "../../../shared/models/evaluacion-prov
                             <div>
                                 <label>Fecha de Calificación:</label>
                             </div>
-                        <p-calendar showIcon="true" formControlName="fecha_calificacion"></p-calendar>
+                        <p-calendar appendTo="body" showIcon="true" formControlName="fecha_calificacion"></p-calendar>
                     </div>
                     <div class="ui-g-12">
                     <div class="ui-g ui-fluid">
@@ -63,8 +63,6 @@ export class CreateEvaluacionProveedorDialogComponent {
     //properties
     constructor(
         private fb: FormBuilder,
-        
-
     ) {}
     
     ngOnInit(){ 
@@ -83,7 +81,6 @@ export class CreateEvaluacionProveedorDialogComponent {
         });
     }
     
-
     onSubmit() {
         this.display = false;
         const evaluacion:  EvaluacionProveedorModel= {
@@ -97,7 +94,6 @@ export class CreateEvaluacionProveedorDialogComponent {
         };
         this.newEvaluacion.reset();
         this.create.emit(evaluacion);
-        console.log(evaluacion)
     }
     
     show() {

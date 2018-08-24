@@ -1,28 +1,22 @@
-import {
-    Component,
-    EventEmitter,
-    Output,
-    Input,
-    ViewChild,
-    OnInit
-} from '@angular/core';
+import { Component,ViewChild,OnInit} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import {  EvaluacionService, ProveedorListaService } from '../../services';
+import { EvaluacionService, ProveedorListaService } from '../../services';
 import { EvaluacionProveedorModel } from '../../../shared/models/evaluacion-proveedor.model';
 import { forkJoin } from 'rxjs';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
-import { CreateProveedorDialogComponent, CreateEvaluacionProveedorDialogComponent, EditEvaluacionProveedorDialogComponent } from '../../components';
+import { EditEvaluacionProveedorDialogComponent  } from '../../components/edit-evaluacion-proveedor-dialog/edit-evaluacion-proveedor-dialog.component';
+import { CreateEvaluacionProveedorDialogComponent } from '../../components/create-evaluacion-proveedor-dialog/create-evaluacion-proveedor-dialog.component'
 import { Store } from '@ngrx/store';
 import { StoreModel } from '../../../shared/models/store.model';
 import * as fromShared from './../../../shared/store';
 import { DataTable } from 'primeng/primeng';
-import { ProveedorService, EvaluacionProveedorService } from '../../../shared/services';
+import { EvaluacionProveedorService } from '../../../shared/services';
 import * as fromRoot from './../../../app/store';
-import { take, switchMap } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment'; 
 
 @Component({
-    selector: 'evaluacion-proveedor',
+    selector: 'evaluacion-proveedor-component',
     template: `
     <div class="ui-g">
     <div class="ui-g-12">
@@ -132,7 +126,6 @@ export class EvaluacionProveedorComponent implements OnInit{
             take(1),
         ).subscribe(route=>{
         this.loadInitData(route.state.params.id);
-
         });
     }
 
@@ -151,15 +144,8 @@ export class EvaluacionProveedorComponent implements OnInit{
     }
 
     getProveedor(id) {
-        return this.proveedorListService.getProveedor(
-            id
-        );
+        return this.proveedorListService.getProveedor(id);
     }
-
-    getEvaluacion(id: number) {
-        return this.evaluacionService.getEvaluaciones(id);
-    }
-
    
     loadInitData(id: number) {
         this.showWaitDialog(
@@ -195,8 +181,7 @@ export class EvaluacionProveedorComponent implements OnInit{
         this.hideWaitDialog();
     }
 
-    onEdit(event: EvaluacionProveedorModel){
-        console.log(event)
+    onEdit(event: EvaluacionProveedorModel){ 
         this.showWaitDialog('Editando evaluación, un momento por favor...')
         this.evaluacionService.updateEvaluacion(event.id, event).subscribe(response => {
             return this.evaluaciones = this.evaluaciones.map(element => {

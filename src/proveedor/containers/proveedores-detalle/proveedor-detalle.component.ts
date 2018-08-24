@@ -1,10 +1,7 @@
 import {
     Component,
     OnInit,
-    ViewChild,
-    EventEmitter,
-    Output,
-    Input
+    ViewChild
 } from '@angular/core';
 import { StoreModel } from '../../../shared/models/store.model';
 
@@ -18,20 +15,20 @@ import {
     TipoIdentificacionService,
     BancoService,
     RegimenService,
-    CiudadService,
-    ProveedorService
+    CiudadService
 } from '../../../shared/services';
 import { TipoCuentaModel } from '../../../shared/models/TipoCuenta.model';
 import { BancoModel } from '../../../shared/models/banco.model';
 import { RegimenModel } from '../../../shared/models/regimen.model';
 import { CiudadModel } from '../../../shared/models/ciudad.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
-import { ProveedorListaService } from '../../services';
+import { ProveedorListaService, FacturaService } from '../../services';
 import * as fromShared from './../../../shared/store';
 import { EditProveedorDetalComponent } from '../../components';
 import { take, switchMap } from 'rxjs/operators';
-import { FacturasProveedorComponent } from '../facturas-proveedor/facturas-proveedor.component';
+import { FacturasProveedorComponent } from '../../components/facturas-proveedor/facturas-proveedor.component';
 import { FacturtaProveedorModel } from '../../../shared/models/factura-proveedor.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'proveedor-detalle',
@@ -63,19 +60,22 @@ import { FacturtaProveedorModel } from '../../../shared/models/factura-proveedor
                                 <p-tabPanel header="Evaluación">
                                     <div class="ui-g">
                                         <div class="ui-g-12">
-                                            <evaluacion-proveedor></evaluacion-proveedor>
+                                            <evaluacion-proveedor-component>
+                                            </evaluacion-proveedor-component>
                                         </div>
                                     </div>
                                 </p-tabPanel>
-                                <p-tabPanel header="facturas">
+                                <p-tabPanel header="Facturas">
                                     <div class="ui-g">
                                         <div class="ui-g-12">
                                         <facturas-proveedor #fpc
                                                             *ngIf="proveedor"
-                                                            [facturas]="proveedor.facturas"
+                                                            [factura]="proveedor.factura"
                                                             (onCreateFacturaProveedor)="createFacturaProveedor($event)"
-                                                            (onDeleteFacturaProveedor)="deletefacturaProveedor($event)"
-                                                            (onDownloadFacturaProveedor)="downloadFacturaProveedor($event)">
+                                                            (onDeleteFacturaProveedor)="deleteFacturaProveedor($event)"
+                                                            (onDownloadFacturaProveedor)="downloadFacturaProveedor($event)"
+                                                            (onConsultarFacturaProveedor)="consultarFacturaProveedor($event)"
+                                                            (lazyFactura)="loadFacturasLazy($event)">
                                         </facturas-proveedor>
                                         </div>
                                     </div>
@@ -87,6 +87,7 @@ import { FacturtaProveedorModel } from '../../../shared/models/factura-proveedor
             </div>
     `
 })
+
 export class ProveedorDetalleComponent implements OnInit {
     //atributos
     display: boolean;
@@ -97,6 +98,7 @@ export class ProveedorDetalleComponent implements OnInit {
     regimen: RegimenModel[];
     banco: BancoModel[];
     tipoCuenta: TipoCuentaModel[];
+    loading: boolean = true;
 
     //viewChild
     @ViewChild('epd') epd: EditProveedorDetalComponent;
@@ -112,11 +114,66 @@ export class ProveedorDetalleComponent implements OnInit {
         private tipoCuentaService: TipoCuentaService,
         private store: Store<StoreModel>,
         private proveedorListaService: ProveedorListaService,
-        private proveedorListService: ProveedorListaService
+        private facturaService: FacturaService
     ) {}
 
     ngOnInit() {
         this.getinitialData();
+    }
+
+    consultarFacturaProveedor(factura: FacturtaProveedorModel){
+        //console.log(factura);
+        const idTipoDocumento = environment.tipos_documento.factura_proveedor_documento.id;
+        this.store.dispatch(new fromRoot.Go({path: [`visor-adjunto/${idTipoDocumento}/${factura.id}/${factura.titulo}`]}))
+    }
+
+    createFacturaProveedor(files: File[]) {
+        this.showWaitDialog('Adjuntando documentos, un momento por favor...');
+        const form: FormData = new FormData();
+        files.forEach(element =>
+            form.append('uploads[]', element, element.name)
+        );
+        this.facturaService
+            .uploadFacturasProveedor(this.proveedor.id, form)
+            .subscribe(response => {
+                this.proveedor.factura = [
+                    ...this.proveedor.factura,
+                    ...response
+                ];  
+                this.fpc.fu.clear();
+                this.hideWaitDialog();
+            });
+    }
+
+    deleteFacturaProveedor(event: FacturtaProveedorModel) {
+        this.showWaitDialog('Eliminando documento, un momento por favor...');
+        this.facturaService
+            .deleteFacturaProveedor(event.id)
+            .subscribe(response => {
+                this.proveedor.factura = this.proveedor.factura.filter(
+                    element => element.id != event.id
+                );
+                this.hideWaitDialog();
+            });
+    }
+
+    downloadFacturaProveedor(event: FacturtaProveedorModel) {
+        this.facturaService
+            .downloadFacturaProveedor({ path: event.path })
+            .subscribe(file => {
+                const blob = new Blob([file], { type: file.type });
+
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                document.body.appendChild(a);
+                a.setAttribute('style', 'display: none');
+                a.href = url;
+                a.download = event.titulo;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove(); // remove the element
+                this.hideWaitDialog();
+        });
     }
 
     getAuxData() {
@@ -148,17 +205,9 @@ export class ProveedorDetalleComponent implements OnInit {
         return this.store.select(fromRoot.getRouterState).pipe(
             take(1),
             switchMap(routerState => {
-                return this.proveedorListService.getProveedor(
+                return this.proveedorListaService.getProveedor(
                     routerState.state.params.id
                 );
-            })
-        );
-    }
-
-    listaProveedor() {
-        this.store.dispatch(
-            new fromRoot.Go({
-                path: [`administracion/proveedores`]
             })
         );
     }
@@ -191,6 +240,15 @@ export class ProveedorDetalleComponent implements OnInit {
         this.store.dispatch(new fromShared.HideWaitDialog());
     }
 
+    loadFacturasLazy(event) {
+        
+        this.facturaService.getFacturasLazy(event, this.proveedor.id)
+            .subscribe(response => {
+                this.proveedor.factura = response.data;
+                this.fpc.totalRecords = response.totalRows;
+        });
+    }
+
     showWaitDialog(header: string, body?: string) {
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
     }
@@ -203,57 +261,9 @@ export class ProveedorDetalleComponent implements OnInit {
                 this.proveedor = response;
                 setTimeout(() => {
                     this.epd.loadFormData(proveedor);
+                    this.getinitialData();
                     this.hideWaitDialog();
             }, 1);
         });
-    }
-
-    createFacturaProveedor(files: File[]) {
-        this.showWaitDialog('Adjuntando documentos, un momento por favor...');
-        const form: FormData = new FormData();
-        files.forEach(element =>
-            form.append('uploads[]', element, element.name)
-        );
-        this.proveedorListaService
-            .uploadFacturasProveedor(this.proveedor.id, form)
-            .subscribe(response => {
-                this.proveedor.facturas = [
-                    ...this.proveedor.facturas,
-                    ...response
-                ];
-                this.fpc.fu.clear();
-                this.hideWaitDialog();
-            });
-    }
-
-    deleteFacturaProveedor(event: FacturtaProveedorModel) {
-        this.showWaitDialog('Eliminando documento, un momento por favor...');
-        this.proveedorListService
-            .deleteFacturaProveedor(event.id)
-            .subscribe(response => {
-                this.proveedor.facturas = this.proveedor.facturas.filter(
-                    element => element.id != event.id
-                );
-                this.hideWaitDialog();
-            });
-    }
-
-    downloadFacturaProveedor(event: FacturtaProveedorModel) {
-        this.proveedorListService
-            .downloadFacturaProveedor({ path: event.path })
-            .subscribe(file => {
-                const blob = new Blob([file], { type: file.type });
-
-                var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
-                document.body.appendChild(a);
-                a.setAttribute('style', 'display: none');
-                a.href = url;
-                a.download = event.titulo;
-                a.click();
-                window.URL.revokeObjectURL(url);
-                a.remove(); // remove the element
-                this.hideWaitDialog();
-            });
-    }
+    }    
 }
