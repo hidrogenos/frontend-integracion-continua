@@ -1,24 +1,25 @@
-export interface AuditoriaListaModel {
+export interface ListaPreguntaModel {
     id?: number;
     nombre: string;
     activo: boolean;
-    data?: AuditoriaListaDataModel;
+    data?: ListaPreguntaDataModel;
 }
 
-export interface AuditoriaListaDataModel {
-    titulos: AuditoriaListaDataTituloModel[];
+export interface ListaPreguntaDataModel {
+    titulos: ListaPreguntaDataTituloModel[];
 }
 
-export interface AuditoriaListaDataTituloModel {
+export interface ListaPreguntaDataTituloModel {
     id: string;
     titulo: string;
-    preguntas: AuditoriaListaDataPreguntaModel[];
+    preguntas: ListaPreguntaDataPreguntaModel[];
 }
 
-export interface AuditoriaListaDataPreguntaModel {
+export interface ListaPreguntaDataPreguntaModel {
     id: string;
     aspecto_evaluar: string;
     actividad_realizar: string;
     responsable: string;
-    fecha: number;
+    fecha: any;
+    ponderado: number;
 }

@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { CreateListaDialogComponent } from '../../components';
-import { AuditoriaListaModel } from '../../../shared/models/auditoria-lista.model';
+import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 import { AdministradorListasService } from '../../services';
 import { forkJoin } from 'rxjs';
 
@@ -31,7 +31,9 @@ import { forkJoin } from 'rxjs';
                         <div class="ui-g-9">
                             <editor-lista
                                 *ngIf="selectedLista"
-                                [lista]="selectedLista">
+                                [lista]="selectedLista"
+                                (onUpdateListaData)="updateListaData($event)"
+                                (onUpdateListaNombre)="updateListaNombre($event)">
                             </editor-lista>
                         </div>
                     </div>
@@ -47,8 +49,8 @@ import { forkJoin } from 'rxjs';
 })
 export class AdministradorListasComponent implements OnInit {
     //atributos
-    listas: AuditoriaListaModel[];
-    selectedLista: AuditoriaListaModel;
+    listas: ListaPreguntaModel[];
+    selectedLista: ListaPreguntaModel;
 
     //viewChild
     @ViewChild('cld')
@@ -64,18 +66,18 @@ export class AdministradorListasComponent implements OnInit {
 
     loadInitialInfo() {
         forkJoin([this.getListas()]).subscribe(([listas]) => {
-            console.log(listas);
             this.listas = listas;
         });
     }
 
-    createLista(lista: AuditoriaListaModel) {
+    createLista(lista: ListaPreguntaModel) {
         this.administradorListasService
             .createLista(lista)
             .subscribe(response => {
                 this.listas = [...this.listas, response];
             });
     }
+
     getListas() {
         return this.administradorListasService.getListas();
     }
@@ -83,11 +85,27 @@ export class AdministradorListasComponent implements OnInit {
     selectLista(id: number) {
         this.administradorListasService.getLista(id).subscribe(response => {
             this.selectedLista = response;
-            console.log(response);
         });
     }
 
     showCreateListaDialog() {
         this.cld.display = true;
+    }
+
+    updateListaData(lista: ListaPreguntaModel) {
+        this.administradorListasService
+            .updateListaData(lista.id, lista.data)
+            .subscribe(response => console.log(response));
+    }
+
+    updateListaNombre(lista: ListaPreguntaModel) {
+        this.administradorListasService
+            .updateListaNombre(lista.id, { nombre: lista.nombre })
+            .subscribe(response => {
+                this.listas = this.listas.map(
+                    (e, i) =>
+                        e.id != lista.id ? e : { ...e, nombre: lista.nombre }
+                );
+            });
     }
 }

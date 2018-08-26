@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuditoriaListaModel } from '../../../shared/models/auditoria-lista.model';
+import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 import { MessageService } from 'primeng/api';
 
 @Component({
@@ -8,7 +8,7 @@ import { MessageService } from 'primeng/api';
     styleUrls: ['create-lista-dialog.component.scss'],
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-            <p-dialog [(visible)]="display" (onHide)="onHideDIalog()">
+            <p-dialog [(visible)]="display" (onHide)="onHideDIalog()" modal="true">
                 <p-header>
                     Crear nueva lista de preguntas
                 </p-header>
@@ -45,11 +45,11 @@ export class CreateListaDialogComponent implements OnInit {
 
     //events
     @Output()
-    onCreateLista = new EventEmitter<AuditoriaListaModel>();
+    onCreateLista = new EventEmitter<ListaPreguntaModel>();
 
     //properties
     @Input()
-    listas: AuditoriaListaModel[];
+    listas: ListaPreguntaModel[];
 
     constructor(
         private fb: FormBuilder,
@@ -72,7 +72,7 @@ export class CreateListaDialogComponent implements OnInit {
 
     onSubmit() {
         if (this.form.valid) {
-            const lista: AuditoriaListaModel = {
+            const lista: ListaPreguntaModel = {
                 nombre: this.form.value.nombre,
                 activo: true,
                 data: {
@@ -86,7 +86,8 @@ export class CreateListaDialogComponent implements OnInit {
                                     aspecto_evaluar: 'Aspecto a evaluar',
                                     actividad_realizar: 'Actividad a realizar',
                                     responsable: 'responsable',
-                                    fecha: new Date().valueOf()
+                                    fecha: new Date().valueOf(),
+                                    ponderado: 1
                                 }
                             ]
                         }
@@ -107,7 +108,7 @@ export class CreateListaDialogComponent implements OnInit {
         }
     }
 
-    validarListaExistente(lista: AuditoriaListaModel): boolean {
+    validarListaExistente(lista: ListaPreguntaModel): boolean {
         return this.listas.findIndex(l => l.nombre == lista.nombre) == -1;
     }
 }

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { AuditoriaListaModel } from '../../../shared/models/auditoria-lista.model';
+import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 
 @Component({
     selector: 'listado-auditoria-listas',
@@ -30,7 +30,7 @@ export class ListadoAuditoriaListasComponent {
 
     //properties
     @Input()
-    listas: AuditoriaListaModel[];
+    listas: ListaPreguntaModel[];
 
     constructor() {}
 
