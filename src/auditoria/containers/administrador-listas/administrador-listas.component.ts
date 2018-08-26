@@ -3,6 +3,11 @@ import { CreateListaDialogComponent } from '../../components';
 import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 import { AdministradorListasService } from '../../services';
 import { forkJoin } from 'rxjs';
+import { StoreModel } from '../../../shared/models/store.model';
+import { Store } from '@ngrx/store';
+
+import * as fromShared from './../../../shared/store';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'administrador-listas',
@@ -57,7 +62,9 @@ export class AdministradorListasComponent implements OnInit {
     cld: CreateListaDialogComponent;
 
     constructor(
-        private administradorListasService: AdministradorListasService
+        private administradorListasService: AdministradorListasService,
+        private messageService: MessageService,
+        private store: Store<StoreModel>
     ) {}
 
     ngOnInit() {
@@ -71,10 +78,16 @@ export class AdministradorListasComponent implements OnInit {
     }
 
     createLista(lista: ListaPreguntaModel) {
+        this.showWaitDialog('Registrando nueva lista, un momento por favor...');
         this.administradorListasService
             .createLista(lista)
             .subscribe(response => {
                 this.listas = [...this.listas, response];
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Lista creda exitosamente'
+                });
+                this.hideWaitDialog();
             });
     }
 
@@ -82,10 +95,17 @@ export class AdministradorListasComponent implements OnInit {
         return this.administradorListasService.getListas();
     }
 
+    hideWaitDialog() {
+        this.store.dispatch(new fromShared.HideWaitDialog());
+    }
+
     selectLista(id: number) {
         this.administradorListasService.getLista(id).subscribe(response => {
             this.selectedLista = response;
         });
+    }
+    showWaitDialog(header: string, body?: string) {
+        this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
     }
 
     showCreateListaDialog() {
@@ -93,12 +113,24 @@ export class AdministradorListasComponent implements OnInit {
     }
 
     updateListaData(lista: ListaPreguntaModel) {
+        this.showWaitDialog(
+            'Actualizando datos de la lista, un momento por favor'
+        );
         this.administradorListasService
             .updateListaData(lista.id, lista.data)
-            .subscribe(response => console.log(response));
+            .subscribe(response => {
+                this.hideWaitDialog();
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Lista actualizada exitosamente'
+                });
+            });
     }
 
     updateListaNombre(lista: ListaPreguntaModel) {
+        this.showWaitDialog(
+            'Actualizando nombre de la lista, un momento por favor'
+        );
         this.administradorListasService
             .updateListaNombre(lista.id, { nombre: lista.nombre })
             .subscribe(response => {
@@ -106,6 +138,12 @@ export class AdministradorListasComponent implements OnInit {
                     (e, i) =>
                         e.id != lista.id ? e : { ...e, nombre: lista.nombre }
                 );
+
+                this.hideWaitDialog();
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Lista actualizada exitosamente'
+                });
             });
     }
 }
