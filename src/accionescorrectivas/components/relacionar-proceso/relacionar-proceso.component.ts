@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AccionProcesoModel } from "../../../shared/models/accion-proceso.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
@@ -7,13 +7,18 @@ import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.m
     selector: "relacionar-proceso",
     templateUrl: "relacionar-proceso.component.html"
 })
-export class RelacionarProcesoComponent {
+export class RelacionarProcesoComponent implements OnInit {
+    //variables
+    selectedProcesos: MapaProcesoHijoModel[];
+    disabled: boolean;
+    form: FormGroup;
 
+    // variables de entrada
     @Input()
     procesos: MapaProcesoHijoModel[];
 
-    /** 
-     * @var data Procesos de una acción correctiva 
+    /**
+     * @var data Procesos de una acción correctiva
      */
     @Input()
     data: AccionProcesoModel[];
@@ -27,35 +32,43 @@ export class RelacionarProcesoComponent {
     @Input()
     rows: number;
 
+    // eventos
     @Output()
-    onRelateProceso: EventEmitter<MapaProcesoHijoModel[]> = new EventEmitter<MapaProcesoHijoModel[]>();
+    onRelateProceso: EventEmitter<MapaProcesoHijoModel[]> = new EventEmitter<
+        MapaProcesoHijoModel[]
+    >();
 
     @Output()
-    onDeleteProcesoFromAccionCorrectiva: EventEmitter<AccionProcesoModel> = new EventEmitter<AccionProcesoModel>();
+    onDeleteProcesoFromAccionCorrectiva: EventEmitter<
+        AccionProcesoModel
+    > = new EventEmitter<AccionProcesoModel>();
 
-    //selected procesos
-    selectedProcesos: MapaProcesoHijoModel[];
+    constructor(private fb: FormBuilder) {}
 
-    form: FormGroup;
+    ngOnInit() {
+        this.createForm();
+        this.disabled = false;
+    }
 
-    constructor(private fb: FormBuilder) {
-        this.form = fb.group({
-            proceso: [[] , Validators.required]
+    createForm() {
+        this.form = this.fb.group({
+            proceso: [null, Validators.required]
         });
     }
 
     relacionarProcesos() {
-        const procesosARelacionar: MapaProcesoHijoModel[] = this.selectedProcesos;
+        const procesosARelacionar: MapaProcesoHijoModel[] = this.form.value
+            .proceso;
         this.onRelateProceso.emit(procesosARelacionar);
-        this.refreshInputs();
+        this.createForm();
+    }
+
+    disableComponent() {
+        this.form.disable();
+        this.disabled = true;
     }
 
     deleteProcesoFromAccionCorrectiva(proceso: AccionProcesoModel) {
         this.onDeleteProcesoFromAccionCorrectiva.emit(proceso);
     }
-
-    refreshInputs() {
-        this.form.setValue({proceso: []});
-    }
-
 }

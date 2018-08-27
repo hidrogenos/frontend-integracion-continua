@@ -1,13 +1,13 @@
 import { environment } from '../../../environments/environment';
-import { AccionModel } from '../../../shared/models/accion.model';
+import { AccionCorrectivaModel } from '../../../shared/models/accion-correctiva.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs'
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { AccionImportanciaModel } from '../../../shared/models/accion-importancia.model';
-import { AccionProcesoModel } from '../../../shared/models/accion-proceso.model';
-import { AccionEstadoModel } from '../../../shared/models/accion-estado.model';
+import { AccionCorrectivaEstadoModel } from '../../../shared/models/accion-correctiva-estado.model';
 import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
+import { AccionCorrectivaService } from '../../../shared/services';
 
 const url_Point_Api = "/acciones/acciones-correctivas";
 
@@ -15,13 +15,13 @@ const url_Point_Api = "/acciones/acciones-correctivas";
 export class AccionesCorrectivasService {
 
 
-    constructor( private http: HttpClient){
+    constructor( private http: HttpClient, private accionCorrectivaService: AccionCorrectivaService){
     }
 
 
-    getAccionesCorrectivas(): Observable< AccionModel[]> {
+    getAccionesCorrectivas(): Observable< AccionCorrectivaModel[]> {
 
-        return this.http.get<AccionModel[]>(
+        return this.http.get<AccionCorrectivaModel[]>(
             `${
                 environment.apiUrl
             }${url_Point_Api}/get-acciones-correctivas`)
@@ -32,15 +32,18 @@ export class AccionesCorrectivasService {
 
     /**
      * @param data los campos necesarios para hacer un lazy loading
-     * @return AccionModel[] lista de acciones correctivas preparada para mostrar al usuario
+     * @return AccionCorrectivaModel[] lista de acciones correctivas preparada para mostrar al usuario
      */
-    getLazyAccionesCorrectivas( data ): Observable<{ cantidad: number , data: AccionModel[]}> {
+    getLazyAccionesCorrectivas( data ): Observable<{ cantidad: number , data: AccionCorrectivaModel[]}> {
 
-        return this.http.post<{ cantidad: number , data: AccionModel[]}>(
+        return this.http.post<{ cantidad: number , data: AccionCorrectivaModel[]}>(
             `${
                 environment.apiUrl
             }${url_Point_Api}/get-async-acciones-correctivas`, data)
              .pipe(
+                map( (response) => {
+                    return {cantidad: response.cantidad, data: response.data.map(accionCorrectiva => this.accionCorrectivaService.transformAccionCorrectiva(accionCorrectiva))}   
+                }),
                  catchError((error: any) => Observable.throw(error.json()))
             );
     }
@@ -65,8 +68,8 @@ export class AccionesCorrectivasService {
            );
      }
 
-     getEstados(): Observable<AccionEstadoModel[]> {
-         return this.http.get<AccionEstadoModel[]>(
+     getEstados(): Observable<AccionCorrectivaEstadoModel[]> {
+         return this.http.get<AccionCorrectivaEstadoModel[]>(
             `${
                 environment.apiUrl
             }${url_Point_Api}/get-estados`)
@@ -77,7 +80,7 @@ export class AccionesCorrectivasService {
 
 
     // /** transforma y ajusta los cambios de un response a una accion correctiva */
-    // transformResponseAccion(accionCorrectiva: AccionModel): AccionModel {
+    // transformResponseAccion(accionCorrectiva: AccionCorrectivaModel): AccionCorrectivaModel {
     //     return {
     //         ...accionCorrectiva,
     //         responsable : accionCorrectiva.responsable ?  accionCorrectiva.responsable.nombre : null,

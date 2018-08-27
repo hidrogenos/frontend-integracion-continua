@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { AccionModel } from '../../../shared/models/accion.model';
+import { AccionCorrectivaModel } from '../../../shared/models/accion-correctiva.model';
 
 @Component({
     selector: "acciones-lista",
@@ -28,14 +28,18 @@ export class AccionesListaComponent {
     onLazy: EventEmitter<any>;
 
     @Output()
-    onEdit: EventEmitter<AccionModel>;
+    onEdit: EventEmitter<AccionCorrectivaModel>;
+
+    @Output()
+    onDeleteAccionCorrectiva: EventEmitter<AccionCorrectivaModel>;
 
     @Input()
     cols: any[]
 
     constructor() {
-        this.onLazy = new EventEmitter();
-        this.onEdit = new EventEmitter();
+        this.onLazy = new EventEmitter<any>();
+        this.onEdit = new EventEmitter<AccionCorrectivaModel>();
+        this.onDeleteAccionCorrectiva = new EventEmitter<AccionCorrectivaModel>();
     }
 
     loadLazy( event: Event)
@@ -43,8 +47,12 @@ export class AccionesListaComponent {
         this.onLazy.emit( event );
     }
 
-    selectAccionCorrectiva(data: AccionModel) {
+    selectAccionCorrectiva(data: AccionCorrectivaModel) {
         this.onEdit.emit(data);
+    }
+
+    deleteAccionCorrectiva(data: AccionCorrectivaModel) {
+        this.onDeleteAccionCorrectiva.emit(data);
     }
     
 }

@@ -1,0 +1,51 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form [formGroup]="form">
+        <p-dialog 
+            header="Asignar acción correctiva: {{ accionCorrectivaActual?.titulo }}" 
+            [(visible)]="display"
+            [modal]="true" 
+            [responsive]="true" 
+            [width]="800"
+            [maximizable]="true" 
+            [baseZIndex]="10000"
+            (onHide)="onHide()"
+            [contentStyle]="{'overflow':'visible'}">
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Responsable</label>
+                    </div>
+                    <p-dropdown [options]="usuarios"
+                                [autoWidth]="false"
+                                placeholder="Seleccione..."
+                                optionLabel="nombre"
+                                formControlName="responsable">
+                    </p-dropdown>
+                </div>
+            </div>
+            <!-- <div class="ui-g">
+                <div class="ui-g-12">
+                    <div>
+                        <label>Observación</label>
+                    </div>
+                    <textarea formControlName="observacion"  pInputTextArea [rows]="6" [cols]="30" style="width: 100%"></textarea>
+                </div>
+            </div> -->
+            <p-footer>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-fluid">
+                        <button type="button"
+                                pButton
+                                label="Asignar" 
+                                class="ui-button" 
+                                (click)="asignarAccionCorrectiva();display=false"
+                                [disabled]="!form.valid"></button>
+                    </div>
+                </div>
+            </p-footer>
+        </p-dialog>
+    </form>
+    </div>
+</div>

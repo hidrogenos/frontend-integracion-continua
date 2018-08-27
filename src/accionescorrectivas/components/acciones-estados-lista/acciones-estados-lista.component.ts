@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AccionEstadoModel } from '../../../shared/models/accion-estado.model';
+import {  AccionCorrectivaEstadoModel } from '../../../shared/models/accion-correctiva-estado.model';
 
 @Component({
     selector: "acciones-estados-lista",
@@ -10,5 +10,5 @@ import { AccionEstadoModel } from '../../../shared/models/accion-estado.model';
 export class AccionesEstadosListaComponent {
     
     @Input()
-    estados: AccionEstadoModel[];
+    estados: AccionCorrectivaEstadoModel[];
 }
