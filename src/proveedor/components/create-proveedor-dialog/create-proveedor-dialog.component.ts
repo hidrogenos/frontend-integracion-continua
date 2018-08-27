@@ -239,8 +239,8 @@ import { CiudadService, RegimenService, BancoService, TipoIdentificacionService,
                     </div>
                 </div>
                 <p-footer>
-                    <button type="submit" pButton icon="fa fa-check"  label="Crear" [disabled]="!newProveedor.valid"></button>
                     <button type="button" pButton icon="fa fa-close" (click)="display=false" (click)="!newProveedor.reset()" label="Cancelar" class="danger-btn"></button>
+                    <button type="submit" pButton icon="fa fa-check"  label="Crear" [disabled]="!newProveedor.valid"></button>
                 </p-footer>
             </p-dialog>
         </form>
