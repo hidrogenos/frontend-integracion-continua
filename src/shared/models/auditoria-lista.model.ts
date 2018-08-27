@@ -22,4 +22,5 @@ export interface ListaPreguntaDataPreguntaModel {
     responsable: string;
     fecha: any;
     ponderado: number;
+    resultado: boolean;
 }

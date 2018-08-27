@@ -65,4 +65,15 @@ export class ListaAuditoriaExternaService {
             }>(`${environment.apiUrl}/auditoria/externa/lista/get-initial-info`)
             .pipe(catchError(error => throwError(error)));
     }
+
+    getLazyAuditorias(data): Observable<{ data: any[]; totalRows: number }> {
+        return this.http
+            .post<{ data: any[]; totalRows: number }>(
+                `${
+                    environment.apiUrl
+                }/auditoria/externa/lista/get-lazy-auditorias`,
+                data
+            )
+            .pipe(catchError(error => throwError(error)));
+    }
 }

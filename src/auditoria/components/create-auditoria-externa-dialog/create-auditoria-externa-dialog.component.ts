@@ -227,6 +227,7 @@ export class CreateAuditoriaExternaDialogComponent implements OnInit {
         if (this.form.valid) {
             const auditoria: AuditoriaExternaModel = {
                 fecha: (this.form.value.fecha as Date).valueOf(),
+                id_estado: 1,
                 id_auditor_principal: this.form.value.auditor_principal.id,
                 id_auditor_apoyo: this.form.value.auditor_apoyo.id,
                 activo: true,
@@ -240,13 +241,12 @@ export class CreateAuditoriaExternaDialogComponent implements OnInit {
             const idsLista: number[] = (this.form.value.listas as any[]).map(
                 e => e.id
             );
-
+            this.display = false;
             this.onCreateAuditoria.emit({ auditoria, idsLista });
         }
     }
 
     searchProveedor(event) {
-        console.log(event);
         this.onSearchProveedor.emit(event.query);
     }
 }

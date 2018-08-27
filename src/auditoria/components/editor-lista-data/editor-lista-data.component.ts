@@ -291,7 +291,8 @@ export class EditorListaComponent implements OnInit {
             actividad_realizar: 'Actividad a realizar',
             responsable: 'responsable',
             fecha: new Date(),
-            ponderado: 1
+            ponderado: 1,
+            resultado: null
         });
     }
 
