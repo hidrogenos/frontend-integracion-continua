@@ -1,4 +1,4 @@
-export interface AccionEstadoModel {
+export interface AccionCorrectivaEstadoModel {
     id: number,
     nombre: string,
     color: string,

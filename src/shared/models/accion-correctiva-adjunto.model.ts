@@ -1,4 +1,4 @@
-export interface AccionDocumentoModel {
+export interface AccionCorrectivaAdjuntoModel {
     id?: number,
     id_accion_correctiva?: number,
     titulo: string,

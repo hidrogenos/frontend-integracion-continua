@@ -1,0 +1,33 @@
+<div class="ui-g" *ngIf="!disabled">
+    <div class="ui-g-12 text-aling-right">
+        <p-fileUpload #fu customUpload="true" name="demo[]" (uploadHandler)="uploadFiles($event)" multiple="multiple" cancelLabel="Limpiar"
+            chooseLabel="Seleccionar" uploadLabel="Adjuntar">
+        </p-fileUpload>
+    </div>
+</div>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-table [value]="documentos">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha de carga</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-documento>
+                <tr>
+                    <td>{{ documento.titulo }}</td>
+                    <td>{{ documento.fecha_carga | date: dateFormatAngular }}</td>
+                    <td style="text-align: center;">
+                        <button style="margin-right:10px;" pButton type="button" icon="fa fa-download" (click)="onDownloadDocumento.emit(documento)"
+                            class="ui-button-success">
+                        </button>
+                        <button *ngIf="!disabled" style="margin-right:10px;" pButton type="button" icon="fa fa-trash" class="ui-button-danger" (click)="onDeleteDocumento.emit(documento)">
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

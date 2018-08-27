@@ -10,13 +10,15 @@ import { StoreModel } from '../../models/store.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from './../../../app/store';
 import * as fromShared from './../../../shared/store';
+import * as fromAuth from './../../../auth/store'
 import { take, switchMap, map, last } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
     CalidadService,
     HasPermisionService,
     AdjuntoService,
-    UsuarioDestrezaDocumentoService
+    UsuarioDestrezaDocumentoService,
+    ProveedorFacturaService
 } from '../../services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PdfViewerComponent } from './../../components/pdf-viewer/pdf-viewer.component';
@@ -44,6 +46,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private calidadService: CalidadService,
         private resolver: ComponentFactoryResolver,
         private hasPermisionService: HasPermisionService,
+        private proveedorFacturaService: ProveedorFacturaService,
         private sanitizer: DomSanitizer,
         private store: Store<StoreModel>,
         private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService
@@ -88,10 +91,28 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             case environment.tipos_documento.usuario_destreza_documento.id:
                 this.getUsuarioDestrezaDocumento(idDocumento);
                 break;
-
+            case environment.tipos_documento.factura_proveedor_documento.id:
+                this.getFacturaProveedorDocumento(idDocumento);
+                break;
             default:
                 break;
         }
+    }
+
+    getFacturaProveedorDocumento(idDocumento){
+        this.proveedorFacturaService.getProveedorFactura(idDocumento)
+            .subscribe(response => {
+                if(response.extension == 'pdf'){
+                    this.hasPermisionService.hasPermision(environment.tipos_documento.factura_proveedor_documento.permiso_impresion)
+                        .subscribe(permisoImpresion => {
+                            this.showPdf(response.path, permisoImpresion)
+                        })
+                } else if(environment.extensiones_imagen.findIndex(e => e == response.extension) != -1 ){
+                    this.showImage(response.path);
+                } else { 
+                    this.downloadFile(response.path, response.titulo);
+                }
+            })
     }
 
     getManualCalidad(idDocumento: number) {

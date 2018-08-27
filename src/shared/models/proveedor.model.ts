@@ -3,6 +3,7 @@ import { TipoIdentificacionModel } from "./tipo-identificacion.model";
 import { RegimenModel } from "./regimen.model";
 import { BancoModel } from "./banco.model";
 import { TipoCuentaModel } from "./TipoCuenta.model";
+import { FacturtaProveedorModel } from "./factura-proveedor.model";
 
 export interface ProveedorModel {
 
@@ -39,5 +40,6 @@ export interface ProveedorModel {
     regimen?: RegimenModel[];
     bancos?: BancoModel[];
     tipoCuenta?: TipoCuentaModel[];
+    factura?: FacturtaProveedorModel[]; 
 
 }

@@ -1,0 +1,57 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-table #tableListaAccionCorrectivaTarea [value]="data" [paginator]="true" [rows]="rows">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        Prioridad
+                    </th>
+                    <th>
+                        Tarea
+                    </th>
+                    <th>
+                        Responsables terceros
+                    </th>
+                    <th>
+                        Fecha cumplimiento
+                    </th>
+                    <th>
+                        Funciones
+                    </th>
+                </tr>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        <input pInputText type="text" (input)="tableListaAccionCorrectivaTarea.filter($event.target.value, col.field, 'contains')"
+                            style="width: 100%">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-accionCorrectivaTarea>
+                <tr>
+                    <td> {{ accionCorrectivaTarea?.prioridad }} </td>
+                    <td> {{ accionCorrectivaTarea?.tarea }} </td>
+                    <td> {{ accionCorrectivaTarea?.responsables_terceros }} </td>
+                    <td> {{ accionCorrectivaTarea?.fecha_cumplimiento | date: dateFormatAngular }} </td>
+                    <td style="text-align: center">
+                        <button *ngIf="!accionCorrectivaTarea.realizada && idEstadoAccionCorrectiva == 6" pButton class="ui-button-success" icon="pi pi-check"
+                            (click)="selectAccionCorrectivaTarea(accionCorrectivaTarea)"></button>
+                        <button *ngIf="accionCorrectivaTarea.realizada" pButton class="ui-button" icon="pi pi-info-circle" (click)="selectAccionCorrectivaTarea(accionCorrectivaTarea)"></button>
+                        <button *ngIf="!accionCorrectivaTarea.realizada && idEstadoAccionCorrectiva == 5" pButton icon="pi pi-pencil" style="margin-left: 10px"
+                            (click)="editAccionCorrectivaTarea(accionCorrectivaTarea)"></button>
+                        <button *ngIf="!accionCorrectivaTarea.realizada && idEstadoAccionCorrectiva == 5" pButton class="ui-button-danger" icon="pi pi-trash"
+                            style="margin-left: 10px" (click)="deleteAccionCorrectivaTarea(accionCorrectivaTarea)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<edit-accion-correctiva-tarea-dialog #editarTarea [accionCorrectivaTareaTipos]="accionCorrectivaTareaTipos" [usuariosResponsables]="usuariosResponsables"
+    (onUpdateAccionCorrectivaTarea)="updateAccionCorrectivaTarea($event)">
+</edit-accion-correctiva-tarea-dialog>
+
+<realizar-tarea-dialog #realizarTarea [evidenciasTarea]="tareaSelected?.adjunto" (onCreateDocumento)="uploadAdjuntoTarea($event)"
+    (onDownloadDocumento)="downloadAdjuntoTarea($event)" (onDeleteDocumento)="deleteAdjuntoTarea($event)" (onFinishTarea)="onFinishTarea.emit($event)">
+
+</realizar-tarea-dialog>

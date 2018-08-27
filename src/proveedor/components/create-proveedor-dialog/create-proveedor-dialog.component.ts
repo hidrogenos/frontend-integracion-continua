@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
-import { Message } from "@angular/compiler/src/i18n/i18n_ast";
 import { ProveedorModel } from "../../../shared/models/proveedor.model";
 import { TipoIdentificacionModel } from "../../../shared/models/tipo-identificacion.model";
 import { CiudadModel } from "../../../shared/models/ciudad.model";
@@ -240,8 +239,8 @@ import { CiudadService, RegimenService, BancoService, TipoIdentificacionService,
                     </div>
                 </div>
                 <p-footer>
-                    <button type="submit" pButton icon="fa fa-check"  label="Crear" [disabled]="!newProveedor.valid"></button>
                     <button type="button" pButton icon="fa fa-close" (click)="display=false" (click)="!newProveedor.reset()" label="Cancelar" class="danger-btn"></button>
+                    <button type="submit" pButton icon="fa fa-check"  label="Crear" [disabled]="!newProveedor.valid"></button>
                 </p-footer>
             </p-dialog>
         </form>
@@ -253,7 +252,6 @@ export class CreateProveedorDialogComponent {
     //atributos
     display:boolean;
     newProveedor: FormGroup;
-    msgs: Message[] = [];
 
     //events
     @Output() create = new EventEmitter<ProveedorModel>();

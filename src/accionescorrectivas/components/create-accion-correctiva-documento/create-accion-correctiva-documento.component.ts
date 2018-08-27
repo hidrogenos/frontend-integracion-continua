@@ -1,34 +1,47 @@
-import { Component, Output, EventEmitter, ViewChild, Input} from '@angular/core';
-import { FileUpload } from 'primeng/primeng';
-import { environment } from '../../../environments/environment';
+import {
+    Component,
+    Output,
+    EventEmitter,
+    ViewChild,
+    Input
+} from "@angular/core";
+import { FileUpload } from "primeng/primeng";
+import { environment } from "../../../environments/environment";
 
 // Models
-import { AccionDocumentoModel } from '../../../shared/models/accion-documento.model';
+import { AccionCorrectivaAdjuntoModel } from "../../../shared/models/accion-correctiva-adjunto.model";
 
 @Component({
-    selector: 'create-accion-correctiva-documento',
-    styleUrls: ['create-accion-correctiva-documento.component.scss'],
-    templateUrl: 'create-accion-correctiva-documento.component.html'
+    selector: "create-accion-correctiva-documento",
+    styleUrls: ["create-accion-correctiva-documento.component.scss"],
+    templateUrl: "create-accion-correctiva-documento.component.html"
 })
 export class CreateDocumentoAccionCorrectivaComponent {
     //atributos
     dateFormatAngular = environment.dateFormatAngular;
+    disabled: boolean;
 
     //events
-    @Output() 
+    @Output()
     onCreateDocumentoAccionCorrectiva = new EventEmitter<File[]>();
 
     @Output()
-    onDeleteDocumentoAccionCorrectiva = new EventEmitter<AccionDocumentoModel>();
-    
+    onDeleteDocumentoAccionCorrectiva = new EventEmitter<
+        AccionCorrectivaAdjuntoModel
+    >();
+
     @Output()
-    onDownloadDocumentoAccionCorrectiva = new EventEmitter<AccionDocumentoModel>();
+    onDownloadDocumentoAccionCorrectiva = new EventEmitter<
+        AccionCorrectivaAdjuntoModel
+    >();
 
     //properties
-    @Input() documentos: AccionDocumentoModel[];
+    @Input()
+    documentos: AccionCorrectivaAdjuntoModel[];
 
     //viewchild
-    @ViewChild('fu') fu: FileUpload;
+    @ViewChild("fu")
+    fu: FileUpload;
 
     constructor() {}
 
@@ -37,5 +50,7 @@ export class CreateDocumentoAccionCorrectivaComponent {
         this.onCreateDocumentoAccionCorrectiva.emit(files);
     }
 
-    
+    disableComponent() {
+        this.disabled = true;
+    }
 }

@@ -2,22 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
-//environment
-import { environment } from '../../../environments/environment';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
-import { ProveedorService } from '../../../shared/services';
+import { ProveedorService, ProveedorFacturaService } from '../../../shared/services';
 import { BancoModel } from '../../../shared/models/banco.model';
 import { CiudadModel } from '../../../shared/models/ciudad.model';
 import { TipoCuentaModel } from '../../../shared/models/TipoCuenta.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import { RegimenModel } from '../../../shared/models/regimen.model';
 
+//environment
+import { environment } from '../../../environments/environment';
+
 @Injectable()
 export class ProveedorListaService {
     constructor(
         private http: HttpClient,
-        private proveedorService: ProveedorService
+        private proveedorService: ProveedorService,
     ) {}
 
     getProveedores(): Observable<ProveedorModel[]> {
@@ -65,16 +65,12 @@ export class ProveedorListaService {
     }
 
     onEliminar(event: ProveedorModel): Observable<ProveedorModel> {
-        console.log(event);
         return this.http.delete<ProveedorModel>(
             `${environment.apiUrl}/proveedor/delete-proveedor/${event.id}`
         );
     }
 
-    updateProveedor(
-        id: number,
-        data: ProveedorModel
-    ): Observable<ProveedorModel> {
+    updateProveedor(id: number,data: ProveedorModel): Observable<ProveedorModel> {
         let aux = this.proveedorService.transformRequestProveedor(data);
         return this.http
             .post<ProveedorModel>(

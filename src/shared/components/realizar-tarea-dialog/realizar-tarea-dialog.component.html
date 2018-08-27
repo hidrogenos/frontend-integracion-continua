@@ -1,0 +1,44 @@
+<div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <p-dialog #realizarTarea header="Realizar tarea" [(visible)]="display" [modal]="true" [responsive]="true" width="800" [maximizable]="true"
+            baseZIndex="10000" (onHide)="display=false">
+            <!-- <pre>{{form.value | json}}</pre> -->
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <div>
+                        <label>Tarea</label>
+                    </div>
+                    <p>{{tarea}}</p>
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Observaciones</label>
+                    </div>
+                    <textarea pInputTextArea formControlName="observaciones" cols="30" rows="5" style="width: 100%"></textarea>
+                </div>
+            </div>
+
+            <div class="ui-g" appendTo="body">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Evidencias adjuntas</label>
+                    </div>
+                    <documento-adjunto [disabled]="disabled" [documentos]="evidenciasTarea" (onCreateDocumento)="onCreateDocumento.emit($event)"
+                        (onDownloadDocumento)="onDownloadDocumento.emit($event)" (onDeleteDocumento)="onDeleteDocumento.emit($event)"></documento-adjunto>
+                </div>
+            </div>
+            <p-footer>
+                <div class="ui-g text-aling-right">
+                    <div class="ui-g-12">
+                        <button *ngIf="!disabled" pButton icon="pi pi-times" class="ui-button-danger" (click)="display=false" label="Cancelar"></button>
+                        <button *ngIf="!disabled" pButton icon="pi pi-save" type="submit" class="ui-button-success" label="Realizar tarea" [disabled]="!form.valid"></button>
+                        <button *ngIf="disabled" pButton icon="pi pi-times" class="ui-button-danger" label="Cerrar" (click)="display=false"></button>
+                    </div>
+                </div>
+            </p-footer>
+        </p-dialog>
+    </form>
+</div>
