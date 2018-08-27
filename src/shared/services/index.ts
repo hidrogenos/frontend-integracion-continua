@@ -10,6 +10,12 @@ export * from "./accioncorrectiva-tarea-adjunto/accioncorrectiva-tarea-adjunto.s
 import { AccionCorrectivaTareaService } from "./accioncorrectiva-tarea/accioncorrectiva-tarea.service";
 export * from "./accioncorrectiva-tarea/accioncorrectiva-tarea.service";
 
+import { AccionPreventivaTareaAdjuntoService } from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
+export * from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
+
+import { AccionPreventivaTareaService } from "./accionpreventiva-tarea/accionpreventiva-tarea.service";
+export * from "./accionpreventiva-tarea/accionpreventiva-tarea.service";
+
 import { BancoService } from "./banco/banco.service";
 export * from "./banco/banco.service";
 
@@ -60,6 +66,8 @@ export const services: any[] = [
     AccionCorrectivaService,
     AccionCorrectivaTareaAdjuntoService,
     AccionCorrectivaTareaService,
+    AccionPreventivaTareaAdjuntoService,
+    AccionPreventivaTareaService,
     BancoService,
     CalidadService,
     CiudadService,

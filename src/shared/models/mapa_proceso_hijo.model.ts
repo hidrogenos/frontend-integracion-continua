@@ -1,3 +1,5 @@
+import { UsuarioModel } from "./usuario.model";
+
 export interface MapaProcesoHijoModel {
     id?: number;
     id_mapa_procesos: number;
@@ -7,4 +9,6 @@ export interface MapaProcesoHijoModel {
     flecha: string;
     descripcion: string;
     activo: boolean;
+    id_jefe?: number;
+    jefe?: UsuarioModel;
 }

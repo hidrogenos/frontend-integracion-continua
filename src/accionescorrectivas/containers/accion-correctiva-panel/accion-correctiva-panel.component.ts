@@ -142,7 +142,7 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                         <p-toolbar>
                             
                             <div class="ui-toolbar">
-                                <div class="ui-g ui-fluid" *ngIf="idAccionCorrectivaEstado == ACCION_EN_CREACION">
+                                <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_CREACION) && accionCorrectivaActual?.id_usuario_crea == usuarioActual?.id ">
                                     <div class="ui-g-6">
                                         <button pButton class="ui-button" label="Enviar a calidad" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_CALIDAD)"></button>
                                     </div>
@@ -152,8 +152,8 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                                 </div>  
                             </div>
 
-                            <div class="ui-g ui-fluid" *ngIf="idAccionCorrectivaEstado == ACCION_EN_CALIDAD ||
-                                                              idAccionCorrectivaEstado == ACCION_EN_REASIGNACION">
+                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_CALIDAD ||
+                                                              idAccionCorrectivaEstado == ACCION_EN_REASIGNACION) && usuarioActual?.es_jefe == 1">
                                 <div class="ui-g-6">
                                     <button pButton class="ui-button" label="Asignar acción" (click)="asignar.display=true;"></button>
                                 </div>
@@ -162,7 +162,7 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                                 </div>
                             </div>
 
-                            <div class="ui-g ui-fluid" *ngIf="idAccionCorrectivaEstado == ACCION_ASIGNADA">
+                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_ASIGNADA) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable)">
                                 <div class="ui-g-6">
                                     <button pButton class="ui-button" label="Resolver acción (Análisis)" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_ANALISIS)"></button>
                                 </div>
@@ -171,19 +171,19 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                                 </div>
                             </div>
 
-                            <div class="ui-g ui-fluid" *ngIf="idAccionCorrectivaEstado == ACCION_EN_ANALISIS">
+                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_ANALISIS) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable)">
                                 <div class="ui-g-12">
                                     <button pButton class="ui-button" label="Finalizar análisis y crear tareas" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_ASIGNACION_ACTIVIDADES)"></button>
                                 </div>
                             </div>
 
-                            <div class="ui-g ui-fluid" *ngIf="idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES">
+                            <!-- <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable)">
                                 <div class="ui-g-12">
                                     <button pButton class="ui-button" label="Finalizar ingreso de tareas" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_DESARROLLO_TAREAS)"></button>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_DESARROLLO_TAREAS) && finishedTareaPermiso">
+                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable) && finishedTareaPermiso">
                                 <div class="ui-g-12">
                                     <button pButton class="ui-button" label="Finalizar acción" (click)="actualizarEstadoAccionCorrectiva(ACCION_FINALIZADA)"></button>
                                 </div>
@@ -205,7 +205,7 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                 <div class="ui-g">
                     <div class="ui-g-12">
                         <asignar-accion-correctiva-dialog #asignar
-                                                         [usuarios]="usuarios"
+                                                         [jefesProcesosHijos]="jefesProcesosHijos"
                                                          [accionCorrectivaActual]="accionCorrectivaActual"
                                                          (onAsignarAccionCorrectiva)="asignarAccionCorrectiva($event)"
                         > </asignar-accion-correctiva-dialog>
@@ -232,6 +232,10 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
     finishedTareaPermiso: boolean;
 
+    // atributos clase
+
+    usuarioActual: UsuarioModel;
+
     // listas para utilizar
 
     importancias: AccionImportanciaModel[];
@@ -243,6 +247,8 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     tareaTipos: AccionCorrectivaTareaTipoModel[];
 
     usuarios: UsuarioModel[];
+
+    jefesProcesosHijos: MapaProcesoHijoModel[];
 
     loadingProcesos: boolean;
 
@@ -261,8 +267,6 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     documentosAccionCorrectiva: AccionCorrectivaAdjuntoModel[];
 
     accionCorrectivaTareas: AccionCorrectivaTareaModel[];
-
-    usuariosResponsables: UsuarioModel[];
 
     // Hijos
     @ViewChild("edit")
@@ -496,13 +500,14 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
                 let aux2 = forkJoin([
                     this.getAccionCorrectivaTareaTipos(),
-                    this.usuarioService.getUsuarios()
+                    this.usuarioService.getUsuarios(),
+                    this.getJefesProcesos()
                 ]);
 
-                aux2.subscribe(([tareaTipos, usuarios]) => {
+                aux2.subscribe(([tareaTipos, usuarios, jefesProcesosHijos]) => {
                     this.tareaTipos = tareaTipos;
                     this.usuarios = usuarios;
-                    this.usuariosResponsables = usuarios;
+                    this.jefesProcesosHijos = jefesProcesosHijos;
                 });
             });
     }
@@ -518,6 +523,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 this.accionCorrectivaActual = response;
                 this.idAccionCorrectivaEstado = this.accionCorrectivaActual.id_estado;
                 this.hideWaitDialog();
+                this.desabilitarComponentes();
                 switch (response.id_estado) {
                     case this.ACCION_EN_CALIDAD:
                     case this.ACCION_ASIGNADA:
@@ -541,38 +547,41 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             "Acción en proceso",
             "Relacionando proceso a acción correctiva, un momento por favor..."
         );
-        this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            let accionCorrectivaProcesos: AccionProcesoModel[] = [];
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                let accionCorrectivaProcesos: AccionProcesoModel[] = [];
 
-            data.forEach(mapaProcesoHijo => {
-                let accionCorrectivaProceso: AccionProcesoModel = {
-                    id_mapa_procesos: mapaProcesoHijo.id,
-                    id_accion_correctiva: this.accionCorrectivaActual.id,
-                    id_usuario: usuario.id
-                };
-                accionCorrectivaProcesos.push(accionCorrectivaProceso);
-            });
-
-            this.accionesCorrectivasProcesoService
-                .addProcesoToAccionCorrectiva(accionCorrectivaProcesos)
-                .subscribe(procesosAccionCorrectiva => {
-                    this.procesosAccionCorrectiva = [
-                        ...this.procesosAccionCorrectiva,
-                        ...procesosAccionCorrectiva
-                    ];
-
-                    this.procesos = this.procesos.filter(procesoActual => {
-                        let procesoBuscado = procesosAccionCorrectiva.find(
-                            element =>
-                                procesoActual.id == element.id_mapa_procesos
-                        );
-                        if (!procesoBuscado) {
-                            return procesoActual;
-                        }
-                    });
-                    this.hideWaitDialog();
+                data.forEach(mapaProcesoHijo => {
+                    let accionCorrectivaProceso: AccionProcesoModel = {
+                        id_mapa_procesos: mapaProcesoHijo.id,
+                        id_accion_correctiva: this.accionCorrectivaActual.id,
+                        id_usuario: usuario.id
+                    };
+                    accionCorrectivaProcesos.push(accionCorrectivaProceso);
                 });
-        });
+
+                this.accionesCorrectivasProcesoService
+                    .addProcesoToAccionCorrectiva(accionCorrectivaProcesos)
+                    .subscribe(procesosAccionCorrectiva => {
+                        this.procesosAccionCorrectiva = [
+                            ...this.procesosAccionCorrectiva,
+                            ...procesosAccionCorrectiva
+                        ];
+
+                        this.procesos = this.procesos.filter(procesoActual => {
+                            let procesoBuscado = procesosAccionCorrectiva.find(
+                                element =>
+                                    procesoActual.id == element.id_mapa_procesos
+                            );
+                            if (!procesoBuscado) {
+                                return procesoActual;
+                            }
+                        });
+                        this.hideWaitDialog();
+                    });
+            });
     }
 
     deleteProcesoFromAccionCorrectiva(data: AccionProcesoModel) {
@@ -667,25 +676,28 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
     createAccionAnalisis(data: AccionAnalisisTipoModel) {
         this.showWaitDialog("Accion en proceso", "Creando nueva idea");
-        this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            const accionAnalisis: AccionCorrectivaAnalisisModel = {
-                id_accion_correctiva: this.accionCorrectivaActual.id,
-                id_accion_analisis_tipo: data.id,
-                id_usuario: usuario.id
-            };
-            this.accionCorrectivaAnalisisService
-                .crearAnalisisAccionCorrectiva(accionAnalisis)
-                .subscribe(response => {
-                    this.createAccionAnalisisHijoByDefault(response);
-                    this.accionCorrectivaAnalisisActual = response;
-                    this.accionCorrectivaActual.metodologia_analisis = response;
-                    this.metodologiaComponent.createFormularioAnalisisHijos(
-                        this.accionCorrectivaAnalisisHijos
-                    );
-                    this.metodologiaComponent.stepComponent.activeIndex = 1;
-                    this.hideWaitDialog();
-                });
-        });
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                const accionAnalisis: AccionCorrectivaAnalisisModel = {
+                    id_accion_correctiva: this.accionCorrectivaActual.id,
+                    id_accion_analisis_tipo: data.id,
+                    id_usuario: usuario.id
+                };
+                this.accionCorrectivaAnalisisService
+                    .crearAnalisisAccionCorrectiva(accionAnalisis)
+                    .subscribe(response => {
+                        this.createAccionAnalisisHijoByDefault(response);
+                        this.accionCorrectivaAnalisisActual = response;
+                        this.accionCorrectivaActual.metodologia_analisis = response;
+                        this.metodologiaComponent.createFormularioAnalisisHijos(
+                            this.accionCorrectivaAnalisisHijos
+                        );
+                        this.metodologiaComponent.stepComponent.activeIndex = 1;
+                        this.hideWaitDialog();
+                    });
+            });
     }
 
     createAccionAnalisisHijos(data: AccionCorrectivaAnalisisHijoModel[]) {
@@ -731,63 +743,69 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
     createAccionAnalisisHijo5ws(data: AccionCorrectivaAnalisisHijo5wsModel[]) {
         this.showWaitDialog("Accion en proceso", "Creando nuevo porque");
-        this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            data.forEach(accionAnalisisHijoActual => {
-                accionAnalisisHijoActual.id_usuario = usuario.id;
-                accionAnalisisHijoActual.id_accion_correctiva_analisis = this.accionCorrectivaAnalisisActual.id;
-            });
-
-            this.accionCorrectivaAnalisisService
-                .createAnalisisAccionCorrectivaHijos5ws(data)
-                .subscribe(response => {
-                    this.accionCorrectivaAnalisisHijos = response;
-                    this.metodologiaComponent.stepComponent.activeIndex = 2;
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                data.forEach(accionAnalisisHijoActual => {
+                    accionAnalisisHijoActual.id_usuario = usuario.id;
+                    accionAnalisisHijoActual.id_accion_correctiva_analisis = this.accionCorrectivaAnalisisActual.id;
                 });
-            this.hideWaitDialog();
-        });
+
+                this.accionCorrectivaAnalisisService
+                    .createAnalisisAccionCorrectivaHijos5ws(data)
+                    .subscribe(response => {
+                        this.accionCorrectivaAnalisisHijos = response;
+                        this.metodologiaComponent.stepComponent.activeIndex = 2;
+                    });
+                this.hideWaitDialog();
+            });
     }
 
     createAccionAnalisisHijo(data) {
         this.showWaitDialog("Accion en proceso", "Creando nuevo porque");
-        this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            data.hijo.id_usuario = usuario.id;
-            data.hijo.id_padre = data.hijo.padre.id;
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                data.hijo.id_usuario = usuario.id;
+                data.hijo.id_padre = data.hijo.padre.id;
 
-            this.accionCorrectivaAnalisisService
-                .createAnalisisAccionCorrectivaHijos([{ ...data.hijo }])
-                .subscribe(response => {
-                    // this.accionCorrectivaAnalisisHijos = [
-                    //     ...this.accionCorrectivaAnalisisHijos,
-                    //     ...response
-                    // ];
-                    let ideas = this.metodologiaComponent.ideasForm.get(
-                        "ideas"
-                    ) as FormArray;
+                this.accionCorrectivaAnalisisService
+                    .createAnalisisAccionCorrectivaHijos([{ ...data.hijo }])
+                    .subscribe(response => {
+                        // this.accionCorrectivaAnalisisHijos = [
+                        //     ...this.accionCorrectivaAnalisisHijos,
+                        //     ...response
+                        // ];
+                        let ideas = this.metodologiaComponent.ideasForm.get(
+                            "ideas"
+                        ) as FormArray;
 
-                    let padreTempo =
-                        response[0].padre != null
-                            ? {
-                                  id: response[0].padre.id,
-                                  pregunta_causa_idea:
-                                      response[0].padre.pregunta_causa_idea
-                              }
-                            : {
-                                  id: 0,
-                                  pregunta_causa_idea: "Causa inicial"
-                              };
+                        let padreTempo =
+                            response[0].padre != null
+                                ? {
+                                      id: response[0].padre.id,
+                                      pregunta_causa_idea:
+                                          response[0].padre.pregunta_causa_idea
+                                  }
+                                : {
+                                      id: 0,
+                                      pregunta_causa_idea: "Causa inicial"
+                                  };
 
-                    let hijoActual = response[0];
-                    hijoActual.padre = padreTempo;
+                        let hijoActual = response[0];
+                        hijoActual.padre = padreTempo;
 
-                    this.accionCorrectivaAnalisisHijos = [
-                        ...this.accionCorrectivaAnalisisHijos,
-                        hijoActual
-                    ];
+                        this.accionCorrectivaAnalisisHijos = [
+                            ...this.accionCorrectivaAnalisisHijos,
+                            hijoActual
+                        ];
 
-                    ideas.at(data.index).setValue(hijoActual);
-                    this.hideWaitDialog();
-                });
-        });
+                        ideas.at(data.index).setValue(hijoActual);
+                        this.hideWaitDialog();
+                    });
+            });
     }
 
     createOrUpdateAccionAnalisisHijo(data) {
@@ -795,46 +813,53 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             "Accion en proceso",
             "Actualizando información análisis"
         );
-        this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            data.hijo.id_accion_correctiva_analisis = this.accionCorrectivaAnalisisActual.id;
-            data.hijo.id_usuario = usuario.id;
-            return this.accionCorrectivaAnalisisService
-                .createOrUpdateAnalisisAccionCorrectivaHijos(
-                    data.hijo.id,
-                    data.hijo
-                )
-                .subscribe(response => {
-                    let ideas = this.metodologiaComponent.ideasForm.get(
-                        "ideas"
-                    ) as FormArray;
-                    const hijo = {
-                        ...response,
-                        padre: response.padre ? response.padre : null
-                    };
-                    ideas.at(data.index).setValue(hijo);
-                    this.hideWaitDialog();
-                });
-        });
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                data.hijo.id_accion_correctiva_analisis = this.accionCorrectivaAnalisisActual.id;
+                data.hijo.id_usuario = usuario.id;
+                return this.accionCorrectivaAnalisisService
+                    .createOrUpdateAnalisisAccionCorrectivaHijos(
+                        data.hijo.id,
+                        data.hijo
+                    )
+                    .subscribe(response => {
+                        let ideas = this.metodologiaComponent.ideasForm.get(
+                            "ideas"
+                        ) as FormArray;
+                        const hijo = {
+                            ...response,
+                            padre: response.padre ? response.padre : null
+                        };
+                        ideas.at(data.index).setValue(hijo);
+                        this.hideWaitDialog();
+                    });
+            });
     }
 
     createAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
         this.showWaitDialog("Accion en proceso", "Creando una nueva tarea");
-        this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            data.id_usuario = usuario.id;
-            data.id_accion_correctiva = this.accionCorrectivaActual.id;
-            data.id_accion_correctiva_tarea_tipo = data.tipo.id;
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                data.id_usuario = usuario.id;
+                data.id_accion_correctiva = this.accionCorrectivaActual.id;
+                data.id_accion_correctiva_tarea_tipo = data.tipo.id;
 
-            this.accionesCorrectivasTareaService
-                .createAccionCorrectivaTarea(data)
-                .subscribe(response => {
-                    this.accionCorrectivaTareas = [
-                        ...this.accionCorrectivaTareas,
-                        response
-                    ];
-                    this.accionCorrectivaActual.tareas.push(response);
-                    this.hideWaitDialog();
-                });
-        });
+                this.accionesCorrectivasTareaService
+                    .createAccionCorrectivaTarea(data)
+                    .subscribe(response => {
+                        this.accionCorrectivaTareas = [
+                            ...this.accionCorrectivaTareas,
+                            response
+                        ];
+                        this.accionCorrectivaActual.tareas.push(response);
+                        this.comprobarSiFinalizada();
+                        this.hideWaitDialog();
+                    });
+            });
     }
 
     updateAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
@@ -849,6 +874,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                     tareaActual =>
                         tareaActual.id == response.id ? response : tareaActual
                 );
+                this.comprobarSiFinalizada();
                 this.hideWaitDialog();
             });
     }
@@ -864,6 +890,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                     tareaActual => tareaActual.id != response.id
                 );
 
+                this.comprobarSiFinalizada();
                 this.hideWaitDialog();
             });
     }
@@ -873,27 +900,30 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             "Acción en proceso",
             "Cambiando estado acción correctiva realizado, un momento por favor..."
         );
-        this.store.select(this.fromAuth.getUser).subscribe(usuario => {
-            data.id_realizada_por = usuario.id;
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                data.id_realizada_por = usuario.id;
 
-            this.accionesCorrectivasTareaService
-                .realizarAccionCorrectivaTarea(data)
-                .subscribe(response => {
-                    this.accionCorrectivaActual.tareas = this.accionCorrectivaActual.tareas.map(
-                        tareaActual => {
-                            if (tareaActual.id == response.id) {
-                                tareaActual = {
-                                    ...tareaActual,
-                                    ...response
-                                };
+                this.accionesCorrectivasTareaService
+                    .realizarAccionCorrectivaTarea(data)
+                    .subscribe(response => {
+                        this.accionCorrectivaActual.tareas = this.accionCorrectivaActual.tareas.map(
+                            tareaActual => {
+                                if (tareaActual.id == response.id) {
+                                    tareaActual = {
+                                        ...tareaActual,
+                                        ...response
+                                    };
+                                }
+                                return tareaActual;
                             }
-                            return tareaActual;
-                        }
-                    );
-                    this.comprobarSiFinalizada();
-                    this.hideWaitDialog();
-                });
-        });
+                        );
+                        this.comprobarSiFinalizada();
+                        this.hideWaitDialog();
+                    });
+            });
     }
 
     uploadAdjuntosByAccionCorrectivaTarea(data: {
@@ -1005,6 +1035,10 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         return this.accionesCorrectivasService.getProcesos();
     }
 
+    getJefesProcesos() {
+        return this.accionesCorrectivasProcesoService.getJefesProcesos();
+    }
+
     getTiposAnalisis() {
         return this.accionCorrectivaAnalisisService.getTiposAnalisis();
     }
@@ -1078,7 +1112,6 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 break;
             }
         }
-        this.desabilitarComponentes();
     }
 
     getBackAccionesCorrectivas() {
@@ -1121,12 +1154,25 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
     desabilitarComponentes() {
         let estado = this.accionCorrectivaActual.id_estado;
+        this.store
+            .select(this.fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                this.usuarioActual = usuario;
+                if (
+                    estado == this.ACCION_EN_CREACION &&
+                    usuario.id != this.accionCorrectivaActual.id_usuario_crea
+                ) {
+                    this.editAccionCorrectivaComponent.disableComponent();
+                    this.relateAccionCorrectivaComponent.disableComponent();
+                }
+            });
 
         if (estado > this.ACCION_EN_CALIDAD) {
             this.editAccionCorrectivaComponent.disableComponent();
             this.relateAccionCorrectivaComponent.disableComponent();
         }
-        if (estado >= this.ACCION_EN_ANALISIS) {
+        if (estado > this.ACCION_EN_ANALISIS) {
             if (this.metodologiaComponent) {
                 this.metodologiaComponent.disableComponent();
             }
@@ -1153,9 +1199,12 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         });
         if (
             contadorTareasRealizadas ==
-            this.accionCorrectivaActual.tareas.length
+                this.accionCorrectivaActual.tareas.length &&
+            this.accionCorrectivaActual.tareas.length > 0
         ) {
             this.finishedTareaPermiso = true;
+        } else {
+            this.finishedTareaPermiso = false;
         }
     }
 }

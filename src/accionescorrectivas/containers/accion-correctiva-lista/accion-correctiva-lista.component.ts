@@ -20,6 +20,7 @@ import { CreateAccionCorrectivaDialogComponent } from "../../components";
 import { MessageService } from "primeng/primeng";
 import { AccionCorrectivaEstadoModel } from "../../../shared/models/accion-correctiva-estado.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { take } from "rxjs/operators";
 
 @Component({
     selector: "accion-correctiva-lista",
@@ -173,36 +174,39 @@ export class AccionCorrectivaListaComponent implements OnInit {
             "Acción en proceso",
             "Registrando nueva Acción Correctiva, un momento por favor..."
         );
-        this.store.select(fromAuth.getUser).subscribe(usuario => {
-            event.id_usuario_crea = usuario.id;
-            this.resourceAccionCorrectivaService
-                .createAccionCorrectiva(event)
-                .subscribe(
-                    response => {
-                        this.accionesCorrectivas = [
-                            ...this.accionesCorrectivas,
-                            response
-                        ];
-                        this.hideWaitDialog();
-                        this.onCreateDialog.display = false;
-                        this.msgs.push({
-                            severity: "success",
-                            summary: "Acción exitosa",
-                            detail:
-                                "Enhorabuena!, Se ha creado una Acción correctiva"
-                        });
-                    },
-                    error => {
-                        this.hideWaitDialog();
-                        this.msgs.push({
-                            severity: "danger",
-                            summary: "Acción fallida",
-                            detail:
-                                "No se puede crear una acción con un codigo repetido"
-                        });
-                    }
-                );
-        });
+        this.store
+            .select(fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                event.id_usuario_crea = usuario.id;
+                this.resourceAccionCorrectivaService
+                    .createAccionCorrectiva(event)
+                    .subscribe(
+                        response => {
+                            this.accionesCorrectivas = [
+                                ...this.accionesCorrectivas,
+                                response
+                            ];
+                            this.hideWaitDialog();
+                            this.onCreateDialog.display = false;
+                            this.msgs.push({
+                                severity: "success",
+                                summary: "Acción exitosa",
+                                detail:
+                                    "Enhorabuena!, Se ha creado una Acción correctiva"
+                            });
+                        },
+                        error => {
+                            this.hideWaitDialog();
+                            this.msgs.push({
+                                severity: "danger",
+                                summary: "Acción fallida",
+                                detail:
+                                    "No se puede crear una acción con un codigo repetido"
+                            });
+                        }
+                    );
+            });
     }
 
     selectAccionCorrectiva(data: AccionCorrectivaModel) {

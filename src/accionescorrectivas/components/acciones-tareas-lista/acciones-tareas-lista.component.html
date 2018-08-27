@@ -33,7 +33,7 @@
                     <td> {{ accionCorrectivaTarea?.responsables_terceros }} </td>
                     <td> {{ accionCorrectivaTarea?.fecha_cumplimiento | date: dateFormatAngular }} </td>
                     <td style="text-align: center">
-                        <button *ngIf="!accionCorrectivaTarea.realizada && idEstadoAccionCorrectiva == 6" pButton class="ui-button-success" icon="pi pi-check"
+                        <button *ngIf="!accionCorrectivaTarea.realizada && idEstadoAccionCorrectiva == 5" pButton class="ui-button-success" icon="pi pi-check"
                             (click)="selectAccionCorrectivaTarea(accionCorrectivaTarea)"></button>
                         <button *ngIf="accionCorrectivaTarea.realizada" pButton class="ui-button" icon="pi pi-info-circle" (click)="selectAccionCorrectivaTarea(accionCorrectivaTarea)"></button>
                         <button *ngIf="!accionCorrectivaTarea.realizada && idEstadoAccionCorrectiva == 5" pButton icon="pi pi-pencil" style="margin-left: 10px"

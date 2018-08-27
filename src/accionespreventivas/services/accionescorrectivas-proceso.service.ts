@@ -1,59 +1,50 @@
-import { environment } from "../../../environments/environment";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { catchError } from "rxjs/operators";
-import { AccionProcesoModel } from "../../../shared/models/accion-proceso.model";
-import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { environment } from "../../environments/environment";
+import { AccionProcesoModel } from "../../shared/models/accion-proceso.model";
 
-const url_Point_Api = "/acciones/accion-correctiva-proceso";
+const url_Point_Api = "/acciones/accion-preventiva-proceso";
 
 @Injectable()
-export class AccionesCorrectivasProcesoService {
+export class AccionesPreventivasProcesoService {
     constructor(private http: HttpClient) {}
 
-    getJefesProcesos(): Observable<MapaProcesoHijoModel[]> {
-        return this.http
-            .get<MapaProcesoHijoModel[]>(
-                `${environment.apiUrl}${url_Point_Api}/get-jefes-procesos`
-            )
-            .pipe(catchError((error: any) => Observable.throw(error.json())));
-    }
-
-    getProcesosByAccionCorrectiva(
+    getProcesosByAccionPreventiva(
         id: number
     ): Observable<AccionProcesoModel[]> {
         return this.http
             .get<AccionProcesoModel[]>(
                 `${
                     environment.apiUrl
-                }${url_Point_Api}/get-procesos-by-accion-correctiva/${id}`
+                }${url_Point_Api}/get-procesos-by-accion-preventiva/${id}`
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
     }
 
-    addProcesoToAccionCorrectiva(
+    addProcesoToAccionPreventiva(
         data: AccionProcesoModel[]
     ): Observable<AccionProcesoModel[]> {
         return this.http
             .post<AccionProcesoModel[]>(
                 `${
                     environment.apiUrl
-                }${url_Point_Api}/add-proceso-to-accion-correctiva
+                }${url_Point_Api}/add-proceso-to-accion-preventiva
         `,
                 data
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
     }
 
-    deleteProcesoFromAccionCorrectiva(
+    deleteProcesoFromAccionPreventiva(
         idProceso: number
     ): Observable<AccionProcesoModel> {
         return this.http
             .delete<AccionProcesoModel>(
                 `${
                     environment.apiUrl
-                }${url_Point_Api}/delete-proceso-from-accion-correctiva/${idProceso}
+                }${url_Point_Api}/delete-proceso-from-accion-preventiva/${idProceso}
         `
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
