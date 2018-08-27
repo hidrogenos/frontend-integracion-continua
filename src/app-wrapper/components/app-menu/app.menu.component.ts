@@ -94,6 +94,11 @@ export class AppMenuComponent implements OnInit {
                         label: 'Adm. listas',
                         icon: 'fa fa-fw fa-tag',
                         routerLink: ['/auditoria/administrador-listas']
+                    },
+                    {
+                        label: 'Auditoria externa',
+                        icon: 'fa fa-fw fa-tag',
+                        routerLink: ['/auditoria/externa/lista']
                     }
                 ]
             },

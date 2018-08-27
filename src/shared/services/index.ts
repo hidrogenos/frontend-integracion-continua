@@ -1,6 +1,9 @@
 import { AdjuntoService } from './utils/adjunto/adjunto.service';
 export * from './utils/adjunto/adjunto.service';
 
+import { AuditoriaExternaService } from './auditoria-externa/auditoria-externa.service';
+export * from './auditoria-externa/auditoria-externa.service';
+
 import { CalidadService } from './calidad/calidad.service';
 export * from './calidad/calidad.service';
 
@@ -45,6 +48,7 @@ export * from './usuario-documento/usuario-documento.service';
 
 export const services: any[] = [
     AdjuntoService,
+    AuditoriaExternaService,
     CalidadService,
     HasPermisionService,
     PdfViewerService,

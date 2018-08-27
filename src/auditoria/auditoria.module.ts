@@ -10,20 +10,28 @@ import * as fromServices from './services';
 //primeng modules
 
 import { AccordionModule } from 'primeng/accordion';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 
 const primeNgModules = [
     AccordionModule,
+    AutoCompleteModule,
     ButtonModule,
     CalendarModule,
     DialogModule,
+    DropdownModule,
+    EditorModule,
     InputTextModule,
+    MultiSelectModule,
     PanelModule,
     TableModule,
     InputTextareaModule

@@ -15,6 +15,15 @@ export const ROUTES: Routes = [
             {
                 path: 'administrador-listas',
                 component: fromContainers.AdministradorListasComponent
+            },
+            {
+                path: 'externa',
+                children: [
+                    {
+                        path: 'lista',
+                        component: fromContainers.ListaAuditoriaExternaComponent
+                    }
+                ]
             }
         ]
     }
