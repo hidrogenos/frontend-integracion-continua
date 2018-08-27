@@ -7,8 +7,10 @@ import { AuditoriaExternaModel } from '../../../shared/models/auditoria-externa.
 import { Calendar } from 'primeng/primeng';
 import { Table } from 'primeng/table';
 import * as fromShared from './../../../shared/store';
+import * as fromRoot from './../../../app/store';
 import { StoreModel } from '../../../shared/models/store.model';
 import { Store } from '@ngrx/store';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'lista-auditoria-externa',
@@ -65,6 +67,10 @@ import { Store } from '@ngrx/store';
                                             Objetivo
                                             <p-sortIcon field="objetivo" ></p-sortIcon>
                                         </th>
+                                        <th>
+                                            Acciones
+                                            
+                                        </th>
                                     </tr>
                                     <tr>
                                         <th>
@@ -85,19 +91,37 @@ import { Store } from '@ngrx/store';
                                         <th>
                                             <input style="width: 100%;" pInputText type="text" (input)="dt.filter($event.target.value, 'objetivo', 'contains')">
                                         </th>
+                                        <th>
+                                        </th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-auditoria>
                                     <tr>
                                         <td>{{ auditoria.id }}</td>
-                                        <td>{{ auditoria.fecha }}</td>
+                                        <td>{{ auditoria.fecha | date: dateFormatAngular }}</td>
                                         <td>{{ auditoria.estado }}</td>
                                         <td>
-                                            <p>{{ auditoria.auditor_principal }} {{ auditoria.auditor_principal }}</p>
-                                            <p>{{ auditoria.auditor_apoyo }} {{ auditoria.auditor_apoyo }}</p>
+                                            <p>{{ auditoria.auditor_principal }}</p>
+                                            <p>{{ auditoria.auditor_apoyo }}</p>
                                         </td>
                                         <td>{{ auditoria.proveedor }}</td>
                                         <td [innerHTML]="auditoria.objetivo"></td>
+                                        <td style="text-align: center;">
+                                            <button pButton 
+                                                style="margin-right: 5px;"
+                                                (click)="detalleAuditoria(auditoria.id)"
+                                                type="button" 
+                                                icon="fa fa-search"
+                                                class="ui-button-primary">
+                                            </button> 
+                                            <button pButton 
+                                                (click)="deleteAuditoria(auditoria.id)"
+                                                type="button" 
+                                                icon="fa fa-trash"
+                                                class="ui-button-danger">
+                                            </button> 
+                                        </td>
+
                                     </tr>
                                 </ng-template>
                             </p-table>
@@ -121,6 +145,7 @@ export class ListaAuditoriaExternaComponent implements OnInit {
     listasPreguntas: ListaPreguntaModel[];
     loading: boolean = true;
     totalRecords: number;
+    dateFormatAngular: string = environment.dateFormatAngular;
 
     //viewchild
     @ViewChild('caed')
@@ -152,6 +177,24 @@ export class ListaAuditoriaExternaComponent implements OnInit {
                 this.dt.reset();
                 this.hideWaitDialog();
             });
+    }
+
+    deleteAuditoria(id: number) {
+        this.showWaitDialog('Eliminando auditoria, un momento por favor...');
+        this.listaAuditoriaExternaService
+            .deleteAuditoria(id)
+            .subscribe(response => {
+                this.auditorias = this.auditorias.filter(
+                    a => a.id != response.id
+                );
+                this.hideWaitDialog();
+            });
+    }
+
+    detalleAuditoria(id: number) {
+        this.store.dispatch(
+            new fromRoot.Go({ path: [`auditoria/externa/detalle/${id}`] })
+        );
     }
 
     getInitialInfo() {

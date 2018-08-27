@@ -41,6 +41,16 @@ export class ListaAuditoriaExternaService {
             );
     }
 
+    deleteAuditoria(id: number): Observable<AuditoriaExternaModel> {
+        return this.http
+            .get<AuditoriaExternaModel>(
+                `${
+                    environment.apiUrl
+                }/auditoria/externa/lista/delete-auditoria/${id}`
+            )
+            .pipe(catchError(error => throwError(error)));
+    }
+
     getFilteredProveedores(data: {
         query: string;
     }): Observable<ProveedorModel[]> {
@@ -74,6 +84,15 @@ export class ListaAuditoriaExternaService {
                 }/auditoria/externa/lista/get-lazy-auditorias`,
                 data
             )
-            .pipe(catchError(error => throwError(error)));
+            .pipe(
+                map(response => ({
+                    ...response,
+                    data: response.data.map(e => ({
+                        ...e,
+                        fecha: e.fecha * 1000
+                    }))
+                })),
+                catchError(error => throwError(error))
+            );
     }
 }

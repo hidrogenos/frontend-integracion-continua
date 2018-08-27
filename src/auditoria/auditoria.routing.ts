@@ -20,6 +20,11 @@ export const ROUTES: Routes = [
                 path: 'externa',
                 children: [
                     {
+                        path: 'detalle/:id',
+                        component:
+                            fromContainers.DetalleAuditoriaExternaComponent
+                    },
+                    {
                         path: 'lista',
                         component: fromContainers.ListaAuditoriaExternaComponent
                     }
