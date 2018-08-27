@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
-import { Message } from "@angular/compiler/src/i18n/i18n_ast";
 import { EvaluacionProveedorModel } from "../../../shared/models/evaluacion-proveedor.model";
 
 @Component({
@@ -55,7 +54,6 @@ export class CreateEvaluacionProveedorDialogComponent {
     //atributos
     display:boolean;
     newEvaluacion: FormGroup;
-    msgs: Message[] = [];
 
     //events
     @Output() create = new EventEmitter<EvaluacionProveedorModel>();
@@ -90,7 +88,6 @@ export class CreateEvaluacionProveedorDialogComponent {
             fecha_calificacion:(this.newEvaluacion.value.fecha_calificacion as Date).valueOf() / 1000,
             observaciones: this.newEvaluacion.value.observaciones,
             activo: true,
-
         };
         this.newEvaluacion.reset();
         this.create.emit(evaluacion);

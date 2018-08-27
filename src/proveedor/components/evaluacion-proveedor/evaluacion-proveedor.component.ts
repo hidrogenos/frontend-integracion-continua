@@ -1,19 +1,21 @@
-import { Component,ViewChild,OnInit} from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component,ViewChild,OnInit, Input} from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { EvaluacionService, ProveedorListaService } from '../../services';
 import { EvaluacionProveedorModel } from '../../../shared/models/evaluacion-proveedor.model';
 import { forkJoin } from 'rxjs';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
 import { EditEvaluacionProveedorDialogComponent  } from '../../components/edit-evaluacion-proveedor-dialog/edit-evaluacion-proveedor-dialog.component';
 import { CreateEvaluacionProveedorDialogComponent } from '../../components/create-evaluacion-proveedor-dialog/create-evaluacion-proveedor-dialog.component'
+import { DataTable } from 'primeng/primeng';
+import { EvaluacionProveedorService } from '../../../shared/services';
+import { take } from 'rxjs/operators';
+import { environment } from '../../../environments/environment'; 
+
+//store
+import * as fromRoot from './../../../app/store';
 import { Store } from '@ngrx/store';
 import { StoreModel } from '../../../shared/models/store.model';
 import * as fromShared from './../../../shared/store';
-import { DataTable } from 'primeng/primeng';
-import { EvaluacionProveedorService } from '../../../shared/services';
-import * as fromRoot from './../../../app/store';
-import { take } from 'rxjs/operators';
-import { environment } from '../../../environments/environment'; 
 
 @Component({
     selector: 'evaluacion-proveedor-component',
@@ -24,12 +26,12 @@ import { environment } from '../../../environments/environment';
             <h1><i class="fa fa-users" aria-hidden="true"></i> Evaluaciones</h1>
             <div class="ui-g">
                 <div class="ui-g-12 text-aling-right">
-                    <button pButton type="button" (click)="createEvaluacion.show()" label="Crear nueva Evaluación" class="ui-button-success"></button>
+                    <button pButton type="button" *ngIf="permisoCrearEvaluacion" (click)="createEvaluacion.show()" label="Crear nueva Evaluación" class="ui-button-success"></button>
                 </div>
             </div>
             <div class="ui-g" *ngIf="proveedor">
                 <div class="ui-g-12 ui-fluid">
-                    <p-table [value]="evaluaciones" [lazy]="true" (onLazyLoad)="loadEvaluacionesLazy($event)" [paginator]="true" 
+                    <p-table [value]="evaluacion" [lazy]="true" (onLazyLoad)="loadEvaluacionesLazy($event)" [paginator]="true" 
                         [rows]="10" [totalRecords]="totalRecords" [loading]="loading" sortField="factura_servicio" #dt>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -70,15 +72,15 @@ import { environment } from '../../../environments/environment';
                                 </th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-evaluaciones>
+                        <ng-template pTemplate="body" let-evaluacion>
                             <tr>
-                                <td>{{ evaluaciones.factura_servicio }}</td>
-                                <td>{{ evaluaciones.calificacion }}</td>
-                                <td>{{ evaluaciones.fecha_calificacion | date : dateFormat }}</td>
-                                <td>{{ evaluaciones.observaciones }}</td>
+                                <td>{{ evaluacion.factura_servicio }}</td>
+                                <td>{{ evaluacion.calificacion }}</td>
+                                <td>{{ evaluacion.fecha_calificacion | date : dateFormat }}</td>
+                                <td>{{ evaluacion.observaciones }}</td>
                                 <td style="text-align: center;">
-                                    <button style="margin-right: 10px;" pButton type="button" icon="pi pi-pencil" (click)="onEditEvaluacion(evaluaciones)" class="ui-button-primary"></button>
-                                    <button pButton type="button" icon="pi pi-trash" (click)="deleteEvaluacion(evaluaciones)" class="ui-button-danger"></button>
+                                    <button style="margin-right: 10px;" *ngIf="permisoEditEvaluacion" pButton type="button" icon="pi pi-pencil" (click)="onEditEvaluacion(evaluacion)" class="ui-button-primary"></button>
+                                    <button pButton type="button" *ngIf="permisoBorrarEvaluacion" icon="pi pi-trash" (click)="deleteEvaluacion(evaluacion)" class="ui-button-danger"></button>
                                 </td>
                             </tr>
                         </ng-template>
@@ -97,12 +99,14 @@ import { environment } from '../../../environments/environment';
 })
 export class EvaluacionProveedorComponent implements OnInit{
 
+    //atributos
     evaluacionesFrom: FormGroup;
-    evaluaciones: EvaluacionProveedorModel[];
+    evaluacion: EvaluacionProveedorModel[];
     loading: boolean = true;
     totalRecords: number;
     proveedor: ProveedorModel;
 
+    //viewchild
     @ViewChild('createEvaluacion')
     createEvaluacion: CreateEvaluacionProveedorDialogComponent;
     @ViewChild('dt')
@@ -111,13 +115,17 @@ export class EvaluacionProveedorComponent implements OnInit{
     editEvaluacion: EditEvaluacionProveedorDialogComponent;
     dateFormat: string;
 
+    //events
+    @Input() permisoCrearEvaluacion: boolean;
+    @Input() permisoEditEvaluacion: boolean;
+    @Input() permisoBorrarEvaluacion: boolean;
+    
+    //properties
     constructor(
-        private fb: FormBuilder,
         private evaluacionService: EvaluacionService,
         private evaluacionProveedorService: EvaluacionProveedorService,
-        private store: Store<StoreModel>,
-        private proveedorListService: ProveedorListaService
-
+        private proveedorListService: ProveedorListaService,
+        private store: Store<StoreModel>
     ){ }
 
     ngOnInit(){
@@ -134,7 +142,7 @@ export class EvaluacionProveedorComponent implements OnInit{
         this.evaluacionService
             .onEliminar(event)
             .subscribe((data: EvaluacionProveedorModel) => {
-                this.evaluaciones = this.evaluaciones.filter(
+                this.evaluacion = this.evaluacion.filter(
                     (proveedor: EvaluacionProveedorModel) => {
                         return proveedor.id != event.id;
                     }
@@ -163,32 +171,32 @@ export class EvaluacionProveedorComponent implements OnInit{
         this.evaluacionService
             .getEvaluacionesLazy(event,this.proveedor.id)
             .subscribe(response => {
-                this.evaluaciones = response.data;
+                this.evaluacion = response.data;
                 this.totalRecords = response.totalRows;
                 this.loading = false;
             });
     }
 
     onCreate($event) {
-       this.showWaitDialog('Creando proveedor, un momento por favor...')
+       this.showWaitDialog('Creando evaluación, un momento por favor...')
        $event.id_proveedor = this.proveedor.id;
         this.evaluacionProveedorService.createEvaluacion($event).subscribe(response => {
-            this.evaluaciones = [
-                ...this.evaluaciones,
+            this.evaluacion = [
+                ...this.evaluacion,
                  response
                 ];
+                this.hideWaitDialog();
         });
-        this.hideWaitDialog();
     }
 
     onEdit(event: EvaluacionProveedorModel){ 
         this.showWaitDialog('Editando evaluación, un momento por favor...')
         this.evaluacionService.updateEvaluacion(event.id, event).subscribe(response => {
-            return this.evaluaciones = this.evaluaciones.map(element => {
+            return this.evaluacion = this.evaluacion.map(element => {
+                this.hideWaitDialog();
                 return element.id == response.id ? response : element;
             });
-        });  
-        this.hideWaitDialog();
+        }); 
     }
 
     showWaitDialog(header: string, body?: string) {
