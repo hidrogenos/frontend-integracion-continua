@@ -18,7 +18,6 @@ export class ProveedorListaService {
     constructor(
         private http: HttpClient,
         private proveedorService: ProveedorService,
-        private facturaProveedorService: ProveedorFacturaService
     ) {}
 
     getProveedores(): Observable<ProveedorModel[]> {
@@ -66,7 +65,6 @@ export class ProveedorListaService {
     }
 
     onEliminar(event: ProveedorModel): Observable<ProveedorModel> {
-        console.log(event);
         return this.http.delete<ProveedorModel>(
             `${environment.apiUrl}/proveedor/delete-proveedor/${event.id}`
         );

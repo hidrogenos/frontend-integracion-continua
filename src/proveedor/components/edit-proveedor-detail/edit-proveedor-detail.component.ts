@@ -1,5 +1,4 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { StoreModel } from '../../../shared/models/store.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
 import { TipoCuentaModel } from '../../../shared/models/TipoCuenta.model';
@@ -7,7 +6,6 @@ import { BancoModel } from '../../../shared/models/banco.model';
 import { RegimenModel } from '../../../shared/models/regimen.model';
 import { CiudadModel } from '../../../shared/models/ciudad.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
     selector: 'edit-proveedor-detail',
@@ -51,7 +49,7 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
                             <div class="ui-g">
                                 <div class="ui-g-12 ui-fluid">
                                     <div>
-                                        <label>Direccion:</label>
+                                        <label>Dirección:</label>
                                     </div>
                                     <input type="text" pInputText formControlName="direccion" />
                                 </div>
@@ -235,7 +233,7 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
                             </div>
                             <div class="ui-g">
                             <div class="ui-g-12 text-aling-right">
-                                <button style="margin-right:10px;" *ngIf="detailProveedor.disabled" pButton type="button" label="Editar datos" (click)="detailProveedor.enable()" class="ui-button-success"></button>
+                                <button style="margin-right:10px;" *ngIf="detailProveedor.disabled && permisoEditar" pButton type="button" label="Editar datos" (click)="detailProveedor.enable()" class="ui-button-success"></button>
                                 <button style="margin-right:10px;" *ngIf="detailProveedor.enabled" pButton type="button" label="Descartar cambios" (click)="loadFormData(proveedor)" class="ui-button-danger"></button>
                                 <button style="margin-right:10px;" *ngIf="detailProveedor.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
                                 </div>
@@ -250,7 +248,6 @@ export class EditProveedorDetalComponent implements OnInit {
     //atributos
     display:boolean;
     detailProveedor: FormGroup;
-    msgs: Message[] = [];
     proveedor: ProveedorModel;
     
     //events
@@ -260,6 +257,7 @@ export class EditProveedorDetalComponent implements OnInit {
     @Input() regimen: RegimenModel[];
     @Input() banco: BancoModel[];
     @Input() tipoCuenta: TipoCuentaModel[];
+    @Input() permisoEditar: boolean; 
     
 
     //properties

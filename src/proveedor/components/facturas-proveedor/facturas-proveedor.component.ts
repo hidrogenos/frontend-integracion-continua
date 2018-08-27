@@ -2,6 +2,8 @@ import { Component, ViewChild, Output, Input, EventEmitter } from "@angular/core
 import { FacturtaProveedorModel } from "../../../shared/models/factura-proveedor.model";
 import { FileUpload, DataTable } from "primeng/primeng";
 import { environment } from "../../../environments/environment";
+
+//store
 import { StoreModel } from "../../../shared/models/store.model";
 import { Store } from '@ngrx/store';
 import * as fromShared from './../../../shared/store';
@@ -9,7 +11,7 @@ import * as fromShared from './../../../shared/store';
 @Component({
     selector:'facturas-proveedor',
     template:`
-    <div class="ui-g">
+    <div class="ui-g" *ngIf="perimisoUploadFactura">
         <div class="ui-g-12 text-aling-right">
             <p-fileUpload #fu
                 customUpload="true"
@@ -25,7 +27,7 @@ import * as fromShared from './../../../shared/store';
     <div class="ui-g">
         <div class="ui-g-12 ui-fluid" >
         <p-table [value]="factura" [lazy]="true" (onLazyLoad)="loadFacturasLazy($event)" [paginator]="true" 
-                            [rows]="10" [totalRecords]="totalRecords"  sortField="titulo" #dt>
+                            [rows]="10" [totalRecords]="totalRecords" sortField="titulo" #dt>
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th pSortableColumn="titulo">
@@ -57,18 +59,21 @@ import * as fromShared from './../../../shared/store';
                                     <td>{{ factura.fecha_carga | date: dateFormat }}</td>
                                     <td style="text-align: center;">
                                     <button style="margin-right:10px;" pButton 
+                                        *ngIf="permisoViewFactura"
                                         type="button" 
                                         icon="fa fa-eye" 
                                         (click)="onConsultarFacturaProveedor.emit(factura)"
                                         class="ui-button-primary">
                                     </button>
                                     <button style="margin-right:10px;" pButton 
+                                        *ngIf="permisoDownloadFactura"
                                         type="button" 
                                         icon="fa fa-download" 
                                         (click)="onDownloadFacturaProveedor.emit(factura)"
                                         class="ui-button-success">
                                     </button>
-                                    <button style="margin-right:10px;" pButton 
+                                    <button style="margin-right:10px;" pButton
+                                        *ngIf="permisoBorrarFactura" 
                                         type="button" 
                                         icon="fa fa-trash" 
                                         class="ui-button-danger"
@@ -88,7 +93,6 @@ export class FacturasProveedorComponent{
 
     //atributos
     dateFormat = environment.dateFormatAngular;
-    loading: boolean = true;
     totalRecords: number;
 
     //events
@@ -98,13 +102,17 @@ export class FacturasProveedorComponent{
     @Output()onDownloadFacturaProveedor = new EventEmitter<FacturtaProveedorModel>();
     @Output()lazyFactura = new EventEmitter<any>();
 
-    //properties
     @Input() factura: FacturtaProveedorModel;
+    @Input() perimisoUploadFactura: boolean;
+    @Input() permisoViewFactura: boolean;
+    @Input() permisoBorrarFactura: boolean;
+    @Input() permisoDownloadFactura: boolean;
 
     //viewchild
     @ViewChild('fu') fu: FileUpload;
     @ViewChild('dt') dt: DataTable;
 
+    //properties
     constructor(private store: Store<StoreModel>) {}
 
     hideWaitDialog() {

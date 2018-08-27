@@ -3,19 +3,13 @@ import {
     OnInit,
     ViewChild
 } from '@angular/core';
-import { StoreModel } from '../../../shared/models/store.model';
-
-//store
-import { Store } from '@ngrx/store';
-import * as fromRoot from './../../../app/store';
-import { forkJoin } from 'rxjs';
-import { ProveedorModel } from '../../../shared/models/proveedor.model';
 import {
     TipoCuentaService,
     TipoIdentificacionService,
     BancoService,
     RegimenService,
-    CiudadService
+    CiudadService,
+    HasPermisionService
 } from '../../../shared/services';
 import { TipoCuentaModel } from '../../../shared/models/TipoCuenta.model';
 import { BancoModel } from '../../../shared/models/banco.model';
@@ -23,15 +17,24 @@ import { RegimenModel } from '../../../shared/models/regimen.model';
 import { CiudadModel } from '../../../shared/models/ciudad.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import { ProveedorListaService, FacturaService } from '../../services';
-import * as fromShared from './../../../shared/store';
-import { EditProveedorDetalComponent } from '../../components';
+import { StoreModel } from '../../../shared/models/store.model';
+import { forkJoin } from 'rxjs';
+import { ProveedorModel } from '../../../shared/models/proveedor.model';
+import { EditProveedorDetalComponent, EvaluacionProveedorComponent } from '../../components';
 import { take, switchMap } from 'rxjs/operators';
 import { FacturasProveedorComponent } from '../../components/facturas-proveedor/facturas-proveedor.component';
 import { FacturtaProveedorModel } from '../../../shared/models/factura-proveedor.model';
 import { environment } from '../../../environments/environment';
 
+//store
+import { Store } from '@ngrx/store';
+import * as fromRoot from './../../../app/store';
+import * as fromShared from './../../../shared/store';
+
+
 @Component({
     selector: 'proveedor-detalle',
+    styleUrls: ['proveedor-detalle.component.scss'],
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
@@ -40,6 +43,7 @@ import { environment } from '../../../environments/environment';
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <edit-proveedor-detail #epd
+                                                    [permisoEditar]="hasPermision([205]) | async"
                                                     [identificacion]="identificacion"
                                                     [ciudades]="ciudades"
                                                     [regimen]="regimen"
@@ -50,41 +54,49 @@ import { environment } from '../../../environments/environment';
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="ui-g-12">
-                <div class="card card-w-title">
-                    <h1><i class="fa fa-address-book" aria-hidden="true"></i> Anexos del proveedor</h1>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p-tabView>
-                                <p-tabPanel header="Evaluación">
-                                    <div class="ui-g">
-                                        <div class="ui-g-12">
-                                            <evaluacion-proveedor-component>
-                                            </evaluacion-proveedor-component>
-                                        </div>
+            <div class="ui-g-12">
+            <div class="card card-w-title">
+                <h1><i class="fa fa-address-book" aria-hidden="true"></i> Anexos del proveedor</h1>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p-tabView>
+                            <p-tabPanel header="Evaluación" >
+                                <div class="ui-g" *ngIf="hasPermision(206) | async">
+                                    <div class="ui-g-12">
+                                        <evaluacion-proveedor-component #epc
+                                            [permisoCrearEvaluacion]="hasPermision([207]) | async"
+                                            [permisoEditEvaluacion]="hasPermision([208]) | async"
+                                            [permisoBorrarEvaluacion]="hasPermision([209]) | async">
+                                        </evaluacion-proveedor-component>
                                     </div>
-                                </p-tabPanel>
-                                <p-tabPanel header="Facturas">
-                                    <div class="ui-g">
-                                        <div class="ui-g-12">
-                                        <facturas-proveedor #fpc
-                                                            *ngIf="proveedor"
-                                                            [factura]="proveedor.factura"
-                                                            (onCreateFacturaProveedor)="createFacturaProveedor($event)"
-                                                            (onDeleteFacturaProveedor)="deleteFacturaProveedor($event)"
-                                                            (onDownloadFacturaProveedor)="downloadFacturaProveedor($event)"
-                                                            (onConsultarFacturaProveedor)="consultarFacturaProveedor($event)"
-                                                            (lazyFactura)="loadFacturasLazy($event)">
-                                        </facturas-proveedor>
-                                        </div>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Facturas" >
+                                <div class="ui-g" *ngIf="hasPermision(210) | async">
+                                    <div class="ui-g-12">
+                                    <facturas-proveedor #fpc
+                                                        *ngIf="proveedor"
+                                                        [factura]="proveedor.factura"
+                                                        (onCreateFacturaProveedor)="createFacturaProveedor($event)"
+                                                        (onDeleteFacturaProveedor)="deleteFacturaProveedor($event)"
+                                                        (onDownloadFacturaProveedor)="downloadFacturaProveedor($event)"
+                                                        (onConsultarFacturaProveedor)="consultarFacturaProveedor($event)"
+                                                        (lazyFactura)="loadFacturasLazy($event)"
+                                                        [perimisoUploadFactura]="hasPermision([211]) | async"
+                                                        [permisoViewFactura]="hasPermision([212]) | async"
+                                                        [permisoDownloadFactura]="hasPermision([213]) | async"
+                                                        [permisoBorrarFactura]="hasPermision([214]) | async">
+                                    </facturas-proveedor>
                                     </div>
-                                </p-tabPanel>
-                            </p-tabView>
-                        </div>
+                                </div>
+                            </p-tabPanel>
+                        </p-tabView>
                     </div>
                 </div>
             </div>
+            </div>
+        </div>
+            
     `
 })
 
@@ -103,18 +115,19 @@ export class ProveedorDetalleComponent implements OnInit {
     //viewChild
     @ViewChild('epd') epd: EditProveedorDetalComponent;
     @ViewChild('fpc') fpc: FacturasProveedorComponent;
+    @ViewChild('epc') epc: EvaluacionProveedorComponent;
     
-
     //properties
     constructor(
-        private ciudadService: CiudadService,
-        private regimenService: RegimenService,
         private bancosService: BancoService,
-        private tipoIdentificacionservice: TipoIdentificacionService,
-        private tipoCuentaService: TipoCuentaService,
-        private store: Store<StoreModel>,
+        private ciudadService: CiudadService,
+        private facturaService: FacturaService,
+        private hasPermisionService: HasPermisionService,
+        private regimenService: RegimenService,
         private proveedorListaService: ProveedorListaService,
-        private facturaService: FacturaService
+        private store: Store<StoreModel>,
+        private tipoIdentificacionservice: TipoIdentificacionService,
+        private tipoCuentaService: TipoCuentaService
     ) {}
 
     ngOnInit() {
@@ -122,7 +135,6 @@ export class ProveedorDetalleComponent implements OnInit {
     }
 
     consultarFacturaProveedor(factura: FacturtaProveedorModel){
-        //console.log(factura);
         const idTipoDocumento = environment.tipos_documento.factura_proveedor_documento.id;
         this.store.dispatch(new fromRoot.Go({path: [`visor-adjunto/${idTipoDocumento}/${factura.id}/${factura.titulo}`]}))
     }
@@ -236,16 +248,21 @@ export class ProveedorDetalleComponent implements OnInit {
         return this.tipoCuentaService.getTiposCuentas();
     }
 
+    hasPermision(id: number){
+        return this.hasPermisionService.hasPermision(id);
+    }
+
     hideWaitDialog() {
         this.store.dispatch(new fromShared.HideWaitDialog());
     }
 
     loadFacturasLazy(event) {
-        
+        this.loading = true;
         this.facturaService.getFacturasLazy(event, this.proveedor.id)
             .subscribe(response => {
                 this.proveedor.factura = response.data;
                 this.fpc.totalRecords = response.totalRows;
+                this.loading = false;
         });
     }
 

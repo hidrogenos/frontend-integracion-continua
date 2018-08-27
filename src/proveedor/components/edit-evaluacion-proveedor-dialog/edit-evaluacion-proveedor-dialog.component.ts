@@ -1,7 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Observable } from 'rxjs';
 import { EvaluacionProveedorModel } from '../../../shared/models/evaluacion-proveedor.model';
 
@@ -32,7 +30,7 @@ import { EvaluacionProveedorModel } from '../../../shared/models/evaluacion-prov
                             <div>
                                 <label>Fecha de Calificación:</label>
                             </div>
-                        <p-calendar showIcon="true" formControlName="fecha_calificacion"></p-calendar>
+                        <p-calendar appendTo="body" showIcon="true" formControlName="fecha_calificacion"></p-calendar>
                     </div>
                     <div class="ui-g-12">
                     <div class="ui-g ui-fluid">
@@ -56,9 +54,8 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
     //atributos
     display: boolean = false;
     editEvaluacionForm: FormGroup;
-    id: number;
     evaluacion: Observable<EvaluacionProveedorModel>;
-    msgs: Message[] = [];
+    id: number;
 
     //events
     @Output() edit = new EventEmitter<EvaluacionProveedorModel>();
@@ -66,7 +63,6 @@ export class EditEvaluacionProveedorDialogComponent implements OnInit {
     //properties
     constructor(
         private fb: FormBuilder,
-        private messageService: MessageService,
     ) { }
 
     ngOnInit() {
