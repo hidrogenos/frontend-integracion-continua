@@ -32,13 +32,23 @@ export class DetalleAuditoriaExternaService {
 
     getInitialInfo(): Observable<{
         auditores: UsuarioModel[];
-        proveedores: ProveedorModel[];
     }> {
         return this.http
             .get<{ auditores: UsuarioModel[]; proveedores: ProveedorModel[] }>(
                 `${
                     environment.apiUrl
                 }/auditoria/externa/detalle/get-initial-info`
+            )
+            .pipe(catchError(error => throwError(error)));
+    }
+
+    serachProveedor(data: { query: string }): Observable<ProveedorModel[]> {
+        return this.http
+            .post<ProveedorModel[]>(
+                `${
+                    environment.apiUrl
+                }/auditoria/externa/detalle/search-proveedor`,
+                data
             )
             .pipe(catchError(error => throwError(error)));
     }

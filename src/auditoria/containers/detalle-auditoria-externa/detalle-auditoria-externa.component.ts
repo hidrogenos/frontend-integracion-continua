@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { map, switchMap, take } from 'rxjs/operators';
 
 //models
@@ -15,6 +15,7 @@ import { AuditoriaExternaModel } from '../../../shared/models/auditoria-externa.
 import { forkJoin } from 'rxjs';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
+import { DatosBasicosAuditoriaExternaComponent } from '../../components';
 
 @Component({
     selector: 'detalle-auditoria-externa',
@@ -26,11 +27,11 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                     <h1>Detalle auditoria externa 1</h1>
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <datos-basicos-auditoria-externa
+                            <datos-basicos-auditoria-externa #dbae
                                 *ngIf="loadedAuditoria"
                                 [auditores]="auditores"
                                 [auditoria]="loadedAuditoria"
-                                [proveedores]="proveedores">
+                                (onSearchProveedor)="searchProveedor($event)">
                             </datos-basicos-auditoria-externa>
                         </div>
                     </div>
@@ -44,6 +45,10 @@ export class DetalleAuditoriaExternaComponent implements OnInit {
     auditores: UsuarioModel[];
     loadedAuditoria: AuditoriaExternaModel;
     proveedores: ProveedorModel[];
+
+    //viewchild
+    @ViewChild('dbae')
+    dbae: DatosBasicosAuditoriaExternaComponent;
 
     constructor(
         private detalleAuditoriaExternaService: DetalleAuditoriaExternaService,
@@ -64,7 +69,6 @@ export class DetalleAuditoriaExternaComponent implements OnInit {
         ]).subscribe(([auditoria, initialInfo]) => {
             this.loadedAuditoria = auditoria;
             this.auditores = initialInfo.auditores;
-            this.proveedores = initialInfo.proveedores;
             this.hideWaitDialog();
             console.log(auditoria);
         });
@@ -82,6 +86,12 @@ export class DetalleAuditoriaExternaComponent implements OnInit {
 
     hideWaitDialog() {
         this.store.dispatch(new fromShared.HideWaitDialog());
+    }
+
+    searchProveedor(query: string) {
+        this.detalleAuditoriaExternaService
+            .serachProveedor({ query })
+            .subscribe(response => (this.dbae.filteredProveedores = response));
     }
 
     showWaitDialog(header: string, body?: string) {
