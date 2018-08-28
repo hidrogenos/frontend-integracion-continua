@@ -17,7 +17,7 @@
     <ng-template pTemplate="body" let-accionCorrectiva>
         <tr>
             <td>
-                <button pButton class="ui-button-rounded shadow-box ui-shadow-2" [ngStyle]="{'background-color': accionCorrectiva?.accion_estado?.color ,'border-radius': '100%'}"
+                <button pButton class="ui-button-rounded shadow-box ui-shadow-2" [ngStyle]="{'background-color': accionCorrectiva?.accion_estado?.color ,'border-radius': '100%','width':'25px'}"
                     (click)="selectAccionCorrectiva(accionCorrectiva)">
                 </button>
             </td>

@@ -22,7 +22,7 @@
             </div>
 
             <div class="ui-g-2 ui-fluid">
-                <button pButton type="submit" class="ui-button-success" icon="pi pi-plus" label="Crear" [disabled]="!form.valid"></button>
+                <button *ngIf="!disabled" pButton type="submit" class="ui-button-success" icon="pi pi-plus" label="Crear" [disabled]="!form.valid"></button>
             </div>
         </div>
     </form>

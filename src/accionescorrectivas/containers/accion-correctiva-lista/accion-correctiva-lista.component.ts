@@ -13,14 +13,12 @@ import { forkJoin } from "rxjs";
 
 //Modelos
 import { AccionImportanciaModel } from "../../../shared/models/accion-importancia.model";
-import { AccionProcesoModel } from "../../../shared/models/accion-proceso.model";
-
 //Child
 import { CreateAccionCorrectivaDialogComponent } from "../../components";
-import { MessageService } from "primeng/primeng";
 import { AccionCorrectivaEstadoModel } from "../../../shared/models/accion-correctiva-estado.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
 import { take } from "rxjs/operators";
+import { MessageService } from "primeng/api";
 
 @Component({
     selector: "accion-correctiva-lista",
@@ -34,7 +32,7 @@ import { take } from "rxjs/operators";
                             </acciones-estados-lista> 
                              <div class="ui-g">
                                 <div class="ui-g-12 text-aling-right">
-                                    <button pButton type="button" (click)="cacd.display=true" label="Crear Acción Correctiva" class="ui-button-success">
+                                    <button pButton type="button" (click)="cacd.display=true" label="Crear acción correctiva" class="ui-button-success">
                                     </button>  
                                 </div>               
                             </div> 
@@ -189,11 +187,10 @@ export class AccionCorrectivaListaComponent implements OnInit {
                             ];
                             this.hideWaitDialog();
                             this.onCreateDialog.display = false;
-                            this.msgs.push({
+                            this.messageService.add({
                                 severity: "success",
                                 summary: "Acción exitosa",
-                                detail:
-                                    "Enhorabuena!, Se ha creado una Acción correctiva"
+                                detail: "Acción correctiva creada exitosamente"
                             });
                         },
                         error => {

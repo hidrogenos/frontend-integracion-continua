@@ -5,15 +5,15 @@
 
 export const environment = {
     production: false,
-    baseUrl: 'http://localhost:4200',
-    apiUrl: 'http://localhost/api-base-5-6/public/api',
+    baseUrl: "http://localhost:4200",
+    apiUrl: "http://localhost/api-base-5-6/public/api",
     auth: {
-        urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
-        secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
+        urlToken: "http://localhost/api-base-5-6/public/oauth/token",
+        secret: "GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq",
         clientId: 2
     },
-    dateFormatAngular: 'yyyy-MM-dd',
-    dateFormatPrimeNg: 'yy-mm-dd',
+    dateFormatAngular: "yyyy-MM-dd",
+    dateFormatPrimeNg: "yy-mm-dd",
     tipos_documento: {
         manual_calidad: {
             id: 1,
@@ -26,7 +26,13 @@ export const environment = {
         factura_proveedor_documento: {
             id: 3,
             permiso_impresion: 203
+        },
+        accion_correctiva_adjunto: {
+            id: 4
+        },
+        accion_correctiva_tarea_adjunto: {
+            id: 5
         }
     },
-    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg']
+    extensiones_imagen: ["jpg", "gif", "png", "svg", "bmp", "jpeg"]
 };

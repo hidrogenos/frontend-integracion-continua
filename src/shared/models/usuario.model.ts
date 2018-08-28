@@ -1,14 +1,14 @@
-import { TipoIdentificacionModel } from './tipo-identificacion.model';
-import { PerfilModel } from './perfil.model';
-import { CalidadOrganigramaModel } from './calidad-organigrama.model';
-import { CiudadModel } from './ciudad.model';
-import { EpsModel } from './eps.model';
-import { ArlModel } from './arl.model';
-import { PensionModel } from './pension.model';
-import { CesantiaModel } from './cesantia.model';
-import { CajaCompensacionModel } from './caja-compensacion.model';
-import { UsuarioDestrezaModel } from './usuario-destreza.model';
-import { UsuarioDocumentoModel } from './usuario-documento.model';
+import { TipoIdentificacionModel } from "./tipo-identificacion.model";
+import { PerfilModel } from "./perfil.model";
+import { CalidadOrganigramaModel } from "./calidad-organigrama.model";
+import { CiudadModel } from "./ciudad.model";
+import { EpsModel } from "./eps.model";
+import { ArlModel } from "./arl.model";
+import { PensionModel } from "./pension.model";
+import { CesantiaModel } from "./cesantia.model";
+import { CajaCompensacionModel } from "./caja-compensacion.model";
+import { UsuarioDestrezaModel } from "./usuario-destreza.model";
+import { UsuarioDocumentoModel } from "./usuario-documento.model";
 
 export interface UsuarioModel {
     id?: number;

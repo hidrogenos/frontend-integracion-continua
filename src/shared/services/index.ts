@@ -1,6 +1,9 @@
 import { AdjuntoService } from "./utils/adjunto/adjunto.service";
 export * from "./utils/adjunto/adjunto.service";
 
+import { AccionCorrectivaAdjuntoService } from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
+export * from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
+
 import { AccionCorrectivaService } from "./accioncorrectiva/accioncorrectiva.service";
 export * from "./accioncorrectiva/accioncorrectiva.service";
 
@@ -63,6 +66,7 @@ export * from "./usuario-documento/usuario-documento.service";
 
 export const services: any[] = [
     AdjuntoService,
+    AccionCorrectivaAdjuntoService,
     AccionCorrectivaService,
     AccionCorrectivaTareaAdjuntoService,
     AccionCorrectivaTareaService,

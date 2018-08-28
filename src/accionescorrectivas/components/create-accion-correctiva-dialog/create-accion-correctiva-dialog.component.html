@@ -36,7 +36,7 @@
                     <div>
                         <label>Fecha compromiso</label>
                     </div>
-                    <p-calendar showIcon="true" formControlName="fecha_compromiso" [dateFormat]="dateFormatNormal"></p-calendar>
+                    <p-calendar showIcon="true" [minDate]="fechaMinimaCalendario" formControlName="fecha_compromiso" [dateFormat]="dateFormatNormal"></p-calendar>
                 </div>
             </div>
             <div class="ui-g">

@@ -47,6 +47,7 @@ import { UsuarioModel } from "../../../shared/models/usuario.model";
 import { AccionCorrectivaAnalisisHijo5wsModel } from "../../../shared/models/accion-correctiva-analisis-hijo-5ws";
 import { AccionCorrectivaTareaAdjuntoModel } from "../../../shared/models/accion-correctiva-tarea-adjunto.model";
 import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
+import { environment } from "../../../environments/environment";
 
 @Component({
     selector: "accion-correctiva-panel",
@@ -81,7 +82,8 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                                                                 [documentos]="documentosAccionCorrectiva"
                                                                 (onCreateDocumentoAccionCorrectiva)="uploadDocumentosToAccionCorrectiva($event)"
                                                                 (onDeleteDocumentoAccionCorrectiva)="deleteDocumentoFromAccionCorrectiva($event)"
-                                                                (onDownloadDocumentoAccionCorrectiva)="downloadDocumentoFromAccionCorrectiva($event)">
+                                                                (onDownloadDocumentoAccionCorrectiva)="downloadDocumentoFromAccionCorrectiva($event)"
+                                                                (onConsultarAccionCorrectivaAdjunto)="consultarAdjuntoFromAccionCorrectiva($event)">
                             </create-accion-correctiva-documento>
                         </div>
                     </div>
@@ -107,7 +109,7 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                     <div class="ui-g-12">
                         <div class="card card-w-title">
                         <div class="ui-g">
-                            <div class="ui-g-12 text-aling-right" *ngIf="idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES">
+                            <div class="ui-g-12 text-aling-right" *ngIf="idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES && usuarioActual?.id == accionCorrectivaActual?.id_responsable ">
                                  <button pButton icon="pi pi-plus" class="ui-button" type="button" (click)="crearTareaAccionCorrectivaComponent.display=true" label="Crear tarea"> </button>
                             </div>
                         </div>
@@ -115,11 +117,13 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                                                    [idEstadoAccionCorrectiva]="accionCorrectivaActual?.id_estado"
                                                    [accionCorrectivaTareaTipos]="tareaTipos"
                                                    [usuariosResponsables]="usuarios"
+                                                   [usuarioActual]="usuarioActual"
                                                    (onUpdateAccionCorrectivaTarea)="updateAccionCorrectivaTarea($event)"
                                                    (onDeleteAccionCorrectivaTarea)="deleteAccionCorrectivaTarea($event)"
                                                    (onUploadAdjuntoTarea)="uploadAdjuntosByAccionCorrectivaTarea($event)"
                                                    (onDownloadAdjuntoTarea)="downloadAdjuntoByAccionCorrectivaTarea($event)"
                                                    (onDeleteAdjuntoTarea)="deleteAdjuntoByAccionCorrectivaTarea($event)"
+                                                   (onConsultarTareaAdjunto)="consultarAdjuntoFromAccionCorrectivaTarea($event)"
                                                    (onFinishTarea)="realizarAccionCorrectivaTarea($event)"
 
                                                    rows="10">
@@ -151,9 +155,8 @@ import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
                                     </div>
                                 </div>  
                             </div>
-
                             <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_CALIDAD ||
-                                                              idAccionCorrectivaEstado == ACCION_EN_REASIGNACION) && usuarioActual?.es_jefe == 1">
+                                                              idAccionCorrectivaEstado == ACCION_EN_REASIGNACION) && usuarioActual?.es_jefe">
                                 <div class="ui-g-6">
                                     <button pButton class="ui-button" label="Asignar acción" (click)="asignar.display=true;"></button>
                                 </div>
@@ -774,10 +777,6 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 this.accionCorrectivaAnalisisService
                     .createAnalisisAccionCorrectivaHijos([{ ...data.hijo }])
                     .subscribe(response => {
-                        // this.accionCorrectivaAnalisisHijos = [
-                        //     ...this.accionCorrectivaAnalisisHijos,
-                        //     ...response
-                        // ];
                         let ideas = this.metodologiaComponent.ideasForm.get(
                             "ideas"
                         ) as FormArray;
@@ -999,21 +998,41 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                             }
                         })
                 ];
-                // const data2: AccionCorrectivaTareaAdjuntoModel[] = this.accionCorrectivaActual.tareas
-                //     .find(tareaActual => tareaActual.id == data.idTarea)
-                //     .adjunto.filter(adjuntoActual => {
-                //         if (adjuntoActual.id != adjuntoEliminado.id) {
-                //             return adjuntoActual;
-                //         }
-                //     });
-
-                // let todo = (this.accionCorrectivaActual.tareas.find(
-                //     tareaActual => tareaActual.id == data.idTarea
-                // ).adjunto = data2);
-                // console.log(todo);
-                //this.loadInitData();
                 this.hideWaitDialog();
             });
+    }
+
+    consultarAdjuntoFromAccionCorrectiva(
+        accionCorrectivaAdjunto: AccionCorrectivaAdjuntoModel
+    ) {
+        const idTipoDocumento =
+            environment.tipos_documento.accion_correctiva_adjunto.id;
+        this.store.dispatch(
+            new fromRootStore.Go({
+                path: [
+                    `visor-adjunto/${idTipoDocumento}/${
+                        accionCorrectivaAdjunto.id
+                    }/${accionCorrectivaAdjunto.titulo}`
+                ]
+            })
+        );
+    }
+
+    consultarAdjuntoFromAccionCorrectivaTarea(
+        accionCorrectivaTareaAdjunto: AccionCorrectivaTareaAdjuntoModel
+    ) {
+        console.log("xd");
+        const idTipoDocumento =
+            environment.tipos_documento.accion_correctiva_tarea_adjunto.id;
+        this.store.dispatch(
+            new fromRootStore.Go({
+                path: [
+                    `visor-adjunto/${idTipoDocumento}/${
+                        accionCorrectivaTareaAdjunto.id
+                    }/${accionCorrectivaTareaAdjunto.titulo}`
+                ]
+            })
+        );
     }
     // getProcesosByAccionCorrectiva(id: number) {
     //     return this.accionesCorrectivasProcesoService.getProcesosByAccionCorrectiva(id);
@@ -1166,12 +1185,34 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                     this.editAccionCorrectivaComponent.disableComponent();
                     this.relateAccionCorrectivaComponent.disableComponent();
                 }
+
+                if (estado == this.ACCION_EN_CALIDAD && !usuario.es_jefe) {
+                    this.editAccionCorrectivaComponent.disableComponent();
+                    this.relateAccionCorrectivaComponent.disableComponent();
+                    this.documentComponent.disableComponent();
+                }
+
+                if (
+                    estado >= this.ACCION_ASIGNADA &&
+                    usuario.id != this.accionCorrectivaActual.id_responsable
+                ) {
+                    if (this.metodologiaComponent) {
+                        this.metodologiaComponent.disableComponent();
+                    }
+                    if (this.accionesTareasListaComponent) {
+                        this.accionesTareasListaComponent.disableComponent();
+                    }
+                    if (this.documentComponent) {
+                        this.documentComponent.disableComponent();
+                    }
+                }
             });
 
         if (estado > this.ACCION_EN_CALIDAD) {
             this.editAccionCorrectivaComponent.disableComponent();
             this.relateAccionCorrectivaComponent.disableComponent();
         }
+
         if (estado > this.ACCION_EN_ANALISIS) {
             if (this.metodologiaComponent) {
                 this.metodologiaComponent.disableComponent();

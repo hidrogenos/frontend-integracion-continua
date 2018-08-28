@@ -31,6 +31,9 @@ export class DocumentoAdjuntoComponent {
     @Output()
     onDeleteDocumento: EventEmitter<any> = new EventEmitter<any>();
 
+    @Output()
+    onConsultarTareaAdjunto: EventEmitter<any> = new EventEmitter<any>();
+
     //viewchild
     @ViewChild("fu")
     fu: FileUpload;
