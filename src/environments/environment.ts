@@ -22,7 +22,29 @@ export const environment = {
         usuario_destreza_documento: {
             id: 2,
             permiso_impresion: 101
+        },
+        documento_adjunto_doc: {
+            id: 3,
+            permiso_impresion: 100
+        },
+        documento_adjunto_flujo_doc: {
+            id: 4,
+            permiso_impresion: 100
         }
     },
-    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg']
+    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
+    estados_documento: {
+        en_creacion: 1,
+        en_elaboracion: 2,
+        en_revision: 3,
+        en_aprobacion: 4,
+        aprobado: 5,
+        en_divulgacion: 6,
+        vigente: 7,
+        para_reasignacion: 8,
+        para_reelaboracion: 9,
+        obsoleto: 10,
+        rechazado: 11,
+        anulado: 12
+    }
 };

@@ -2,6 +2,8 @@ import { UsuarioModel } from "./usuario.model";
 import { MapaProcesoHijoModel } from "./mapa_proceso_hijo.model";
 import { DocumentoEstadoModel } from "./documento-estado.model";
 import { DocumentoAdjuntoModel } from "./documento-adjunto.model";
+import { DocumentoAsociadoModel } from "./documento-asociado.model";
+import { DocumentoDivulgacionRegistroModel } from "./documento-divulgacion-registro.model";
 
 export interface DocumentoModel {
     id?: number;
@@ -27,4 +29,6 @@ export interface DocumentoModel {
     procesos?: MapaProcesoHijoModel[];
     estado?: DocumentoEstadoModel;
     adjuntos?: DocumentoAdjuntoModel[];
+    documentos_asociados?: DocumentoModel[];
+    divulgacion_registros?: DocumentoDivulgacionRegistroModel[];
 }

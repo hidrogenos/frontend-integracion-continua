@@ -86,8 +86,14 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
                 </div>
             </div>
             <div class="ui-g">
-                <div class="ui-g-12 text-aling-right">
-                    <button type="submit" pButton label="Editar información inicial" class="ui-button-primary" [disabled]="!form.valid"></button>
+                <div class="ui-g-6" >
+                    <button *ngIf="puedeReasignar" type="button" pButton label="Solicitar reasignación" class="ui-button-warning" 
+                    (click)="solicitarReasignacion()"></button>
+                    <button *ngIf="puedeReelaborar" type="button" pButton label="Solicitar reelaboracion" class="ui-button-warning" 
+                    (click)="solicitarReelaboracion()"></button>
+                </div>
+                <div class="ui-g-6 text-aling-right" *ngIf="puedeEditar">
+                    <button type="submit" pButton label="Editar información inicial" class="ui-button-primary" [disabled]="!form.valid" ></button>
                 </div>
             </div>
         </form>
@@ -107,6 +113,12 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
     filteredRespElaboracion;
     @Input()
     filteredProcesos;
+    @Input()
+    puedeEditar: boolean;
+    @Input()
+    puedeReasignar: boolean;
+    @Input()
+    puedeReelaborar: boolean;
     @Output()
     onFilterRespElaboracion = new EventEmitter<any>();
     @Output()
@@ -117,6 +129,10 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
     onFilterProcesos = new EventEmitter<string>();
     @Output()
     onUpdateDoc = new EventEmitter<any>();
+    @Output()
+    onSolicitarReasignacion = new EventEmitter();
+    @Output()
+    onSolicitarReelaboracion = new EventEmitter();
 
     constructor(
         private fb: FormBuilder
@@ -136,7 +152,7 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
         })
     }
 
-    inicializarForm(documento: DocumentoModel) {
+    inicializarForm(documento: DocumentoModel, puedeEditarForm: boolean) {
         this.form.patchValue({
             id: documento.id,
             codigo: documento.codigo,
@@ -148,6 +164,9 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
             version: documento.version,
             descripcion: documento.descripcion
         })
+        if (!puedeEditarForm) {
+            this.form.disable();
+        }
     }
 
     filterResponsableElaboracion(event) {
@@ -188,5 +207,13 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
 
     onSubmitUpdateDoc() {
         this.onUpdateDoc.emit(this.form.value);
+    }
+
+    solicitarReasignacion() {
+        this.onSolicitarReasignacion.emit();
+    }
+
+    solicitarReelaboracion() {
+        this.onSolicitarReelaboracion.emit();
     }
 }

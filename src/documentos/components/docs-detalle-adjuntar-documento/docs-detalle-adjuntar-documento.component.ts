@@ -1,7 +1,6 @@
 
 import { Component, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { FileUpload } from 'primeng/primeng';
-import { DocumentoAdjuntoModel } from '../../../shared/models/documento-adjunto.model';
 
 import { environment } from '../../../environments/environment';
 
@@ -10,7 +9,7 @@ import { environment } from '../../../environments/environment';
     template: `
     <div>
         <div class="ui-g">
-            <h2>Adjuntar documentos</h2>
+            <h2>{{ titulo }}</h2>
         </div>
         <div class="ui-g">
             <div class="ui-g-12 text-aling-right">
@@ -21,6 +20,7 @@ import { environment } from '../../../environments/environment';
                     multiple="multiple"
                     cancelLabel="Limpiar"
                     chooseLabel="Seleccionar"
+                    [disabled]="!puedeEditar"
                     uploadLabel="Adjuntar">
                 </p-fileUpload>
             </div>
@@ -44,9 +44,11 @@ import { environment } from '../../../environments/environment';
                             <td>{{adjunto.fecha_carga | date: formatDateAngular}}</td>
                             <td style="text-align: center;">
                                 <button pButton type="button" icon="fa fa-eye" style="margin-right: 10px;" 
-                                class="ui-button-success" (click)="verDocumentoAdjunto(adjunto)"></button>
+                                class="ui-button-success"
+                                (click)="verDocumentoAdjunto(adjunto)"></button>
                                 <button pButton type="button" icon="fa fa-trash" 
-                                class="ui-button-danger" (click)="deleteDocumentoAdjunto(adjunto)"></button>
+                                class="ui-button-danger" *ngIf="puedeEditar"
+                                (click)="deleteDocumentoAdjunto(adjunto)"></button>
                             </td>
                         </tr>
                     </ng-template>
@@ -59,13 +61,22 @@ import { environment } from '../../../environments/environment';
 export class DocsDetalleAdjuntarDocumentoComponent {
 
     @Input()
-    adjuntos: DocumentoAdjuntoModel[];
+    titulo: string;
+
+    @Input()
+    adjuntos: any[];
+
+    @Input()
+    puedeEditar: boolean;
 
     @Output()
     onAdjuntarDocumento = new EventEmitter<File[]>();
 
     @Output()
-    onDeleteAdjunto = new EventEmitter<DocumentoAdjuntoModel>();
+    onDeleteAdjunto = new EventEmitter<any>();
+
+    @Output()
+    onVerAdjunto = new EventEmitter<any>();
 
     @ViewChild('fu') fu: FileUpload;
 
@@ -81,5 +92,9 @@ export class DocsDetalleAdjuntarDocumentoComponent {
     deleteDocumentoAdjunto(adjunto) {
         adjunto.activo = false;
         this.onDeleteAdjunto.emit(adjunto);
+    }
+
+    verDocumentoAdjunto(adjunto) {
+        this.onVerAdjunto.emit(adjunto)
     }
 }

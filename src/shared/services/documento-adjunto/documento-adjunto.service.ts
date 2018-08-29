@@ -13,6 +13,10 @@ export class DocumentoAdjuntoService {
         private http: HttpClient
     ) { }
 
+    getDocumentoAdjunto(id: number): Observable<DocumentoAdjuntoModel> {
+        return this.http.get<DocumentoAdjuntoModel>(`${environment.apiUrl}/documento-adjunto/${id}`);
+    }
+
     updateDocumentoAdjunto(adjunto: DocumentoAdjuntoModel) {
         adjunto = this.transformDocumentoAdjuntoRequest(adjunto);
         return this.http.put(`${environment.apiUrl}/documento-adjunto/${adjunto.id}`, adjunto);
@@ -26,9 +30,10 @@ export class DocumentoAdjuntoService {
     }
 
     transformDocumentoAdjuntoResponse(adjunto: DocumentoAdjuntoModel) {
-        return {
+        let er = {
             ...adjunto,
             fecha_carga: adjunto.fecha_carga * 1000
-        }
+        };
+        return er;
     }
 }

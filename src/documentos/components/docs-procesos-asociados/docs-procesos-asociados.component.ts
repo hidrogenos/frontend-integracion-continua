@@ -16,10 +16,11 @@ import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.m
                     optionLabel="proceso"
                     [autoWidth]="false"
                     filter="true"
-                    placeholder="Seleccione...">
+                    placeholder="Seleccione..."
+                    [disabled]="!puedeEditar">
                 </p-dropdown>
             </div>
-            <div class="ui-g-3 text-aling-right">
+            <div class="ui-g-3 text-aling-right" *ngIf="puedeEditar">
                 <button pButton type="button" label="Relacionar proceso" (click)="relacionarProceso()"
                 [disabled]="!selectedProceso"></button>
             </div>
@@ -30,14 +31,14 @@ import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.m
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Proceso</th>
-                            <th style="width: 10%;"></th>
+                            <th style="width: 10%;">Eliminar</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-proceso>
                         <tr>
                             <td>{{proceso.proceso}}</td>
-                            <td style="text-align: center;">
-                                <button pButton type="button" icon="pi pi-trash" 
+                            <td style="text-align: center;" >
+                                <button pButton type="button" icon="pi pi-trash" *ngIf="puedeEditar"
                                 class="ui-button-danger" (click)="deleteProcesoFromDocumento(proceso)"></button>
                             </td>
                         </tr>
@@ -56,6 +57,8 @@ export class DocsProcesosAsociadosComponent {
     @Input()
     procesosDocumento: MapaProcesoHijoModel[];
 
+    @Input()
+    puedeEditar: boolean;
     @Output()
     onDeleteProceso = new EventEmitter<number>();
 

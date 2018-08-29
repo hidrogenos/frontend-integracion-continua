@@ -7,9 +7,6 @@ import * as fromComponents from './components';
 //containers
 import * as fromContainers from './containers';
 
-// pipes
-import * as fromPipes from './pipes';
-
 // primeng modules
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';

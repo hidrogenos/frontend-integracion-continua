@@ -37,8 +37,8 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
                 <td>
-                    <button pButton class="ui-button-rounded" (click)="verDetalleDocumento(rowData.id)"
-                    [ngStyle]="{'background-color': rowData.estado.color ,'border-radius': '100%','border':'1px solid #555555'}">                
+                    <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleDocumento(rowData.id)"
+                    [ngStyle]="{'background-color': rowData.estado.color ,'border-radius': '100%'}">                
                     </button>
                 </td>
                 <td *ngFor="let col of columns">

@@ -4,8 +4,17 @@ export * from './utils/adjunto/adjunto.service';
 import { CalidadService } from './calidad/calidad.service';
 export * from './calidad/calidad.service';
 
+import { DocumentoService } from './documento/documento.service';
+export * from './documento/documento.service';
+
 import { DocumentoAdjuntoService } from './documento-adjunto/documento-adjunto.service';
 export * from './documento-adjunto/documento-adjunto.service';
+
+import { DocumentoAsociadoService } from './documento-asociado/documento-asociado.service';
+export * from './documento-asociado/documento-asociado.service';
+
+import { DocumentoDivulgacionRegistroService } from './documento-divulgacion-registro/documento-divulgacion-registro.service';
+export * from './documento-divulgacion-registro/documento-divulgacion-registro.service';
 
 import { DocumentoEstadoService } from './documento-estado/documento-estado.service';
 export * from './documento-estado/documento-estado.service';
@@ -58,7 +67,10 @@ export * from './usuario-documento/usuario-documento.service';
 export const services: any[] = [
     AdjuntoService,
     CalidadService,
+    DocumentoService,
     DocumentoAdjuntoService,
+    DocumentoAsociadoService,
+    DocumentoDivulgacionRegistroService,
     DocumentoEstadoService,
     DocumentoProcesoService,
     DocumentoTipoService,

@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, AfterViewChecked, ViewChild } from '@angular/core';
+import { Editor } from 'primeng/editor';
 
 @Component({
     selector: 'docs-detalle-editor-documento',
@@ -9,9 +10,9 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
         </div>
         <div class="ui-g">
             <div class="ui-g-12">
-                <p-editor [(ngModel)]="text" [style]="{'height':'220px'}"></p-editor>
+                <p-editor [(ngModel)]="text" [style]="{'height':'220px'}" [readonly]="!puedeEditar"></p-editor>
             </div>
-            <div class="ui-g-12 text-aling-right">
+            <div class="ui-g-12 text-aling-right" *ngIf="puedeEditar">
                 <button pButton type="button" label="Editar documento" (click)="guardarDocumento()"
                 [disabled]="!text"></button>
             </div>
@@ -23,6 +24,10 @@ export class DocsDetalleEditorDocumentoComponent {
 
     @Input()
     text: string;
+
+    @Input()
+    puedeEditar: boolean;
+
     @Output()
     onGuardarDocumento = new EventEmitter<string>();
 
