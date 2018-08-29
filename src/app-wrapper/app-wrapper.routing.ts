@@ -17,11 +17,13 @@ import { DocumentationComponent } from './demo/view/documentation.component';
 import { AppWrapperComponent } from './containers';
 
 import * as fromSharedContainers from './../shared/containers';
+import * as fromGuards from './guards';
 
 export const ROUTES: Routes = [
     {
         path: '',
         component: AppWrapperComponent,
+        canActivate: [fromGuards.AppMenuGuard],
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             {
@@ -37,6 +39,11 @@ export const ROUTES: Routes = [
                 path: 'acciones',
                 loadChildren:
                     './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'
+            },
+            {
+                path: 'documentos',
+                loadChildren:
+                    './../documentos/documentos.module#DocumentosModule'
             },
             {
                 path: 'proveedores',

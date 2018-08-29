@@ -6,11 +6,11 @@
 export const environment = {
     production: false,
     baseUrl: 'http://localhost:4200',
-    apiUrl: 'http://localhost/api-base-5-6/public/api',
+    apiUrl: 'http://localhost:8083/APISGDv2_1/public/api',
     auth: {
-        urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
-        secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
-        clientId: 2
+        urlToken: 'http://localhost:8083/APISGDv2_1/public/oauth/token',
+        secret: 'yr4UMVVPu73VVBv4ureOri14UpqZwASy2JKuXuNm',
+        clientId: 4
     },
     dateFormatAngular: 'yyyy-MM-dd',
     dateFormatPrimeNg: 'yy-mm-dd',
@@ -26,7 +26,29 @@ export const environment = {
         factura_proveedor_documento: {
             id: 3,
             permiso_impresion: 203
+        },
+        documento_adjunto_doc: {
+            id: 3,
+            permiso_impresion: 100
+        },
+        documento_adjunto_flujo_doc: {
+            id: 4,
+            permiso_impresion: 100
         }
     },
-    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg']
+    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
+    estados_documento: {
+        en_creacion: 1,
+        en_elaboracion: 2,
+        en_revision: 3,
+        en_aprobacion: 4,
+        aprobado: 5,
+        en_divulgacion: 6,
+        vigente: 7,
+        para_reasignacion: 8,
+        para_reelaboracion: 9,
+        obsoleto: 10,
+        rechazado: 11,
+        anulado: 12
+    }
 };

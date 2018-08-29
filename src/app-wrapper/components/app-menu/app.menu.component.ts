@@ -14,6 +14,11 @@ import {
 } from '@angular/animations';
 import { MenuItem } from 'primeng/primeng';
 import { AppWrapperComponent } from './../../containers/app-wrapper/app-wrapper.component';
+import { Store } from '@ngrx/store';
+import * as fromShared from './../../../shared/store';
+import { switchMap, map } from 'rxjs/operators';
+import { DocumentoTipoModel } from '../../../shared/models/documento-tipo.model';
+import { Observable, of } from 'rxjs';
 
 @Component({
     selector: 'app-menu',
@@ -34,696 +39,113 @@ export class AppMenuComponent implements OnInit {
 
     version = 'v3';
 
-    constructor(public app: AppWrapperComponent) {}
+    documentos: MenuItem[] = [];
+
+    constructor(public app: AppWrapperComponent, private store: Store<fromShared.SharedState>) { }
 
     ngOnInit() {
-        this.model = [
-            // {
-            //     label: 'Bootstrap Version',
-            //     icon: 'fa fa-fw  fa-tags',
-            //     items: [
-            //         {
-            //             label: 'Bootstrap v3',
-            //             icon: 'fa fa-fw fa-tag',
-            //             command: () => this.changeVersion('v3')
-            //         },
-            //         {
-            //             label: 'Bootstrap v4',
-            //             icon: 'fa fa-fw fa-tag',
-            //             command: () => this.changeVersion('v4')
-            //         }
-            //     ]
-            // },
-            { label: 'Inicio', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
-            {
-                label: 'Administración',
-                icon: 'fa fa-fw fa-lock',
-                items: [
-                    {
-                        label: 'Colaboradores',
-                        icon: 'fa fa-fw fa-users',
-                        routerLink: ['/administracion/colaboradores']
-                    },
-                    {
-                        label: 'Permisos',
-                        icon: 'fa fa-fw fa-unlock',
-                        routerLink: ['/administracion/permisos']
-                    }
-                ]
-            },
-            {
-                label: 'Acciones',
-                icon: 'fa fa-fw fa-home',
-                items: [
-                    {
-                        label: 'Correctivas',
-                        icon: 'fa fa-fw fa-tag',
-                        routerLink: ['/acciones/acciones-correctivas']
-                    },
-                    {
-                        label: 'Preventivas',
-                        icon: 'fa fa-fw fa-tag'
-                    }
-                ]
-            },
-            {
-                label: 'Auditorias',
-                icon: 'fa fa-fw fa-home',
-                items: [
-                    {
-                        label: 'Externas',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Internas',
-                        icon: 'fa fa-fw fa-tag'
-                    }
-                ]
-            },
-            {
-                label: 'Calidad',
-                icon: 'fa fa-quora',
-                routerLink: ['/calidad/nuestra-empresa/inicio'],
-                items: [
-                    {
-                        label: 'Nuestra organización',
-                        icon: 'fa fa-building-o',
-                        routerLink: ['/calidad/nuestra-empresa/inicio']
-                    },
-                    {
-                        label: 'Organigrama',
-                        icon: 'fa fa-puzzle-piece',
-                        routerLink: ['/calidad/nuestra-empresa/organigrama']
-                    },
-                    {
-                        label: 'Mapa de procesos',
-                        icon: 'fa fa-map-signs',
-                        routerLink: ['/calidad/nuestra-empresa/mapa-procesos']
-                    }
-                ]
-            },
-            {
-                label: 'Doucumentos',
-                icon: 'fa fa-fw fa-home',
-                items: [
-                    {
-                        label: 'Capacitaciones',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Especificaciones',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Formatos',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Formulas maestras',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Instructivos',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Manuales',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Planes y programas',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Planos',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Procedimientos',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Protocolos',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Registros',
-                        icon: 'fa fa-fw fa-tag'
-                    },
-                    {
-                        label: 'Tecnicas',
-                        icon: 'fa fa-fw fa-tag'
-                    }
-                ]
-            },
-            { label: 'Equipos', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
-            {
-                label: 'Proveedores',
-                icon: 'fa fa-fw fa-home',
-                routerLink: ['/proveedores']
-            }
-            // {
-            //     label: 'Customization',
-            //     icon: 'fa fa-fw fa-bars',
-            //     badge: '8',
-            //     items: [
-            //         {
-            //             label: 'Static Menu',
-            //             icon: 'fa fa-fw fa-bars',
-            //             command: () => this.app.changeToStaticMenu()
-            //         },
-            //         {
-            //             label: 'Overlay Menu',
-            //             icon: 'fa fa-fw fa-bars',
-            //             command: () => this.app.changeToOverlayMenu()
-            //         },
-            //         {
-            //             label: 'Slim Menu',
-            //             icon: 'fa fa-fw fa-bars',
-            //             command: () => this.app.changeToSlimMenu()
-            //         },
-            //         {
-            //             label: 'Horizontal Menu',
-            //             icon: 'fa fa-fw fa-bars',
-            //             command: () => this.app.changeToHorizontalMenu()
-            //         },
-            //         {
-            //             label: 'Inline Profile',
-            //             icon: 'fa fa-sun-o fa-fw',
-            //             command: () => (this.app.profileMode = 'inline')
-            //         },
-            //         {
-            //             label: 'Top Profile',
-            //             icon: 'fa fa-moon-o fa-fw',
-            //             command: () => (this.app.profileMode = 'top')
-            //         },
-            //         {
-            //             label: 'Light Menu',
-            //             icon: 'fa fa-sun-o fa-fw',
-            //             command: () => (this.app.darkMenu = false)
-            //         },
-            //         {
-            //             label: 'Dark Menu',
-            //             icon: 'fa fa-moon-o fa-fw',
-            //             command: () => (this.app.darkMenu = true)
-            //         }
-            //     ]
-            // },
-            // {
-            //     label: 'Layout Colors',
-            //     icon: 'fa fa-fw fa-magic',
-            //     items: [
-            //         {
-            //             label: 'Flat',
-            //             icon: 'fa fa-fw fa-circle',
-            //             items: [
-            //                 {
-            //                     label: 'Blue',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('blue');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Purple',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('purple');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Cyan',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('cyan');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Indigo',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('indigo');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Teal',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('teal');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Pink',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('pink');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Lime',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('lime');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Green',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('green');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Amber',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('amber');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Brown',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('brown');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Orange',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('orange');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Deep Purple',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('deeppurple');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Light Blue',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('lightblue');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Light Green',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('lightgreen');
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Dark Grey',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('darkgrey');
-            //                     }
-            //                 }
-            //             ]
-            //         },
-            //         {
-            //             label: 'Special',
-            //             icon: 'fa fa-fw fa-fire',
-            //             items: [
-            //                 {
-            //                     label: 'Influenza',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('influenza', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Suzy',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('suzy', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Calm',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('calm', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Crimson',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('crimson', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Night',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('night', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Skyling',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('skyline', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Sunkist',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('sunkist', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Little Leaf',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('littleleaf', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Joomla',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('joomla', true);
-            //                     }
-            //                 },
-            //                 {
-            //                     label: 'Firewatch',
-            //                     icon: 'fa fa-fw fa-paint-brush',
-            //                     command: event => {
-            //                         this.changeLayout('firewatch', true);
-            //                     }
-            //                 }
-            //             ]
-            //         }
-            //     ]
-            // },
-            // {
-            //     label: 'Themes',
-            //     icon: 'fa fa-fw fa-paint-brush',
-            //     badge: '5',
-            //     items: [
-            //         {
-            //             label: 'Blue',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('blue');
-            //             }
-            //         },
-            //         {
-            //             label: 'Cyan',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('cyan');
-            //             }
-            //         },
-            //         {
-            //             label: 'Indigo',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('indigo');
-            //             }
-            //         },
-            //         {
-            //             label: 'Purple',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('purple');
-            //             }
-            //         },
-            //         {
-            //             label: 'Teal',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('teal');
-            //             }
-            //         },
-            //         {
-            //             label: 'Orange',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('orange');
-            //             }
-            //         },
-            //         {
-            //             label: 'Deep Purple',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('deeppurple');
-            //             }
-            //         },
-            //         {
-            //             label: 'Light Blue',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('lightblue');
-            //             }
-            //         },
-            //         {
-            //             label: 'Green',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('green');
-            //             }
-            //         },
-            //         {
-            //             label: 'Light Green',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('lightgreen');
-            //             }
-            //         },
-            //         {
-            //             label: 'Lime',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('lime');
-            //             }
-            //         },
-            //         {
-            //             label: 'Amber',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('amber');
-            //             }
-            //         },
-            //         {
-            //             label: 'Brown',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('brown');
-            //             }
-            //         },
-            //         {
-            //             label: 'Dark Grey',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('darkgrey');
-            //             }
-            //         },
-            //         {
-            //             label: 'Pink',
-            //             icon: 'fa fa-fw fa-paint-brush',
-            //             command: event => {
-            //                 this.changeTheme('pink');
-            //             }
-            //         }
-            //     ]
-            // },
-            // {
-            //     label: 'Components',
-            //     icon: 'fa fa-fw fa-sitemap',
-            //     items: [
-            //         {
-            //             label: 'Sample Page',
-            //             icon: 'fa fa-fw fa-columns',
-            //             routerLink: ['/sample']
-            //         },
-            //         {
-            //             label: 'Forms',
-            //             icon: 'fa fa-fw fa-code',
-            //             routerLink: ['/forms']
-            //         },
-            //         {
-            //             label: 'Data',
-            //             icon: 'fa fa-fw fa-table',
-            //             routerLink: ['/data']
-            //         },
-            //         {
-            //             label: 'Panels',
-            //             icon: 'fa fa-fw fa-list-alt',
-            //             routerLink: ['/panels']
-            //         },
-            //         {
-            //             label: 'Overlays',
-            //             icon: 'fa fa-fw fa-square',
-            //             routerLink: ['/overlays']
-            //         },
-            //         {
-            //             label: 'Menus',
-            //             icon: 'fa fa-fw fa-minus-square-o',
-            //             routerLink: ['/menus']
-            //         },
-            //         {
-            //             label: 'Messages',
-            //             icon: 'fa fa-fw fa-circle-o-notch',
-            //             routerLink: ['/messages']
-            //         },
-            //         {
-            //             label: 'Charts',
-            //             icon: 'fa fa-fw fa-area-chart',
-            //             routerLink: ['/charts']
-            //         },
-            //         {
-            //             label: 'File',
-            //             icon: 'fa fa-fw fa-arrow-circle-o-up',
-            //             routerLink: ['/file']
-            //         },
-            //         {
-            //             label: 'Misc',
-            //             icon: 'fa fa-fw fa-user-secret',
-            //             routerLink: ['/misc']
-            //         }
-            //     ]
-            // },
-            // {
-            //     label: 'Template Pages',
-            //     icon: 'fa fa-fw fa-life-saver',
-            //     items: [
-            //         {
-            //             label: 'Empty Page',
-            //             icon: 'fa fa-fw fa-square-o',
-            //             routerLink: ['/empty']
-            //         },
-            //         {
-            //             label: 'Landing Page',
-            //             icon: 'fa fa-fw fa-certificate',
-            //             url: 'assets/pages/landing.html',
-            //             target: '_blank'
-            //         },
-            //         {
-            //             label: 'Login Page',
-            //             icon: 'fa fa-fw fa-sign-in',
-            //             url: 'assets/pages/login.html',
-            //             target: '_blank'
-            //         },
-            //         {
-            //             label: 'Error Page',
-            //             icon: 'fa fa-fw fa-exclamation-circle',
-            //             url: 'assets/pages/error.html',
-            //             target: '_blank'
-            //         },
-            //         {
-            //             label: 'Not Found Page',
-            //             icon: 'fa fa-fw fa-times',
-            //             url: 'assets/pages/notfound.html',
-            //             target: '_blank'
-            //         },
-            //         {
-            //             label: 'Access Denied Page',
-            //             icon: 'fa fa-fw fa-exclamation-triangle',
-            //             url: 'assets/pages/access.html',
-            //             target: '_blank'
-            //         }
-            //     ]
-            // },
-            // {
-            //     label: 'Menu Hierarchy',
-            //     icon: 'fa fa-fw fa-gg',
-            //     items: [
-            //         {
-            //             label: 'Submenu 1',
-            //             icon: 'fa fa-fw fa-sign-in',
-            //             items: [
-            //                 {
-            //                     label: 'Submenu 1.1',
-            //                     icon: 'fa fa-fw fa-sign-in',
-            //                     items: [
-            //                         {
-            //                             label: 'Submenu 1.1.1',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         },
-            //                         {
-            //                             label: 'Submenu 1.1.2',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         },
-            //                         {
-            //                             label: 'Submenu 1.1.3',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         }
-            //                     ]
-            //                 },
-            //                 {
-            //                     label: 'Submenu 1.2',
-            //                     icon: 'fa fa-fw fa-sign-in',
-            //                     items: [
-            //                         {
-            //                             label: 'Submenu 1.2.1',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         },
-            //                         {
-            //                             label: 'Submenu 1.2.2',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         }
-            //                     ]
-            //                 }
-            //             ]
-            //         },
-            //         {
-            //             label: 'Submenu 2',
-            //             icon: 'fa fa-fw fa-sign-in',
-            //             items: [
-            //                 {
-            //                     label: 'Submenu 2.1',
-            //                     icon: 'fa fa-fw fa-sign-in',
-            //                     items: [
-            //                         {
-            //                             label: 'Submenu 2.1.1',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         },
-            //                         {
-            //                             label: 'Submenu 2.1.2',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         },
-            //                         {
-            //                             label: 'Submenu 2.1.3',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         }
-            //                     ]
-            //                 },
-            //                 {
-            //                     label: 'Submenu 2.2',
-            //                     icon: 'fa fa-fw fa-sign-in',
-            //                     items: [
-            //                         {
-            //                             label: 'Submenu 2.2.1',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         },
-            //                         {
-            //                             label: 'Submenu 2.2.2',
-            //                             icon: 'fa fa-fw fa-sign-in'
-            //                         }
-            //                     ]
-            //                 }
-            //             ]
-            //         }
-            //     ]
-            // },
-            // {
-            //     label: 'Utils',
-            //     icon: 'fa fa-fw fa-wrench',
-            //     routerLink: ['/utils']
-            // },
-            // {
-            //     label: 'Documentation',
-            //     icon: 'fa fa-fw fa-book',
-            //     routerLink: ['/documentation']
-            // }
-        ];
+        this.buildMenuDocumentos().subscribe(response => {
+            this.model = [
+                { label: 'Inicio', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
+                {
+                    label: 'Administración',
+                    icon: 'fa fa-fw fa-lock',
+                    items: [
+                        {
+                            label: 'Colaboradores',
+                            icon: 'fa fa-fw fa-users',
+                            routerLink: ['/administracion/colaboradores']
+                        },
+                        {
+                            label: 'Permisos',
+                            icon: 'fa fa-fw fa-unlock',
+                            routerLink: ['/administracion/permisos']
+                        }
+                    ]
+                },
+                {
+                    label: 'Acciones',
+                    icon: 'fa fa-fw fa-home',
+                    items: [
+                        {
+                            label: 'Correctivas',
+                            icon: 'fa fa-fw fa-tag',
+                            routerLink: ['/acciones/acciones-correctivas']
+                        },
+                        {
+                            label: 'Preventivas',
+                            icon: 'fa fa-fw fa-tag'
+                        }
+                    ]
+                },
+                {
+                    label: 'Auditorias',
+                    icon: 'fa fa-fw fa-home',
+                    items: [
+                        {
+                            label: 'Externas',
+                            icon: 'fa fa-fw fa-tag'
+                        },
+                        {
+                            label: 'Internas',
+                            icon: 'fa fa-fw fa-tag'
+                        }
+                    ]
+                },
+                {
+                    label: 'Calidad',
+                    icon: 'fa fa-quora',
+                    routerLink: ['/calidad/nuestra-empresa/inicio'],
+                    items: [
+                        {
+                            label: 'Nuestra organización',
+                            icon: 'fa fa-building-o',
+                            routerLink: ['/calidad/nuestra-empresa/inicio']
+                        },
+                        {
+                            label: 'Organigrama',
+                            icon: 'fa fa-puzzle-piece',
+                            routerLink: ['/calidad/nuestra-empresa/organigrama']
+                        },
+                        {
+                            label: 'Mapa de procesos',
+                            icon: 'fa fa-map-signs',
+                            routerLink: ['/calidad/nuestra-empresa/mapa-procesos']
+                        }
+                    ]
+                },
+                {
+                    label: 'Documentos',
+                    icon: 'fa fa-fw fa-home',
+                    items: this.documentos
+                },
+                { label: 'Equipos', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
+                {
+                    label: 'Proveedores',
+                    icon: 'fa fa-fw fa-home',
+                    routerLink: ['/']
+                }
+            ];
+        });
+    }
+
+    buildMenuDocumentos(): Observable<boolean> {
+        return this.store.select(fromShared.getAllDocumentoTipos).pipe(
+            switchMap((tipos: DocumentoTipoModel[]) => {
+                tipos.map((tipo: DocumentoTipoModel) => {
+                    let item: MenuItem = {
+                        label: tipo.nombre,
+                        icon: 'fa fa-fw fa-book',
+                        routerLink: [`/documentos/${tipo.id}`],
+                    };
+                    this.documentos = [
+                        ...this.documentos,
+                        item
+                    ]
+                })
+                return of(true);
+            })
+        );
     }
 
     changeTheme(theme: string) {
@@ -868,7 +290,7 @@ export class AppSubMenuComponent {
 
     activeIndex: number;
 
-    constructor(public app: AppWrapperComponent) {}
+    constructor(public app: AppWrapperComponent) { }
 
     itemClick(event: Event, item: MenuItem, index: number) {
         if (this.root) {
