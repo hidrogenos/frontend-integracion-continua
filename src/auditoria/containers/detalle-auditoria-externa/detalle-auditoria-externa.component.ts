@@ -31,7 +31,8 @@ import { DatosBasicosAuditoriaExternaComponent } from '../../components';
                                 *ngIf="loadedAuditoria"
                                 [auditores]="auditores"
                                 [auditoria]="loadedAuditoria"
-                                (onSearchProveedor)="searchProveedor($event)">
+                                (onSearchProveedor)="searchProveedor($event)"
+                                (onUpdateDatosBasicos)="updateDatosBasicos($event)">
                             </datos-basicos-auditoria-externa>
                         </div>
                     </div>
@@ -96,5 +97,21 @@ export class DetalleAuditoriaExternaComponent implements OnInit {
 
     showWaitDialog(header: string, body?: string) {
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
+    }
+
+    updateDatosBasicos(data: AuditoriaExternaModel) {
+        this.showWaitDialog(
+            'Actualizando datos de auditoria, un momento por favor...'
+        );
+        this.detalleAuditoriaExternaService
+            .updateDatosBasicos(this.loadedAuditoria.id, data)
+            .subscribe(response => {
+                this.loadedAuditoria = {
+                    ...this.loadedAuditoria,
+                    ...response
+                };
+                this.dbae.createForm();
+                this.hideWaitDialog();
+            });
     }
 }

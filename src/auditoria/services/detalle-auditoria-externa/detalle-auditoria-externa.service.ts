@@ -52,4 +52,21 @@ export class DetalleAuditoriaExternaService {
             )
             .pipe(catchError(error => throwError(error)));
     }
+
+    updateDatosBasicos(
+        id: number,
+        data: AuditoriaExternaModel
+    ): Observable<AuditoriaExternaModel> {
+        const aux: AuditoriaExternaModel = this.auditoriaExternaService.transformRequest(
+            data
+        );
+        return this.http
+            .post<AuditoriaExternaModel>(
+                `${
+                    environment.apiUrl
+                }/auditoria/externa/detalle/update-datos-basicos/${id}`,
+                aux
+            )
+            .pipe(catchError(error => throwError(error)));
+    }
 }
