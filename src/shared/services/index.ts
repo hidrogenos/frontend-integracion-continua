@@ -107,6 +107,6 @@ export const services: any[] = [
     UsuarioDestrezaService,
     UsuarioDestrezaDocumentoService,
     UsuarioDocumentoService,
-    UsuarioService
-    PlanoService,
+    UsuarioService,
+    PlanoService
 ];
