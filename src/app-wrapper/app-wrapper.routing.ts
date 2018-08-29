@@ -32,6 +32,10 @@ export const ROUTES: Routes = [
                     './../administracion/administracion.module#AdministracionModule'
             },
             {
+                path: 'auditoria',
+                loadChildren: './../auditoria/auditoria.module#AuditoriaModule'
+            },
+            {
                 path: 'calidad',
                 loadChildren: './../calidad/calidad.module#CalidadModule'
             },
