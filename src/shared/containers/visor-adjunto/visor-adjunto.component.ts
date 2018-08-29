@@ -10,7 +10,7 @@ import { StoreModel } from '../../models/store.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from './../../../app/store';
 import * as fromShared from './../../../shared/store';
-import * as fromAuth from './../../../auth/store'
+import * as fromAuth from './../../../auth/store';
 import { take, switchMap, map, last } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
@@ -18,9 +18,9 @@ import {
     HasPermisionService,
     AdjuntoService,
     DocumentoAdjuntoService,
-    DocumentoDivulgacionRegistroService
-    ProveedorFacturaService
-    UsuarioDestrezaDocumentoService,
+    DocumentoDivulgacionRegistroService,
+    ProveedorFacturaService,
+    UsuarioDestrezaDocumentoService
 } from '../../services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PdfViewerComponent } from './../../components/pdf-viewer/pdf-viewer.component';
@@ -53,8 +53,8 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private store: Store<StoreModel>,
         private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
         private documentoAdjuntoService: DocumentoAdjuntoService,
-        private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
-    ) { }
+        private documentoDivulgacionService: DocumentoDivulgacionRegistroService
+    ) {}
 
     ngAfterContentInit() {
         this.showWaitDialog('Consultado adjunto, un momento por favor...');
@@ -110,20 +110,29 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         }
     }
 
-    getFacturaProveedorDocumento(idDocumento){
-        this.proveedorFacturaService.getProveedorFactura(idDocumento)
+    getFacturaProveedorDocumento(idDocumento) {
+        this.proveedorFacturaService
+            .getProveedorFactura(idDocumento)
             .subscribe(response => {
-                if(response.extension == 'pdf'){
-                    this.hasPermisionService.hasPermision(environment.tipos_documento.factura_proveedor_documento.permiso_impresion)
+                if (response.extension == 'pdf') {
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento
+                                .factura_proveedor_documento.permiso_impresion
+                        )
                         .subscribe(permisoImpresion => {
-                            this.showPdf(response.path, permisoImpresion)
-                        })
-                } else if(environment.extensiones_imagen.findIndex(e => e == response.extension) != -1 ){
+                            this.showPdf(response.path, permisoImpresion);
+                        });
+                } else if (
+                    environment.extensiones_imagen.findIndex(
+                        e => e == response.extension
+                    ) != -1
+                ) {
                     this.showImage(response.path);
-                } else { 
+                } else {
                     this.downloadFile(response.path, response.titulo);
                 }
-            })
+            });
     }
 
     getManualCalidad(idDocumento: number) {
@@ -220,11 +229,11 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             const url = window.URL.createObjectURL(blob);
             const URL = permisoImpresion
                 ? this.sanitizer.bypassSecurityTrustResourceUrl(
-                    `${url}#toolbar=1&navpanes=1`
-                )
+                      `${url}#toolbar=1&navpanes=1`
+                  )
                 : this.sanitizer.bypassSecurityTrustResourceUrl(
-                    `${url}#toolbar=0&navpanes=1`
-                );
+                      `${url}#toolbar=0&navpanes=1`
+                  );
 
             let componentFactory = this.resolver.resolveComponentFactory(
                 PdfViewerComponent
@@ -253,8 +262,8 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 switchMap(documento =>
                     this.hasPermisionService
                         .hasPermision(
-                            environment.tipos_documento
-                                .documento_adjunto_doc.permiso_impresion
+                            environment.tipos_documento.documento_adjunto_doc
+                                .permiso_impresion
                         )
                         .pipe(
                             map(permisoImpresion => {
@@ -286,7 +295,6 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 }
             });
     }
-
 
     getDocumentoAdjuntoFlujoDoc(idDocumento: number) {
         this.documentoDivulgacionService
