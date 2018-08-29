@@ -89,7 +89,7 @@ import * as fromRoot from './../../../app/store';
                                              </button>
                                             <button pButton 
                                                 *ngIf="hasPermision(204) | async"
-                                                type="button" 
+                                                type="button"
                                                 icon="pi pi-trash" 
                                                 (click)="deleteProveedor(proveedor)"
                                                 class="ui-button-danger">

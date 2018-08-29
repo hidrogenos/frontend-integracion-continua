@@ -26,6 +26,10 @@ export const environment = {
         factura_proveedor_documento: {
             id: 3,
             permiso_impresion: 203
+        },
+        plano_documento: {
+            id: 6,
+            permiso_impresion: 903
         }
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg']

@@ -125,6 +125,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Doucumentos',
                 icon: 'fa fa-fw fa-home',
+                routerLink: ['/'],
                 items: [
                     {
                         label: 'Capacitaciones',
@@ -156,7 +157,8 @@ export class AppMenuComponent implements OnInit {
                     },
                     {
                         label: 'Planos',
-                        icon: 'fa fa-fw fa-tag'
+                        icon: 'fa fa-fw fa-tag',
+                        routerLink: ['/planos'],
                     },
                     {
                         label: 'Procedimientos',
