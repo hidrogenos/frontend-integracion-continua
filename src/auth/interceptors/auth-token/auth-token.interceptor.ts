@@ -11,6 +11,7 @@ import { Observable, throwError } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 
+import * as fromShared from './../../../shared/store';
 import * as fromAuthStore from './../../../auth/store';
 import { catchError } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
@@ -19,6 +20,7 @@ import { MessageService } from 'primeng/api';
 export class AuthTokenInterceptor implements HttpInterceptor {
     constructor(
         private authStore: Store<fromAuthStore.AuthState>,
+        private store: Store<fromShared.SharedState>,
         private messageService: MessageService
     ) { }
 
@@ -33,13 +35,24 @@ export class AuthTokenInterceptor implements HttpInterceptor {
         });
         return next.handle(modified).pipe(
             catchError(err => {
-                if (err instanceof HttpErrorResponse && err.status !== 401) {
-                    this.messageService.add({ severity: 'error', summary: err.status.toString(), detail: err.statusText });
-                } else if (err.status !== 401) {
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Contacte con el administrador' });
-                }
+                this.handleError(err);
                 return throwError(err);
             })
         );
+    }
+
+    handleError(err) {
+        this.store.dispatch(new fromShared.HideWaitDialog());
+        if (err instanceof HttpErrorResponse && err.status !== 401) {
+            let message;
+            if (err.error.message !== "") {
+                message = err.error.message;
+            } else {
+                message = err.message;
+            }
+            this.messageService.add({ severity: 'error', summary: err.status.toString(), detail: message });
+        } else if (err.status !== 401) {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Contacte con el administrador' });
+        }
     }
 }

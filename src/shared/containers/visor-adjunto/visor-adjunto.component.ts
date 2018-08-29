@@ -17,8 +17,10 @@ import {
     CalidadService,
     HasPermisionService,
     AdjuntoService,
-    UsuarioDestrezaDocumentoService,
+    DocumentoAdjuntoService,
+    DocumentoDivulgacionRegistroService
     ProveedorFacturaService
+    UsuarioDestrezaDocumentoService,
 } from '../../services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PdfViewerComponent } from './../../components/pdf-viewer/pdf-viewer.component';
@@ -49,8 +51,10 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private proveedorFacturaService: ProveedorFacturaService,
         private sanitizer: DomSanitizer,
         private store: Store<StoreModel>,
-        private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService
-    ) {}
+        private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
+        private documentoAdjuntoService: DocumentoAdjuntoService,
+        private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
+    ) { }
 
     ngAfterContentInit() {
         this.showWaitDialog('Consultado adjunto, un momento por favor...');
@@ -91,6 +95,13 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             case environment.tipos_documento.usuario_destreza_documento.id:
                 this.getUsuarioDestrezaDocumento(idDocumento);
                 break;
+            case environment.tipos_documento.documento_adjunto_doc.id:
+                this.getDocumentoAdjuntoDoc(idDocumento);
+                break;
+            case environment.tipos_documento.documento_adjunto_flujo_doc.id:
+                this.getDocumentoAdjuntoFlujoDoc(idDocumento);
+                break;
+
             case environment.tipos_documento.factura_proveedor_documento.id:
                 this.getFacturaProveedorDocumento(idDocumento);
                 break;
@@ -209,11 +220,11 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             const url = window.URL.createObjectURL(blob);
             const URL = permisoImpresion
                 ? this.sanitizer.bypassSecurityTrustResourceUrl(
-                      `${url}#toolbar=1&navpanes=1`
-                  )
+                    `${url}#toolbar=1&navpanes=1`
+                )
                 : this.sanitizer.bypassSecurityTrustResourceUrl(
-                      `${url}#toolbar=0&navpanes=1`
-                  );
+                    `${url}#toolbar=0&navpanes=1`
+                );
 
             let componentFactory = this.resolver.resolveComponentFactory(
                 PdfViewerComponent
@@ -233,5 +244,88 @@ export class VisorAdjuntoComponent implements AfterContentInit {
 
     showWaitDialog(header: string, body?: string) {
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
+    }
+
+    getDocumentoAdjuntoDoc(idDocumento: number) {
+        this.documentoAdjuntoService
+            .getDocumentoAdjunto(idDocumento)
+            .pipe(
+                switchMap(documento =>
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento
+                                .documento_adjunto_doc.permiso_impresion
+                        )
+                        .pipe(
+                            map(permisoImpresion => {
+                                return {
+                                    documento,
+                                    permisoImpresion
+                                };
+                            })
+                        )
+                )
+            )
+            .subscribe(response => {
+                if (response.documento.extension == 'pdf') {
+                    this.showPdf(
+                        response.documento.path,
+                        response.permisoImpresion
+                    );
+                } else if (
+                    environment.extensiones_imagen.findIndex(
+                        ext => ext == response.documento.extension
+                    ) != -1
+                ) {
+                    this.showImage(response.documento.path);
+                } else {
+                    this.downloadFile(
+                        response.documento.path,
+                        response.documento.titulo
+                    );
+                }
+            });
+    }
+
+
+    getDocumentoAdjuntoFlujoDoc(idDocumento: number) {
+        this.documentoDivulgacionService
+            .getDocumentoDivulgacionRegistro(idDocumento)
+            .pipe(
+                switchMap(documento =>
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento
+                                .documento_adjunto_flujo_doc.permiso_impresion
+                        )
+                        .pipe(
+                            map(permisoImpresion => {
+                                return {
+                                    documento,
+                                    permisoImpresion
+                                };
+                            })
+                        )
+                )
+            )
+            .subscribe(response => {
+                if (response.documento.extension == 'pdf') {
+                    this.showPdf(
+                        response.documento.path,
+                        response.permisoImpresion
+                    );
+                } else if (
+                    environment.extensiones_imagen.findIndex(
+                        ext => ext == response.documento.extension
+                    ) != -1
+                ) {
+                    this.showImage(response.documento.path);
+                } else {
+                    this.downloadFile(
+                        response.documento.path,
+                        response.documento.titulo
+                    );
+                }
+            });
     }
 }

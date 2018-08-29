@@ -9,8 +9,31 @@ export * from './calidad/calidad.service';
 import { AccionCorrectivaService } from './accioncorrectiva/accioncorrectiva.service';
 export * from './accioncorrectiva/accioncorrectiva.service';
 
+import { DocumentoService } from './documento/documento.service';
+export * from './documento/documento.service';
+
 import { AccionCorrectivaTareaAdjuntoService } from './accioncorrectiva-tarea-adjunto/accioncorrectiva-tarea-adjunto.service';
 export * from './accioncorrectiva-tarea-adjunto/accioncorrectiva-tarea-adjunto.service';
+import { DocumentoAdjuntoService } from './documento-adjunto/documento-adjunto.service';
+export * from './documento-adjunto/documento-adjunto.service';
+
+import { DocumentoAsociadoService } from './documento-asociado/documento-asociado.service';
+export * from './documento-asociado/documento-asociado.service';
+
+import { DocumentoDivulgacionRegistroService } from './documento-divulgacion-registro/documento-divulgacion-registro.service';
+export * from './documento-divulgacion-registro/documento-divulgacion-registro.service';
+
+import { DocumentoEstadoService } from './documento-estado/documento-estado.service';
+export * from './documento-estado/documento-estado.service';
+
+import { DocumentoProcesoService } from './documento-proceso/documento-proceso.service';
+export * from './documento-proceso/documento-proceso.service';
+
+import { DocumentoTipoService } from './documento-tipo/documento-tipo.service';
+export * from './documento-tipo/documento-tipo.service';
+
+import { HasPermisionService } from './utils/auth-has-permision/auth-has-permision.service';
+export * from './utils/auth-has-permision/auth-has-permision.service';
 
 import { AccionCorrectivaTareaService } from './accioncorrectiva-tarea/accioncorrectiva-tarea.service';
 export * from './accioncorrectiva-tarea/accioncorrectiva-tarea.service';
@@ -23,9 +46,6 @@ export * from './ciudad/ciudad.service';
 
 import { EvaluacionProveedorService } from './evaluacion-proveedor/evaluacion-proveedor.service';
 export * from './evaluacion-proveedor/evaluacion-proveedor.service';
-
-import { HasPermisionService } from './utils/auth-has-permision/auth-has-permision.service';
-export * from './utils/auth-has-permision/auth-has-permision.service';
 
 import { PdfViewerService } from './pdf-viewer/pdf-viewer.service';
 export * from './pdf-viewer/pdf-viewer.service';
@@ -66,6 +86,13 @@ export const services: any[] = [
     BancoService,
     CalidadService,
     CiudadService,
+    DocumentoService,
+    DocumentoAdjuntoService,
+    DocumentoAsociadoService,
+    DocumentoDivulgacionRegistroService,
+    DocumentoEstadoService,
+    DocumentoProcesoService,
+    DocumentoTipoService,
     EvaluacionProveedorService,
     HasPermisionService,
     PdfViewerService,

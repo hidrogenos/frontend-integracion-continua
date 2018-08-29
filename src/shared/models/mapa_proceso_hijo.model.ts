@@ -7,4 +7,5 @@ export interface MapaProcesoHijoModel {
     flecha: string;
     descripcion: string;
     activo: boolean;
+    pivot?: any;
 }

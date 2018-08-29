@@ -28,9 +28,10 @@ const primeNgModules = [
 import * as fromServices from "./services";
 
 // store
-import { StoreModule } from "@ngrx/store";
-import { EffectsModule } from "@ngrx/effects";
-import { reducers } from "./store";
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { reducers } from './store';
+import { effects } from './store';
 
 // ng modules
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -40,7 +41,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
         CommonModule,
         ReactiveFormsModule,
         ...primeNgModules,
-        StoreModule.forFeature("shared", reducers)
+        StoreModule.forFeature('shared', reducers),
+        EffectsModule.forFeature(effects),
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
     providers: [...fromServices.services],
