@@ -19,7 +19,7 @@
     <div class="ui-g-12">
         <div class="ui-g">
             <div class="ui-g-12">
-                <p-table #tableListaProcesos [columns]="cols" [value]="data" paginator="true" [rows]="rows" [loading]="loadingProcesos">
+                <p-table [columns]="cols" [value]="data" paginator="true" [rows]="rows" [loading]="loadingProcesos">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th *ngFor="let col of columns; let i = index" [ngStyle]="(i==0)?{'width':'85%'}:{'width':'15%'}">

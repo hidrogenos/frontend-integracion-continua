@@ -38,6 +38,10 @@ export class AccionesTareasListaComponent {
 
     tareaSelected: AccionCorrectivaTareaModel;
 
+    //permisos
+    @Input()
+    permisoRealizarTarea: boolean;
+
     // tareas de la datatable
     @Input()
     data: AccionCorrectivaTareaModel[];
@@ -159,7 +163,8 @@ export class AccionesTareasListaComponent {
             !accionCorrectivaTarea.realizada &&
             this.idEstadoAccionCorrectiva == 5 &&
             (usuarioAux ||
-                accionCorrectivaTarea.id_usuario == this.usuarioActual.id)
+                accionCorrectivaTarea.id_usuario == this.usuarioActual.id ||
+                this.permisoRealizarTarea)
         ) {
             return true;
         } else {

@@ -59,10 +59,6 @@ export class RealizarTareaDialogComponent implements OnInit {
         this.tarea = data.tarea;
     }
 
-    imprimir() {
-        console.log("llego");
-    }
-
     bloquearCampos(bloqueo: boolean) {
         if (bloqueo) {
             this.form.disable();

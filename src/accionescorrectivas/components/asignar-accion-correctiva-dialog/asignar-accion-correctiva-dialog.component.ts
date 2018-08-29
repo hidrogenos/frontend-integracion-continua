@@ -40,13 +40,13 @@ export class AsignarAccionCorrectivaComponent implements OnInit {
     }
 
     onHide() {
-        this.display = false;
+        this.form.reset();
     }
 
     asignarAccionCorrectiva() {
         const accionCorrectivaActual: AccionCorrectivaModel = {
             ...this.accionCorrectivaActual,
-            id_responsable: this.form.value.responsable.jefe.id
+            id_responsable: this.form.value.responsable.proceso.jefe.id
         };
         this.onAsignarAccionCorrectiva.emit(accionCorrectivaActual);
     }

@@ -28,10 +28,12 @@ export const environment = {
             permiso_impresion: 203
         },
         accion_correctiva_adjunto: {
-            id: 4
+            id: 4,
+            permiso_impresion: 302
         },
         accion_correctiva_tarea_adjunto: {
-            id: 5
+            id: 5,
+            permiso_impresion: 303
         }
     },
     extensiones_imagen: ["jpg", "gif", "png", "svg", "bmp", "jpeg"]

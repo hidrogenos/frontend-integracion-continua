@@ -114,14 +114,14 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             .getAccionCorrectivaAdjunto(idAdjunto)
             .subscribe(response => {
                 if (response.extension == "pdf") {
-                    // this.hasPermisionService
-                    //     .hasPermision(
-                    //         environment.tipos_documento
-                    //             .factura_proveedor_documento.permiso_impresion
-                    //     )
-                    //     .subscribe(permisoImpresion => {
-                    this.showPdf(response.path, true);
-                    // });
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento
+                                .accion_correctiva_adjunto.permiso_impresion
+                        )
+                        .subscribe(permisoImpresion => {
+                            this.showPdf(response.path, permisoImpresion);
+                        });
                 } else if (
                     environment.extensiones_imagen.findIndex(
                         e => e == response.extension
@@ -139,14 +139,15 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             .getAccionCorrectivaTareaAdjunto(idAdjunto)
             .subscribe(response => {
                 if (response.extension == "pdf") {
-                    // this.hasPermisionService
-                    //     .hasPermision(
-                    //         environment.tipos_documento
-                    //             .factura_proveedor_documento.permiso_impresion
-                    //     )
-                    //     .subscribe(permisoImpresion => {
-                    this.showPdf(response.path, true);
-                    // });
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento
+                                .accion_correctiva_tarea_adjunto
+                                .permiso_impresion
+                        )
+                        .subscribe(permisoImpresion => {
+                            this.showPdf(response.path, permisoImpresion);
+                        });
                 } else if (
                     environment.extensiones_imagen.findIndex(
                         e => e == response.extension

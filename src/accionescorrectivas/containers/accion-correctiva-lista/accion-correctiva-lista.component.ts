@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
 import { AccionesCorrectivasService } from "../../services";
-import { AccionCorrectivaService } from "../../../shared/services";
+import {
+    AccionCorrectivaService,
+    HasPermisionService
+} from "../../../shared/services";
 
 //store
 import { Store } from "@ngrx/store";
@@ -19,6 +22,8 @@ import { AccionCorrectivaEstadoModel } from "../../../shared/models/accion-corre
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
 import { take } from "rxjs/operators";
 import { MessageService } from "primeng/api";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
+import { PermisosService } from "../../../administracion/services";
 
 @Component({
     selector: "accion-correctiva-lista",
@@ -32,7 +37,7 @@ import { MessageService } from "primeng/api";
                             </acciones-estados-lista> 
                              <div class="ui-g">
                                 <div class="ui-g-12 text-aling-right">
-                                    <button pButton type="button" (click)="cacd.display=true" label="Crear acción correctiva" class="ui-button-success">
+                                    <button *ngIf="(hasPermission(300) | async)" pButton type="button" (click)="cacd.display=true" label="Crear acción correctiva" class="ui-button-success">
                                     </button>  
                                 </div>               
                             </div> 
@@ -79,6 +84,8 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     private estados: AccionCorrectivaEstadoModel[];
 
+    private usuarioActual: UsuarioModel;
+
     msgs = [];
 
     //viewChild
@@ -89,6 +96,7 @@ export class AccionCorrectivaListaComponent implements OnInit {
         private accionesCorrectivasService: AccionesCorrectivasService,
         private resourceAccionCorrectivaService: AccionCorrectivaService,
         private store: Store<StoreModel>,
+        private hasPermisosService: HasPermisionService,
         private messageService: MessageService
     ) {
         this.estaCargando = true;
@@ -127,6 +135,10 @@ export class AccionCorrectivaListaComponent implements OnInit {
             this.procesos = procesos;
             this.estados = estados;
             this.hideWaitDialog();
+        });
+
+        this.store.select(fromAuth.getUser).subscribe(user => {
+            this.usuarioActual = user;
         });
     }
 
@@ -207,11 +219,20 @@ export class AccionCorrectivaListaComponent implements OnInit {
     }
 
     selectAccionCorrectiva(data: AccionCorrectivaModel) {
+        // if (this.usuarioActual.es_jefe) {
         this.store.dispatch(
             new fromRootStore.Go({
                 path: [`/acciones/acciones-correctivas/${data.id}`]
             })
         );
+        // } else {
+        //     this.messageService.add({
+        //         severity: "error",
+        //         summary: "Acción denegada",
+        //         detail:
+        //             "Usted no cuenta con los privilegios suficientes para acceder a esta sección"
+        //     });
+        // }
     }
 
     deleteAccionCorrectiva(data: AccionCorrectivaModel) {
@@ -243,5 +264,9 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     showWaitDialog(header: string, body?: string) {
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
+    }
+
+    hasPermission(id: number) {
+        return this.hasPermisosService.hasPermision(id);
     }
 }
