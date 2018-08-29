@@ -54,6 +54,10 @@ export const ROUTES: Routes = [
                 loadChildren: './../proveedor/proveedor.module#ProveedorModule'
             },
             {
+                path: 'planos',
+                loadChildren: './../plano/plano.module#PlanoModule'
+            },
+            {
                 path:
                     'visor-adjunto/:id_tipo_documento/:id_documento/:nombre_doc',
                 component: fromSharedContainers.VisorAdjuntoComponent

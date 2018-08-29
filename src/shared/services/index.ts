@@ -56,6 +56,9 @@ export * from './proveedor-factura/proveedor-factura.service';
 import { ProveedorService } from './proveedor/proveedor.service';
 export * from './proveedor/proveedor.service';
 
+import { PlanoService } from './plano/plano.service';
+export * from './plano/plano.service';
+
 import { RegimenService } from './regimen/regimen.service';
 export * from './regimen/regimen.service';
 
@@ -104,5 +107,6 @@ export const services: any[] = [
     UsuarioDestrezaService,
     UsuarioDestrezaDocumentoService,
     UsuarioDocumentoService,
-    UsuarioService
+    UsuarioService,
+    PlanoService
 ];

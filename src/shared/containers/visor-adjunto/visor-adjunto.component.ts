@@ -20,11 +20,15 @@ import {
     DocumentoAdjuntoService,
     DocumentoDivulgacionRegistroService,
     ProveedorFacturaService,
-    UsuarioDestrezaDocumentoService
+    UsuarioDestrezaDocumentoService,
+    ProveedorFacturaService,
+    PlanoService
 } from '../../services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PdfViewerComponent } from './../../components/pdf-viewer/pdf-viewer.component';
 import { ImageViewerComponentComponent } from '../../components';
+
+
 
 @Component({
     selector: 'visor-adjunto',
@@ -49,6 +53,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private resolver: ComponentFactoryResolver,
         private hasPermisionService: HasPermisionService,
         private proveedorFacturaService: ProveedorFacturaService,
+        private planoService: PlanoService,
         private sanitizer: DomSanitizer,
         private store: Store<StoreModel>,
         private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
@@ -105,6 +110,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             case environment.tipos_documento.factura_proveedor_documento.id:
                 this.getFacturaProveedorDocumento(idDocumento);
                 break;
+            case environment.tipos_documento.plano_documento.id:
+                this.getPlanoDocumento(idDocumento);
+                break;
             default:
                 break;
         }
@@ -133,6 +141,22 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                     this.downloadFile(response.path, response.titulo);
                 }
             });
+    }
+
+    getPlanoDocumento(idDocumento){
+        this.planoService.getPlano(idDocumento)
+            .subscribe(response => {
+                if(response.extension == 'pdf'){
+                    this.hasPermisionService.hasPermision(environment.tipos_documento.plano_documento.permiso_impresion)
+                        .subscribe(permisoImpresion => {
+                            this.showPdf(response.path, permisoImpresion)
+                        })
+                } else if(environment.extensiones_imagen.findIndex(e => e == response.extension) != -1 ){
+                    this.showImage(response.path);
+                } else { 
+                    this.downloadFile(response.path, response.nombre);
+                }
+            })
     }
 
     getManualCalidad(idDocumento: number) {
