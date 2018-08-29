@@ -35,6 +35,11 @@ export class CreateDocumentoAccionCorrectivaComponent {
         AccionCorrectivaAdjuntoModel
     >();
 
+    @Output()
+    onConsultarAccionCorrectivaAdjunto = new EventEmitter<
+        AccionCorrectivaAdjuntoModel
+    >();
+
     //properties
     @Input()
     documentos: AccionCorrectivaAdjuntoModel[];

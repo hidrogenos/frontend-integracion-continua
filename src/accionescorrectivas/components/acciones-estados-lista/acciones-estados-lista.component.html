@@ -2,12 +2,11 @@
     <div class="tooltip">
         <button pButton class="ui-button tooltip" label="Ver estados"></button>
         <div class="ui-g-4 tooltip-button">
-                <div *ngFor="let estado of estados">
-                    <button pButton class="ui-button-rounded" 
-                    [ngStyle]="{'background-color': estado.color ,'border-radius': '100%','margin-left': '20px'}">                
-                    </button>
-                    <p> &nbsp; {{estado.nombre}} </p>
-                </div>
+            <div *ngFor="let estado of estados">
+                <button pButton class="ui-button-rounded" [ngStyle]="{'background-color': estado.color ,'border-radius': '100%','margin-left': '20px','width':'25px'}">
+                </button>
+                <p> &nbsp; {{estado.nombre}} </p>
             </div>
+        </div>
     </div>
 </div>

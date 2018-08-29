@@ -16,6 +16,8 @@ import {
     DropdownModule,
     ButtonModule,
     InputTextModule,
+    MessageService,
+    GrowlModule,
     FileUploadModule,
     StepsModule,
     ToolbarModule,
@@ -25,17 +27,9 @@ import {
 import { RouterModule, Route } from "@angular/router";
 import { TableModule } from "primeng/table";
 import { SharedModule } from "../shared/shared.module";
+import { AccionesPreventivasRoutes } from "./accionespreventivas.routing";
 
-const ROUTES: Route[] = [
-    {
-        path: "acciones-correctivas",
-        component: fromContainers.AccionCorrectivaListaComponent
-    },
-    {
-        path: "acciones-correctivas/:id",
-        component: fromContainers.AccionCorrectivaPanel
-    }
-];
+const ROUTES: Route[] = [];
 
 export const ngModules: any[] = [
     CommonModule,
@@ -51,6 +45,7 @@ export const primeNgModules: any[] = [
     MultiSelectModule,
     DropdownModule,
     InputTextModule,
+    GrowlModule,
     FileUploadModule,
     StepsModule,
     ToolbarModule,
@@ -61,9 +56,14 @@ export const primeNgModules: any[] = [
 export const customModules: any[] = [SharedModule];
 
 @NgModule({
-    imports: [...ngModules, ...primeNgModules, ...customModules],
+    imports: [
+        ...ngModules,
+        ...primeNgModules,
+        ...customModules,
+        AccionesPreventivasRoutes
+    ],
     declarations: [...fromContainers.container, ...fromComponents.container],
-    providers: [...fromServices.container, DatePipe],
+    providers: [...fromServices.container, DatePipe, MessageService],
     exports: [RouterModule]
 })
 export class AccionesCorrectivasModule {}

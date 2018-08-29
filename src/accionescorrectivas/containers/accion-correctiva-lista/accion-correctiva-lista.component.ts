@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
 import { AccionesCorrectivasService } from "../../services";
-import { AccionCorrectivaService } from "../../../shared/services";
+import {
+    AccionCorrectivaService,
+    HasPermisionService
+} from "../../../shared/services";
 
 //store
 import { Store } from "@ngrx/store";
@@ -13,13 +16,14 @@ import { forkJoin } from "rxjs";
 
 //Modelos
 import { AccionImportanciaModel } from "../../../shared/models/accion-importancia.model";
-import { AccionProcesoModel } from "../../../shared/models/accion-proceso.model";
-
 //Child
 import { CreateAccionCorrectivaDialogComponent } from "../../components";
-import { MessageService } from "primeng/primeng";
 import { AccionCorrectivaEstadoModel } from "../../../shared/models/accion-correctiva-estado.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { take } from "rxjs/operators";
+import { MessageService } from "primeng/api";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
+import { PermisosService } from "../../../administracion/services";
 
 @Component({
     selector: "accion-correctiva-lista",
@@ -33,7 +37,7 @@ import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.m
                             </acciones-estados-lista> 
                              <div class="ui-g">
                                 <div class="ui-g-12 text-aling-right">
-                                    <button pButton type="button" (click)="cacd.display=true" label="Crear Acción Correctiva" class="ui-button-success">
+                                    <button *ngIf="(hasPermission(300) | async)" pButton type="button" (click)="cacd.display=true" label="Crear acción correctiva" class="ui-button-success">
                                     </button>  
                                 </div>               
                             </div> 
@@ -80,6 +84,8 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     private estados: AccionCorrectivaEstadoModel[];
 
+    private usuarioActual: UsuarioModel;
+
     msgs = [];
 
     //viewChild
@@ -90,6 +96,7 @@ export class AccionCorrectivaListaComponent implements OnInit {
         private accionesCorrectivasService: AccionesCorrectivasService,
         private resourceAccionCorrectivaService: AccionCorrectivaService,
         private store: Store<StoreModel>,
+        private hasPermisosService: HasPermisionService,
         private messageService: MessageService
     ) {
         this.estaCargando = true;
@@ -128,6 +135,10 @@ export class AccionCorrectivaListaComponent implements OnInit {
             this.procesos = procesos;
             this.estados = estados;
             this.hideWaitDialog();
+        });
+
+        this.store.select(fromAuth.getUser).subscribe(user => {
+            this.usuarioActual = user;
         });
     }
 
@@ -173,44 +184,55 @@ export class AccionCorrectivaListaComponent implements OnInit {
             "Acción en proceso",
             "Registrando nueva Acción Correctiva, un momento por favor..."
         );
-        this.store.select(fromAuth.getUser).subscribe(usuario => {
-            event.id_usuario_crea = usuario.id;
-            this.resourceAccionCorrectivaService
-                .createAccionCorrectiva(event)
-                .subscribe(
-                    response => {
-                        this.accionesCorrectivas = [
-                            ...this.accionesCorrectivas,
-                            response
-                        ];
-                        this.hideWaitDialog();
-                        this.onCreateDialog.display = false;
-                        this.msgs.push({
-                            severity: "success",
-                            summary: "Acción exitosa",
-                            detail:
-                                "Enhorabuena!, Se ha creado una Acción correctiva"
-                        });
-                    },
-                    error => {
-                        this.hideWaitDialog();
-                        this.msgs.push({
-                            severity: "danger",
-                            summary: "Acción fallida",
-                            detail:
-                                "No se puede crear una acción con un codigo repetido"
-                        });
-                    }
-                );
-        });
+        this.store
+            .select(fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(usuario => {
+                event.id_usuario_crea = usuario.id;
+                this.resourceAccionCorrectivaService
+                    .createAccionCorrectiva(event)
+                    .subscribe(
+                        response => {
+                            this.accionesCorrectivas = [
+                                ...this.accionesCorrectivas,
+                                response
+                            ];
+                            this.hideWaitDialog();
+                            this.onCreateDialog.display = false;
+                            this.messageService.add({
+                                severity: "success",
+                                summary: "Acción exitosa",
+                                detail: "Acción correctiva creada exitosamente"
+                            });
+                        },
+                        error => {
+                            this.hideWaitDialog();
+                            this.msgs.push({
+                                severity: "danger",
+                                summary: "Acción fallida",
+                                detail:
+                                    "No se puede crear una acción con un codigo repetido"
+                            });
+                        }
+                    );
+            });
     }
 
     selectAccionCorrectiva(data: AccionCorrectivaModel) {
+        // if (this.usuarioActual.es_jefe) {
         this.store.dispatch(
             new fromRootStore.Go({
                 path: [`/acciones/acciones-correctivas/${data.id}`]
             })
         );
+        // } else {
+        //     this.messageService.add({
+        //         severity: "error",
+        //         summary: "Acción denegada",
+        //         detail:
+        //             "Usted no cuenta con los privilegios suficientes para acceder a esta sección"
+        //     });
+        // }
     }
 
     deleteAccionCorrectiva(data: AccionCorrectivaModel) {
@@ -242,5 +264,9 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     showWaitDialog(header: string, body?: string) {
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
+    }
+
+    hasPermission(id: number) {
+        return this.hasPermisosService.hasPermision(id);
     }
 }
