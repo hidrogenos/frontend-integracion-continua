@@ -95,7 +95,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-12 ui-fluid">
-                            <p-editor  [style]="{'height':'100px'}" formControlName="objetivo">
+                            <p-editor  [style]="{'height':'100px'}" formControlName="objetivo" [readonly]="readonlyEditors">
                                 <p-header>
                                     <span class="ql-formats">
                                         Objetivo
@@ -106,7 +106,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-12 ui-fluid">
-                            <p-editor  [style]="{'height':'100px'}" formControlName="alcance">
+                            <p-editor  [style]="{'height':'100px'}" formControlName="alcance" [readonly]="readonlyEditors">
                                 <p-header>
                                     <span class="ql-formats">
                                         Alcance
@@ -117,13 +117,39 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-12 ui-fluid">
-                            <p-editor  [style]="{'height':'100px'}" formControlName="normas">
+                            <p-editor  [style]="{'height':'100px'}" formControlName="normas" [readonly]="readonlyEditors">
                                 <p-header>
                                     <span class="ql-formats">
                                         Normas
                                     </span>
                                 </p-header>
                             </p-editor>
+                        </div>
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-12 text-aling-right" *ngIf="readonlyEditors">
+                            <button pButton 
+                                (click)="toogleEdit()"
+                                type="button" 
+                                label="Editar datos basicos" 
+                                class="ui-button-primary">
+                            </button>
+                        </div>
+                        <div class="ui-g-12 text-aling-right" *ngIf="!readonlyEditors">
+                            <button pButton 
+                                style="margin-right: 10px;"
+                                (click)="toogleEdit()"
+                                type="button" 
+                                label="Descartar cambios" 
+                                class="ui-button-danger">
+                            </button>
+                            <button pButton 
+                                (click)="updateDatosBasicosAuditoria()"
+                                type="button" 
+                                label="Actualizar" 
+                                class="ui-button-success"
+                                [disabled]="!form.valid">
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -138,10 +164,13 @@ export class DatosBasicosAuditoriaExternaComponent implements OnInit {
     //atributos
     form: FormGroup;
     filteredProveedores: ProveedorModel[];
+    readonlyEditors: boolean;
 
     //events
     @Output()
     onSearchProveedor = new EventEmitter<string>();
+    @Output()
+    onUpdateDatosBasicos = new EventEmitter<AuditoriaExternaModel>();
 
     //properties
     @Input()
@@ -177,9 +206,61 @@ export class DatosBasicosAuditoriaExternaComponent implements OnInit {
             alcance: [this.auditoria.alcance, Validators.required],
             normas: [this.auditoria.normas, Validators.required]
         });
+        setTimeout(() => {
+            this.form.disable();
+        }, 1);
+        this.readonlyEditors = true;
+    }
+
+    onChangeAuditorApoyo(event) {
+        if (
+            this.form.value.auditor_principal &&
+            event.value.id == this.form.value.auditor_principal.id
+        ) {
+            this.form.get('auditor_principal').setValue(null);
+        }
+    }
+
+    onChangeAuditorPrincipal(event) {
+        if (
+            this.form.value.auditor_apoyo &&
+            event.value.id == this.form.value.auditor_apoyo.id
+        ) {
+            this.form.get('auditor_apoyo').setValue(null);
+        }
     }
 
     searchProveedor(event) {
         this.onSearchProveedor.emit(event.query);
+    }
+
+    toogleEdit() {
+        if (this.readonlyEditors) {
+            this.form.enable();
+            this.readonlyEditors = false;
+        } else {
+            this.createForm();
+        }
+    }
+
+    updateDatosBasicosAuditoria() {
+        if (this.form.valid) {
+            const auditoria: AuditoriaExternaModel = {
+                activo: true,
+                alcance: this.form.value.alcance,
+                auditado: this.form.value.auditado,
+                id_auditor_apoyo: this.form.value.auditor_apoyo.id,
+                id_auditor_principal: this.form.value.auditor_principal.id,
+                id_estado: this.auditoria.id_estado,
+                fecha: (this.form.value.fecha as Date).valueOf(),
+                id_proveedor: this.form.value.proveedor.id,
+                normas: this.form.value.normas,
+                objetivo: this.form.value.objetivo
+            };
+
+            this.onUpdateDatosBasicos.emit(auditoria);
+
+            console.log(auditoria);
+        }
     }
 }
