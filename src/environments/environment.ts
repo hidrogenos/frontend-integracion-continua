@@ -34,6 +34,10 @@ export const environment = {
         documento_adjunto_flujo_doc: {
             id: 4,
             permiso_impresion: 100
+        },
+        plano_documento: {
+            id: 6,
+            permiso_impresion: 903
         }
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
