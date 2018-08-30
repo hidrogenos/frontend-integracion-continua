@@ -33,6 +33,9 @@ export class RealizarTareaDialogComponent implements OnInit {
     onDeleteDocumento: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
+    onConsultarTareaAdjunto: EventEmitter<any> = new EventEmitter<any>();
+
+    @Output()
     onFinishTarea: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private fb: FormBuilder) {}

@@ -1,21 +1,21 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from "@angular/core";
 import {
     CreatePerfilComponent,
     ListaPermisosComponent,
     EditPerfilComponent
-} from '../../components';
-import { PerfilModel } from '../../../shared/models/perfil.model';
-import { PermisosService } from '../../services';
-import { forkJoin } from 'rxjs';
-import { StoreModel } from '../../../shared/models/store.model';
-import { Store } from '@ngrx/store';
-import * as fromAuth from './../../../auth/store';
-import * as fromShared from './../../../shared/store';
-import { ModuloModel } from '../../../shared/models/modulo.model';
+} from "../../components";
+import { PerfilModel } from "../../../shared/models/perfil.model";
+import { PermisosService } from "../../services";
+import { forkJoin } from "rxjs";
+import { StoreModel } from "../../../shared/models/store.model";
+import { Store } from "@ngrx/store";
+import * as fromAuth from "./../../../auth/store";
+import * as fromShared from "./../../../shared/store";
+import { ModuloModel } from "../../../shared/models/modulo.model";
 
 @Component({
-    selector: 'permisos',
-    styleUrls: ['permisos.component.scss'],
+    selector: "permisos",
+    styleUrls: ["permisos.component.scss"],
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
@@ -70,11 +70,11 @@ export class PermisosComponent implements OnInit {
     selectedPerfil: PerfilModel;
 
     //viewChild
-    @ViewChild('ep')
+    @ViewChild("ep")
     ep: EditPerfilComponent;
-    @ViewChild('cp')
+    @ViewChild("cp")
     cp: CreatePerfilComponent;
-    @ViewChild('lp')
+    @ViewChild("lp")
     lp: ListaPermisosComponent;
 
     constructor(
@@ -87,7 +87,7 @@ export class PermisosComponent implements OnInit {
     }
 
     addPermiso(id_permiso: number) {
-        this.showWaitDialog('Actualizando permiso, un momento por favor...');
+        this.showWaitDialog("Actualizando permiso, un momento por favor...");
         this.permisosService
             .addPermiso({ id_perfil: this.selectedPerfil.id, id_permiso })
             .subscribe(response => {
@@ -100,7 +100,7 @@ export class PermisosComponent implements OnInit {
     }
 
     createPerfil(data: string) {
-        this.showWaitDialog('Creando nuevo perfil, un momento por favor...');
+        this.showWaitDialog("Creando nuevo perfil, un momento por favor...");
         this.store.select(fromAuth.getUser).subscribe(usuario => {
             const perfil: PerfilModel = {
                 nombre: data,
@@ -120,7 +120,7 @@ export class PermisosComponent implements OnInit {
     }
 
     editPerfil(data: { id: number; perfil: string }) {
-        this.showWaitDialog('Actualizando perfil, un momento por favor...');
+        this.showWaitDialog("Actualizando perfil, un momento por favor...");
         this.permisosService
             .editPerfil(data.id, { perfil: data.perfil })
             .subscribe(response => {
@@ -138,10 +138,11 @@ export class PermisosComponent implements OnInit {
 
     loadInitalInfo() {
         this.showWaitDialog(
-            'Consultado información requerida, un momento por favor...'
+            "Consultado información requerida, un momento por favor..."
         );
         forkJoin([this.getPerfiles(), this.getModulos()]).subscribe(
             ([perfiles, modulos]) => {
+                console.log(modulos);
                 this.perfiles = perfiles;
                 this.modulos = modulos;
 
@@ -166,7 +167,7 @@ export class PermisosComponent implements OnInit {
     }
 
     removePermiso(id_permiso: number) {
-        this.showWaitDialog('Actualizando permiso, un momento por favor...');
+        this.showWaitDialog("Actualizando permiso, un momento por favor...");
         this.permisosService
             .removePermiso({ id_perfil: this.selectedPerfil.id, id_permiso })
             .subscribe(response => {

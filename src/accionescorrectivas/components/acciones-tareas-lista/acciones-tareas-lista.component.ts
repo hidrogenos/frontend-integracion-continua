@@ -22,8 +22,12 @@ export class AccionesTareasListaComponent {
     dateFormatAngular = environment.dateFormatAngular;
     disabled: boolean;
 
+    // información para manejar las funcionalidades que tiene una persona en el sistema
     @Input()
     idEstadoAccionCorrectiva: number;
+
+    @Input()
+    usuarioActual: UsuarioModel;
 
     //información para las listas seleccionables
     @Input()
@@ -33,6 +37,10 @@ export class AccionesTareasListaComponent {
     usuariosResponsables: UsuarioModel[];
 
     tareaSelected: AccionCorrectivaTareaModel;
+
+    //permisos
+    @Input()
+    permisoRealizarTarea: boolean;
 
     // tareas de la datatable
     @Input()
@@ -70,6 +78,11 @@ export class AccionesTareasListaComponent {
         idTarea: number;
         data: AccionCorrectivaTareaAdjuntoModel;
     }>();
+
+    @Output()
+    onConsultarTareaAdjunto: EventEmitter<
+        AccionCorrectivaTareaAdjuntoModel
+    > = new EventEmitter<AccionCorrectivaTareaAdjuntoModel>();
 
     @Output()
     onFinishTarea: EventEmitter<AccionCorrectivaTareaModel> = new EventEmitter<
@@ -140,5 +153,22 @@ export class AccionesTareasListaComponent {
 
     disableComponent() {
         this.disabled = true;
+    }
+
+    usuarioEsResponsable(accionCorrectivaTarea: AccionCorrectivaTareaModel) {
+        let usuarioAux = accionCorrectivaTarea.responsables.find(
+            tareaActual => tareaActual.id_responsable == this.usuarioActual.id
+        );
+        if (
+            !accionCorrectivaTarea.realizada &&
+            this.idEstadoAccionCorrectiva == 5 &&
+            (usuarioAux ||
+                accionCorrectivaTarea.id_usuario == this.usuarioActual.id ||
+                this.permisoRealizarTarea)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

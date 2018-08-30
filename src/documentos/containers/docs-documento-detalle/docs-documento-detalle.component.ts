@@ -37,7 +37,6 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                         [filteredRespAprobacion]="filteredRespAprobacion" (onFilterRespAprobacion)="onFilterRespAprobacion($event)"
                         [filteredRespRevision]="filteredRespRevision" (onFilterRespRevision)="onFilterRespRevision($event)"
                         [filteredRespElaboracion]="filteredRespElaboracion" (onFilterRespElaboracion)="onFilterRespElaboracion($event)"
-                        [filteredProcesos]="filteredProcesos" (onFilterProcesos)="onFilterProcesos($event)"
                         (onUpdateDoc)="onSubmitUpdateDoc($event)"
                         [puedeEditar]="permisoPuedeEditar"
                         [puedeReasignar]="permisoPuedeReasignar"

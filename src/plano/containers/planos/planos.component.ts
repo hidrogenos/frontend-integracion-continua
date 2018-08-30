@@ -168,10 +168,7 @@ export class PlanosComponent implements OnInit{
         this.documentPlanoService
             .deletePlano(event.id)
             .subscribe(response => {
-                this.user.planos = this.planos.filter(
-                    element => element.id != event.id,
-                    this.dt.reset()
-                );
+                
                 this.hideWaitDialog();
             });
     }

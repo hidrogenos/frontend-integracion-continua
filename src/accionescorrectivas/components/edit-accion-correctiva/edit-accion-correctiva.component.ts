@@ -1,13 +1,13 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AccionImportanciaModel } from "../../../shared/models/accion-importancia.model";
-import { environment } from "../../../environments/environment";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { AccionCorrectivaModel } from '../../../shared/models/accion-correctiva.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AccionImportanciaModel } from '../../../shared/models/accion-importancia.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: "edit-accion-correctiva",
-    templateUrl: "edit-accion-correctiva.component.html",
-    styleUrls: ["edit-accion-correctiva.component.scss"]
+    selector: 'edit-accion-correctiva',
+    templateUrl: 'edit-accion-correctiva.component.html',
+    styleUrls: ['edit-accion-correctiva.component.scss']
 })
 export class EditAccionCorrectivaComponent {
     //atributos
@@ -17,10 +17,10 @@ export class EditAccionCorrectivaComponent {
 
     //atributos de entrada
     @Input()
-    private accionCorrectiva: AccionCorrectivaModel;
+    accionCorrectiva: AccionCorrectivaModel;
 
     @Input()
-    private importancias: AccionImportanciaModel[];
+    importancias: AccionImportanciaModel[];
 
     //eventos
     @Output()
@@ -39,10 +39,10 @@ export class EditAccionCorrectivaComponent {
 
     createForm() {
         this.form = this.fb.group({
-            codigo: ["", Validators.required],
-            titulo: ["", Validators.required],
+            codigo: ['', Validators.required],
+            titulo: ['', Validators.required],
             importancia: [null, Validators.required],
-            descripcion: ["", Validators.required],
+            descripcion: ['', Validators.required],
             fecha_compromiso: [null, Validators.required]
         });
     }

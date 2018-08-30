@@ -16,8 +16,6 @@ import {
     DropdownModule,
     ButtonModule,
     InputTextModule,
-    MessageService,
-    GrowlModule,
     FileUploadModule,
     StepsModule,
     ToolbarModule,
@@ -53,7 +51,6 @@ export const primeNgModules: any[] = [
     MultiSelectModule,
     DropdownModule,
     InputTextModule,
-    GrowlModule,
     FileUploadModule,
     StepsModule,
     ToolbarModule,
@@ -66,7 +63,7 @@ export const customModules: any[] = [SharedModule];
 @NgModule({
     imports: [...ngModules, ...primeNgModules, ...customModules],
     declarations: [...fromContainers.container, ...fromComponents.container],
-    providers: [...fromServices.container, DatePipe, MessageService],
+    providers: [...fromServices.container, DatePipe],
     exports: [RouterModule]
 })
 export class AccionesCorrectivasModule {}

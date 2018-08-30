@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AccionProcesoModel } from "../../../shared/models/accion-proceso.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
 
 @Component({
     selector: "relacionar-proceso",

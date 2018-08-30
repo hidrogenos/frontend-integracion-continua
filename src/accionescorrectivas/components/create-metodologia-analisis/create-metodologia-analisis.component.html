@@ -22,7 +22,7 @@
             </div>
 
             <div class="ui-g-2 ui-fluid">
-                <button pButton type="submit" class="ui-button-success" icon="pi pi-plus" label="Crear" [disabled]="!form.valid"></button>
+                <button *ngIf="!disabled" pButton type="submit" class="ui-button-success" icon="pi pi-plus" label="Crear" [disabled]="!form.valid"></button>
             </div>
         </div>
     </form>
@@ -89,8 +89,14 @@
 
         </div>
 
+        <div *ngSwitchCase="3" class="ui-g ui-fluid">
+            <div class="ui-g-12" style="text-align: center; background-color:#63a0d4; color: white">
+                <b> No aplica</b>
+            </div>
+        </div>
 
-        <div *ngSwitchCase="3" class="ui-g">
+
+        <div *ngSwitchCase="4" class="ui-g">
 
             <div class="ui-g-12">
 
