@@ -41,56 +41,18 @@ export class AppMenuComponent implements OnInit {
 
     documentos: MenuItem[] = [];
 
-    constructor(public app: AppWrapperComponent, private store: Store<fromShared.SharedState>) { }
+    constructor(
+        public app: AppWrapperComponent,
+        private store: Store<fromShared.SharedState>
+    ) {}
 
     ngOnInit() {
         this.buildMenuDocumentos().subscribe(response => {
             this.model = [
-                { label: 'Inicio', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
                 {
-                    label: 'Administración',
-                    icon: 'fa fa-fw fa-lock',
-                    items: [
-                        {
-                            label: 'Colaboradores',
-                            icon: 'fa fa-fw fa-users',
-                            routerLink: ['/administracion/colaboradores']
-                        },
-                        {
-                            label: 'Permisos',
-                            icon: 'fa fa-fw fa-unlock',
-                            routerLink: ['/administracion/permisos']
-                        }
-                    ]
-                },
-                {
-                    label: 'Acciones',
+                    label: 'Inicio',
                     icon: 'fa fa-fw fa-home',
-                    items: [
-                        {
-                            label: 'Correctivas',
-                            icon: 'fa fa-fw fa-tag',
-                            routerLink: ['/acciones/acciones-correctivas']
-                        },
-                        {
-                            label: 'Preventivas',
-                            icon: 'fa fa-fw fa-tag'
-                        }
-                    ]
-                },
-                {
-                    label: 'Auditorias',
-                    icon: 'fa fa-fw fa-home',
-                    items: [
-                        {
-                            label: 'Externas',
-                            icon: 'fa fa-fw fa-tag'
-                        },
-                        {
-                            label: 'Internas',
-                            icon: 'fa fa-fw fa-tag'
-                        }
-                    ]
+                    routerLink: ['/']
                 },
                 {
                     label: 'Calidad',
@@ -110,7 +72,37 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'Mapa de procesos',
                             icon: 'fa fa-map-signs',
-                            routerLink: ['/calidad/nuestra-empresa/mapa-procesos']
+                            routerLink: [
+                                '/calidad/nuestra-empresa/mapa-procesos'
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    label: 'Acciones',
+                    icon: 'fa fa-fw fa-home',
+                    items: [
+                        {
+                            label: 'Correctivas',
+                            icon: 'fa fa-fw fa-tag',
+                            routerLink: ['/acciones/acciones-correctivas']
+                        }
+                    ]
+                },
+                {
+                    label: 'Auditorias',
+                    icon: 'fa fa-fw fa-home',
+                    items: [
+                        {
+                            label: 'Adm. listas',
+                            icon: 'fa fa-fw fa-tag',
+                            routerLink: ['/auditoria/administrador-listas']
+                        },
+                        {
+                            label: 'Externas',
+                            icon: 'fa fa-fw fa-tag',
+                            routerLink: ['/auditoria/externa/lista']
                         }
                     ]
                 },
@@ -119,11 +111,36 @@ export class AppMenuComponent implements OnInit {
                     icon: 'fa fa-fw fa-home',
                     items: this.documentos
                 },
-                { label: 'Equipos', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
+                {
+                    label: 'Planos',
+                    icon: 'fa fa-fw fa-home',
+                    routerLink: ['/planos/lista']
+                },
+                {
+                    label: 'Administración',
+                    icon: 'fa fa-fw fa-lock',
+                    items: [
+                        {
+                            label: 'Colaboradores',
+                            icon: 'fa fa-fw fa-users',
+                            routerLink: ['/administracion/colaboradores']
+                        },
+                        {
+                            label: 'Permisos',
+                            icon: 'fa fa-fw fa-unlock',
+                            routerLink: ['/administracion/permisos']
+                        }
+                    ]
+                },
+                {
+                    label: 'Equipos',
+                    icon: 'fa fa-fw fa-home',
+                    routerLink: ['/']
+                },
                 {
                     label: 'Proveedores',
                     icon: 'fa fa-fw fa-home',
-                    routerLink: ['/']
+                    routerLink: ['/proveedores/lista']
                 }
             ];
         });
@@ -136,13 +153,10 @@ export class AppMenuComponent implements OnInit {
                     let item: MenuItem = {
                         label: tipo.nombre,
                         icon: 'fa fa-fw fa-book',
-                        routerLink: [`/documentos/${tipo.id}`],
+                        routerLink: [`/documentos/${tipo.id}`]
                     };
-                    this.documentos = [
-                        ...this.documentos,
-                        item
-                    ]
-                })
+                    this.documentos = [...this.documentos, item];
+                });
                 return of(true);
             })
         );
@@ -290,7 +304,7 @@ export class AppSubMenuComponent {
 
     activeIndex: number;
 
-    constructor(public app: AppWrapperComponent) { }
+    constructor(public app: AppWrapperComponent) {}
 
     itemClick(event: Event, item: MenuItem, index: number) {
         if (this.root) {

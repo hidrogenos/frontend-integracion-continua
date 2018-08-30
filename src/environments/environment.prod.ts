@@ -1,15 +1,14 @@
-
 export const environment = {
     production: true,
-    baseUrl: "http://localhost:4200",
-    apiUrl: "http://localhost/api-base-5-6/public/api",
+    baseUrl: 'http://144.217.85.84/sgd-v-2-1/app',
+    apiUrl: 'http://144.217.85.84/sgd-v-2-1/api/public/api',
     auth: {
-        urlToken: "http://localhost/api-base-5-6/public/oauth/token",
-        secret: "GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq",
+        urlToken: 'http://144.217.85.84/sgd-v-2-1/api/public/oauth/token',
+        secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },
-    dateFormatAngular: "yyyy-MM-dd",
-    dateFormatPrimeNg: "yy-mm-dd",
+    dateFormatAngular: 'yyyy-MM-dd',
+    dateFormatPrimeNg: 'yy-mm-dd',
     tipos_documento: {
         manual_calidad: {
             id: 1,
@@ -24,11 +23,11 @@ export const environment = {
             permiso_impresion: 203
         },
         documento_adjunto_doc: {
-            id: 3,
+            id: 4,
             permiso_impresion: 100
         },
         documento_adjunto_flujo_doc: {
-            id: 4,
+            id: 5,
             permiso_impresion: 100
         },
         plano_documento: {
@@ -36,15 +35,15 @@ export const environment = {
             permiso_impresion: 903
         },
         accion_correctiva_adjunto: {
-            id: 4,
+            id: 7,
             permiso_impresion: 302
         },
         accion_correctiva_tarea_adjunto: {
-            id: 5,
+            id: 8,
             permiso_impresion: 303
         }
     },
-    extensiones_imagen: ["jpg", "gif", "png", "svg", "bmp", "jpeg"],
+    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
     estados_documento: {
         en_creacion: 1,
         en_elaboracion: 2,
