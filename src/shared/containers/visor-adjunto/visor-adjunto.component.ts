@@ -263,7 +263,6 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         this.accionPreventivaTareaAdjuntoService
             .getAccionPreventivaTareaAdjunto(idAdjunto)
             .subscribe(response => {
-                console.log("permiso", response);
                 if (response.extension == "pdf") {
                     this.hasPermisionService
                         .hasPermision(

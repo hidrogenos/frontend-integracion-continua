@@ -535,7 +535,8 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         this.accionCorrectivaService
             .updateAccionCorrectiva(data)
             .subscribe(response => {
-                let auxEstadoAcionCorrectivaActual = data.id_estado;
+                let auxEstadoAcionCorrectivaActual = this.accionCorrectivaActual
+                    .id_estado;
                 this.accionCorrectivaActual = response;
                 this.idAccionCorrectivaEstado = this.accionCorrectivaActual.id_estado;
                 this.hideWaitDialog();
