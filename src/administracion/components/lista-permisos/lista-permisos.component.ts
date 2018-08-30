@@ -5,14 +5,14 @@ import {
     AfterViewInit,
     Output,
     EventEmitter
-} from '@angular/core';
-import { ModuloModel } from '../../../shared/models/modulo.model';
-import { PerfilModel } from '../../../shared/models/perfil.model';
-import { PermisoModel } from '../../../shared/models/permiso.model';
+} from "@angular/core";
+import { ModuloModel } from "../../../shared/models/modulo.model";
+import { PerfilModel } from "../../../shared/models/perfil.model";
+import { PermisoModel } from "../../../shared/models/permiso.model";
 
 @Component({
-    selector: 'lista-permisos',
-    styleUrls: ['lista-permisos.component.scss'],
+    selector: "lista-permisos",
+    styleUrls: ["lista-permisos.component.scss"],
     template: `
         <div>
             <p-table #dt

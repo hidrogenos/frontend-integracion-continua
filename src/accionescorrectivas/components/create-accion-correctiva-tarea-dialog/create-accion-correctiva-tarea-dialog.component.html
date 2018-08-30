@@ -29,7 +29,7 @@
                     <div>
                         <label>Fecha para cumplir de tarea</label>
                     </div>
-                    <p-calendar showIcon="true" [dateFormat]="formatoFechaPrimeNg" formControlName="fecha_cumplimiento"></p-calendar>
+                    <p-calendar showIcon="true" [minDate]="fechaMinimaCalendario" [dateFormat]="formatoFechaPrimeNg" formControlName="fecha_cumplimiento"></p-calendar>
                 </div>
             </div>
 

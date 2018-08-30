@@ -191,6 +191,7 @@ export class CreateMetodologiaAnalisisComponent implements OnInit {
 
     disableComponent() {
         this.form.disable();
+        this.ideasForm.disable();
         if (this.CincoWsComponent) {
             this.CincoWsComponent.disableComponent();
         }

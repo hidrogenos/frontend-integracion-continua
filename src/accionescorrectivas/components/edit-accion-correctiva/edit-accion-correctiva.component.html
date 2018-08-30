@@ -11,6 +11,14 @@
                     </div>
                     <div class="ui-g-3">
                         <div>
+                            <label>Estado</label>
+                        </div>
+                        <p>{{ accionCorrectiva?.accion_estado?.nombre }}</p>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3">
+                        <div>
                             <label>Fecha compromiso</label>
                         </div>
                         <p-calendar showIcon="true" formControlName="fecha_compromiso" [dateFormat]="dateFormatNormal"></p-calendar>

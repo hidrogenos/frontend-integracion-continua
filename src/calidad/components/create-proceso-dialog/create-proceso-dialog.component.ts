@@ -119,7 +119,7 @@ import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-pro
                             class="ui-button-primary"
                             [disabled]="!form.valid">
                         </button>
-                        <button *ngIf="form?.value?.id" style="margin-right:10px;" pButton 
+                        <button *ngIf="form?.value?.id && permisoEditarProceso" style="margin-right:10px;" pButton 
                             type="submit" 
                             label="Actualizar" 
                             class="ui-button-primary"
@@ -144,6 +144,8 @@ export class CreateProcesoDialogComponent implements OnInit {
     //properties
     @Input()
     mapa: CalidadMapaProcesoModel;
+    @Input()
+    permisoEditarProceso: boolean;
 
     constructor(private fb: FormBuilder) {}
 

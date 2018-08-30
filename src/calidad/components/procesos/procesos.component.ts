@@ -60,6 +60,7 @@ import { CreateProcesoDialogComponent } from '../create-proceso-dialog/create-pr
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button style="margin-right:10px;" pButton 
+                                *ngIf="permisoCrearNuevoProceso"
                                 type="button" 
                                 label="Crear nuevo proceso" 
                                 class="ui-button-primary"
@@ -72,12 +73,14 @@ import { CreateProcesoDialogComponent } from '../create-proceso-dialog/create-pr
         </div> 
         <edit-mapa-procesos-dialog #empd
             [mapa]="mapa"
-            (onUpdateMapaProcesos)="onUpdateMapaProcesos.emit($event)">
+            (onUpdateMapaProcesos)="onUpdateMapaProcesos.emit($event)"
+            [permisoEditarEntradaSalida]="permisoEditarEntradaSalida">
         </edit-mapa-procesos-dialog>
         <create-proceso-dialog #cpd
             [mapa]="mapa"
             (onCreateProceso)="onCreateProceso.emit($event)"
-            (onUpdateProceso)="onUpdateProceso.emit($event)">
+            (onUpdateProceso)="onUpdateProceso.emit($event)"
+            [permisoEditarProceso]="permisoEditarProceso">
         </create-proceso-dialog>
     `
 })
@@ -85,6 +88,12 @@ export class ProcesosComponent implements OnInit {
     //properties
     @Input()
     mapa: CalidadMapaProcesoModel;
+    @Input()
+    permisoCrearNuevoProceso: boolean;
+    @Input()
+    permisoEditarEntradaSalida: boolean;
+    @Input()
+    permisoEditarProceso: boolean;
 
     //events
     @Output()

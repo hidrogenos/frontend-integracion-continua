@@ -11,6 +11,7 @@ import { environment } from "../../../environments/environment";
 })
 export class CreateAccionCorrectivaTareaDialogComponent implements OnInit {
     formatoFechaPrimeNg = environment.dateFormatPrimeNg;
+    fechaMinimaCalendario = new Date();
 
     //información para las listas seleccionables
     @Input()

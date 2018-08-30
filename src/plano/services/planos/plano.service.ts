@@ -4,22 +4,15 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { PlanoModel } from '../../../shared/models/plano.model';
 //environment
-import { environment } from '../../../environments/environment.prod';
-
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class DocumentosPlanosService {
-    constructor(
-        private http: HttpClient,
-    ) {}
+    constructor(private http: HttpClient) {}
 
     deletePlano(id: number): Observable<PlanoModel> {
         return this.http
-            .get<PlanoModel>(
-                `${
-                    environment.apiUrl
-                }/planos/delete-plano/${id}`
-            )
+            .get<PlanoModel>(`${environment.apiUrl}/planos/delete-plano/${id}`)
             .pipe(catchError((error: any) => throwError(error)));
     }
 
@@ -38,17 +31,14 @@ export class DocumentosPlanosService {
                 data
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
-    }    
+    }
 
-    uploadPlano(idPlano: number,data: any): Observable<PlanoModel[]> {
+    uploadPlano(idPlano: number, data: any): Observable<PlanoModel[]> {
         return this.http
             .post<PlanoModel[]>(
-                `${
-                    environment.apiUrl
-                }/planos/upload-plano/${idPlano}`,
+                `${environment.apiUrl}/planos/upload-plano/${idPlano}`,
                 data
             )
             .pipe(catchError((error: any) => throwError(error)));
     }
-
 }

@@ -17,7 +17,7 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <div style="text-align: right; color: #337ab7;">
+                    <div style="text-align: right; color: #337ab7;" *ngIf="permisoEditarValores">
                         <i 
                             *ngIf="!edit"
                             style="cursor: pointer;" 
@@ -75,6 +75,8 @@ export class ValoresComponent implements OnInit, AfterViewInit {
     //properties
     @Input()
     loadedCalidad: CalidadModel;
+    @Input()
+    permisoEditarValores: boolean;
 
     //viewChild
     @ViewChild('valoresContainer')
