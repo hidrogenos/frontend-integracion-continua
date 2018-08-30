@@ -1,15 +1,15 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
-import { AccionCorrectivaAnalisisHijo5wsModel } from "../../../shared/models/accion-correctiva-analisis-hijo-5ws";
-import { Column } from "primeng/primeng";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { AccionCorrectivaAnalisisHijo5wsModel } from '../../../shared/models/accion-correctiva-analisis-hijo-5ws';
+import { Column } from 'primeng/primeng';
 
 @Component({
-    selector: "cinco-ws",
-    styleUrls: ["cinco-ws.component.scss"],
+    selector: 'cinco-ws',
+    styleUrls: ['cinco-ws.component.scss'],
     template: `
         <div class="ui-g">
                 <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-                    <div class="ui-g-3" *ngFor="let pq of form.get('pqs').controls; let i=index">
+                    <div class="ui-g-3" *ngFor="let pq of form.get('pqs')['controls']; let i=index">
                         <div style="text-align: center; margin-bottom:10px">
                             <button icon="pi pi-trash"
                                 pButton
@@ -20,7 +20,7 @@ import { Column } from "primeng/primeng";
                             </button>
                         </div>
                     
-                        <p-table [value]="pq.get('filas').controls" >
+                        <p-table [value]="pq.get('filas')['controls']" >
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th colspan="2">Por qué {{i + 1}}</th>
@@ -41,7 +41,7 @@ import { Column } from "primeng/primeng";
                             pButton
                             icon="pi pi-plus"
                             class="ui-button-success"
-                            *ngIf="form.get('pqs').length < 5 && !disabled"
+                            *ngIf="form.get('pqs')['length'] < 5 && !disabled"
                             (click)="addPq()"
                             label="Agregar por qué">
                         </button>
@@ -70,12 +70,12 @@ export class CincoWsComponent implements OnInit {
     }
 
     addPq() {
-        const pqs = this.form.get("pqs") as FormArray;
+        const pqs = this.form.get('pqs') as FormArray;
         pqs.push(this.createFormPq());
     }
 
     removePq(index: number) {
-        const pqs = this.form.get("pqs") as FormArray;
+        const pqs = this.form.get('pqs') as FormArray;
         pqs.removeAt(index);
     }
 
@@ -87,51 +87,51 @@ export class CincoWsComponent implements OnInit {
     }
 
     clearForm() {
-        this.form.setControl("pqs", this.fb.array([]));
+        this.form.setControl('pqs', this.fb.array([]));
     }
 
     setValue(data: AccionCorrectivaAnalisisHijo5wsModel[]) {
         // this.form.setValue({ pqs: this.fb.array([]) });
         this.clearForm();
-        let nuevoForm = this.form.get("pqs") as FormArray;
+        let nuevoForm = this.form.get('pqs') as FormArray;
 
         data.forEach(element => {
             let groupTest = this.fb.group({
                 filas: this.fb.array([
                     this.fb.group({
-                        label: "Quién",
+                        label: 'Quién',
                         value: this.fb.control(
                             element.quien,
                             Validators.required
                         )
                     }),
                     this.fb.group({
-                        label: "Qué",
+                        label: 'Qué',
                         value: this.fb.control(element.que, Validators.required)
                     }),
                     this.fb.group({
-                        label: "Cuándo",
+                        label: 'Cuándo',
                         value: this.fb.control(
                             element.cuando,
                             Validators.required
                         )
                     }),
                     this.fb.group({
-                        label: "Dónde",
+                        label: 'Dónde',
                         value: this.fb.control(
                             element.donde,
                             Validators.required
                         )
                     }),
                     this.fb.group({
-                        label: "Cómo ocurre",
+                        label: 'Cómo ocurre',
                         value: this.fb.control(
                             element.como_ocurre,
                             Validators.required
                         )
                     }),
                     this.fb.group({
-                        label: "Cómo resolverlo",
+                        label: 'Cómo resolverlo',
                         value: this.fb.control(
                             element.como_resolverlo,
                             Validators.required
@@ -148,28 +148,28 @@ export class CincoWsComponent implements OnInit {
         return this.fb.group({
             filas: this.fb.array([
                 this.fb.group({
-                    label: "Quién",
-                    value: this.fb.control("", Validators.required)
+                    label: 'Quién',
+                    value: this.fb.control('', Validators.required)
                 }),
                 this.fb.group({
-                    label: "Qué",
-                    value: this.fb.control("", Validators.required)
+                    label: 'Qué',
+                    value: this.fb.control('', Validators.required)
                 }),
                 this.fb.group({
-                    label: "Cuándo",
-                    value: this.fb.control("", Validators.required)
+                    label: 'Cuándo',
+                    value: this.fb.control('', Validators.required)
                 }),
                 this.fb.group({
-                    label: "Dónde",
-                    value: this.fb.control("", Validators.required)
+                    label: 'Dónde',
+                    value: this.fb.control('', Validators.required)
                 }),
                 this.fb.group({
-                    label: "Cómo ocurre",
-                    value: this.fb.control("", Validators.required)
+                    label: 'Cómo ocurre',
+                    value: this.fb.control('', Validators.required)
                 }),
                 this.fb.group({
-                    label: "Cómo resolverlo",
-                    value: this.fb.control("", Validators.required)
+                    label: 'Cómo resolverlo',
+                    value: this.fb.control('', Validators.required)
                 })
             ])
         });
@@ -185,12 +185,12 @@ export class CincoWsComponent implements OnInit {
         let porques: AccionCorrectivaAnalisisHijo5wsModel[] = [];
         pqsGuardados.forEach(columna => {
             let porque: AccionCorrectivaAnalisisHijo5wsModel = {
-                quien: columna.filas["0"].value,
-                que: columna.filas["1"].value,
-                cuando: columna.filas["2"].value,
-                donde: columna.filas["3"].value,
-                como_ocurre: columna.filas["4"].value,
-                como_resolverlo: columna.filas["5"].value
+                quien: columna.filas['0'].value,
+                que: columna.filas['1'].value,
+                cuando: columna.filas['2'].value,
+                donde: columna.filas['3'].value,
+                como_ocurre: columna.filas['4'].value,
+                como_resolverlo: columna.filas['5'].value
             };
             porques.push(porque);
         });

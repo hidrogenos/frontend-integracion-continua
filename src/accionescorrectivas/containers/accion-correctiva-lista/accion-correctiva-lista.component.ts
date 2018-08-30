@@ -1,32 +1,32 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
-import { AccionesCorrectivasService } from "../../services";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AccionCorrectivaModel } from '../../../shared/models/accion-correctiva.model';
+import { AccionesCorrectivasService } from '../../services';
 import {
     AccionCorrectivaService,
     HasPermisionService
-} from "../../../shared/services";
+} from '../../../shared/services';
 
 //store
-import { Store } from "@ngrx/store";
-import { StoreModel } from "../../../shared/models/store.model";
-import * as fromShared from "./../../../shared/store";
-import * as fromAuth from "./../../../auth/store";
-import * as fromRootStore from "./../../../app/store";
-import { forkJoin } from "rxjs";
+import { Store } from '@ngrx/store';
+import { StoreModel } from '../../../shared/models/store.model';
+import * as fromShared from './../../../shared/store';
+import * as fromAuth from './../../../auth/store';
+import * as fromRootStore from './../../../app/store';
+import { forkJoin } from 'rxjs';
 
 //Modelos
-import { AccionImportanciaModel } from "../../../shared/models/accion-importancia.model";
+import { AccionImportanciaModel } from '../../../shared/models/accion-importancia.model';
 //Child
-import { CreateAccionCorrectivaDialogComponent } from "../../components";
-import { AccionCorrectivaEstadoModel } from "../../../shared/models/accion-correctiva-estado.model";
-import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
-import { take } from "rxjs/operators";
-import { MessageService } from "primeng/api";
-import { UsuarioModel } from "../../../shared/models/usuario.model";
-import { PermisosService } from "../../../administracion/services";
+import { CreateAccionCorrectivaDialogComponent } from '../../components';
+import { AccionCorrectivaEstadoModel } from '../../../shared/models/accion-correctiva-estado.model';
+import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
+import { take } from 'rxjs/operators';
+import { MessageService } from 'primeng/api';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
+import { PermisosService } from '../../../administracion/services';
 
 @Component({
-    selector: "accion-correctiva-lista",
+    selector: 'accion-correctiva-lista',
     template: `<div class="ui-g">
                     <div class="ui-g-12">                    
                         <div class="card card-w-title">
@@ -64,32 +64,32 @@ export class AccionCorrectivaListaComponent implements OnInit {
     /**
      * @var accionesCorrectivas lista donde se almacenan las acciones correctivas
      */
-    private accionesCorrectivas: AccionCorrectivaModel[];
+    accionesCorrectivas: AccionCorrectivaModel[];
 
     /**
      * @var cantidadTotalAccionesCorrectivas total de acciones correctivas
      */
-    private cantidadTotalAccionesCorrectivas: number;
+    cantidadTotalAccionesCorrectivas: number;
 
     /**
      * @var estaCargando si la tabla esta o no en estado de carga
      */
-    private estaCargando: boolean;
+    estaCargando: boolean;
 
-    private colsAccionCorrectiva: any[];
+    colsAccionCorrectiva: any[];
 
-    private importancias: AccionImportanciaModel[];
+    importancias: AccionImportanciaModel[];
 
-    private procesos: MapaProcesoHijoModel[];
+    procesos: MapaProcesoHijoModel[];
 
-    private estados: AccionCorrectivaEstadoModel[];
+    estados: AccionCorrectivaEstadoModel[];
 
-    private usuarioActual: UsuarioModel;
+    usuarioActual: UsuarioModel;
 
     msgs = [];
 
     //viewChild
-    @ViewChild("cacd")
+    @ViewChild('cacd')
     onCreateDialog: CreateAccionCorrectivaDialogComponent;
 
     constructor(
@@ -102,15 +102,15 @@ export class AccionCorrectivaListaComponent implements OnInit {
         this.estaCargando = true;
 
         this.colsAccionCorrectiva = [
-            { field: "estado", header: "Ver" },
-            { field: "codigo", header: "Código" },
-            { field: "accion_estado", header: "Estado" },
-            { field: "titulo", header: "Titulo" },
-            { field: "importancia", header: "Importancia" },
-            { field: "responsable", header: "Responsable" },
-            { field: "fecha_creacion", header: "Creación" },
-            { field: "fecha_compromiso", header: "Fecha compromiso" },
-            { field: "none", header: "Funciones" }
+            { field: 'estado', header: 'Ver' },
+            { field: 'codigo', header: 'Código' },
+            { field: 'accion_estado', header: 'Estado' },
+            { field: 'titulo', header: 'Titulo' },
+            { field: 'importancia', header: 'Importancia' },
+            { field: 'responsable', header: 'Responsable' },
+            { field: 'fecha_creacion', header: 'Creación' },
+            { field: 'fecha_compromiso', header: 'Fecha compromiso' },
+            { field: 'none', header: 'Funciones' }
         ];
     }
 
@@ -120,8 +120,8 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     loadInitData() {
         this.showWaitDialog(
-            "Acción en proceso",
-            "Consultado datos requeridos, un momento por favor..."
+            'Acción en proceso',
+            'Consultado datos requeridos, un momento por favor...'
         );
 
         let aux = forkJoin([
@@ -170,10 +170,10 @@ export class AccionCorrectivaListaComponent implements OnInit {
                 },
                 error => {
                     this.msgs.push({
-                        severity: "danger",
-                        summary: "Carga fallida",
+                        severity: 'danger',
+                        summary: 'Carga fallida',
                         detail:
-                            "No se han podido obtener respuesta valida del servidor"
+                            'No se han podido obtener respuesta valida del servidor'
                     });
                 }
             );
@@ -181,8 +181,8 @@ export class AccionCorrectivaListaComponent implements OnInit {
 
     createAccionCorrectiva(event: AccionCorrectivaModel) {
         this.showWaitDialog(
-            "Acción en proceso",
-            "Registrando nueva Acción Correctiva, un momento por favor..."
+            'Acción en proceso',
+            'Registrando nueva Acción Correctiva, un momento por favor...'
         );
         this.store
             .select(fromAuth.getUser)
@@ -200,18 +200,18 @@ export class AccionCorrectivaListaComponent implements OnInit {
                             this.hideWaitDialog();
                             this.onCreateDialog.display = false;
                             this.messageService.add({
-                                severity: "success",
-                                summary: "Acción exitosa",
-                                detail: "Acción correctiva creada exitosamente"
+                                severity: 'success',
+                                summary: 'Acción exitosa',
+                                detail: 'Acción correctiva creada exitosamente'
                             });
                         },
                         error => {
                             this.hideWaitDialog();
                             this.msgs.push({
-                                severity: "danger",
-                                summary: "Acción fallida",
+                                severity: 'danger',
+                                summary: 'Acción fallida',
                                 detail:
-                                    "No se puede crear una acción con un codigo repetido"
+                                    'No se puede crear una acción con un codigo repetido'
                             });
                         }
                     );

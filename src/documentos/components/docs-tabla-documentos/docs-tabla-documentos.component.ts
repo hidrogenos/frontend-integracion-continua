@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+    Component,
+    Input,
+    Output,
+    EventEmitter,
+    ViewChild
+} from '@angular/core';
 import { DataTable } from 'primeng/primeng';
 
 import { Store } from '@ngrx/store';
@@ -9,13 +15,11 @@ import { environment } from './../../../environments/environment';
 import { DocumentoEstadoModel } from '../../../shared/models/documento-estado.model';
 import { DocumentoModel } from '../../../shared/models/documento.model';
 
-
-
 @Component({
     selector: 'docs-tabla-documentos',
     template: `
     <p-table #dt [columns]="cols" [value]="documentos" [lazy]="true" (onLazyLoad)="loadDocumentosLazy($event)" [paginator]="true" 
-        [rows]="10" [totalRecords]="total" [loading]="loading" lazyLoadOnInit="false">
+        [rows]="10" [totalRecords]="total" lazyLoadOnInit="false">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th style="width:3em">Ver</th>
@@ -50,15 +54,14 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
     `
 })
 export class DocsTablaDocumentosComponent {
-
     cols: any[] = [
         { field: 'codigo', header: 'Código' },
         { field: 'titulo', header: 'Título' },
         { field: 'usuario_creacion_nombre', header: 'Usuario creador' },
         { field: 'version', header: 'Versión' },
         { field: 'estado_nombre', header: 'Estado' },
-        { field: 'fecha_fin', header: 'Vence' },
-    ]
+        { field: 'fecha_fin', header: 'Vence' }
+    ];
 
     @Input()
     documentos: DocumentoModel[];
@@ -72,22 +75,21 @@ export class DocsTablaDocumentosComponent {
     @Output()
     onLoadDocumentosLazy = new EventEmitter<any>();
 
-    @ViewChild('dt') dt: DataTable;
+    @ViewChild('dt')
+    dt: DataTable;
 
-    constructor(
-        private store: Store<fromRootStore.State>
-    ) { }
+    constructor(private store: Store<fromRootStore.State>) {}
 
     loadDocumentosLazy(event) {
         this.onLoadDocumentosLazy.emit(event);
     }
 
     formatDateFilter(event, field, filterMatchMode) {
-        this.dt.filter('', field, filterMatchMode)
+        this.dt.filter('', field, filterMatchMode);
     }
 
     mapEstadosFilter(value, field, filterMatchMode) {
-        this.dt.filter(value, field, filterMatchMode)
+        this.dt.filter(value, field, filterMatchMode);
     }
 
     verDetalleDocumento(id) {

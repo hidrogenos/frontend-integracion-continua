@@ -101,7 +101,6 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
     `
 })
 export class DocsInformacionGeneralDocumentoComponent implements OnInit {
-
     display: boolean;
     form: FormGroup;
 
@@ -111,8 +110,7 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
     filteredRespRevision;
     @Input()
     filteredRespElaboracion;
-    @Input()
-    filteredProcesos;
+
     @Input()
     puedeEditar: boolean;
     @Input()
@@ -125,8 +123,7 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
     onFilterRespRevision = new EventEmitter<any>();
     @Output()
     onFilterRespAprobacion = new EventEmitter<any>();
-    @Output()
-    onFilterProcesos = new EventEmitter<string>();
+
     @Output()
     onUpdateDoc = new EventEmitter<any>();
     @Output()
@@ -134,9 +131,7 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
     @Output()
     onSolicitarReelaboracion = new EventEmitter();
 
-    constructor(
-        private fb: FormBuilder
-    ) { }
+    constructor(private fb: FormBuilder) {}
 
     ngOnInit() {
         this.form = this.fb.group({
@@ -149,7 +144,7 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
             estado: [{ value: null, disabled: true }],
             version: [null, Validators.required],
             descripcion: [null]
-        })
+        });
     }
 
     inicializarForm(documento: DocumentoModel, puedeEditarForm: boolean) {
@@ -163,27 +158,36 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
             estado: documento.estado.nombre,
             version: documento.version,
             descripcion: documento.descripcion
-        })
+        });
         if (!puedeEditarForm) {
             this.form.disable();
         }
     }
 
     filterResponsableElaboracion(event) {
-        let obj = this.validateExcludeArray(event.query, this.form.value.responsable_revision,
-            this.form.value.responsable_aprobacion);
+        let obj = this.validateExcludeArray(
+            event.query,
+            this.form.value.responsable_revision,
+            this.form.value.responsable_aprobacion
+        );
         this.onFilterRespElaboracion.emit(obj);
     }
 
     filterResponsableRevision(event) {
-        let obj = this.validateExcludeArray(event.query, this.form.value.responsable_elaboracion,
-            this.form.value.responsable_aprobacion);
+        let obj = this.validateExcludeArray(
+            event.query,
+            this.form.value.responsable_elaboracion,
+            this.form.value.responsable_aprobacion
+        );
         this.onFilterRespRevision.emit(obj);
     }
 
     filterResponsableAprobacion(event) {
-        let obj = this.validateExcludeArray(event.query, this.form.value.responsable_revision,
-            this.form.value.responsable_elaboracion);
+        let obj = this.validateExcludeArray(
+            event.query,
+            this.form.value.responsable_revision,
+            this.form.value.responsable_elaboracion
+        );
         this.onFilterRespAprobacion.emit(obj);
     }
 
@@ -191,7 +195,7 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
         let obj = {
             query: query,
             exclude: []
-        }
+        };
         if (responsable1) {
             obj.exclude.push(responsable1.id);
         }
@@ -199,10 +203,6 @@ export class DocsInformacionGeneralDocumentoComponent implements OnInit {
             obj.exclude.push(responsable2.id);
         }
         return obj;
-    }
-
-    filterProcesos(event) {
-        this.onFilterProcesos.emit(event.query);
     }
 
     onSubmitUpdateDoc() {

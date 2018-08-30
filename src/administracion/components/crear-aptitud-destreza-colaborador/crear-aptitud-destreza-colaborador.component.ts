@@ -54,7 +54,6 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                         <p-fileUpload #fu
                             customUpload="true"
                             name="demo[]"
-                            (uploadHandler)="uploadFiles($event)"
                             multiple="multiple"
                             [showUploadButton]="false"
                             cancelLabel="Limpiar"
@@ -87,10 +86,12 @@ export class CreateAptitudDestrezaColaboradorComponent implements OnInit {
     form: FormGroup;
 
     //events
-    @Output() onCreateDestreza = new EventEmitter<any>();
+    @Output()
+    onCreateDestreza = new EventEmitter<any>();
 
     //viewchild
-    @ViewChild('fu') fu: FileUpload;
+    @ViewChild('fu')
+    fu: FileUpload;
 
     constructor(private fb: FormBuilder) {}
 

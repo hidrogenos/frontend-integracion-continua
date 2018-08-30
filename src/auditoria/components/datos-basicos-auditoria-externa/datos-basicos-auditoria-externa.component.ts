@@ -10,7 +10,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
-                <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+                <form [formGroup]="form" novalidate>
                     <div class="ui-g">
                         <div class="ui-g-4 ui-fluid">
                             <div>
