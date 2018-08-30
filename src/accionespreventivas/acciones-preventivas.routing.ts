@@ -14,12 +14,13 @@ export const ROUTES: Routes = [
                 children: [
                     { path: "", redirectTo: "lista", pathMatch: "full" },
                     {
-                        path: ":id"
-                        //    component: fromContainers.ColaboradorDetalleComponent
+                        path: "detalle/:id",
+                        component:
+                            fromContainers.AccionPreventivaDetalleComponent
                     },
                     {
-                        path: ""
-                        //    component: fromContainers.ColaboradoresListaComponent
+                        path: "lista",
+                        component: fromContainers.AccionPreventivaListaComponent
                     }
                 ]
             }

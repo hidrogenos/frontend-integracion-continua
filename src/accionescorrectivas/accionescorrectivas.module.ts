@@ -28,12 +28,24 @@ import { SharedModule } from "../shared/shared.module";
 
 const ROUTES: Route[] = [
     {
-        path: "acciones-correctivas",
-        component: fromContainers.AccionCorrectivaListaComponent
-    },
-    {
-        path: "acciones-correctivas/:id",
-        component: fromContainers.AccionCorrectivaPanel
+        path: "",
+        children: [
+            { path: "", redirectTo: "acciones-correctivas", pathMatch: "full" },
+            {
+                path: "acciones-correctivas",
+                children: [
+                    { path: "", redirectTo: "lista", pathMatch: "full" },
+                    {
+                        path: "detalle/:id",
+                        component: fromContainers.AccionCorrectivaPanel
+                    },
+                    {
+                        path: "lista",
+                        component: fromContainers.AccionCorrectivaListaComponent
+                    }
+                ]
+            }
+        ]
     }
 ];
 

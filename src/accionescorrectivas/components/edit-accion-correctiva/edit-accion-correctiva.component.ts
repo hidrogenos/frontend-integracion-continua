@@ -17,10 +17,10 @@ export class EditAccionCorrectivaComponent {
 
     //atributos de entrada
     @Input()
-    private accionCorrectiva: AccionCorrectivaModel;
+    accionCorrectiva: AccionCorrectivaModel;
 
     @Input()
-    private importancias: AccionImportanciaModel[];
+    importancias: AccionImportanciaModel[];
 
     //eventos
     @Output()

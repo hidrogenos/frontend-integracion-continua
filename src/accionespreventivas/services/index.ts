@@ -1,18 +1,10 @@
-import { AccionesPreventivasDocumentoService } from "./accionescorrectivas-documento.service";
-export * from "./accionescorrectivas-documento.service";
+import { AccionPreventivaDetalleService } from "./accion-preventiva-detalle/accion-preventiva-detalle.service";
+export * from "./accion-preventiva-detalle/accion-preventiva-detalle.service";
 
-import { AccionesPreventivasProcesoService } from "./accionescorrectivas-proceso.service";
-export * from "./accionescorrectivas-proceso.service";
-
-import { AccionesPreventivasTareaAdjuntoService } from "./accionescorrectivas-tarea-adjunto.service";
-export * from "./accionescorrectivas-tarea-adjunto.service";
-
-import { AccionesPreventivasTareaService } from "./accionescorrectivas-tarea.service";
-export * from "./accionescorrectivas-tarea.service";
+import { AccionPreventivaListaService } from "./accion-preventiva-lista/accion-preventiva-lista.service";
+export * from "./accion-preventiva-lista/accion-preventiva-lista.service";
 
 export const container: any[] = [
-    AccionesPreventivasDocumentoService,
-    AccionesPreventivasProcesoService,
-    AccionesPreventivasTareaAdjuntoService,
-    AccionesPreventivasTareaService
+    AccionPreventivaDetalleService,
+    AccionPreventivaListaService
 ];

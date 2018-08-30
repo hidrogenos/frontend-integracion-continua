@@ -1,0 +1,43 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form [formGroup]="form">
+            <p-dialog header="Asignar acción preventiva: {{ accionPreventivaActual?.titulo }}" [(visible)]="display" [modal]="true" [responsive]="true"
+                [width]="800" [maximizable]="true" [baseZIndex]="10000" (onHide)="onHide()" [contentStyle]="{ 'overflow':
+                'visible'} ">
+
+                <div class="ui-g ">
+                    <div class="ui-g-12 ui-fluid ">
+                        <div>
+                            <label>Responsable</label>
+                        </div>
+                        <p-dropdown [options]="accionPreventivaActual.procesos " [autoWidth]="false" optionLabel="proceso.jefe.nombre" placeholder="Seleccione... "
+                            formControlName="responsable">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle ">{{item.value.proceso.jefe.nombre}} {{item.value.proceso.jefe.apellido}}</span>
+                            </ng-template>
+                            <ng-template let-item pTemplate="item">
+                                <div>{{ item.value.proceso.proceso}} | {{item.value.proceso.jefe.nombre}} {{item.value.proceso.jefe.apellido}}</div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
+                <!-- <div class="ui-g ">
+                <div class="ui-g-12 ">
+                    <div>
+                        <label>Observación</label>
+                    </div>
+                    <textarea formControlName="observacion "  pInputTextArea [rows]="6 " [cols]="30 " style="width: 100% "></textarea>
+                </div>
+            </div> -->
+                <p-footer>
+                    <div class="ui-g ">
+                        <div class="ui-g-12 ui-fluid ">
+                            <button type="button " pButton label="Asignar " class="ui-button " (click)="asignarAccionPreventiva();display=false
+                " [disabled]="!form.valid "></button>
+                        </div>
+                    </div>
+                </p-footer>
+            </p-dialog>
+        </form>
+    </div>
+</div>

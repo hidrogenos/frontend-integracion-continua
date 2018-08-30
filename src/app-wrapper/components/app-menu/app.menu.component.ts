@@ -4,24 +4,24 @@ import {
     OnInit,
     EventEmitter,
     ViewChild
-} from '@angular/core';
+} from "@angular/core";
 import {
     trigger,
     state,
     style,
     transition,
     animate
-} from '@angular/animations';
-import { MenuItem } from 'primeng/primeng';
-import { AppWrapperComponent } from './../../containers/app-wrapper/app-wrapper.component';
-import { Store } from '@ngrx/store';
-import * as fromShared from './../../../shared/store';
-import { switchMap, map } from 'rxjs/operators';
-import { DocumentoTipoModel } from '../../../shared/models/documento-tipo.model';
-import { Observable, of } from 'rxjs';
+} from "@angular/animations";
+import { MenuItem } from "primeng/primeng";
+import { AppWrapperComponent } from "./../../containers/app-wrapper/app-wrapper.component";
+import { Store } from "@ngrx/store";
+import * as fromShared from "./../../../shared/store";
+import { switchMap, map } from "rxjs/operators";
+import { DocumentoTipoModel } from "../../../shared/models/documento-tipo.model";
+import { Observable, of } from "rxjs";
 
 @Component({
-    selector: 'app-menu',
+    selector: "app-menu",
     template: `
         <ul app-submenu [item]="model" root="true" class="layout-menu layout-main-menu clearfix"
             [reset]="reset" visible="true" parentActive="true"></ul>
@@ -33,97 +33,111 @@ export class AppMenuComponent implements OnInit {
 
     model: any[];
 
-    theme = 'blue';
+    theme = "blue";
 
-    layout = 'blue';
+    layout = "blue";
 
-    version = 'v3';
+    version = "v3";
 
     documentos: MenuItem[] = [];
 
-    constructor(public app: AppWrapperComponent, private store: Store<fromShared.SharedState>) { }
+    constructor(
+        public app: AppWrapperComponent,
+        private store: Store<fromShared.SharedState>
+    ) {}
 
     ngOnInit() {
         this.buildMenuDocumentos().subscribe(response => {
             this.model = [
-                { label: 'Inicio', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
                 {
-                    label: 'Administración',
-                    icon: 'fa fa-fw fa-lock',
+                    label: "Inicio",
+                    icon: "fa fa-fw fa-home",
+                    routerLink: ["/"]
+                },
+                {
+                    label: "Administración",
+                    icon: "fa fa-fw fa-lock",
                     items: [
                         {
-                            label: 'Colaboradores',
-                            icon: 'fa fa-fw fa-users',
-                            routerLink: ['/administracion/colaboradores']
+                            label: "Colaboradores",
+                            icon: "fa fa-fw fa-users",
+                            routerLink: ["/administracion/colaboradores"]
                         },
                         {
-                            label: 'Permisos',
-                            icon: 'fa fa-fw fa-unlock',
-                            routerLink: ['/administracion/permisos']
+                            label: "Permisos",
+                            icon: "fa fa-fw fa-unlock",
+                            routerLink: ["/administracion/permisos"]
                         }
                     ]
                 },
                 {
-                    label: 'Acciones',
-                    icon: 'fa fa-fw fa-home',
+                    label: "Acciones",
+                    icon: "fa fa-fw fa-home",
                     items: [
                         {
-                            label: 'Correctivas',
-                            icon: 'fa fa-fw fa-tag',
-                            routerLink: ['/acciones/acciones-correctivas']
+                            label: "Correctivas",
+                            icon: "fa fa-fw fa-tag",
+                            routerLink: ["/acciones/acciones-correctivas"]
                         },
                         {
-                            label: 'Preventivas',
-                            icon: 'fa fa-fw fa-tag'
+                            label: "Preventivas",
+                            icon: "fa fa-fw fa-tag",
+                            routerLink: ["/acciones/acciones-preventivas"]
                         }
                     ]
                 },
                 {
-                    label: 'Auditorias',
-                    icon: 'fa fa-fw fa-home',
+                    label: "Auditorias",
+                    icon: "fa fa-fw fa-home",
                     items: [
                         {
-                            label: 'Externas',
-                            icon: 'fa fa-fw fa-tag'
+                            label: "Externas",
+                            icon: "fa fa-fw fa-tag"
                         },
                         {
-                            label: 'Internas',
-                            icon: 'fa fa-fw fa-tag'
+                            label: "Internas",
+                            icon: "fa fa-fw fa-tag"
                         }
                     ]
                 },
                 {
-                    label: 'Calidad',
-                    icon: 'fa fa-quora',
-                    routerLink: ['/calidad/nuestra-empresa/inicio'],
+                    label: "Calidad",
+                    icon: "fa fa-quora",
+                    routerLink: ["/calidad/nuestra-empresa/inicio"],
                     items: [
                         {
-                            label: 'Nuestra organización',
-                            icon: 'fa fa-building-o',
-                            routerLink: ['/calidad/nuestra-empresa/inicio']
+                            label: "Nuestra organización",
+                            icon: "fa fa-building-o",
+                            routerLink: ["/calidad/nuestra-empresa/inicio"]
                         },
                         {
-                            label: 'Organigrama',
-                            icon: 'fa fa-puzzle-piece',
-                            routerLink: ['/calidad/nuestra-empresa/organigrama']
+                            label: "Organigrama",
+                            icon: "fa fa-puzzle-piece",
+                            routerLink: ["/calidad/nuestra-empresa/organigrama"]
                         },
                         {
-                            label: 'Mapa de procesos',
-                            icon: 'fa fa-map-signs',
-                            routerLink: ['/calidad/nuestra-empresa/mapa-procesos']
+                            label: "Mapa de procesos",
+                            icon: "fa fa-map-signs",
+                            routerLink: [
+                                "/calidad/nuestra-empresa/mapa-procesos"
+                            ]
                         }
                     ]
                 },
                 {
-                    label: 'Documentos',
-                    icon: 'fa fa-fw fa-home',
+                    label: "Documentos",
+                    icon: "fa fa-fw fa-home",
                     items: this.documentos
                 },
-                { label: 'Equipos', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
                 {
-                    label: 'Proveedores',
-                    icon: 'fa fa-fw fa-home',
-                    routerLink: ['/']
+                    label: "Equipos",
+                    icon: "fa fa-fw fa-home",
+                    routerLink: ["/"]
+                },
+                {
+                    label: "Proveedores",
+                    icon: "fa fa-fw fa-home",
+                    routerLink: ["/"]
                 }
             ];
         });
@@ -135,14 +149,11 @@ export class AppMenuComponent implements OnInit {
                 tipos.map((tipo: DocumentoTipoModel) => {
                     let item: MenuItem = {
                         label: tipo.nombre,
-                        icon: 'fa fa-fw fa-book',
-                        routerLink: [`/documentos/${tipo.id}`],
+                        icon: "fa fa-fw fa-book",
+                        routerLink: [`/documentos/${tipo.id}`]
                     };
-                    this.documentos = [
-                        ...this.documentos,
-                        item
-                    ]
-                })
+                    this.documentos = [...this.documentos, item];
+                });
                 return of(true);
             })
         );
@@ -150,13 +161,13 @@ export class AppMenuComponent implements OnInit {
 
     changeTheme(theme: string) {
         const themeLink: HTMLLinkElement = <HTMLLinkElement>(
-            document.getElementById('theme-css')
+            document.getElementById("theme-css")
         );
 
-        if (this.version === 'v3') {
-            themeLink.href = 'assets/theme/theme-' + theme + '.css';
+        if (this.version === "v3") {
+            themeLink.href = "assets/theme/theme-" + theme + ".css";
         } else {
-            themeLink.href = 'assets/theme/theme-' + theme + '-v4' + '.css';
+            themeLink.href = "assets/theme/theme-" + theme + "-v4" + ".css";
         }
 
         this.theme = theme;
@@ -164,14 +175,14 @@ export class AppMenuComponent implements OnInit {
 
     changeLayout(layout: string, special?: boolean) {
         const layoutLink: HTMLLinkElement = <HTMLLinkElement>(
-            document.getElementById('layout-css')
+            document.getElementById("layout-css")
         );
 
-        if (this.version === 'v3') {
-            layoutLink.href = 'assets/layout/css/layout-' + layout + '.css';
+        if (this.version === "v3") {
+            layoutLink.href = "assets/layout/css/layout-" + layout + ".css";
         } else {
             layoutLink.href =
-                'assets/layout/css/layout-' + layout + '-v4' + '.css';
+                "assets/layout/css/layout-" + layout + "-v4" + ".css";
         }
 
         this.layout = layout;
@@ -183,30 +194,30 @@ export class AppMenuComponent implements OnInit {
 
     changeVersion(version: string) {
         const themeLink: HTMLLinkElement = <HTMLLinkElement>(
-            document.getElementById('theme-css')
+            document.getElementById("theme-css")
         );
         const layoutLink: HTMLLinkElement = <HTMLLinkElement>(
-            document.getElementById('layout-css')
+            document.getElementById("layout-css")
         );
 
-        if (version === 'v3') {
-            this.version = 'v3';
-            themeLink.href = 'assets/theme/theme-' + this.theme + '.css';
+        if (version === "v3") {
+            this.version = "v3";
+            themeLink.href = "assets/theme/theme-" + this.theme + ".css";
             layoutLink.href =
-                'assets/layout/css/layout-' + this.layout + '.css';
+                "assets/layout/css/layout-" + this.layout + ".css";
         } else {
             themeLink.href =
-                'assets/theme/theme-' + this.theme + '-v4' + '.css';
+                "assets/theme/theme-" + this.theme + "-v4" + ".css";
             layoutLink.href =
-                'assets/layout/css/layout-' + this.layout + '-v4' + '.css';
-            this.version = '-v4';
+                "assets/layout/css/layout-" + this.layout + "-v4" + ".css";
+            this.version = "-v4";
         }
     }
 }
 
 @Component({
     /* tslint:disable:component-selector */
-    selector: '[app-submenu]',
+    selector: "[app-submenu]",
     /* tslint:enable:component-selector */
     template: `
         <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
@@ -238,38 +249,38 @@ export class AppMenuComponent implements OnInit {
         </ng-template>
     `,
     animations: [
-        trigger('children', [
+        trigger("children", [
             state(
-                'hiddenAnimated',
+                "hiddenAnimated",
                 style({
-                    height: '0px'
+                    height: "0px"
                 })
             ),
             state(
-                'visibleAnimated',
+                "visibleAnimated",
                 style({
-                    height: '*'
+                    height: "*"
                 })
             ),
             state(
-                'visible',
+                "visible",
                 style({
-                    display: 'block'
+                    display: "block"
                 })
             ),
             state(
-                'hidden',
+                "hidden",
                 style({
-                    display: 'none'
+                    display: "none"
                 })
             ),
             transition(
-                'visibleAnimated => hiddenAnimated',
-                animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')
+                "visibleAnimated => hiddenAnimated",
+                animate("400ms cubic-bezier(0.86, 0, 0.07, 1)")
             ),
             transition(
-                'hiddenAnimated => visibleAnimated',
-                animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')
+                "hiddenAnimated => visibleAnimated",
+                animate("400ms cubic-bezier(0.86, 0, 0.07, 1)")
             )
         ])
     ]
@@ -290,7 +301,7 @@ export class AppSubMenuComponent {
 
     activeIndex: number;
 
-    constructor(public app: AppWrapperComponent) { }
+    constructor(public app: AppWrapperComponent) {}
 
     itemClick(event: Event, item: MenuItem, index: number) {
         if (this.root) {

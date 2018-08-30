@@ -1,0 +1,26 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form [formGroup]="form">
+            <p-dialog header="Anular acción preventiva: {{ accionPreventivaActual?.titulo }}" [(visible)]="displayAnularAccion" [modal]="true"
+                [responsive]="true" [width]="800" [maximizable]="true" [baseZIndex]="10000" (onHide)="onHideAnularAccionDialog()">
+
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div>
+                            <label>Observacion</label>
+                        </div>
+                        <textarea formControlName="observacion" pInputTextArea [rows]="6" [cols]="30" style="width: 100%"></textarea>
+                    </div>
+                </div>
+                <p-footer>
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-fluid">
+                            <button type="button" pButton label="Anular" class="ui-button-danger" (click)="anularAccionPreventiva();displayAnularAccion=false"
+                                [disabled]="!form.valid"></button>
+                        </div>
+                    </div>
+                </p-footer>
+            </p-dialog>
+        </form>
+    </div>
+</div>

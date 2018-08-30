@@ -46,6 +46,14 @@ export const environment = {
         accion_correctiva_tarea_adjunto: {
             id: 5,
             permiso_impresion: 303
+        },
+        accion_preventiva_adjunto: {
+            id: 10,
+            permiso_impresion: 402
+        },
+        accion_preventiva_tarea_adjunto: {
+            id: 11,
+            permiso_impresion: 403
         }
     },
     extensiones_imagen: ["jpg", "gif", "png", "svg", "bmp", "jpeg"],

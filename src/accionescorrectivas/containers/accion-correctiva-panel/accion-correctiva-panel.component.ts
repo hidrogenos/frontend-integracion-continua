@@ -535,19 +535,25 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         this.accionCorrectivaService
             .updateAccionCorrectiva(data)
             .subscribe(response => {
+                let auxEstadoAcionCorrectivaActual = data.id_estado;
                 this.accionCorrectivaActual = response;
                 this.idAccionCorrectivaEstado = this.accionCorrectivaActual.id_estado;
                 this.hideWaitDialog();
                 this.desabilitarComponentes();
-                switch (response.id_estado) {
-                    case this.ACCION_EN_CALIDAD:
-                    case this.ACCION_ASIGNADA:
-                    case this.ACCION_EN_REASIGNACION:
-                    case this.ACCION_ANULADA: {
-                        this.getBackAccionesCorrectivas();
-                        break;
-                    }
-                    default: {
+                if (
+                    auxEstadoAcionCorrectivaActual !=
+                    this.accionCorrectivaActual.id_estado
+                ) {
+                    switch (response.id_estado) {
+                        case this.ACCION_EN_CALIDAD:
+                        case this.ACCION_ASIGNADA:
+                        case this.ACCION_EN_REASIGNACION:
+                        case this.ACCION_ANULADA: {
+                            this.getBackAccionesCorrectivas();
+                            break;
+                        }
+                        default: {
+                        }
                     }
                 }
             });
@@ -1284,8 +1290,11 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             }
             if (
                 (metodologiaAnalisis &&
+                    metodologiaAnalisis.analisis_hijo &&
                     (metodologiaAnalisis.analisis_hijo.length > 0 ||
-                        metodologiaAnalisis.analisis_hijo5ws.length > 0)) ||
+                        (metodologiaAnalisis.analisis_hijo5ws &&
+                            metodologiaAnalisis.analisis_hijo5ws.length >
+                                0))) ||
                 metodologiaAnalisis.id_accion_analisis_tipo ==
                     this.METODOLOGIA_ANALISIS_NO_APLICA
             ) {

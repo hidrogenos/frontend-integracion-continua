@@ -27,7 +27,7 @@ import {
 import { RouterModule, Route } from "@angular/router";
 import { TableModule } from "primeng/table";
 import { SharedModule } from "../shared/shared.module";
-import { AccionesPreventivasRoutes } from "./accionespreventivas.routing";
+import { AccionesPreventivasRoutes } from "./acciones-preventivas.routing";
 
 const ROUTES: Route[] = [];
 
@@ -66,4 +66,4 @@ export const customModules: any[] = [SharedModule];
     providers: [...fromServices.container, DatePipe, MessageService],
     exports: [RouterModule]
 })
-export class AccionesCorrectivasModule {}
+export class AccionesPreventivasModule {}

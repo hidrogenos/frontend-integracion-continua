@@ -1,0 +1,36 @@
+<!-- <pre>{{data | json}}</pre> -->
+<p-table #tableListaAccionPreventiva [value]="data" [lazy]="true" [paginator]="true" [rows]="rows" [totalRecords]="cantidadTotalAcciones"
+    [loading]="loading" (onLazyLoad)="loadLazy($event)" [columns]="cols">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns; let i = index" [ngStyle]="{'width':(i == 0)?'50px':'auto'}">
+                {{col.header}}
+            </th>
+        </tr>
+        <tr>
+            <th *ngFor="let col of columns; let i = index">
+                <input *ngIf="i > 0 && i < columns.length-1" pInputText type="text" (input)="tableListaAccionPreventiva.filter($event.target.value, col.field, 'contains')"
+                    style="width: 100%">
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-accionPreventiva>
+        <tr>
+            <td>
+                <button pButton class="ui-button-rounded shadow-box ui-shadow-2" [ngStyle]="{'background-color': accionPreventiva?.accion_estado?.color ,'border-radius': '100%','width':'25px'}"
+                    (click)="selectAccionPreventiva(accionPreventiva)">
+                </button>
+            </td>
+            <td> {{ accionPreventiva?.codigo }} </td>
+            <td> {{ accionPreventiva?.accion_estado?.nombre }} </td>
+            <td> {{ accionPreventiva?.titulo }} </td>
+            <td> {{ accionPreventiva?.importancia?.nombre }} </td>
+            <td> {{ accionPreventiva?.responsable?.nombre }} </td>
+            <td> {{ accionPreventiva?.fecha_creacion | date: dateFormatAngular }} </td>
+            <td> {{ accionPreventiva?.fecha_compromiso | date: dateFormatAngular }}</td>
+            <td>
+                <button pButton class="ui-button" icon="pi pi-search" (click)="selectAccionPreventiva(accionPreventiva)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

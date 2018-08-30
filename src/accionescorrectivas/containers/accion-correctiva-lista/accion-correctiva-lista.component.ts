@@ -219,20 +219,11 @@ export class AccionCorrectivaListaComponent implements OnInit {
     }
 
     selectAccionCorrectiva(data: AccionCorrectivaModel) {
-        // if (this.usuarioActual.es_jefe) {
         this.store.dispatch(
             new fromRootStore.Go({
-                path: [`/acciones/acciones-correctivas/${data.id}`]
+                path: [`/acciones/acciones-correctivas/detalle/${data.id}`]
             })
         );
-        // } else {
-        //     this.messageService.add({
-        //         severity: "error",
-        //         summary: "Acción denegada",
-        //         detail:
-        //             "Usted no cuenta con los privilegios suficientes para acceder a esta sección"
-        //     });
-        // }
     }
 
     deleteAccionCorrectiva(data: AccionCorrectivaModel) {
