@@ -36,6 +36,7 @@ import { EditCalidadOrganigramaDialogComponent } from '../edit-calidad-organigra
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button style="margin-right:10px;" pButton 
+                                *ngIf="permisoCrearNuevoCargo"
                                 type="button" 
                                 label="Crear nuevo cargo" 
                                 class="ui-button-primary"
@@ -54,7 +55,9 @@ import { EditCalidadOrganigramaDialogComponent } from '../edit-calidad-organigra
         <edit-calidad-organigrama-dialog #ecod
             [cargos]="loadedCalidad?.calidad_organigrama"
             (onUpdateCargo)="onUpdateCargo.emit($event)"
-            (onDeleteCargo)="onDeleteCargo.emit($event)">
+            (onDeleteCargo)="onDeleteCargo.emit($event)"
+            [permisoEditarCargo]="permisoEditarCargo"
+            [permisoEliminarCargo]="permisoEliminarCargo">
         </edit-calidad-organigrama-dialog>
     `
 })
@@ -69,10 +72,17 @@ export class OrganigramaComponent implements OnInit {
     onDeleteCargo = new EventEmitter<number>();
     @Output()
     onUpdateCargo = new EventEmitter<CalidadOrganigramaModel>();
+    
 
     //properties
     @Input()
     loadedCalidad: CalidadModel;
+    @Input()
+    permisoCrearNuevoCargo: boolean;
+    @Input()
+    permisoEditarCargo: boolean;
+    @Input()
+    permisoEliminarCargo: boolean;
 
     //viewChild
     @ViewChild('ecod')

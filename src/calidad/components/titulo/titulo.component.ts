@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <div style="text-align: right; color: #337ab7;">
+                    <div style="text-align: right; color: #337ab7;" *ngIf="permisoEditarTitulo">
                         <i 
                             *ngIf="!edit"
                             style="cursor: pointer;" 
@@ -88,6 +88,8 @@ export class TituloComponent implements OnInit {
     onUpdateEmpresaNombre = new EventEmitter<string>();
     @Output()
     onUpdateEmpresaLogo = new EventEmitter<File>();
+
+    @Input() permisoEditarTitulo: boolean;
 
     //properties
     @Input()

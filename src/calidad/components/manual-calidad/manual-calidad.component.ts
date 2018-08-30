@@ -15,7 +15,7 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <div style="text-align: right; color: #337ab7;">
+                    <div style="text-align: right; color: #337ab7;" *ngIf="permisoAdjuntarManualCalidad">
                         <i 
                             *ngIf="!edit"
                             style="cursor: pointer;" 
@@ -40,6 +40,7 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
                     <div *ngIf="!edit" class="ui-g">
                         <div class="ui-g-12" style="text-align: center;">
                             <button style="margin-right:10px;" pButton 
+                                *ngIf="permisoConsultarManualCalidad"
                                 type="button" 
                                 label="Consultar manual de calidad" 
                                 class="ui-button-primary"
@@ -47,6 +48,7 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
                                 [disabled]="!loadedCalidad?.url_manual">
                             </button>
                             <button style="margin-right:10px;" pButton 
+                                *ngIf="permisoDescargarManualCalidad"
                                 type="button" 
                                 label="Descargar manual de calidad" 
                                 class="ui-button-success"
@@ -87,6 +89,12 @@ export class ManualCalidadComponent implements OnInit, AfterViewInit {
     //properties
     @Input()
     loadedCalidad: CalidadModel;
+    @Input()
+    permisoAdjuntarManualCalidad: boolean;
+    @Input()
+    permisoConsultarManualCalidad: boolean;
+    @Input()
+    permisoDescargarManualCalidad: boolean;
 
     constructor() {}
 

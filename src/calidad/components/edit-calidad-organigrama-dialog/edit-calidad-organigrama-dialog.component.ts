@@ -50,6 +50,7 @@ import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigr
                 </div>
                 <p-footer>
                         <button style="margin-right:10px;" pButton 
+                            *ngIf="permisoEliminarCargo"
                             type="button" 
                             label="Eliminar" 
                             class="ui-button-warning"
@@ -62,6 +63,7 @@ import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigr
                             (click)="display = false">
                         </button>
                         <button style="margin-right:10px;" pButton 
+                            *ngIf="permisoEditarCargo"
                             type="submit" 
                             label="Actualizar" 
                             class="ui-button-primary"
@@ -86,6 +88,10 @@ export class EditCalidadOrganigramaDialogComponent implements OnInit {
     //properties
     @Input()
     cargos: CalidadOrganigramaModel[];
+    @Input()
+    permisoEditarCargo: boolean;
+    @Input()
+    permisoEliminarCargo: boolean;
 
     constructor(private fb: FormBuilder) {}
 
