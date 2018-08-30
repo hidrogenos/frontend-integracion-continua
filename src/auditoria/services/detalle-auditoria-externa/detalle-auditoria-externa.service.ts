@@ -67,6 +67,11 @@ export class DetalleAuditoriaExternaService {
                 }/auditoria/externa/detalle/update-datos-basicos/${id}`,
                 aux
             )
-            .pipe(catchError(error => throwError(error)));
+            .pipe(
+                map(response =>
+                    this.auditoriaExternaService.transformResponse(response)
+                ),
+                catchError(error => throwError(error))
+            );
     }
 }

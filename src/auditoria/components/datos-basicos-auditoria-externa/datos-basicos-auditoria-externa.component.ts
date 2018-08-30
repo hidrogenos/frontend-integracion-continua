@@ -153,9 +153,6 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                         </div>
                     </div>
                 </form>
-                <pre>
-                    {{ form.value | json}}
-                </pre>
             </div>
         </div>
     `

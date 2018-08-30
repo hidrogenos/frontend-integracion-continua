@@ -110,8 +110,10 @@ export class DetalleAuditoriaExternaComponent implements OnInit {
                     ...this.loadedAuditoria,
                     ...response
                 };
-                this.dbae.createForm();
-                this.hideWaitDialog();
+                setTimeout(() => {
+                    this.dbae.createForm();
+                    this.hideWaitDialog();
+                }, 1);
             });
     }
 }
