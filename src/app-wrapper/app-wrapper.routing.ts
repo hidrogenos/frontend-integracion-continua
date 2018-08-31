@@ -85,7 +85,12 @@ export const ROUTES: Routes = [
             { path: "charts", component: ChartsDemoComponent },
             { path: "file", component: FileDemoComponent },
             { path: "utils", component: UtilsDemoComponent },
-            { path: "documentation", component: DocumentationComponent }
+            { path: "documentation", component: DocumentationComponent },
+            {
+                path: "capacitaciones",
+                loadChildren:
+                    "./../capacitacion/capacitacion.module#CapacitacionModule"
+            }
         ]
     }
 ];

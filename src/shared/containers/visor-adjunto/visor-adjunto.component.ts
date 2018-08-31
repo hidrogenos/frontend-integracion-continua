@@ -25,13 +25,12 @@ import {
     AccionCorrectivaAdjuntoService,
     AccionPreventivaTareaAdjuntoService,
     AccionCorrectivaTareaAdjuntoService,
-    AccionPreventivaAdjuntoService
-    
-} from '../../services';
-import { DomSanitizer } from '@angular/platform-browser';
-import { PdfViewerComponent } from './../../components/pdf-viewer/pdf-viewer.component';
-import { ImageViewerComponentComponent } from '../../components';
-    
+    AccionPreventivaAdjuntoService,
+    CapacitacionDocumentoService
+} from "../../services";
+import { DomSanitizer } from "@angular/platform-browser";
+import { PdfViewerComponent } from "./../../components/pdf-viewer/pdf-viewer.component";
+import { ImageViewerComponentComponent } from "../../components";
 
 @Component({
     selector: "visor-adjunto",
@@ -65,7 +64,8 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private store: Store<StoreModel>,
         private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
         private documentoAdjuntoService: DocumentoAdjuntoService,
-        private documentoDivulgacionService: DocumentoDivulgacionRegistroService
+        private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
+        private capacitacionDocumentoService: CapacitacionDocumentoService
     ) {}
 
     ngAfterContentInit() {
@@ -112,6 +112,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 break;
             case environment.tipos_documento.documento_adjunto_flujo_doc.id:
                 this.getDocumentoAdjuntoFlujoDoc(idDocumento);
+                break;
+            case environment.tipos_documento.documento_capacitacion.id:
+                this.getDocumentoCapacitacion(idDocumento);
                 break;
 
             case environment.tipos_documento.factura_proveedor_documento.id:
@@ -397,6 +400,31 @@ export class VisorAdjuntoComponent implements AfterContentInit {
 
             this.hideWaitDialog();
         });
+    }
+
+    getDocumentoCapacitacion(id_documento) {
+        this.capacitacionDocumentoService
+            .getDocumentoCapacitacion(id_documento)
+            .subscribe(response => {
+                if (response.extension == "pdf") {
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento.documento_capacitacion
+                                .permiso_impresion
+                        )
+                        .subscribe(permisoImpresion => {
+                            this.showPdf(response.path, permisoImpresion);
+                        });
+                } else if (
+                    environment.extensiones_imagen.findIndex(
+                        e => e == response.extension
+                    ) != -1
+                ) {
+                    this.showImage(response.path);
+                } else {
+                    this.downloadFile(response.path, response.titulo);
+                }
+            });
     }
 
     hideWaitDialog() {

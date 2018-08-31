@@ -54,6 +54,10 @@ export const environment = {
         accion_preventiva_tarea_adjunto: {
             id: 11,
             permiso_impresion: 403
+        },
+        documento_capacitacion: {
+            id: 8,
+            permiso_impresion: 800
         }
     },
     extensiones_imagen: ["jpg", "gif", "png", "svg", "bmp", "jpeg"],

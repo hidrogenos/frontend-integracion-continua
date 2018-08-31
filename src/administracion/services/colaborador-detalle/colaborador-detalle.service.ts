@@ -1,28 +1,28 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, throwError } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 
 //environment
-import { environment } from '../../../environments/environment';
-import { PerfilModel } from '../../../shared/models/perfil.model';
-import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
-import { PaisModel } from '../../../shared/models/pais.model';
-import { ArlModel } from '../../../shared/models/arl.model';
-import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.model';
-import { CesantiaModel } from '../../../shared/models/cesantia.model';
-import { EpsModel } from '../../../shared/models/eps.model';
-import { PensionModel } from '../../../shared/models/pension.model';
-import { UsuarioModel } from '../../../shared/models/usuario.model';
+import { environment } from "../../../environments/environment";
+import { PerfilModel } from "../../../shared/models/perfil.model";
+import { CalidadOrganigramaModel } from "../../../shared/models/calidad-organigrama.model";
+import { PaisModel } from "../../../shared/models/pais.model";
+import { ArlModel } from "../../../shared/models/arl.model";
+import { CajaCompensacionModel } from "../../../shared/models/caja-compensacion.model";
+import { CesantiaModel } from "../../../shared/models/cesantia.model";
+import { EpsModel } from "../../../shared/models/eps.model";
+import { PensionModel } from "../../../shared/models/pension.model";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
 import {
     UsuarioService,
     UsuarioDestrezaService
-} from '../../../shared/services';
-import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
-import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
-import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
-import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.model';
-import { UsuarioDocumentoService } from '../../../shared/services/usuario-documento/usuario-documento.service';
+} from "../../../shared/services";
+import { TipoIdentificacionModel } from "../../../shared/models/tipo-identificacion.model";
+import { UsuarioDestrezaModel } from "../../../shared/models/usuario-destreza.model";
+import { UsuarioDestrezaDocumentoModel } from "../../../shared/models/usuario-destreza-documento.model";
+import { UsuarioDocumentoModel } from "../../../shared/models/usuario-documento.model";
+import { UsuarioDocumentoService } from "../../../shared/services/usuario-documento/usuario-documento.service";
 
 @Injectable()
 export class ColaboradorDetalleService {
@@ -90,7 +90,7 @@ export class ColaboradorDetalleService {
     downloadUsuarioDestrezaDocumento(data: { path: string }) {
         return this.http
             .post(`${environment.apiUrl}/utils/get-adjunto`, data, {
-                responseType: 'blob'
+                responseType: "blob"
             })
             .pipe(catchError((error: any) => throwError(error)));
     }

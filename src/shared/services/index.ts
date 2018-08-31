@@ -8,6 +8,8 @@ import { AccionCorrectivaAdjuntoService } from "./accion-correctiva-adjunto/acci
 export * from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
 import { EquipoService } from './equipo/equipo.service';
 export * from './equipo/equipo.service';
+import { CapacitacionProcesoService } from "./capacitacion-proceso/capacitacion-proceso.service";
+export * from "./capacitacion-proceso/capacitacion-proceso.service";
 
 import { EquipoAdjuntoService } from './equipo-adjunto/equipo-adjunto.service';
 export * from './equipo-adjunto/equipo-adjunto.service';
@@ -108,6 +110,24 @@ export * from "./usuario/usuario.service";
 import { UsuarioDocumentoService } from "./usuario-documento/usuario-documento.service";
 export * from "./usuario-documento/usuario-documento.service";
 
+import { CapacitacionService } from "./capacitacion/capacitacion.service";
+export * from "./capacitacion/capacitacion.service";
+
+import { CapacitacionAsistenteExternoService } from "./capacitacion-asistentes-externos-service/capacitacion-asistente-externo.service";
+export * from "./capacitacion-asistentes-externos-service/capacitacion-asistente-externo.service";
+
+import { CapacitacionAsistenteInternoService } from "./capacitacion-asistentes-interno-service/capacitacion-asistente-interno.service";
+export * from "./capacitacion-asistentes-interno-service/capacitacion-asistente-interno.service";
+
+import { CapacitacionCapacitadorExternService } from "./capacitacion-capacitadores-externos-service/capacitacion-capacitador-externo.service";
+export * from "./capacitacion-capacitadores-externos-service/capacitacion-capacitador-externo.service";
+
+import { CapacitacionCapacitadorInternoService } from "./capacitacion-capacitadores-internos-service/capacitacion-capacitador-interno.service";
+export * from "./capacitacion-capacitadores-internos-service/capacitacion-capacitador-interno.service";
+
+import { CapacitacionDocumentoService } from "./capacitacion-documento/capacitacion-documento-.service";
+export * from "./capacitacion-documento/capacitacion-documento-.service";
+
 export const services: any[] = [
     AdjuntoService,
     AuditoriaExternaService,
@@ -133,6 +153,9 @@ export const services: any[] = [
     EquipoService,
     EquipoAdjuntoService,
     EquipoServicioMantenimientoService,
+    CapacitacionService,
+    CapacitacionProcesoService,
+    CapacitacionDocumentoService,
     HasPermisionService,
     PdfViewerService,
     ProveedorFacturaService,
@@ -153,5 +176,9 @@ export const services: any[] = [
     TipoServicioService,
     BancoService,
     ProveedorService,
-    UsuarioDestrezaDocumentoService
+    UsuarioDestrezaDocumentoService,
+    CapacitacionAsistenteExternoService,
+    CapacitacionAsistenteInternoService,
+    CapacitacionCapacitadorExternService,
+    CapacitacionCapacitadorInternoService
 ];
