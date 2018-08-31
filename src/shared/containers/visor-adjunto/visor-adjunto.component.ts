@@ -26,6 +26,7 @@ import {
     AccionPreventivaTareaAdjuntoService,
     AccionCorrectivaTareaAdjuntoService,
     AccionPreventivaAdjuntoService,
+    DocumentoService,
     CapacitacionDocumentoService
 } from "../../services";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -65,8 +66,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
         private documentoAdjuntoService: DocumentoAdjuntoService,
         private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
-        private capacitacionDocumentoService: CapacitacionDocumentoService
-    ) {}
+        private capacitacionDocumentoService: CapacitacionDocumentoService,
+        private documentoService: DocumentoService,
+    ) { }
 
     ngAfterContentInit() {
         this.showWaitDialog("Consultado adjunto, un momento por favor...");
@@ -108,10 +110,16 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 this.getUsuarioDestrezaDocumento(idDocumento);
                 break;
             case environment.tipos_documento.documento_adjunto_doc.id:
-                this.getDocumentoAdjuntoDoc(idDocumento);
+                this.getPermisoModuloDocumentosAdjunto(idDocumento, environment.permiso_documento.imprimir_adjuntos)
+                    .subscribe((response: any) => {
+                        this.getDocumentoAdjuntoDoc(idDocumento, response.id_permiso);
+                    })
                 break;
             case environment.tipos_documento.documento_adjunto_flujo_doc.id:
-                this.getDocumentoAdjuntoFlujoDoc(idDocumento);
+                this.getPermisoModuloDocumentosAdjuntoFlujo(idDocumento, environment.permiso_documento.imprimir_adjuntos_flujo)
+                    .subscribe((response: any) => {
+                        this.getDocumentoAdjuntoFlujoDoc(idDocumento, response.id_permiso);
+                    })
                 break;
             case environment.tipos_documento.documento_capacitacion.id:
                 this.getDocumentoCapacitacion(idDocumento);
@@ -138,6 +146,14 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             default:
                 break;
         }
+    }
+
+    getPermisoModuloDocumentosAdjunto(idDocumento: number, idPermisoDocumento: number) {
+        return this.documentoService.getPermisoByIdDocAdjunto(idDocumento, idPermisoDocumento);
+    }
+
+    getPermisoModuloDocumentosAdjuntoFlujo(idDocumento: number, idPermisoDocumento: number) {
+        return this.documentoService.getPermisoByIdDocAdjuntoFlujo(idDocumento, idPermisoDocumento);
     }
 
     getFacturaProveedorDocumento(idDocumento) {
@@ -384,11 +400,11 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             const url = window.URL.createObjectURL(blob);
             const URL = permisoImpresion
                 ? this.sanitizer.bypassSecurityTrustResourceUrl(
-                      `${url}#toolbar=1&navpanes=1`
-                  )
+                    `${url}#toolbar=1&navpanes=1`
+                )
                 : this.sanitizer.bypassSecurityTrustResourceUrl(
-                      `${url}#toolbar=0&navpanes=1`
-                  );
+                    `${url}#toolbar=0&navpanes=1`
+                );
 
             let componentFactory = this.resolver.resolveComponentFactory(
                 PdfViewerComponent
@@ -435,16 +451,13 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
     }
 
-    getDocumentoAdjuntoDoc(idDocumento: number) {
+    getDocumentoAdjuntoDoc(idDocumento: number, idPermiso: number) {
         this.documentoAdjuntoService
             .getDocumentoAdjunto(idDocumento)
             .pipe(
                 switchMap(documento =>
                     this.hasPermisionService
-                        .hasPermision(
-                            environment.tipos_documento.documento_adjunto_doc
-                                .permiso_impresion
-                        )
+                        .hasPermision(idPermiso)
                         .pipe(
                             map(permisoImpresion => {
                                 return {
@@ -476,16 +489,13 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             });
     }
 
-    getDocumentoAdjuntoFlujoDoc(idDocumento: number) {
+    getDocumentoAdjuntoFlujoDoc(idDocumento: number, idPermiso: number) {
         this.documentoDivulgacionService
             .getDocumentoDivulgacionRegistro(idDocumento)
             .pipe(
                 switchMap(documento =>
                     this.hasPermisionService
-                        .hasPermision(
-                            environment.tipos_documento
-                                .documento_adjunto_flujo_doc.permiso_impresion
-                        )
+                        .hasPermision(idPermiso)
                         .pipe(
                             map(permisoImpresion => {
                                 return {
