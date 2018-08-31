@@ -706,7 +706,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 this.store.dispatch(
                     new fromRouteStore.Go({
                         path: [
-                            `documentos/${this.documento.id_tipo}`
+                            `dashboard`
                         ]
                     })
                 );
