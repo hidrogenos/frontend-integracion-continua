@@ -4,15 +4,15 @@ import {
     EventEmitter,
     ViewChild,
     Input
-} from '@angular/core';
-import { FileUpload } from 'primeng/primeng';
-import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
-import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.model';
-import { environment } from '../../../environments/environment';
+} from "@angular/core";
+import { FileUpload } from "primeng/primeng";
+import { UsuarioDestrezaDocumentoModel } from "../../../shared/models/usuario-destreza-documento.model";
+import { UsuarioDocumentoModel } from "../../../shared/models/usuario-documento.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
-    selector: 'create-documento-colaborador',
-    styleUrls: ['create-documento-colaborador.component.scss'],
+    selector: "create-documento-colaborador",
+    styleUrls: ["create-documento-colaborador.component.scss"],
     template: `
         <div class="ui-g">
             <div class="ui-g-12 text-aling-right">
@@ -66,17 +66,20 @@ export class CreateDocumentoColaboradorComponent {
     //atributos
     dateFormatAngular = environment.dateFormatAngular;
     //events
-    @Output() onCreateDocumentoColaborador = new EventEmitter<File[]>();
+    @Output()
+    onCreateDocumentoColaborador = new EventEmitter<File[]>();
     @Output()
     onDeleteUsuarioDocumento = new EventEmitter<UsuarioDocumentoModel>();
     @Output()
     onDownloadUsuarioDocumento = new EventEmitter<UsuarioDocumentoModel>();
 
     //properties
-    @Input() documentos: UsuarioDestrezaDocumentoModel;
+    @Input()
+    documentos: UsuarioDestrezaDocumentoModel;
 
     //viewchild
-    @ViewChild('fu') fu: FileUpload;
+    @ViewChild("fu")
+    fu: FileUpload;
 
     constructor() {}
 

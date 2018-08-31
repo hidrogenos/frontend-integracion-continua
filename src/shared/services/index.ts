@@ -1,51 +1,75 @@
-import { AdjuntoService } from './utils/adjunto/adjunto.service';
-export * from './utils/adjunto/adjunto.service';
+import { AdjuntoService } from "./utils/adjunto/adjunto.service";
+export * from "./utils/adjunto/adjunto.service";
 
-import { CalidadService } from './calidad/calidad.service';
-export * from './calidad/calidad.service';
+import { CalidadService } from "./calidad/calidad.service";
+export * from "./calidad/calidad.service";
 
-import { HasPermisionService } from './utils/auth-has-permision/auth-has-permision.service';
-export * from './utils/auth-has-permision/auth-has-permision.service';
+import { CapacitacionProcesoService } from "./capacitacion-proceso/capacitacion-proceso.service";
+export * from "./capacitacion-proceso/capacitacion-proceso.service";
 
-import { PdfViewerService } from './pdf-viewer/pdf-viewer.service';
-export * from './pdf-viewer/pdf-viewer.service';
+import { HasPermisionService } from "./utils/auth-has-permision/auth-has-permision.service";
+export * from "./utils/auth-has-permision/auth-has-permision.service";
 
-import { BancoService } from './banco/banco.service';
-export * from './banco/banco.service';
+import { PdfViewerService } from "./pdf-viewer/pdf-viewer.service";
+export * from "./pdf-viewer/pdf-viewer.service";
 
-import { CiudadService } from './ciudad/ciudad.service';
-export * from './ciudad/ciudad.service';
+import { BancoService } from "./banco/banco.service";
+export * from "./banco/banco.service";
 
-import { ProveedorService } from './proveedor/proveedor.service';
-export * from './proveedor/proveedor.service';
+import { CiudadService } from "./ciudad/ciudad.service";
+export * from "./ciudad/ciudad.service";
 
-import { RegimenService } from './regimen/regimen.service';
-export * from './regimen/regimen.service';
+import { ProveedorService } from "./proveedor/proveedor.service";
+export * from "./proveedor/proveedor.service";
 
-import { TipoCuentaService } from './tipo-cuenta/tipo-cuenta.service';
-export * from './tipo-cuenta/tipo-cuenta.service';
+import { RegimenService } from "./regimen/regimen.service";
+export * from "./regimen/regimen.service";
 
-import { TipoIdentificacionService } from './tipo-identificacion/tipo-identificacion.service';
-export * from './tipo-identificacion/tipo-identificacion.service';
+import { TipoCuentaService } from "./tipo-cuenta/tipo-cuenta.service";
+export * from "./tipo-cuenta/tipo-cuenta.service";
 
-import { UsuarioDestrezaDocumentoService } from './usuario-destreza-documento/usuario-destreza-documento.service';
-export * from './usuario-destreza-documento/usuario-destreza-documento.service';
+import { TipoIdentificacionService } from "./tipo-identificacion/tipo-identificacion.service";
+export * from "./tipo-identificacion/tipo-identificacion.service";
 
-import { UsuarioDestrezaService } from './usuario-destreza/usuario-destreza.service';
-export * from './usuario-destreza/usuario-destreza.service';
+import { UsuarioDestrezaDocumentoService } from "./usuario-destreza-documento/usuario-destreza-documento.service";
+export * from "./usuario-destreza-documento/usuario-destreza-documento.service";
 
-import { UsuarioService } from './usuario/usuario.service';
-export * from './usuario/usuario.service';
+import { UsuarioDestrezaService } from "./usuario-destreza/usuario-destreza.service";
+export * from "./usuario-destreza/usuario-destreza.service";
 
-import { AccionCorrectivaService } from './accioncorrectiva/accioncorrectiva.service';
-export * from './accioncorrectiva/accioncorrectiva.service';
+import { UsuarioService } from "./usuario/usuario.service";
+export * from "./usuario/usuario.service";
 
-import { UsuarioDocumentoService } from './usuario-documento/usuario-documento.service';
-export * from './usuario-documento/usuario-documento.service';
+import { AccionCorrectivaService } from "./accioncorrectiva/accioncorrectiva.service";
+export * from "./accioncorrectiva/accioncorrectiva.service";
+
+import { UsuarioDocumentoService } from "./usuario-documento/usuario-documento.service";
+export * from "./usuario-documento/usuario-documento.service";
+
+import { CapacitacionService } from "./capacitacion/capacitacion.service";
+export * from "./capacitacion/capacitacion.service";
+
+import { CapacitacionAsistenteExternoService } from "./capacitacion-asistentes-externos-service/capacitacion-asistente-externo.service";
+export * from "./capacitacion-asistentes-externos-service/capacitacion-asistente-externo.service";
+
+import { CapacitacionAsistenteInternoService } from "./capacitacion-asistentes-interno-service/capacitacion-asistente-interno.service";
+export * from "./capacitacion-asistentes-interno-service/capacitacion-asistente-interno.service";
+
+import { CapacitacionCapacitadorExternService } from "./capacitacion-capacitadores-externos-service/capacitacion-capacitador-externo.service";
+export * from "./capacitacion-capacitadores-externos-service/capacitacion-capacitador-externo.service";
+
+import { CapacitacionCapacitadorInternoService } from "./capacitacion-capacitadores-internos-service/capacitacion-capacitador-interno.service";
+export * from "./capacitacion-capacitadores-internos-service/capacitacion-capacitador-interno.service";
+
+import { CapacitacionDocumentoService } from "./capacitacion-documento/capacitacion-documento-.service";
+export * from "./capacitacion-documento/capacitacion-documento-.service";
 
 export const services: any[] = [
     AdjuntoService,
     CalidadService,
+    CapacitacionService,
+    CapacitacionProcesoService,
+    CapacitacionDocumentoService,
     HasPermisionService,
     PdfViewerService,
     TipoIdentificacionService,
@@ -58,5 +82,9 @@ export const services: any[] = [
     TipoCuentaService,
     BancoService,
     ProveedorService,
-    UsuarioDestrezaDocumentoService
+    UsuarioDestrezaDocumentoService,
+    CapacitacionAsistenteExternoService,
+    CapacitacionAsistenteInternoService,
+    CapacitacionCapacitadorExternService,
+    CapacitacionCapacitadorInternoService
 ];

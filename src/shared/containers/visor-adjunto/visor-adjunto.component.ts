@@ -5,26 +5,27 @@ import {
     ComponentFactoryResolver,
     AfterContentInit,
     OnInit
-} from '@angular/core';
-import { StoreModel } from '../../models/store.model';
-import { Store } from '@ngrx/store';
-import * as fromRoot from './../../../app/store';
-import * as fromShared from './../../../shared/store';
-import { take, switchMap, map, last } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+} from "@angular/core";
+import { StoreModel } from "../../models/store.model";
+import { Store } from "@ngrx/store";
+import * as fromRoot from "./../../../app/store";
+import * as fromShared from "./../../../shared/store";
+import { take, switchMap, map, last } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
 import {
     CalidadService,
     HasPermisionService,
     AdjuntoService,
-    UsuarioDestrezaDocumentoService
-} from '../../services';
-import { DomSanitizer } from '@angular/platform-browser';
-import { PdfViewerComponent } from './../../components/pdf-viewer/pdf-viewer.component';
-import { ImageViewerComponentComponent } from '../../components';
+    UsuarioDestrezaDocumentoService,
+    CapacitacionDocumentoService
+} from "../../services";
+import { DomSanitizer } from "@angular/platform-browser";
+import { PdfViewerComponent } from "./../../components/pdf-viewer/pdf-viewer.component";
+import { ImageViewerComponentComponent } from "../../components";
 
 @Component({
-    selector: 'visor-adjunto',
-    styleUrls: ['visor-adjunto.component.scss'],
+    selector: "visor-adjunto",
+    styleUrls: ["visor-adjunto.component.scss"],
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
@@ -36,7 +37,7 @@ import { ImageViewerComponentComponent } from '../../components';
 })
 export class VisorAdjuntoComponent implements AfterContentInit {
     //viewChild
-    @ViewChild('container', { read: ViewContainerRef })
+    @ViewChild("container", { read: ViewContainerRef })
     container: ViewContainerRef;
 
     constructor(
@@ -46,11 +47,12 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private hasPermisionService: HasPermisionService,
         private sanitizer: DomSanitizer,
         private store: Store<StoreModel>,
-        private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService
+        private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
+        private capacitacionDocumentoService: CapacitacionDocumentoService
     ) {}
 
     ngAfterContentInit() {
-        this.showWaitDialog('Consultado adjunto, un momento por favor...');
+        this.showWaitDialog("Consultado adjunto, un momento por favor...");
         this.store
             .select(fromRoot.getRouterState)
             .pipe(take(1))
@@ -68,9 +70,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             const blob = new Blob([file], { type: file.type });
 
             var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
+            var a = document.createElement("a");
             document.body.appendChild(a);
-            a.setAttribute('style', 'display: none');
+            a.setAttribute("style", "display: none");
             a.href = url;
             a.download = nombre;
             a.click();
@@ -87,6 +89,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 break;
             case environment.tipos_documento.usuario_destreza_documento.id:
                 this.getUsuarioDestrezaDocumento(idDocumento);
+                break;
+            case environment.tipos_documento.documento_capacitacion.id:
+                this.getDocumentoCapacitacion(idDocumento);
                 break;
 
             default:
@@ -140,7 +145,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 )
             )
             .subscribe(response => {
-                if (response.documento.extension == 'pdf') {
+                if (response.documento.extension == "pdf") {
                     this.showPdf(
                         response.documento.path,
                         response.permisoImpresion
@@ -163,7 +168,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
     showImage(path: string) {
         this.adjuntoService.getAdjunto({ path }).subscribe(response => {
             const blob = new Blob([response], {
-                type: 'application/pdf'
+                type: "application/pdf"
             });
             const url = window.URL.createObjectURL(blob);
             const URL = this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -183,7 +188,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
     showPdf(path: string, permisoImpresion: boolean) {
         this.adjuntoService.getAdjunto({ path }).subscribe(response => {
             const blob = new Blob([response], {
-                type: 'application/pdf'
+                type: "application/pdf"
             });
             const url = window.URL.createObjectURL(blob);
             const URL = permisoImpresion
@@ -204,6 +209,31 @@ export class VisorAdjuntoComponent implements AfterContentInit {
 
             this.hideWaitDialog();
         });
+    }
+
+    getDocumentoCapacitacion(id_documento) {
+        this.capacitacionDocumentoService
+            .getDocumentoCapacitacion(id_documento)
+            .subscribe(response => {
+                if (response.extension == "pdf") {
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento.documento_capacitacion
+                                .permiso_impresion
+                        )
+                        .subscribe(permisoImpresion => {
+                            this.showPdf(response.path, permisoImpresion);
+                        });
+                } else if (
+                    environment.extensiones_imagen.findIndex(
+                        e => e == response.extension
+                    ) != -1
+                ) {
+                    this.showImage(response.path);
+                } else {
+                    this.downloadFile(response.path, response.titulo);
+                }
+            });
     }
 
     hideWaitDialog() {

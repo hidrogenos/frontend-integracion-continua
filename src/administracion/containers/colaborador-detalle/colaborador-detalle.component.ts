@@ -1,40 +1,40 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { StoreModel } from '../../../shared/models/store.model';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { StoreModel } from "../../../shared/models/store.model";
 
 //store
-import { Store } from '@ngrx/store';
-import * as fromRoot from './../../../app/store';
-import * as fromSahred from './../../../shared/store';
-import { take, switchMap, map, tap } from 'rxjs/operators';
-import { ColaboradorDetalleService } from '../../services';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { UsuarioModel } from '../../../shared/models/usuario.model';
-import { forkJoin } from 'rxjs';
-import { ArlModel } from '../../../shared/models/arl.model';
-import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.model';
-import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
-import { CesantiaModel } from '../../../shared/models/cesantia.model';
-import { EpsModel } from '../../../shared/models/eps.model';
-import { PaisModel } from '../../../shared/models/pais.model';
-import { PensionModel } from '../../../shared/models/pension.model';
-import { PerfilModel } from '../../../shared/models/perfil.model';
-import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
+import { Store } from "@ngrx/store";
+import * as fromRoot from "./../../../app/store";
+import * as fromSahred from "./../../../shared/store";
+import { take, switchMap, map, tap } from "rxjs/operators";
+import { ColaboradorDetalleService } from "../../services";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
+import { forkJoin } from "rxjs";
+import { ArlModel } from "../../../shared/models/arl.model";
+import { CajaCompensacionModel } from "../../../shared/models/caja-compensacion.model";
+import { CalidadOrganigramaModel } from "../../../shared/models/calidad-organigrama.model";
+import { CesantiaModel } from "../../../shared/models/cesantia.model";
+import { EpsModel } from "../../../shared/models/eps.model";
+import { PaisModel } from "../../../shared/models/pais.model";
+import { PensionModel } from "../../../shared/models/pension.model";
+import { PerfilModel } from "../../../shared/models/perfil.model";
+import { TipoIdentificacionModel } from "../../../shared/models/tipo-identificacion.model";
 import {
     UsuarioService,
     UsuarioDestrezaService
-} from '../../../shared/services';
+} from "../../../shared/services";
 import {
     DatosBasicosColaboradorComponent,
     CreateDocumentoColaboradorComponent
-} from '../../components';
-import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
-import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
-import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.model';
-import { environment } from '../../../environments/environment';
+} from "../../components";
+import { UsuarioDestrezaModel } from "../../../shared/models/usuario-destreza.model";
+import { UsuarioDestrezaDocumentoModel } from "../../../shared/models/usuario-destreza-documento.model";
+import { UsuarioDocumentoModel } from "../../../shared/models/usuario-documento.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
-    selector: 'colaborador-detalle',
-    styleUrls: ['colaborador-detalle.component.scss'],
+    selector: "colaborador-detalle",
+    styleUrls: ["colaborador-detalle.component.scss"],
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
@@ -115,9 +115,9 @@ export class ColaboradorDetalleComponent implements OnInit {
     tiposIdentificacion: TipoIdentificacionModel[];
 
     //viewChild
-    @ViewChild('cdc')
+    @ViewChild("cdc")
     cdc: CreateDocumentoColaboradorComponent;
-    @ViewChild('dbc')
+    @ViewChild("dbc")
     dbc: DatosBasicosColaboradorComponent;
 
     constructor(
@@ -146,7 +146,7 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     createDestreza(data) {
         this.showWaitDialog(
-            'Regitsrando nueva aptitud o destreza, un momento por favor...'
+            "Regitsrando nueva aptitud o destreza, un momento por favor..."
         );
 
         const auxDestreza: UsuarioDestrezaModel = {
@@ -160,7 +160,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                     const files: File[] = data.files;
                     const form: FormData = new FormData();
                     files.forEach(element =>
-                        form.append('uploads[]', element, element.name)
+                        form.append("uploads[]", element, element.name)
                     );
                     return this.colaboradorDetalleService
                         .uploadUsuarioDestrezaDocumentos(destreza.id, form)
@@ -182,12 +182,12 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
-
+    //este
     createDocumentoColaborador(files: File[]) {
-        this.showWaitDialog('Adjuntando documentos, un momento por favor...');
+        this.showWaitDialog("Adjuntando documentos, un momento por favor...");
         const form: FormData = new FormData();
         files.forEach(element =>
-            form.append('uploads[]', element, element.name)
+            form.append("uploads[]", element, element.name)
         );
 
         this.colaboradorDetalleService
@@ -203,7 +203,7 @@ export class ColaboradorDetalleComponent implements OnInit {
     }
 
     deleteDestreza(destreza: UsuarioDestrezaModel) {
-        this.showWaitDialog('Eliminando destreza, un momento por favor...');
+        this.showWaitDialog("Eliminando destreza, un momento por favor...");
         this.colaboradorDetalleService
             .deleteDestreza(destreza.id)
             .subscribe(response => {
@@ -215,7 +215,7 @@ export class ColaboradorDetalleComponent implements OnInit {
     }
 
     deleteDestrezaDocumento(destrezaDocumento: UsuarioDestrezaDocumentoModel) {
-        this.showWaitDialog('Eliminando documento, un momento por favor...');
+        this.showWaitDialog("Eliminando documento, un momento por favor...");
         this.colaboradorDetalleService
             .deleteDestrezaDocumento(destrezaDocumento.id)
             .subscribe(response => {
@@ -227,9 +227,9 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
-
+    //este
     deleteUsuarioDocumento(event: UsuarioDocumentoModel) {
-        this.showWaitDialog('Eliminando documento, un momento por favor...');
+        this.showWaitDialog("Eliminando documento, un momento por favor...");
         this.colaboradorDetalleService
             .deleteUsuarioDocumento(event.id)
             .subscribe(response => {
@@ -239,7 +239,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
-
+    ///este
     downloadUsuarioDocumento(event: UsuarioDocumentoModel) {
         this.colaboradorDetalleService
             .downloadUsuarioDestrezaDocumento({ path: event.path })
@@ -247,9 +247,9 @@ export class ColaboradorDetalleComponent implements OnInit {
                 const blob = new Blob([file], { type: file.type });
 
                 var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
+                var a = document.createElement("a");
                 document.body.appendChild(a);
-                a.setAttribute('style', 'display: none');
+                a.setAttribute("style", "display: none");
                 a.href = url;
                 a.download = event.titulo;
                 a.click();
@@ -260,16 +260,16 @@ export class ColaboradorDetalleComponent implements OnInit {
     }
 
     downloadUsuarioDestrezaDocumento(event: UsuarioDestrezaDocumentoModel) {
-        this.showWaitDialog('Descargando documento, un momento por favor...');
+        this.showWaitDialog("Descargando documento, un momento por favor...");
         this.colaboradorDetalleService
             .downloadUsuarioDestrezaDocumento({ path: event.path })
             .subscribe(file => {
                 const blob = new Blob([file], { type: file.type });
 
                 var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
+                var a = document.createElement("a");
                 document.body.appendChild(a);
-                a.setAttribute('style', 'display: none');
+                a.setAttribute("style", "display: none");
                 a.href = url;
                 a.download = event.titulo;
                 a.click();
@@ -285,7 +285,7 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     getInitialData() {
         this.showWaitDialog(
-            'COnsultando datos del colaborador, un momento por favor'
+            "COnsultando datos del colaborador, un momento por favor"
         );
         forkJoin([this.getUsuario(), this.getAuxData()]).subscribe(
             ([usuario, auxData]) => {
@@ -324,14 +324,14 @@ export class ColaboradorDetalleComponent implements OnInit {
     }
 
     resetPassword(data) {
-        this.showWaitDialog('Actualizando la contraseña, un momento por favor');
+        this.showWaitDialog("Actualizando la contraseña, un momento por favor");
         this.colaboradorDetalleService
             .resetPassword(data)
             .subscribe(response => this.hideWaitDialog());
     }
 
     updateUsuario(usuario: UsuarioModel) {
-        this.showWaitDialog('Actualizando datos, un momento por favor');
+        this.showWaitDialog("Actualizando datos, un momento por favor");
 
         this.colaboradorDetalleService
             .updateUsuario(this.loadedUsuario.id, usuario)
@@ -349,7 +349,7 @@ export class ColaboradorDetalleComponent implements OnInit {
     }
 
     updateDestreza(data: { destreza: UsuarioDestrezaModel; files: File[] }) {
-        this.showWaitDialog('Actualizando datos, un momento por favor...');
+        this.showWaitDialog("Actualizando datos, un momento por favor...");
         this.colaboradorDetalleService
             .updateDestreza(data.destreza.id, data.destreza)
             .pipe(
@@ -357,7 +357,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                     const files: File[] = data.files;
                     const form: FormData = new FormData();
                     files.forEach(element =>
-                        form.append('uploads[]', element, element.name)
+                        form.append("uploads[]", element, element.name)
                     );
                     return this.colaboradorDetalleService
                         .uploadUsuarioDestrezaDocumentos(data.destreza.id, form)

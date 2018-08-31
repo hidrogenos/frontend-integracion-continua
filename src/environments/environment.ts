@@ -5,15 +5,15 @@
 
 export const environment = {
     production: false,
-    baseUrl: 'http://localhost:4200',
-    apiUrl: 'http://localhost/api-base-5-6/public/api',
+    baseUrl: "http://localhost:4200",
+    apiUrl: "http://localhost/api-base-5-6/public/api",
     auth: {
-        urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
-        secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
+        urlToken: "http://localhost/api-base-5-6/public/oauth/token",
+        secret: "GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq",
         clientId: 2
     },
-    dateFormatAngular: 'yyyy-MM-dd',
-    dateFormatPrimeNg: 'yy-mm-dd',
+    dateFormatAngular: "yyyy-MM-dd",
+    dateFormatPrimeNg: "yy-mm-dd",
     tipos_documento: {
         manual_calidad: {
             id: 1,
@@ -22,7 +22,11 @@ export const environment = {
         usuario_destreza_documento: {
             id: 2,
             permiso_impresion: 101
+        },
+        documento_capacitacion: {
+            id: 8,
+            permiso_impresion: 800
         }
     },
-    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg']
+    extensiones_imagen: ["jpg", "gif", "png", "svg", "bmp", "jpeg"]
 };
