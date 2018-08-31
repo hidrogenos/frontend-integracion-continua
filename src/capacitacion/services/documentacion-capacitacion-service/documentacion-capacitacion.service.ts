@@ -3,11 +3,9 @@ import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { catchError, map } from "rxjs/operators";
-import { AccionDocumentoModel } from "../../../shared/models/accion-documento.model";
 import { CapacitacionAdjuntoModel } from "../../../shared/models/capacitacion-adjunto.model";
 import { CapacitacionDocumentoService } from "../../../shared/services/capacitacion-documento/capacitacion-documento-.service";
 
-const url_Point_Api = "/capacitacion/capacitacion-documento";
 
 @Injectable()
 export class DocumentacionCapacitacionService {

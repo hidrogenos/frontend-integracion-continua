@@ -5,15 +5,15 @@
 
 export const environment = {
     production: false,
-    baseUrl: "http://localhost:4200",
-    apiUrl: "http://localhost/api-base-5-6/public/api",
+    baseUrl: 'http://localhost:4200',
+    apiUrl: 'http://localhost/api-base-5-6/public/api',
     auth: {
-        urlToken: "http://localhost/api-base-5-6/public/oauth/token",
-        secret: "GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq",
+        urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
+        secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },
-    dateFormatAngular: "yyyy-MM-dd",
-    dateFormatPrimeNg: "yy-mm-dd",
+    dateFormatAngular: 'yyyy-MM-dd',
+    dateFormatPrimeNg: 'yy-mm-dd',
     tipos_documento: {
         manual_calidad: {
             id: 1,
@@ -28,11 +28,11 @@ export const environment = {
             permiso_impresion: 203
         },
         documento_adjunto_doc: {
-            id: 3,
+            id: 4,
             permiso_impresion: 100
         },
         documento_adjunto_flujo_doc: {
-            id: 4,
+            id: 5,
             permiso_impresion: 100
         },
         plano_documento: {
@@ -40,27 +40,27 @@ export const environment = {
             permiso_impresion: 903
         },
         accion_correctiva_adjunto: {
-            id: 4,
+            id: 7,
             permiso_impresion: 302
         },
         accion_correctiva_tarea_adjunto: {
-            id: 5,
+            id: 8,
             permiso_impresion: 303
         },
         accion_preventiva_adjunto: {
-            id: 10,
+            id: 9,
             permiso_impresion: 402
         },
         accion_preventiva_tarea_adjunto: {
-            id: 11,
+            id: 10,
             permiso_impresion: 403
         },
         documento_capacitacion: {
-            id: 8,
+            id: 11,
             permiso_impresion: 800
         }
     },
-    extensiones_imagen: ["jpg", "gif", "png", "svg", "bmp", "jpeg"],
+    extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
     estados_documento: {
         en_creacion: 1,
         en_elaboracion: 2,
