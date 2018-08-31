@@ -1,6 +1,7 @@
 import { AccionProcesoModel } from "./accion-proceso.model";
 import { AccionImportanciaModel } from "./accion-importancia.model";
 import { AccionPreventivaAdjuntoModel } from "./accion-preventiva-adjunto.model";
+import { AccionPreventivaAnalisisModel } from "./accion-preventiva-analisis.model";
 import { AccionPreventivaTareaModel } from "./accion-preventiva-tarea.model";
 
 export interface AccionPreventivaModel {
@@ -21,6 +22,7 @@ export interface AccionPreventivaModel {
     id_usuario_crea?: number;
     procesos?: AccionProcesoModel[];
     documentos?: AccionPreventivaAdjuntoModel[];
+    metodologia_analisis?: AccionPreventivaAnalisisModel;
     tareas?: AccionPreventivaTareaModel[];
     observacion?: string;
 }

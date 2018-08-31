@@ -1,0 +1,171 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <h2>
+            <b> Metodología de análisis</b>
+        </h2>
+    </div>
+</div>
+
+<hr />
+
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-steps #steps [model]="stepsItems"></p-steps>
+    </div>
+</div>
+
+<div *ngIf="!metodologiaActual">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="ui-g">
+            <div class="ui-g-6 ui-fluid">
+                <p-dropdown [options]="metodologias" [autoWidth]="false" formControlName="metodologia" optionLabel="nombre" placeholder="Seleccione una metodología..."></p-dropdown>
+            </div>
+
+            <div class="ui-g-2 ui-fluid">
+                <button *ngIf="!disabled" pButton type="submit" class="ui-button-success" icon="pi pi-plus" label="Crear" [disabled]="!form.valid"></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div *ngIf="metodologiaActual" [ngSwitch]="metodologiaActual.id_accion_analisis_tipo">
+    <form [formGroup]="ideasForm" (ngSubmit)="onSubmitSaveHijo()" novalidate>
+        <div *ngSwitchCase="2" class="ui-g">
+
+            <div class="ui-g-12">
+
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <h3>
+                            <b>Lluvia de ideas</b>
+                        </h3>
+                    </div>
+                </div>
+
+                <div *ngIf="stepComponent.activeIndex >= 1" class="ui-g">
+                    <div class="ui-g-12">
+                        <div formArrayName="ideas" *ngFor="let item of ideas.controls; let i = index;">
+                            <div [formGroupName]="i">
+                                <div class="ui-g">
+                                    <div class="ui-g-5 ui-fluid">
+                                        <div>
+                                            <label>Idea</label>
+                                        </div>
+                                        <textarea pInputTextarea [rows]="5" [cols]="30" autoResize="false" formControlName="pregunta_causa_idea" style="width: 100%">
+                                    </textarea>
+                                    </div>
+                                    <div class="ui-g-5 ui-fluid">
+                                        <div>
+                                            <label>Contribuyentes</label>
+                                        </div>
+                                        <!-- <p-chips formControlName="contribuyo"></p-chips> -->
+                                        <textarea pInputTextarea [rows]="5" [cols]="30" autoResize="false" formControlName="contribuyo" style="width: 100%;">
+                                    </textarea>
+                                    </div>
+
+                                    <div *ngIf="stepComponent.activeIndex == 1 && !disabled" class="ui-g-2 ui-fluid" style="text-align:left; padding-top: 5%;">
+                                        <button pButton type="button" class="ui-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
+                                    </div>
+
+                                    <div *ngIf="stepComponent.activeIndex == 2 && !disabled" class="ui-g-2 ui-fluid" style="text-align:left; padding-top: 5%;">
+                                        <button *ngIf="item.disabled" pButton type="button" class="ui-button" icon="pi pi-pencil" (click)="item.enable()"></button>
+                                        <button *ngIf="item.enabled" pButton type="button" class="ui-button-success" icon="pi pi-save" (click)="editItemAccionAnalisisHijo(i); item.disable()"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g" *ngIf="!disabled">
+                    <div class="ui-g-12 text-aling-right">
+                        <button pButton type="button" class="ui-button-success" icon="pi pi-plus" (click)="addItem()" label="Añadir nueva idea"></button>
+                        <button *ngIf="stepComponent.activeIndex == 1" pButton type="submit" class="ui-button" style="margin-left: 2%" icon="pi pi-save"
+                            [disabled]="!ideasForm.valid" label="Guardar cambios"></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div *ngSwitchCase="3" class="ui-g ui-fluid">
+            <div class="ui-g-12" style="text-align: center; background-color:#63a0d4; color: white">
+                <b> No aplica</b>
+            </div>
+        </div>
+
+
+        <div *ngSwitchCase="4" class="ui-g">
+
+            <div class="ui-g-12">
+
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <h3>
+                            <b>Esquema de pescado</b>
+                        </h3>
+                    </div>
+                </div>
+                <!-- <pre>{{ideasForm.value | json}}</pre> -->
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div formArrayName="ideas" *ngFor="let item of ideas.controls; let i = index;">
+                            <div [formGroupName]="i">
+                                <div class="ui-g">
+                                    <div class="ui-g-5 ui-fluid">
+                                        <div>
+                                            <label>Pertenece a</label>
+                                        </div>
+                                        <p-dropdown [options]="causas" [autoWidth]="false" formControlName="padre" optionLabel="pregunta_causa_idea" placeholder="Seleccione..."
+                                            (onChange)="mirar($event)"></p-dropdown>
+                                    </div>
+
+                                    <div class="ui-g-5 ui-fluid">
+                                        <div>
+                                            <label>Causa</label>
+                                        </div>
+                                        <textarea pInputTextarea [rows]="5" [cols]="30" autoResize="false" formControlName="pregunta_causa_idea" style="width: 100%;">
+                                            </textarea>
+                                    </div>
+
+                                    <div class="ui-g-2 ui-fluid" style="text-align:left; padding-top: 5%;">
+                                        <button pButton type="button" class="ui-button" icon="pi pi-save" (click)="saveItemAccionAnalisisHijo(i)"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-12 text-aling-right">
+                        <button pButton type="button" class="ui-button-success" icon="pi pi-plus" (click)="addItem()" label="Añadir nueva idea"></button>
+                        <button *ngIf="stepComponent.activeIndex == 1" pButton type="submit" class="ui-button" style="margin-left: 2%" icon="pi pi-save"
+                            [disabled]="!ideasForm.valid" label="Guardar cambios"></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div *ngSwitchCase="1" class="ui-g">
+
+            <div class="ui-g-12">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <h3>
+                            <b>Cinco WS</b>
+                        </h3>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <cinco-ws #cincows (onSave5ws)="onCreateAccionAnalisisHijo5($event)"></cinco-ws>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

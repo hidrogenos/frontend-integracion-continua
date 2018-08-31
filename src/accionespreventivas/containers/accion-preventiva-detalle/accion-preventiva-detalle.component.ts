@@ -1,29 +1,21 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
-import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
+import { AccionPreventivaModel } from "../../../shared/models/accion-preventiva.model";
 import { AccionImportanciaModel } from "../../../shared/models/accion-importancia.model";
+import { UsuarioService, HasPermisionService } from "../../../shared/services";
 import {
-    AccionCorrectivaService,
-    UsuarioService,
-    HasPermisionService
-} from "../../../shared/services";
-import {
-    AccionesCorrectivasService,
-    AccionesCorrectivasProcesoService,
-    AccionesCorrectivasDocumentoService,
-    AccionesCorrectivasAnalisisService,
-    AccionesCorrectivasTareaService,
-    AccionesCorrectivasTareaAdjuntoService
+    AccionPreventivaDetalleService,
+    AccionPreventivaListaService
 } from "../../services";
 import { ComponenteCargado } from "../../../shared/services/utils/abstract-clases/ComponenteCargado";
 import {
-    EditAccionCorrectivaComponent,
+    EditAccionPreventivaComponent,
     RelacionarProcesoComponent,
-    CreateDocumentoAccionCorrectivaComponent,
+    CreateDocumentoAccionPreventivaComponent,
     CreateMetodologiaAnalisisComponent,
-    AnularAccionCorrectivaComponent,
-    AsignarAccionCorrectivaComponent,
-    CreateAccionCorrectivaTareaDialogComponent,
-    EditAccionCorrectivaTareaDialogComponent,
+    AnularAccionPreventivaComponent,
+    AsignarAccionPreventivaDialogComponent,
+    CreateAccionPreventivaTareaDialogComponent,
+    EditAccionPreventivaTareaDialogComponent,
     AccionesTareasListaComponent
 } from "../../components";
 
@@ -35,68 +27,68 @@ import { forkJoin } from "rxjs";
 import { map, finalize, switchMap, tap, take } from "rxjs/operators";
 
 // models
-import { AccionProcesoModel } from "../../../shared/models/accion-proceso.model";
+import { AccionPreventivaProcesoModel } from "../../../shared/models/accion-preventiva-proceso.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
-import { AccionCorrectivaAdjuntoModel } from "../../../shared/models/accion-correctiva-adjunto.model";
+import { AccionPreventivaAdjuntoModel } from "../../../shared/models/accion-preventiva-adjunto.model";
 import { AccionAnalisisTipoModel } from "../../../shared/models/accion-analisis-tipo.model";
-import { AccionCorrectivaAnalisisModel } from "../../../shared/models/accion-correctiva-analisis.model";
-import { AccionCorrectivaAnalisisHijoModel } from "../../../shared/models/accion-correctiva-analisis-hijo.model";
+import { AccionPreventivaAnalisisModel } from "../../../shared/models/accion-preventiva-analisis.model";
+import { AccionPreventivaAnalisisHijoModel } from "../../../shared/models/accion-preventiva-analisis-hijo.model";
 import { FormArray } from "@angular/forms";
-import { AccionCorrectivaTareaModel } from "../../../shared/models/accion-correctiva-tarea.model";
-import { AccionCorrectivaTareaTipoModel } from "../../../shared/models/accion-correctiva-tarea-tipo.model";
+import { AccionPreventivaTareaModel } from "../../../shared/models/accion-preventiva-tarea.model";
+import { AccionPreventivaTareaTipoModel } from "../../../shared/models/accion-preventiva-tarea-tipo.model";
 import { UsuarioModel } from "../../../shared/models/usuario.model";
-import { AccionCorrectivaAnalisisHijo5wsModel } from "../../../shared/models/accion-correctiva-analisis-hijo-5ws";
-import { AccionCorrectivaTareaAdjuntoModel } from "../../../shared/models/accion-correctiva-tarea-adjunto.model";
+import { AccionPreventivaAnalisisHijo5wsModel } from "../../../shared/models/accion-preventiva-analisis-hijo-5ws";
+import { AccionPreventivaTareaAdjuntoModel } from "../../../shared/models/accion-preventiva-tarea-adjunto.model";
 import { THIS_EXPR, IfStmt } from "@angular/compiler/src/output/output_ast";
 import { environment } from "../../../environments/environment";
 
 @Component({
-    selector: "accion-correctiva-panel",
+    selector: "accion-preventiva-detalle",
     template: `<div class="ui-g">
                     <div class="ui-g-12">
-                        <edit-accion-correctiva #edit
-                                                [accionCorrectiva]="accionCorrectivaActual"
+                        <edit-accion-preventiva #edit
+                                                [accionPreventiva]="accionPreventivaActual"
                                                 [importancias]="importancias"
-                                                (onEditAccionCorrectiva)="updateAccionCorrectiva($event)">
-                        </edit-accion-correctiva>
+                                                (onEditAccionPreventiva)="updateAccionPreventiva($event)">
+                        </edit-accion-preventiva>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-12">
                         <div class="card card-w-title">
                             <relacionar-proceso #relate
-                                                [data]="accionCorrectivaActual?.procesos" 
+                                                [data]="accionPreventivaActual?.procesos" 
                                                 [procesos]="procesos"
                                                 [loadingProcesos]="loadingProcesos"
-                                                [cols]="colsAccionCorrectivaProceso"
+                                                [cols]="colsAccionPreventivaProceso"
                                                 [rows]="10"
-                                                (onRelateProceso)="addProcesoToAccionCorrectiva($event)"
-                                                (onDeleteProcesoFromAccionCorrectiva)="deleteProcesoFromAccionCorrectiva($event)"
+                                                (onRelateProceso)="addProcesoToAccionPreventiva($event)"
+                                                (onDeleteProcesoFromAccionPreventiva)="deleteProcesoFromAccionPreventiva($event)"
                                                 ></relacionar-proceso>
                             </div>
                     </div>
                 </div>
 
-                <div class="ui-g" *ngIf="idAccionCorrectivaEstado >= ACCION_EN_CALIDAD">
+                <div class="ui-g" *ngIf="idAccionPreventivaEstado >= ACCION_EN_CALIDAD">
                     <div class="ui-g-12">
                         <div class="card card-w-title">
-                            <create-accion-correctiva-documento #documentos 
-                                                                [documentos]="documentosAccionCorrectiva"
-                                                                (onCreateDocumentoAccionCorrectiva)="uploadDocumentosToAccionCorrectiva($event)"
-                                                                (onDeleteDocumentoAccionCorrectiva)="deleteDocumentoFromAccionCorrectiva($event)"
-                                                                (onDownloadDocumentoAccionCorrectiva)="downloadDocumentoFromAccionCorrectiva($event)"
-                                                                (onConsultarAccionCorrectivaAdjunto)="consultarAdjuntoFromAccionCorrectiva($event)">
-                            </create-accion-correctiva-documento>
+                            <create-accion-preventiva-documento #documentos 
+                                                                [documentos]="documentosAccionPreventiva"
+                                                                (onCreateDocumentoAccionPreventiva)="uploadDocumentosToAccionPreventiva($event)"
+                                                                (onDeleteDocumentoAccionPreventiva)="deleteDocumentoFromAccionPreventiva($event)"
+                                                                (onDownloadDocumentoAccionPreventiva)="downloadDocumentoFromAccionPreventiva($event)"
+                                                                (onConsultarAccionPreventivaAdjunto)="consultarAdjuntoFromAccionPreventiva($event)">
+                            </create-accion-preventiva-documento>
                         </div>
                     </div>
                 </div>
 
-                <div class="ui-g" *ngIf="idAccionCorrectivaEstado >= ACCION_EN_ANALISIS && idAccionCorrectivaEstado < ACCION_EN_REASIGNACION">
+                <div class="ui-g" *ngIf="idAccionPreventivaEstado >= ACCION_EN_ANALISIS && idAccionPreventivaEstado < ACCION_EN_REASIGNACION">
                     <div class="ui-g-12">
                         <div class="card card-w-title">
                             <create-metodologia-analisis #metodologia [metodologias]="metodologias"
-                                                         [metodologiaActual]="accionCorrectivaAnalisisActual"
-                                                         [causas]="accionCorrectivaAnalisisHijos"
+                                                         [metodologiaActual]="accionPreventivaAnalisisActual"
+                                                         [causas]="accionPreventivaAnalisisHijos"
                                                          (onCreateAccionAnalisisHijos5ws)="createAccionAnalisisHijo5ws($event)"
                                                          (onCreateAccionAnalisis)="createAccionAnalisis($event)"
                                                          (onCreateAccionAnalisisHijos)="createAccionAnalisisHijos($event)"
@@ -107,27 +99,27 @@ import { environment } from "../../../environments/environment";
                         </div>
                     </div>
                 </div>
-                <div class="ui-g" *ngIf="(idAccionCorrectivaEstado >= ACCION_EN_ASIGNACION_ACTIVIDADES) && (idAccionCorrectivaEstado < ACCION_EN_REASIGNACION)">
+                <div class="ui-g" *ngIf="(idAccionPreventivaEstado >= ACCION_EN_ASIGNACION_ACTIVIDADES) && (idAccionPreventivaEstado < ACCION_EN_REASIGNACION)">
                     <div class="ui-g-12">
                         <div class="card card-w-title">
                         <div class="ui-g">
-                            <div class="ui-g-12 text-aling-right" *ngIf="idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES && (usuarioActual?.id == accionCorrectivaActual?.id_responsable || (hasPermission(301) | async))">
-                                 <button pButton icon="pi pi-plus" class="ui-button" type="button" (click)="crearTareaAccionCorrectivaComponent.display=true" label="Crear tarea"> </button>
+                            <div class="ui-g-12 text-aling-right" *ngIf="idAccionPreventivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES && (usuarioActual?.id == accionPreventivaActual?.id_responsable || (hasPermission(401) | async))">
+                                 <button pButton icon="pi pi-plus" class="ui-button" type="button" (click)="crearTareaAccionPreventivaComponent.display=true" label="Crear tarea"> </button>
                             </div>
                         </div>
-                            <acciones-tareas-lista #listaTareas [data]="accionCorrectivaActual.tareas"
-                                                   [idEstadoAccionCorrectiva]="accionCorrectivaActual?.id_estado"
-                                                   [accionCorrectivaTareaTipos]="tareaTipos"
+                            <acciones-tareas-lista #listaTareas [data]="accionPreventivaActual.tareas"
+                                                   [idEstadoAccionPreventiva]="accionPreventivaActual?.id_estado"
+                                                   [accionPreventivaTareaTipos]="tareaTipos"
                                                    [usuariosResponsables]="usuarios"
                                                    [usuarioActual]="usuarioActual"
-                                                   [permisoRealizarTarea]="(hasPermission(301) | async)"
-                                                   (onUpdateAccionCorrectivaTarea)="updateAccionCorrectivaTarea($event)"
-                                                   (onDeleteAccionCorrectivaTarea)="deleteAccionCorrectivaTarea($event)"
-                                                   (onUploadAdjuntoTarea)="uploadAdjuntosByAccionCorrectivaTarea($event)"
-                                                   (onDownloadAdjuntoTarea)="downloadAdjuntoByAccionCorrectivaTarea($event)"
-                                                   (onDeleteAdjuntoTarea)="deleteAdjuntoByAccionCorrectivaTarea($event)"
-                                                   (onConsultarTareaAdjunto)="consultarAdjuntoFromAccionCorrectivaTarea($event)"
-                                                   (onFinishTarea)="realizarAccionCorrectivaTarea($event)"
+                                                   [permisoRealizarTarea]="(hasPermission(401) | async)"
+                                                   (onUpdateAccionPreventivaTarea)="updateAccionPreventivaTarea($event)"
+                                                   (onDeleteAccionPreventivaTarea)="deleteAccionPreventivaTarea($event)"
+                                                   (onUploadAdjuntoTarea)="uploadAdjuntosByAccionPreventivaTarea($event)"
+                                                   (onDownloadAdjuntoTarea)="downloadAdjuntoByAccionPreventivaTarea($event)"
+                                                   (onDeleteAdjuntoTarea)="deleteAdjuntoByAccionPreventivaTarea($event)"
+                                                   (onConsultarTareaAdjunto)="consultarAdjuntoFromAccionPreventivaTarea($event)"
+                                                   (onFinishTarea)="realizarAccionPreventivaTarea($event)"
 
                                                    rows="10">
                             </acciones-tareas-lista>
@@ -135,12 +127,12 @@ import { environment } from "../../../environments/environment";
                     </div>
                 </div>
 
-                <div class="ui-g" *ngIf="idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES">
+                <div class="ui-g" *ngIf="idAccionPreventivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES">
                     <div class="ui-g-12">
-                        <create-accion-correctiva-tarea-dialog #crearTarea
-                                                            [accionCorrectivaTareaTipos]="tareaTipos"
+                        <create-accion-preventiva-tarea-dialog #crearTarea
+                                                            [accionPreventivaTareaTipos]="tareaTipos"
                                                             [usuariosResponsables]="usuarios"
-                                                            (onCreateAccionCorrectivaTarea)="createAccionCorrectivaTarea($event)" ></create-accion-correctiva-tarea-dialog>
+                                                            (onCreateAccionPreventivaTarea)="createAccionPreventivaTarea($event)" ></create-accion-preventiva-tarea-dialog>
                     </div>
                 </div>
 
@@ -149,48 +141,48 @@ import { environment } from "../../../environments/environment";
                         <p-toolbar>
                             
                             <div class="ui-toolbar">
-                                <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_CREACION) && accionCorrectivaActual?.id_usuario_crea == usuarioActual?.id ">
+                                <div class="ui-g ui-fluid" *ngIf="(idAccionPreventivaEstado == ACCION_EN_CREACION) && accionPreventivaActual?.id_usuario_crea == usuarioActual?.id ">
                                     <div class="ui-g-6">
-                                        <button pButton class="ui-button" label="Enviar a calidad" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_CALIDAD)"></button>
+                                        <button pButton class="ui-button" label="Enviar a calidad" (click)="actualizarEstadoAccionPreventiva(ACCION_EN_CALIDAD)"></button>
                                     </div>
                                     <div class="ui-g-6">
                                         <button pButton class="ui-button-danger" label="Anular" (click)="anular.displayAnularAccion=true"></button>
                                     </div>
                                 </div>  
                             </div>
-                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_CALIDAD ||
-                                                              idAccionCorrectivaEstado == ACCION_EN_REASIGNACION) && usuarioActual?.es_jefe">
+                            <div class="ui-g ui-fluid" *ngIf="(idAccionPreventivaEstado == ACCION_EN_CALIDAD ||
+                                                              idAccionPreventivaEstado == ACCION_EN_REASIGNACION) && usuarioActual?.es_jefe">
                                 <div class="ui-g-6">
-                                    <button pButton class="ui-button" label="Asignar acción" (click)="asignarAccionCorrectivaComponent.display=true;"></button>
+                                    <button pButton class="ui-button" label="Asignar acción" (click)="asignarAccionPreventivaComponent.display=true;"></button>
                                 </div>
                                 <div class="ui-g-6">
                                     <button pButton class="ui-button-danger" label="Anular" (click)="anular.displayAnularAccion=true"></button>
                                 </div>
                             </div>
-                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_ASIGNADA) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable || (hasPermission(301) | async))">
+                            <div class="ui-g ui-fluid" *ngIf="(idAccionPreventivaEstado == ACCION_ASIGNADA) && (usuarioActual?.id == accionPreventivaActual?.id_responsable || (hasPermission(401) | async))">
                                 <div class="ui-g-6">
-                                    <button pButton class="ui-button" label="Iniciar análisis" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_ANALISIS)"></button>
+                                    <button pButton class="ui-button" label="Iniciar análisis" (click)="actualizarEstadoAccionPreventiva(ACCION_EN_ANALISIS)"></button>
                                 </div>
                                 <div class="ui-g-6">
-                                    <button pButton class="ui-button-danger" label="Solicitar reasignación" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_REASIGNACION)"></button>
+                                    <button pButton class="ui-button-danger" label="Solicitar reasignación" (click)="actualizarEstadoAccionPreventiva(ACCION_EN_REASIGNACION)"></button>
                                 </div>
                             </div>
 
-                            <div class="ui-g ui-fluid" *ngIf="accionCorrectivaActual?.metodologia_analisis && usuarioActual && comprobarSiFinalizarAnalisis()">
+                            <div class="ui-g ui-fluid" *ngIf="accionPreventivaActual?.metodologia_analisis && usuarioActual && comprobarSiFinalizarAnalisis()">
                                 <div class="ui-g-12">
-                                    <button pButton class="ui-button" label="Finalizar análisis y crear tareas" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_ASIGNACION_ACTIVIDADES)"></button>
+                                    <button pButton class="ui-button" label="Finalizar análisis y crear tareas" (click)="actualizarEstadoAccionPreventiva(ACCION_EN_ASIGNACION_ACTIVIDADES)"></button>
                                 </div>
                             </div>
 
-                            <!-- <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable)">
+                            <!-- <div class="ui-g ui-fluid" *ngIf="(idAccionPreventivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionPreventivaActual?.id_responsable)">
                                 <div class="ui-g-12">
-                                    <button pButton class="ui-button" label="Finalizar ingreso de tareas" (click)="actualizarEstadoAccionCorrectiva(ACCION_EN_DESARROLLO_TAREAS)"></button>
+                                    <button pButton class="ui-button" label="Finalizar ingreso de tareas" (click)="actualizarEstadoAccionPreventiva(ACCION_EN_DESARROLLO_TAREAS)"></button>
                                 </div>
                             </div> -->
 
-                            <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable || (hasPermission(301) | async)) && finishedTareaPermiso">
+                            <div class="ui-g ui-fluid" *ngIf="(idAccionPreventivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionPreventivaActual?.id_responsable || (hasPermission(401) | async)) && finishedTareaPermiso">
                                 <div class="ui-g-12">
-                                    <button pButton class="ui-button" label="Finalizar acción" (click)="actualizarEstadoAccionCorrectiva(ACCION_FINALIZADA)"></button>
+                                    <button pButton class="ui-button" label="Finalizar acción" (click)="actualizarEstadoAccionPreventiva(ACCION_FINALIZADA)"></button>
                                 </div>
                             </div>
 
@@ -200,26 +192,27 @@ import { environment } from "../../../environments/environment";
 
                 <div class="ui-g">
                     <div class="ui-g-12">
-                        <anular-accion-correctiva-dialog #anular
-                                                         [accionCorrectivaActual]="accionCorrectivaActual"
-                                                         (onAnularAccionCorrectiva)="anularAccionCorrectiva($event)"
-                        > </anular-accion-correctiva-dialog>
+                        <anular-accion-preventiva-dialog #anular
+                                                         [accionPreventivaActual]="accionPreventivaActual"
+                                                         (onAnularAccionPreventiva)="anularAccionPreventiva($event)"
+                        > </anular-accion-preventiva-dialog>
                     <div>
                 </div>
 
                 <div class="ui-g">
                     <div class="ui-g-12">
-                        <asignar-accion-correctiva-dialog #asignarAccionCorrectivaComponent
-                            *ngIf="accionCorrectivaActual"
+                        <asignar-accion-preventiva-dialog #asignarAccionPreventivaComponent
+                            *ngIf="accionPreventivaActual"
                                                          [jefesProcesosHijos]="jefesProcesosHijos"
-                                                         [accionCorrectivaActual]="accionCorrectivaActual"
-                                                         (onAsignarAccionCorrectiva)="asignarAccionCorrectiva($event)"
-                        > </asignar-accion-correctiva-dialog>
+                                                         [accionPreventivaActual]="accionPreventivaActual"
+                                                         (onAsignarAccionPreventiva)="asignarAccionPreventiva($event)"
+                        > </asignar-accion-preventiva-dialog>
                     <div>
                 </div>
                 `
 })
-export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
+export class AccionPreventivaDetalleComponent extends ComponenteCargado
+    implements OnInit {
     // constantes estados de una acción
     readonly ACCION_EN_CREACION = 1;
     readonly ACCION_EN_CALIDAD = 2;
@@ -234,7 +227,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     readonly METODOLOGIA_ANALISIS_NO_APLICA = 3;
 
     // labels
-    colsAccionCorrectivaProceso: any[];
+    colsAccionPreventivaProceso: any[];
 
     stepsItems: any[];
 
@@ -252,7 +245,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
     metodologias: AccionAnalisisTipoModel[];
 
-    tareaTipos: AccionCorrectivaTareaTipoModel[];
+    tareaTipos: AccionPreventivaTareaTipoModel[];
 
     usuarios: UsuarioModel[];
 
@@ -260,55 +253,50 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
     loadingProcesos: boolean;
 
-    // relaciones de accion correctiva
+    // relaciones de accion preventiva
 
-    accionCorrectivaActual: AccionCorrectivaModel;
+    accionPreventivaActual: AccionPreventivaModel;
 
-    idAccionCorrectivaEstado: number;
+    idAccionPreventivaEstado: number;
 
-    accionCorrectivaAnalisisActual: AccionCorrectivaAnalisisModel;
+    accionPreventivaAnalisisActual: AccionPreventivaAnalisisModel;
 
-    accionCorrectivaAnalisisHijos: AccionCorrectivaAnalisisHijoModel[];
+    accionPreventivaAnalisisHijos: AccionPreventivaAnalisisHijoModel[];
 
-    procesosAccionCorrectiva: AccionProcesoModel[];
+    procesosAccionPreventiva: AccionPreventivaProcesoModel[];
 
-    documentosAccionCorrectiva: AccionCorrectivaAdjuntoModel[];
+    documentosAccionPreventiva: AccionPreventivaAdjuntoModel[];
 
-    accionCorrectivaTareas: AccionCorrectivaTareaModel[];
+    accionPreventivaTareas: AccionPreventivaTareaModel[];
 
     // Hijos
     @ViewChild("edit")
-    editAccionCorrectivaComponent: EditAccionCorrectivaComponent;
+    editAccionPreventivaComponent: EditAccionPreventivaComponent;
 
     @ViewChild("relate")
-    relateAccionCorrectivaComponent: RelacionarProcesoComponent;
+    relateAccionPreventivaComponent: RelacionarProcesoComponent;
 
     @ViewChild("documentos")
-    documentComponent: CreateDocumentoAccionCorrectivaComponent;
+    documentComponent: CreateDocumentoAccionPreventivaComponent;
 
     @ViewChild("metodologia")
     metodologiaComponent: CreateMetodologiaAnalisisComponent;
 
     @ViewChild("anular")
-    anularAccionCorrectivaComponent: AnularAccionCorrectivaComponent;
+    anularAccionPreventivaComponent: AnularAccionPreventivaComponent;
 
-    @ViewChild("asignarAccionCorrectivaComponent")
-    asignarAccionCorrectivaComponent: AsignarAccionCorrectivaComponent;
+    @ViewChild("asignarAccionPreventivaComponent")
+    asignarAccionPreventivaComponent: AsignarAccionPreventivaDialogComponent;
 
     @ViewChild("crearTarea")
-    crearTareaAccionCorrectivaComponent: CreateAccionCorrectivaTareaDialogComponent;
+    crearTareaAccionPreventivaComponent: CreateAccionPreventivaTareaDialogComponent;
 
     @ViewChild("listaTareas")
     accionesTareasListaComponent: AccionesTareasListaComponent;
 
     constructor(
-        private accionCorrectivaService: AccionCorrectivaService,
-        private accionesCorrectivasService: AccionesCorrectivasService,
-        private accionesCorrectivasProcesoService: AccionesCorrectivasProcesoService,
-        private accionCorrectivaDocumentoService: AccionesCorrectivasDocumentoService,
-        private accionCorrectivaAnalisisService: AccionesCorrectivasAnalisisService,
-        private accionesCorrectivasTareaService: AccionesCorrectivasTareaService,
-        private accionesCorrectivasTareaAdjuntoService: AccionesCorrectivasTareaAdjuntoService,
+        private accionPreventivaListaService: AccionPreventivaListaService,
+        private accionPreventivaDetalleService: AccionPreventivaDetalleService,
         private usuarioService: UsuarioService,
         private hasPermisosService: HasPermisionService,
         private store: Store<StoreModel>
@@ -329,7 +317,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         this.loadingProcesos = true;
         this.finishedTareaPermiso = false;
 
-        this.colsAccionCorrectivaProceso = [
+        this.colsAccionPreventivaProceso = [
             { field: "nombre", header: "Nombre proceso" }
         ];
 
@@ -350,7 +338,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                     this.getImportancias(),
                     this.getProcesos(),
                     this.getTiposAnalisis(),
-                    this.getAccionCorrectiva(routerId)
+                    this.getAccionPreventiva(routerId)
                 ]);
 
                 aux.subscribe(
@@ -358,43 +346,43 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                         importancias,
                         procesos,
                         tiposAnalisis,
-                        accionCorrectiva
+                        accionPreventiva
                     ]) => {
-                        //Variables independientes de acción correctiva
+                        //Variables independientes de acción preventiva
                         this.importancias = importancias;
                         this.metodologias = tiposAnalisis;
                         this.procesos = procesos.filter(
                             procesoActual =>
-                                !accionCorrectiva.procesos.find(
-                                    procesoAccionCorrectivaA =>
-                                        procesoAccionCorrectivaA.id_mapa_procesos ==
+                                !accionPreventiva.procesos.find(
+                                    procesoAccionPreventivaA =>
+                                        procesoAccionPreventivaA.id_mapa_procesos ==
                                         procesoActual.id
                                 )
                         );
 
-                        // Variables dependientes de accionCorrectiva
-                        this.accionCorrectivaActual = accionCorrectiva;
-                        this.idAccionCorrectivaEstado =
-                            accionCorrectiva.id_estado;
-                        this.documentosAccionCorrectiva =
-                            accionCorrectiva.documentos;
-                        this.accionCorrectivaAnalisisActual =
-                            accionCorrectiva.metodologia_analisis;
-                        this.accionCorrectivaTareas = [
-                            ...accionCorrectiva.tareas
+                        // Variables dependientes de accionPreventiva
+                        this.accionPreventivaActual = accionPreventiva;
+                        this.idAccionPreventivaEstado =
+                            accionPreventiva.id_estado;
+                        this.documentosAccionPreventiva =
+                            accionPreventiva.documentos;
+                        this.accionPreventivaAnalisisActual =
+                            accionPreventiva.metodologia_analisis;
+                        this.accionPreventivaTareas = [
+                            ...accionPreventiva.tareas
                         ];
 
                         setTimeout(() => {
-                            this.editAccionCorrectivaComponent.setDataAccionCorrectiva(
-                                this.accionCorrectivaActual
+                            this.editAccionPreventivaComponent.setDataAccionPreventiva(
+                                this.accionPreventivaActual
                             );
                             this.loadingProcesos = false;
 
                             if (
-                                accionCorrectiva.metodologia_analisis &&
+                                accionPreventiva.metodologia_analisis &&
                                 this.metodologiaComponent
                             ) {
-                                this.accionCorrectivaAnalisisHijos = accionCorrectiva.metodologia_analisis.analisis_hijo.map(
+                                this.accionPreventivaAnalisisHijos = accionPreventiva.metodologia_analisis.analisis_hijo.map(
                                     hijoActual => {
                                         let padreTempo =
                                             hijoActual.padre != null
@@ -413,7 +401,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                     }
                                 );
 
-                                let accionCorrectivaAnalisisHijos2 = accionCorrectiva.metodologia_analisis.analisis_hijo.map(
+                                let accionPreventivaAnalisisHijos2 = accionPreventiva.metodologia_analisis.analisis_hijo.map(
                                     hijoActual => {
                                         let padreTempo =
                                             hijoActual.padre != null
@@ -437,13 +425,13 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                     }
                                 );
                                 // Validación estado wizard
-                                if (this.accionCorrectivaAnalisisActual) {
+                                if (this.accionPreventivaAnalisisActual) {
                                     if (this.metodologiaComponent) {
                                         let stepsComponent = this
                                             .metodologiaComponent.stepComponent;
                                         stepsComponent.activeIndex = 1;
                                         if (
-                                            this.accionCorrectivaActual
+                                            this.accionPreventivaActual
                                                 .metodologia_analisis
                                                 .id_accion_analisis_tipo ==
                                             this.METODOLOGIA_ANALISIS_NO_APLICA
@@ -454,18 +442,18 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                 }
 
                                 switch (
-                                    this.accionCorrectivaAnalisisActual
+                                    this.accionPreventivaAnalisisActual
                                         .id_accion_analisis_tipo
                                 ) {
                                     case 1: {
                                         if (
-                                            this.accionCorrectivaActual
+                                            this.accionPreventivaActual
                                                 .metodologia_analisis
                                                 .analisis_hijo5ws.length > 0
                                         ) {
                                             this.metodologiaComponent.stepComponent.activeIndex = 2;
                                             this.metodologiaComponent.CincoWsComponent.setValue(
-                                                this.accionCorrectivaActual
+                                                this.accionPreventivaActual
                                                     .metodologia_analisis
                                                     .analisis_hijo5ws
                                             );
@@ -474,12 +462,12 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                     }
                                     case 2: {
                                         if (
-                                            this.accionCorrectivaAnalisisHijos
+                                            this.accionPreventivaAnalisisHijos
                                                 .length > 0
                                         ) {
                                             this.metodologiaComponent.stepComponent.activeIndex = 2;
                                             this.metodologiaComponent.createFormularioAnalisisHijos(
-                                                accionCorrectivaAnalisisHijos2
+                                                accionPreventivaAnalisisHijos2
                                             );
 
                                             this.metodologiaComponent.lockItems(
@@ -487,18 +475,18 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                             );
                                         } else {
                                             if (
-                                                this.accionCorrectivaActual
+                                                this.accionPreventivaActual
                                                     .metodologia_analisis
                                                     .id_accion_analisis_tipo ==
                                                 2
                                             ) {
                                                 this.createAccionAnalisisHijoByDefault(
                                                     this
-                                                        .accionCorrectivaAnalisisActual
+                                                        .accionPreventivaAnalisisActual
                                                 );
                                                 this.metodologiaComponent.createFormularioAnalisisHijos(
                                                     this
-                                                        .accionCorrectivaAnalisisHijos
+                                                        .accionPreventivaAnalisisHijos
                                                 );
                                             }
                                         }
@@ -516,7 +504,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 );
 
                 let aux2 = forkJoin([
-                    this.getAccionCorrectivaTareaTipos(),
+                    this.getAccionPreventivaTareaTipos(),
                     this.usuarioService.getUsuarios()
                 ]);
 
@@ -527,30 +515,31 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    updateAccionCorrectiva(data: AccionCorrectivaModel) {
+    updateAccionPreventiva(data: AccionPreventivaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Actualizando información acción correctiva, un momento por favor..."
+            "Actualizando información acción preventiva, un momento por favor..."
         );
-        this.accionCorrectivaService
-            .updateAccionCorrectiva(data)
+        this.accionPreventivaDetalleService
+            .updateAccionPreventiva(data)
             .subscribe(response => {
-                let auxEstadoAcionCorrectivaActual = this.accionCorrectivaActual
+                let auxIdAccionPreventiva = this.accionPreventivaActual
                     .id_estado;
-                this.accionCorrectivaActual = response;
-                this.idAccionCorrectivaEstado = this.accionCorrectivaActual.id_estado;
+                this.accionPreventivaActual = response;
+                this.idAccionPreventivaEstado = this.accionPreventivaActual.id_estado;
                 this.hideWaitDialog();
                 this.desabilitarComponentes();
+
                 if (
-                    auxEstadoAcionCorrectivaActual !=
-                    this.accionCorrectivaActual.id_estado
+                    auxIdAccionPreventiva !=
+                    this.accionPreventivaActual.id_estado
                 ) {
                     switch (response.id_estado) {
                         case this.ACCION_EN_CALIDAD:
                         case this.ACCION_ASIGNADA:
                         case this.ACCION_EN_REASIGNACION:
                         case this.ACCION_ANULADA: {
-                            this.getBackAccionesCorrectivas();
+                            this.getBackAccionesPreventivas();
                             break;
                         }
                         default: {
@@ -560,40 +549,40 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    getAccionCorrectiva(id: number) {
-        return this.accionCorrectivaService.getAccionCorrectiva(id);
+    getAccionPreventiva(id: number) {
+        return this.accionPreventivaDetalleService.getAccionPreventiva(id);
     }
 
-    addProcesoToAccionCorrectiva(data: MapaProcesoHijoModel[]) {
+    addProcesoToAccionPreventiva(data: MapaProcesoHijoModel[]) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Relacionando proceso a acción correctiva, un momento por favor..."
+            "Relacionando proceso a acción preventiva, un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
             .subscribe(usuario => {
-                let accionCorrectivaProcesos: AccionProcesoModel[] = [];
+                let accionPreventivaProcesos: AccionPreventivaProcesoModel[] = [];
 
                 data.forEach(mapaProcesoHijo => {
-                    let accionCorrectivaProceso: AccionProcesoModel = {
+                    let accionPreventivaProceso: AccionPreventivaProcesoModel = {
                         id_mapa_procesos: mapaProcesoHijo.id,
-                        id_accion_correctiva: this.accionCorrectivaActual.id,
+                        id_accion_preventiva: this.accionPreventivaActual.id,
                         id_usuario: usuario.id
                     };
-                    accionCorrectivaProcesos.push(accionCorrectivaProceso);
+                    accionPreventivaProcesos.push(accionPreventivaProceso);
                 });
 
-                this.accionesCorrectivasProcesoService
-                    .addProcesoToAccionCorrectiva(accionCorrectivaProcesos)
-                    .subscribe(procesosAccionCorrectiva => {
-                        this.accionCorrectivaActual.procesos = [
-                            ...this.accionCorrectivaActual.procesos,
-                            ...procesosAccionCorrectiva
+                this.accionPreventivaDetalleService
+                    .addProcesoToAccionPreventiva(accionPreventivaProcesos)
+                    .subscribe(procesosAccionPreventiva => {
+                        this.accionPreventivaActual.procesos = [
+                            ...this.accionPreventivaActual.procesos,
+                            ...procesosAccionPreventiva
                         ];
 
                         this.procesos = this.procesos.filter(procesoActual => {
-                            let procesoBuscado = this.accionCorrectivaActual.procesos.find(
+                            let procesoBuscado = this.accionPreventivaActual.procesos.find(
                                 element =>
                                     procesoActual.id == element.id_mapa_procesos
                             );
@@ -607,17 +596,17 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    deleteProcesoFromAccionCorrectiva(data: AccionProcesoModel) {
+    deleteProcesoFromAccionPreventiva(data: AccionPreventivaProcesoModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Eliminando proceso de acción correctiva, un momento por favor..."
+            "Eliminando proceso de acción preventiva, un momento por favor..."
         );
-        this.accionesCorrectivasProcesoService
-            .deleteProcesoFromAccionCorrectiva(data.id)
-            .subscribe(procesoAccionCorrectiva => {
-                this.accionCorrectivaActual.procesos = this.accionCorrectivaActual.procesos.filter(
+        this.accionPreventivaDetalleService
+            .deleteProcesoFromAccionPreventiva(data.id)
+            .subscribe(procesoAccionPreventiva => {
+                this.accionPreventivaActual.procesos = this.accionPreventivaActual.procesos.filter(
                     procesoActual => {
-                        if (procesoActual.id != procesoAccionCorrectiva.id) {
+                        if (procesoActual.id != procesoAccionPreventiva.id) {
                             return procesoActual;
                         } else {
                             // const proceso:  MapaProcesoHijoModel= {
@@ -637,7 +626,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    uploadDocumentosToAccionCorrectiva(files: File[]) {
+    uploadDocumentosToAccionPreventiva(files: File[]) {
         this.showWaitDialog(
             "Acción en proceso",
             "Realizando carga de documentos solicitados, un momento por favor..."
@@ -648,14 +637,14 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             form.append("uploads[]", archivo, archivo.name);
         });
 
-        this.accionCorrectivaDocumentoService
-            .uploadDocumentosByAccionCorrectiva(
-                this.accionCorrectivaActual.id,
+        this.accionPreventivaDetalleService
+            .uploadDocumentosByAccionPreventiva(
+                this.accionPreventivaActual.id,
                 form
             )
             .subscribe(response => {
-                this.documentosAccionCorrectiva = [
-                    ...this.documentosAccionCorrectiva,
+                this.documentosAccionPreventiva = [
+                    ...this.documentosAccionPreventiva,
                     ...response
                 ];
                 this.documentComponent.fu.clear();
@@ -663,9 +652,9 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    downloadDocumentoFromAccionCorrectiva(event: AccionCorrectivaAdjuntoModel) {
-        this.accionCorrectivaDocumentoService
-            .downloadAccionCorrectivaDocumento({ path: event.path })
+    downloadDocumentoFromAccionPreventiva(event: AccionPreventivaAdjuntoModel) {
+        this.accionPreventivaDetalleService
+            .downloadAccionPreventivaDocumento({ path: event.path })
             .subscribe(file => {
                 const blob = new Blob([file], { type: file.type });
 
@@ -682,15 +671,15 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    deleteDocumentoFromAccionCorrectiva(event: AccionCorrectivaAdjuntoModel) {
+    deleteDocumentoFromAccionPreventiva(event: AccionPreventivaAdjuntoModel) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Eliminando documento de acción correctiva"
+            "Eliminando documento de acción preventiva"
         );
-        this.accionCorrectivaDocumentoService
-            .deleteDocumentoByAccionCorrectiva(event.id)
+        this.accionPreventivaDetalleService
+            .deleteDocumentoByAccionPreventiva(event.id)
             .subscribe(response => {
-                this.documentosAccionCorrectiva = this.documentosAccionCorrectiva.filter(
+                this.documentosAccionPreventiva = this.documentosAccionPreventiva.filter(
                     documentos => documentos.id != response.id
                 );
                 this.hideWaitDialog();
@@ -703,19 +692,19 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             .select(this.fromAuth.getUser)
             .pipe(take(1))
             .subscribe(usuario => {
-                const accionAnalisis: AccionCorrectivaAnalisisModel = {
-                    id_accion_correctiva: this.accionCorrectivaActual.id,
+                const accionAnalisis: AccionPreventivaAnalisisModel = {
+                    id_accion_preventiva: this.accionPreventivaActual.id,
                     id_accion_analisis_tipo: data.id,
                     id_usuario: usuario.id
                 };
-                this.accionCorrectivaAnalisisService
-                    .crearAnalisisAccionCorrectiva(accionAnalisis)
+                this.accionPreventivaDetalleService
+                    .crearAnalisisAccionPreventiva(accionAnalisis)
                     .subscribe(response => {
                         this.createAccionAnalisisHijoByDefault(response);
-                        this.accionCorrectivaAnalisisActual = response;
-                        this.accionCorrectivaActual.metodologia_analisis = response;
+                        this.accionPreventivaAnalisisActual = response;
+                        this.accionPreventivaActual.metodologia_analisis = response;
                         this.metodologiaComponent.createFormularioAnalisisHijos(
-                            this.accionCorrectivaAnalisisHijos
+                            this.accionPreventivaAnalisisHijos
                         );
                         this.metodologiaComponent.stepComponent.activeIndex = 1;
                         if (
@@ -729,7 +718,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    createAccionAnalisisHijos(data: AccionCorrectivaAnalisisHijoModel[]) {
+    createAccionAnalisisHijos(data: AccionPreventivaAnalisisHijoModel[]) {
         this.showWaitDialog(
             "Accion en proceso",
             "Creando nuevas ideas en análisis"
@@ -745,11 +734,11 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 }
             });
 
-            this.accionCorrectivaAnalisisService
-                .createAnalisisAccionCorrectivaHijos(data)
+            this.accionPreventivaDetalleService
+                .createAnalisisAccionPreventivaHijos(data)
                 .subscribe(response => {
-                    this.accionCorrectivaAnalisisHijos = [
-                        ...this.accionCorrectivaAnalisisHijos,
+                    this.accionPreventivaAnalisisHijos = [
+                        ...this.accionPreventivaAnalisisHijos,
                         ...response
                     ];
                     let cont: number = 0;
@@ -762,7 +751,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                         cont++;
                     });
 
-                    this.accionCorrectivaActual.metodologia_analisis.analisis_hijo = response;
+                    this.accionPreventivaActual.metodologia_analisis.analisis_hijo = response;
                     this.metodologiaComponent.stepComponent.activeIndex = 2;
                     this.metodologiaComponent.lockItems(true);
                     this.hideWaitDialog();
@@ -770,22 +759,25 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         });
     }
 
-    createAccionAnalisisHijo5ws(data: AccionCorrectivaAnalisisHijo5wsModel[]) {
-        this.showWaitDialog("Accion en proceso", "Creando nuevo porque");
+    createAccionAnalisisHijo5ws(data: AccionPreventivaAnalisisHijo5wsModel[]) {
+        this.showWaitDialog(
+            "Accion en proceso",
+            "Creando nuevos porques, un momento por favor..."
+        );
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
             .subscribe(usuario => {
                 data.forEach(accionAnalisisHijoActual => {
                     accionAnalisisHijoActual.id_usuario = usuario.id;
-                    accionAnalisisHijoActual.id_accion_correctiva_analisis = this.accionCorrectivaAnalisisActual.id;
+                    accionAnalisisHijoActual.id_accion_preventiva_analisis = this.accionPreventivaAnalisisActual.id;
                 });
 
-                this.accionCorrectivaAnalisisService
-                    .createAnalisisAccionCorrectivaHijos5ws(data)
+                this.accionPreventivaDetalleService
+                    .createAnalisisAccionPreventivaHijos5ws(data)
                     .subscribe(response => {
-                        this.accionCorrectivaAnalisisHijos = response;
-                        this.accionCorrectivaActual.metodologia_analisis.analisis_hijo5ws = [
+                        this.accionPreventivaAnalisisHijos = response;
+                        this.accionPreventivaActual.metodologia_analisis.analisis_hijo5ws = [
                             ...response
                         ];
                         this.metodologiaComponent.stepComponent.activeIndex = 2;
@@ -803,8 +795,8 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 data.hijo.id_usuario = usuario.id;
                 data.hijo.id_padre = data.hijo.padre.id;
 
-                this.accionCorrectivaAnalisisService
-                    .createAnalisisAccionCorrectivaHijos([{ ...data.hijo }])
+                this.accionPreventivaDetalleService
+                    .createAnalisisAccionPreventivaHijos([{ ...data.hijo }])
                     .subscribe(response => {
                         let ideas = this.metodologiaComponent.ideasForm.get(
                             "ideas"
@@ -825,8 +817,8 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                         let hijoActual = response[0];
                         hijoActual.padre = padreTempo;
 
-                        this.accionCorrectivaAnalisisHijos = [
-                            ...this.accionCorrectivaAnalisisHijos,
+                        this.accionPreventivaAnalisisHijos = [
+                            ...this.accionPreventivaAnalisisHijos,
                             hijoActual
                         ];
 
@@ -845,10 +837,10 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             .select(this.fromAuth.getUser)
             .pipe(take(1))
             .subscribe(usuario => {
-                data.hijo.id_accion_correctiva_analisis = this.accionCorrectivaAnalisisActual.id;
+                data.hijo.id_accion_preventiva_analisis = this.accionPreventivaAnalisisActual.id;
                 data.hijo.id_usuario = usuario.id;
-                return this.accionCorrectivaAnalisisService
-                    .createOrUpdateAnalisisAccionCorrectivaHijos(
+                return this.accionPreventivaDetalleService
+                    .createOrUpdateAnalisisAccionPreventivaHijos(
                         data.hijo.id,
                         data.hijo
                     )
@@ -866,39 +858,42 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    createAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
-        this.showWaitDialog("Accion en proceso", "Creando una nueva tarea");
+    createAccionPreventivaTarea(data: AccionPreventivaTareaModel) {
+        this.showWaitDialog(
+            "Accion en proceso",
+            "Creando una nueva tarea, un momento por favor ..."
+        );
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
             .subscribe(usuario => {
                 data.id_usuario = usuario.id;
-                data.id_accion_correctiva = this.accionCorrectivaActual.id;
-                data.id_accion_correctiva_tarea_tipo = data.tipo.id;
+                data.id_accion_preventiva = this.accionPreventivaActual.id;
+                data.id_accion_preventiva_tarea_tipo = data.tipo.id;
 
-                this.accionesCorrectivasTareaService
-                    .createAccionCorrectivaTarea(data)
+                this.accionPreventivaDetalleService
+                    .createAccionPreventivaTarea(data)
                     .subscribe(response => {
-                        this.accionCorrectivaTareas = [
-                            ...this.accionCorrectivaTareas,
+                        this.accionPreventivaTareas = [
+                            ...this.accionPreventivaTareas,
                             response
                         ];
-                        this.accionCorrectivaActual.tareas.push(response);
+                        this.accionPreventivaActual.tareas.push(response);
                         this.comprobarSiFinalizada();
                         this.hideWaitDialog();
                     });
             });
     }
 
-    updateAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
+    updateAccionPreventivaTarea(data: AccionPreventivaTareaModel) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Actualizando información tarea acción correctiva"
+            "Actualizando información tarea acción preventiva"
         );
-        this.accionesCorrectivasTareaService
-            .updateAccionCorrectivaTarea(data.id, data)
+        this.accionPreventivaDetalleService
+            .updateAccionPreventivaTarea(data.id, data)
             .subscribe(response => {
-                this.accionCorrectivaActual.tareas = this.accionCorrectivaActual.tareas.map(
+                this.accionPreventivaActual.tareas = this.accionPreventivaActual.tareas.map(
                     tareaActual =>
                         tareaActual.id == response.id ? response : tareaActual
                 );
@@ -906,15 +901,15 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 this.hideWaitDialog();
             });
     }
-    deleteAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
+    deleteAccionPreventivaTarea(data: AccionPreventivaTareaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Eliminando tarea acción correctiva, un momento por favor..."
+            "Eliminando tarea acción preventiva, un momento por favor..."
         );
-        this.accionesCorrectivasTareaService
-            .deleteAccionCorrectivaTarea(data.id)
+        this.accionPreventivaDetalleService
+            .deleteAccionPreventivaTarea(data.id)
             .subscribe(response => {
-                this.accionCorrectivaActual.tareas = this.accionCorrectivaActual.tareas.filter(
+                this.accionPreventivaActual.tareas = this.accionPreventivaActual.tareas.filter(
                     tareaActual => tareaActual.id != response.id
                 );
 
@@ -923,10 +918,10 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    realizarAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
+    realizarAccionPreventivaTarea(data: AccionPreventivaTareaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Cambiando estado acción correctiva realizado, un momento por favor..."
+            "Cambiando estado acción preventiva realizado, un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
@@ -934,10 +929,10 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             .subscribe(usuario => {
                 data.id_realizada_por = usuario.id;
 
-                this.accionesCorrectivasTareaService
-                    .realizarAccionCorrectivaTarea(data)
+                this.accionPreventivaDetalleService
+                    .realizarAccionPreventivaTarea(data)
                     .subscribe(response => {
-                        this.accionCorrectivaActual.tareas = this.accionCorrectivaActual.tareas.map(
+                        this.accionPreventivaActual.tareas = this.accionPreventivaActual.tareas.map(
                             tareaActual => {
                                 if (tareaActual.id == response.id) {
                                     tareaActual = {
@@ -954,7 +949,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    uploadAdjuntosByAccionCorrectivaTarea(data: {
+    uploadAdjuntosByAccionPreventivaTarea(data: {
         idTarea: number;
         files: File[];
     }) {
@@ -969,19 +964,19 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             form.append("uploads[]", archivo, archivo.name);
         });
 
-        this.accionesCorrectivasTareaAdjuntoService
+        this.accionPreventivaDetalleService
             .uploadAdjuntosByTarea(data.idTarea, form)
             .subscribe(response => {
-                let adjuntos = this.accionCorrectivaActual.tareas.find(
+                let adjuntos = this.accionPreventivaActual.tareas.find(
                     tareaActual => tareaActual.id == data.idTarea
                 ).adjunto;
 
                 if (adjuntos) {
-                    this.accionCorrectivaActual.tareas.find(
+                    this.accionPreventivaActual.tareas.find(
                         tareaActual => tareaActual.id == data.idTarea
                     ).adjunto = [...adjuntos, ...response];
                 } else {
-                    this.accionCorrectivaActual.tareas.find(
+                    this.accionPreventivaActual.tareas.find(
                         tareaActual => tareaActual.id == data.idTarea
                     ).adjunto = [...response];
                 }
@@ -990,14 +985,14 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    downloadAdjuntoByAccionCorrectivaTarea(
-        data: AccionCorrectivaTareaAdjuntoModel
+    downloadAdjuntoByAccionPreventivaTarea(
+        data: AccionPreventivaTareaAdjuntoModel
     ) {
         this.showWaitDialog(
             "Acción en proceso",
             "descargando evidencia de una tarea, un momento por favor..."
         );
-        this.accionesCorrectivasTareaAdjuntoService
+        this.accionPreventivaDetalleService
             .downloadAdjuntoByTarea({ path: data.path })
             .subscribe(file => {
                 const blob = new Blob([file], { type: file.type });
@@ -1015,21 +1010,21 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    deleteAdjuntoByAccionCorrectivaTarea(data: {
+    deleteAdjuntoByAccionPreventivaTarea(data: {
         idTarea: number;
-        data: AccionCorrectivaTareaAdjuntoModel;
+        data: AccionPreventivaTareaAdjuntoModel;
     }) {
         this.showWaitDialog(
             "Acción en proceso",
             "Eliminando evidencia de una tarea, un momento por favor..."
         );
-        this.accionesCorrectivasTareaAdjuntoService
+        this.accionPreventivaDetalleService
             .deleteAdjuntoByTarea(data.data)
             .subscribe(adjuntoEliminado => {
-                this.accionCorrectivaActual.tareas.find(
+                this.accionPreventivaActual.tareas.find(
                     tareaActual => tareaActual.id == data.idTarea
                 ).adjunto = [
-                    ...this.accionCorrectivaActual.tareas
+                    ...this.accionPreventivaActual.tareas
                         .find(tareaActual => tareaActual.id == data.idTarea)
                         .adjunto.filter(adjuntoActual => {
                             if (adjuntoActual.id != adjuntoEliminado.id) {
@@ -1041,43 +1036,43 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
     }
 
-    consultarAdjuntoFromAccionCorrectiva(
-        accionCorrectivaAdjunto: AccionCorrectivaAdjuntoModel
+    consultarAdjuntoFromAccionPreventiva(
+        accionPreventivaAdjunto: AccionPreventivaAdjuntoModel
     ) {
         const idTipoDocumento =
-            environment.tipos_documento.accion_correctiva_adjunto.id;
+            environment.tipos_documento.accion_preventiva_adjunto.id;
         this.store.dispatch(
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionCorrectivaAdjunto.id
-                    }/${accionCorrectivaAdjunto.titulo}`
+                        accionPreventivaAdjunto.id
+                    }/${accionPreventivaAdjunto.titulo}`
                 ]
             })
         );
     }
 
-    consultarAdjuntoFromAccionCorrectivaTarea(
-        accionCorrectivaTareaAdjunto: AccionCorrectivaTareaAdjuntoModel
+    consultarAdjuntoFromAccionPreventivaTarea(
+        accionPreventivaTareaAdjunto: AccionPreventivaTareaAdjuntoModel
     ) {
         const idTipoDocumento =
-            environment.tipos_documento.accion_correctiva_tarea_adjunto.id;
+            environment.tipos_documento.accion_preventiva_tarea_adjunto.id;
         this.store.dispatch(
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionCorrectivaTareaAdjunto.id
-                    }/${accionCorrectivaTareaAdjunto.titulo}`
+                        accionPreventivaTareaAdjunto.id
+                    }/${accionPreventivaTareaAdjunto.titulo}`
                 ]
             })
         );
     }
-    // getProcesosByAccionCorrectiva(id: number) {
-    //     return this.accionesCorrectivasProcesoService.getProcesosByAccionCorrectiva(id);
+    // getProcesosByAccionPreventiva(id: number) {
+    //     return this.accionPreventivaDetalleService.getProcesosByAccionPreventiva(id);
     // }
 
-    // getDocumentosByAccionCorrectiva(id: number) {
-    //     return this.accionCorrectivaDocumentoService.getDocumentosByAccionCorrectiva(id);
+    // getDocumentosByAccionPreventiva(id: number) {
+    //     return this.accionPreventivaDetalleService.getDocumentosByAccionPreventiva(id);
     // }
 
     getUsuarios() {
@@ -1085,84 +1080,80 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     }
 
     getImportancias() {
-        return this.accionesCorrectivasService.getImportancias();
+        return this.accionPreventivaListaService.getImportancias();
     }
 
     getProcesos() {
-        return this.accionesCorrectivasService.getProcesos();
-    }
-
-    getJefesProcesos() {
-        return this.accionesCorrectivasProcesoService.getJefesProcesos();
+        return this.accionPreventivaListaService.getProcesos();
     }
 
     getTiposAnalisis() {
-        return this.accionCorrectivaAnalisisService.getTiposAnalisis();
+        return this.accionPreventivaDetalleService.getTiposAnalisis();
     }
 
-    getAccionCorrectivaTareaTipos() {
-        return this.accionesCorrectivasTareaService.getAccionCorrectivaTareaTipos();
+    getAccionPreventivaTareaTipos() {
+        return this.accionPreventivaDetalleService.getAccionPreventivaTareaTipos();
     }
 
-    anularAccionCorrectiva(data: AccionCorrectivaModel) {
-        this.accionCorrectivaActual = {
-            ...this.accionCorrectivaActual,
+    anularAccionPreventiva(data: AccionPreventivaModel) {
+        this.accionPreventivaActual = {
+            ...this.accionPreventivaActual,
             observacion: data.observacion
         };
-        this.actualizarEstadoAccionCorrectiva(this.ACCION_ANULADA);
+        this.actualizarEstadoAccionPreventiva(this.ACCION_ANULADA);
     }
 
-    asignarAccionCorrectiva(data: AccionCorrectivaModel) {
-        this.accionCorrectivaActual = {
-            ...this.accionCorrectivaActual,
+    asignarAccionPreventiva(data: AccionPreventivaModel) {
+        this.accionPreventivaActual = {
+            ...this.accionPreventivaActual,
             id_responsable: data.id_responsable
         };
-        this.actualizarEstadoAccionCorrectiva(this.ACCION_ASIGNADA);
+        this.actualizarEstadoAccionPreventiva(this.ACCION_ASIGNADA);
     }
 
-    actualizarEstadoAccionCorrectiva(estadoNuevo) {
-        let accionCorrectiva: AccionCorrectivaModel = {
-            ...this.accionCorrectivaActual
+    actualizarEstadoAccionPreventiva(estadoNuevo) {
+        let accionPreventiva: AccionPreventivaModel = {
+            ...this.accionPreventivaActual
         };
         switch (estadoNuevo) {
             case this.ACCION_EN_CALIDAD: {
-                accionCorrectiva.id_estado = this.ACCION_EN_CALIDAD;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_EN_CALIDAD;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             case this.ACCION_ANULADA: {
-                accionCorrectiva.id_estado = this.ACCION_ANULADA;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_ANULADA;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             case this.ACCION_ASIGNADA: {
-                accionCorrectiva.id_estado = this.ACCION_ASIGNADA;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_ASIGNADA;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             case this.ACCION_EN_ANALISIS: {
-                accionCorrectiva.id_estado = this.ACCION_EN_ANALISIS;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_EN_ANALISIS;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             case this.ACCION_EN_REASIGNACION: {
-                accionCorrectiva.id_estado = this.ACCION_EN_REASIGNACION;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_EN_REASIGNACION;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             case this.ACCION_EN_ASIGNACION_ACTIVIDADES: {
-                accionCorrectiva.id_estado = this.ACCION_EN_ASIGNACION_ACTIVIDADES;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_EN_ASIGNACION_ACTIVIDADES;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             case this.ACCION_EN_DESARROLLO_TAREAS: {
-                accionCorrectiva.id_estado = this.ACCION_EN_DESARROLLO_TAREAS;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_EN_DESARROLLO_TAREAS;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             case this.ACCION_FINALIZADA: {
-                accionCorrectiva.id_estado = this.ACCION_FINALIZADA;
-                this.updateAccionCorrectiva(accionCorrectiva);
+                accionPreventiva.id_estado = this.ACCION_FINALIZADA;
+                this.updateAccionPreventiva(accionPreventiva);
                 break;
             }
             default: {
@@ -1171,21 +1162,21 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         }
     }
 
-    getBackAccionesCorrectivas() {
+    getBackAccionesPreventivas() {
         this.store.dispatch(
             new fromRootStore.Go({
-                path: [`/acciones/acciones-correctivas`]
+                path: [`/acciones/acciones-preventivas`]
             })
         );
     }
 
     createAccionAnalisisHijoByDefault(response) {
-        let causaDefault: AccionCorrectivaAnalisisHijoModel = {
+        let causaDefault: AccionPreventivaAnalisisHijoModel = {
             pregunta_causa_idea: "Causa inicial",
             id: 0
         };
 
-        let hijoModel: AccionCorrectivaAnalisisHijoModel = {
+        let hijoModel: AccionPreventivaAnalisisHijoModel = {
             id: null,
             id_padre: 0,
             id_usuario: null,
@@ -1193,7 +1184,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             pregunta_causa_idea: "",
             contribuyo: "",
             respuestas: "",
-            id_accion_correctiva_analisis: response.id,
+            id_accion_preventiva_analisis: response.id,
             fecha_creacion: null,
             created_at: null,
             updated_at: null
@@ -1204,13 +1195,13 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             hijoModel.pregunta_causa_idea = "Causa inicial";
         }
 
-        this.accionCorrectivaAnalisisHijos = [hijoModel];
+        this.accionPreventivaAnalisisHijos = [hijoModel];
 
         this.metodologiaComponent.causas = [causaDefault];
     }
 
     desabilitarComponentes() {
-        let estado = this.accionCorrectivaActual.id_estado;
+        let estado = this.accionPreventivaActual.id_estado;
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
@@ -1218,24 +1209,24 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 this.usuarioActual = usuario;
                 if (
                     estado == this.ACCION_EN_CREACION &&
-                    usuario.id != this.accionCorrectivaActual.id_usuario_crea
+                    usuario.id != this.accionPreventivaActual.id_usuario_crea
                 ) {
-                    this.editAccionCorrectivaComponent.disableComponent();
-                    this.relateAccionCorrectivaComponent.disableComponent();
+                    this.editAccionPreventivaComponent.disableComponent();
+                    this.relateAccionPreventivaComponent.disableComponent();
                 }
 
                 if (estado == this.ACCION_EN_CALIDAD && !usuario.es_jefe) {
-                    this.editAccionCorrectivaComponent.disableComponent();
-                    this.relateAccionCorrectivaComponent.disableComponent();
+                    this.editAccionPreventivaComponent.disableComponent();
+                    this.relateAccionPreventivaComponent.disableComponent();
                     if (this.documentComponent) {
                         this.documentComponent.disableComponent();
                     }
                 }
-                this.hasPermission(301).subscribe(tienePermiso => {
+                this.hasPermission(401).subscribe(tienePermiso => {
                     if (
                         estado >= this.ACCION_ASIGNADA &&
                         (usuario.id !=
-                            this.accionCorrectivaActual.id_responsable &&
+                            this.accionPreventivaActual.id_responsable &&
                             !tienePermiso)
                     ) {
                         if (this.metodologiaComponent) {
@@ -1252,8 +1243,8 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             });
 
         if (estado > this.ACCION_EN_CALIDAD) {
-            this.editAccionCorrectivaComponent.disableComponent();
-            this.relateAccionCorrectivaComponent.disableComponent();
+            this.editAccionPreventivaComponent.disableComponent();
+            this.relateAccionPreventivaComponent.disableComponent();
         }
 
         if (estado > this.ACCION_EN_ANALISIS) {
@@ -1278,13 +1269,13 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     comprobarSiFinalizarAnalisis() {
         let esResponsableAnalisis = false;
         let analisisFinalizado = false;
-        this.hasPermission(301).subscribe(tienePermiso => {
-            let metodologiaAnalisis = this.accionCorrectivaActual
+        this.hasPermission(401).subscribe(tienePermiso => {
+            let metodologiaAnalisis = this.accionPreventivaActual
                 .metodologia_analisis;
             if (
-                this.idAccionCorrectivaEstado == this.ACCION_EN_ANALISIS &&
+                this.idAccionPreventivaEstado == this.ACCION_EN_ANALISIS &&
                 (this.usuarioActual.id ==
-                    this.accionCorrectivaActual.id_responsable ||
+                    this.accionPreventivaActual.id_responsable ||
                     tienePermiso)
             ) {
                 esResponsableAnalisis = true;
@@ -1307,15 +1298,15 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
 
     comprobarSiFinalizada() {
         let contadorTareasRealizadas: number = 0;
-        this.accionCorrectivaActual.tareas.forEach(tareaActual => {
+        this.accionPreventivaActual.tareas.forEach(tareaActual => {
             if (tareaActual.realizada) {
                 contadorTareasRealizadas++;
             }
         });
         if (
             contadorTareasRealizadas ==
-                this.accionCorrectivaActual.tareas.length &&
-            this.accionCorrectivaActual.tareas.length > 0
+                this.accionPreventivaActual.tareas.length &&
+            this.accionPreventivaActual.tareas.length > 0
         ) {
             this.finishedTareaPermiso = true;
         } else {

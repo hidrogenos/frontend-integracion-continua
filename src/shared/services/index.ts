@@ -21,6 +21,13 @@ export * from "./accioncorrectiva-tarea-adjunto/accioncorrectiva-tarea-adjunto.s
 
 import { DocumentoAdjuntoService } from "./documento-adjunto/documento-adjunto.service";
 export * from "./documento-adjunto/documento-adjunto.service";
+
+import { AccionPreventivaService } from "./accion-preventiva/accion-preventiva.service";
+export * from "./accion-preventiva/accion-preventiva.service";
+
+import { AccionPreventivaAdjuntoService } from "./accion-preventiva-adjunto/accion-preventiva-adjunto.service";
+export * from "./accion-preventiva-adjunto/accion-preventiva-adjunto.service";
+
 import { AccionPreventivaTareaAdjuntoService } from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
 export * from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
 
@@ -97,6 +104,8 @@ export const services: any[] = [
     AccionCorrectivaService,
     AccionCorrectivaTareaAdjuntoService,
     AccionCorrectivaTareaService,
+    AccionPreventivaAdjuntoService,
+    AccionPreventivaService,
     AccionPreventivaTareaAdjuntoService,
     AccionPreventivaTareaService,
     BancoService,
