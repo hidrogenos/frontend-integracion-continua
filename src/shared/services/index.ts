@@ -6,6 +6,14 @@ export * from "./auditoria-externa/auditoria-externa.service";
 
 import { AccionCorrectivaAdjuntoService } from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
 export * from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
+import { EquipoService } from './equipo/equipo.service';
+export * from './equipo/equipo.service';
+
+import { EquipoAdjuntoService } from './equipo-adjunto/equipo-adjunto.service';
+export * from './equipo-adjunto/equipo-adjunto.service';
+
+import { EquipoServicioMantenimientoService } from './equipo-servicio-mantenimiento/equipo-servicio-mantenimiento.service';
+export * from './equipo-servicio-mantenimiento/equipo-servicio-mantenimiento.service';
 
 import { CalidadService } from "./calidad/calidad.service";
 export * from "./calidad/calidad.service";
@@ -30,6 +38,9 @@ export * from "./accion-preventiva-adjunto/accion-preventiva-adjunto.service";
 
 import { AccionPreventivaTareaAdjuntoService } from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
 export * from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
+
+import { TipoServicioService } from './tipo-servicio/tipo-servicio.service';
+export * from './tipo-servicio/tipo-servicio.service';
 
 import { AccionPreventivaTareaService } from "./accionpreventiva-tarea/accionpreventiva-tarea.service";
 export * from "./accionpreventiva-tarea/accionpreventiva-tarea.service";
@@ -119,6 +130,9 @@ export const services: any[] = [
     DocumentoProcesoService,
     DocumentoTipoService,
     EvaluacionProveedorService,
+    EquipoService,
+    EquipoAdjuntoService,
+    EquipoServicioMantenimientoService,
     HasPermisionService,
     PdfViewerService,
     ProveedorFacturaService,
@@ -130,5 +144,14 @@ export const services: any[] = [
     UsuarioDestrezaDocumentoService,
     UsuarioDocumentoService,
     UsuarioService,
-    PlanoService
+    PlanoService,
+    AccionCorrectivaService,
+    UsuarioDocumentoService,
+    CiudadService,
+    RegimenService,
+    TipoCuentaService,
+    TipoServicioService,
+    BancoService,
+    ProveedorService,
+    UsuarioDestrezaDocumentoService
 ];
