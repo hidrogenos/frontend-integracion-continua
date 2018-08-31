@@ -41,8 +41,9 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
                     [ngStyle]="{'background-color': rowData.estado.color ,'border-radius': '100%'}">                
                     </button>
                 </td>
-                <td *ngFor="let col of columns">
-                    {{rowData[col.field]}}
+                <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <span *ngSwitchCase="'fecha_fin'">{{rowData[col.field] | date: dateFormat}}</span>
+                    <span *ngSwitchDefault>{{rowData[col.field]}}</span>
                 </td>
             </tr>
         </ng-template>
@@ -73,6 +74,8 @@ export class DocsTablaDocumentosComponent {
     onLoadDocumentosLazy = new EventEmitter<any>();
 
     @ViewChild('dt') dt: DataTable;
+
+    dateFormat: string = environment.dateFormatAngular;
 
     constructor(
         private store: Store<fromRootStore.State>

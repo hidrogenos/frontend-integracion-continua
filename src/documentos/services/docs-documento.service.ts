@@ -10,6 +10,7 @@ import { DocumentoAdjuntoModel } from '../../shared/models/documento-adjunto.mod
 import { DocumentoService } from '../../shared/services/documento/documento.service';
 
 import { DocumentoDivulgacionRegistroService, DocumentoAdjuntoService } from '../../shared/services';
+import { DocumentoPermisoTipoDocumentoModel } from '../../shared/models/documento-permiso-tipo-documento.model';
 
 export interface DataEstado {
     estado: number,
@@ -31,7 +32,15 @@ export class DocsDocumentoService {
     ) { }
 
     getDocumentosByIdTipo(filtros, idTipoDocumento: number): any {
-        return this.http.post(`${environment.apiUrl}/documentos/get-documentos-by-id-tipo/${idTipoDocumento}`, filtros);
+        return this.http.post(`${environment.apiUrl}/documentos/get-documentos-by-id-tipo/${idTipoDocumento}`, filtros)
+            .pipe(
+                map((response: any) => {
+                    return {
+                        ...response,
+                        documentos: response.documentos.map(documento => this.documentoService.transformDocumentoResponse(documento))
+                    }
+                })
+            );
     }
 
     getUsuariosQuery(queryObject) {
@@ -94,5 +103,22 @@ export class DocsDocumentoService {
 
     getDocumentosReemplazoQuery(filter: { query: string, id_documento: number }) {
         return this.http.post(`${environment.apiUrl}/documentos/get-documentos-reemplazo-query`, filter);
+    }
+
+    getPermisosByDoc(idDoc: number): Observable<DocumentoPermisoTipoDocumentoModel[]> {
+        return this.http.get<DocumentoPermisoTipoDocumentoModel[]>(`${environment.apiUrl}/documentos/get-permisos-by-id-doc/${idDoc}`);
+    }
+
+    getPermisosByTipoDoc(idTipoDoc: number): Observable<DocumentoPermisoTipoDocumentoModel[]> {
+        return this.http.get<DocumentoPermisoTipoDocumentoModel[]>(`${environment.apiUrl}/documentos/get-permisos-by-tipo-doc/${idTipoDoc}`);
+    }
+
+    filtrarPermisoDocumento(response: DocumentoPermisoTipoDocumentoModel[], permisoDocumento): number {
+        let permiso = response.find(item => item.id_documento_permiso == permisoDocumento);
+        if (permiso) {
+            return permiso.id_permiso;
+        } else {
+            return null;
+        }
     }
 }

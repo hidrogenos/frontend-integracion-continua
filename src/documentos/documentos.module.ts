@@ -53,7 +53,9 @@ const ROUTES: Routes = [
     {
         path: 'detalle/:documentoId',
         component: fromContainers.DocsDocumentoDetalleComponent,
-
+        canActivate: [
+            fromGuards.DocumentoGuard
+        ]
     }
 ]
 
