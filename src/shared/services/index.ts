@@ -4,6 +4,15 @@ export * from './utils/adjunto/adjunto.service';
 import { CalidadService } from './calidad/calidad.service';
 export * from './calidad/calidad.service';
 
+import { EquipoService } from './equipo/equipo.service';
+export * from './equipo/equipo.service';
+
+import { EquipoAdjuntoService } from './equipo-adjunto/equipo-adjunto.service';
+export * from './equipo-adjunto/equipo-adjunto.service';
+
+import { EquipoServicioMantenimientoService } from './equipo-servicio-mantenimiento/equipo-servicio-mantenimiento.service';
+export * from './equipo-servicio-mantenimiento/equipo-servicio-mantenimiento.service';
+
 import { HasPermisionService } from './utils/auth-has-permision/auth-has-permision.service';
 export * from './utils/auth-has-permision/auth-has-permision.service';
 
@@ -28,6 +37,9 @@ export * from './tipo-cuenta/tipo-cuenta.service';
 import { TipoIdentificacionService } from './tipo-identificacion/tipo-identificacion.service';
 export * from './tipo-identificacion/tipo-identificacion.service';
 
+import { TipoServicioService } from './tipo-servicio/tipo-servicio.service';
+export * from './tipo-servicio/tipo-servicio.service';
+
 import { UsuarioDestrezaDocumentoService } from './usuario-destreza-documento/usuario-destreza-documento.service';
 export * from './usuario-destreza-documento/usuario-destreza-documento.service';
 
@@ -46,6 +58,9 @@ export * from './usuario-documento/usuario-documento.service';
 export const services: any[] = [
     AdjuntoService,
     CalidadService,
+    EquipoService,
+    EquipoAdjuntoService,
+    EquipoServicioMantenimientoService,
     HasPermisionService,
     PdfViewerService,
     TipoIdentificacionService,
@@ -56,6 +71,7 @@ export const services: any[] = [
     CiudadService,
     RegimenService,
     TipoCuentaService,
+    TipoServicioService,
     BancoService,
     ProveedorService,
     UsuarioDestrezaDocumentoService

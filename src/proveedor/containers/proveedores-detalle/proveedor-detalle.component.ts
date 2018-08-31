@@ -41,11 +41,11 @@ import { take, switchMap } from 'rxjs/operators';
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <edit-proveedor-detail #epd
-                            [identificacion]="identificacion"
-                            [ciudades]="ciudades"
-                            [regimen]="regimen"
-                            [banco]="banco"
-                            (editProveedor)="updateProveedor($event)">
+                                [identificacion]="identificacion"
+                                [ciudades]="ciudades"
+                                [regimen]="regimen"
+                                [banco]="banco"
+                                (editProveedor)="updateProveedor($event)">
                             </edit-proveedor-detail>
                         </div>
                     </div>

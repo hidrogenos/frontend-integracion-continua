@@ -250,6 +250,7 @@ import { CiudadService, RegimenService, BancoService, TipoIdentificacionService,
 
 export class CreateProveedorDialogComponent {
 
+    
     //atributos
     display:boolean;
     newProveedor: FormGroup;

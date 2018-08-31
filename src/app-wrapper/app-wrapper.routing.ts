@@ -34,6 +34,10 @@ export const ROUTES: Routes = [
                 loadChildren: './../calidad/calidad.module#CalidadModule'
             },
             {
+                path: 'equipos',
+                loadChildren: './../equipo/equipo.module#EquipoModule'
+            },
+            {
                 path: 'acciones',
                 loadChildren:
                     './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'

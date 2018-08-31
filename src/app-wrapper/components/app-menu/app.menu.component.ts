@@ -176,7 +176,10 @@ export class AppMenuComponent implements OnInit {
                     }
                 ]
             },
-            { label: 'Equipos', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
+            { 
+                label: 'Equipos', 
+                icon: 'fa fa-fw fa-home', 
+                routerLink: ['/equipos'] },
             {
                 label: 'Proveedores',
                 icon: 'fa fa-fw fa-home',
