@@ -1,9 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CapacitacionCapacitadorExternoModel } from "../../../shared/models/capacitacion-capacitador-externo.model";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CapacitacionCapacitadorExternoModel } from '../../../shared/models/capacitacion-capacitador-externo.model';
 
 @Component({
-    selector: "edit-capacitadores-externo-component",
+    selector: 'edit-capacitadores-externo-component',
     template: `
     <div class="ui-g">
     <div>
@@ -60,9 +60,9 @@ export class EditCapacitadoresExternosDialogComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            id: [""],
-            nombre_capacitador: ["", Validators.required],
-            calificacion: ["", Validators.required]
+            id: [''],
+            nombre_capacitador: ['', Validators.required],
+            calificacion: ['', Validators.required]
         });
     }
 
@@ -79,7 +79,6 @@ export class EditCapacitadoresExternosDialogComponent implements OnInit {
         const newCapacitador: CapacitacionCapacitadorExternoModel = {
             ...this.form.value
         };
-        console.log(newCapacitador);
         this.editCE.emit(newCapacitador);
     }
 

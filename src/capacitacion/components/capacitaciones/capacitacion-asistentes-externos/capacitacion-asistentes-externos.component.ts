@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/capacitacion-asistente-externo.model";
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CapacitacionAsistenteExternoModel } from '../../../../shared/models/capacitacion-asistente-externo.model';
 
 @Component({
-    selector: "asistentes-externos-component",
-    styleUrls: ["capacitacion-asistentes-externos.component.scss"],
+    selector: 'asistentes-externos-component',
+    styleUrls: ['capacitacion-asistentes-externos.component.scss'],
     template: `
 
     <div class="ui-g">
@@ -40,6 +40,9 @@ import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/cap
                                             Asistente
                                         </th>
                                         <th>
+                                            Identificación
+                                        </th>
+                                        <th>
                                         Calificacion
                                         </th>
                                         <th>
@@ -50,6 +53,7 @@ import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/cap
                                 <ng-template pTemplate="body" let-asistenteExterno>
                                     <tr>
                                         <td>{{asistenteExterno?.nombre_asistente}} </td>
+                                        <td>{{asistenteExterno?.identificacion_asistente}} </td>
                                         <td>{{asistenteExterno?.calificacion}}</td>
                                         <td style="text-align: center;">
                                         <button pButton *ngIf="permisoEditAE" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteExterno)" ></button>
@@ -98,9 +102,9 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            id: [""],
-            nombre_asistente: ["", Validators.required],
-            identificacion_asistente: ["", Validators.required],
+            id: [''],
+            nombre_asistente: ['', Validators.required],
+            identificacion_asistente: ['', Validators.required],
             fecha: [new Date()]
         });
     }
@@ -111,7 +115,6 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
             identificacion_asistente: this.form.value.identificacion_asistente,
             fecha: (this.form.value.fecha as Date).valueOf()
         };
-        console.log(NewAsistente);
         this.createAE.emit(NewAsistente);
     }
     showEdit(asistenteExterno: CapacitacionAsistenteExternoModel) {

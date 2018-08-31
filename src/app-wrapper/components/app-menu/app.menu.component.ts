@@ -122,6 +122,11 @@ export class AppMenuComponent implements OnInit {
                     routerLink: ['/planos/lista']
                 },
                 {
+                    label: 'Capcitaciones',
+                    icon: 'fa fa-fw fa-home',
+                    routerLink: ['/capacitaciones/lista']
+                },
+                {
                     label: 'Administración',
                     icon: 'fa fa-fw fa-lock',
                     items: [

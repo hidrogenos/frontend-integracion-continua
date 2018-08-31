@@ -1,9 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/capacitacion-capacitador-externo.model";
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CapacitacionCapacitadorExternoModel } from '../../../../shared/models/capacitacion-capacitador-externo.model';
 
 @Component({
-    selector: "capacitadores-externos-component",
+    selector: 'capacitadores-externos-component',
     template: `
 
     <div class="ui-g">
@@ -39,6 +39,9 @@ import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/c
                                          Capacitador
                                         </th>
                                         <th>
+                                         Identificación
+                                        </th>
+                                        <th>
                                         Calificacion
                                         </th>
                                         <th>
@@ -49,6 +52,7 @@ import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/c
                                 <ng-template pTemplate="body" let-capacitadoresExternos>
                                     <tr>
                                         <td>{{capacitadoresExternos?.nombre_capacitador}}</td>
+                                        <td>{{capacitadoresExternos?.identificacion_capacitador}}</td>
                                         <td>{{capacitadoresExternos?.calificacion}}</td>
                                         <td style="text-align: center;">
                                         <button pButton type="button" *ngIf="permisoEditCE" icon="pi pi-pencil" (click)="showEdit(capacitadoresExternos)" ></button>
@@ -97,9 +101,9 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            id: [""],
-            nombre_capacitador: ["", Validators.required],
-            identificacion_capacitador: ["", Validators.required],
+            id: [''],
+            nombre_capacitador: ['', Validators.required],
+            identificacion_capacitador: ['', Validators.required],
             fecha: [new Date()]
         });
     }
@@ -111,7 +115,6 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
                 .identificacion_capacitador,
             fecha: (this.form.value.fecha as Date).valueOf()
         };
-        console.log(NewCapacitador);
         this.createCE.emit(NewCapacitador);
     }
     showEdit(capacitadorExterno: CapacitacionCapacitadorExternoModel) {

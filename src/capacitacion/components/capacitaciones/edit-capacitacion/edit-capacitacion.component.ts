@@ -1,14 +1,14 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CapacitacionModel } from "../../../../shared/models/capacitacion.model";
-import * as fromShared from "./../../../../shared/store";
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CapacitacionModel } from '../../../../shared/models/capacitacion.model';
+import * as fromShared from './../../../../shared/store';
 
-import { Store } from "@ngrx/store";
-import { StoreModel } from "../../../../shared/models/store.model";
+import { Store } from '@ngrx/store';
+import { StoreModel } from '../../../../shared/models/store.model';
 
 @Component({
-    selector: "edit-capacitacion-component",
-    styleUrls: ["edit-capacitacion.component.scss"],
+    selector: 'edit-capacitacion-component',
+    styleUrls: ['edit-capacitacion.component.scss'],
     template: `
     <div class="ui-g">
     <div class="ui-g-12">
@@ -91,13 +91,13 @@ export class EditCapacitacionComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            tema: ["", Validators.required],
-            objetivo: ["", Validators.required],
+            tema: ['', Validators.required],
+            objetivo: ['', Validators.required],
             fecha_inicio: [new Date(), Validators.required],
             fecha_fin: [new Date(), Validators.required],
-            lugar: ["", Validators.required],
-            observaciones: ["", Validators.required],
-            id: [""]
+            lugar: ['', Validators.required],
+            observaciones: ['', Validators.required],
+            id: ['']
         });
     }
 
@@ -116,7 +116,7 @@ export class EditCapacitacionComponent implements OnInit {
     }
 
     onSubmit() {
-        this.showWaitDialog("Editando capacitación un momento por favor...");
+        this.showWaitDialog('Editando capacitación un momento por favor...');
         const newCapacitacion: CapacitacionModel = {
             id: this.form.value.id,
             tema: this.form.value.tema,
@@ -126,7 +126,6 @@ export class EditCapacitacionComponent implements OnInit {
             lugar: this.form.value.lugar,
             observaciones: this.form.value.observaciones
         };
-        console.log(newCapacitacion, "capa");
         this.edit.emit(newCapacitacion);
         this.form.disable();
         this.hideWaitDialog();
