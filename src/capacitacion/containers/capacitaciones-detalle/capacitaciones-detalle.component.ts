@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
     EditCapacitacionComponent,
     ProcesosCapacitacionComponent,
@@ -8,7 +8,7 @@ import {
     CapacitacionCapacitadoresExternosComponent,
     EditCapacitadoresExternosDialogComponent,
     EditCapacitadoresInternosDialogComponent
-} from '../../components';
+} from "../../components";
 import {
     CapacitacionesService,
     DocumentacionCapacitacionService,
@@ -16,34 +16,34 @@ import {
     CapacitacionAsistentesInternosService,
     CapacitacionCapacitadoresExternosService,
     CapacitacionCapacitadoresInternosService
-} from '../../services';
-import * as fromShared from './../../../shared/store';
-import * as fromRoute from './../../../app/store';
-import { StoreModel } from '../../../shared/models/store.model';
-import { Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
-import * as fromRoot from './../../../app/store';
-import { CapacitacionModel } from '../../../shared/models/capacitacion.model';
-import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
+} from "../../services";
+import * as fromShared from "./../../../shared/store";
+import * as fromRoute from "./../../../app/store";
+import { StoreModel } from "../../../shared/models/store.model";
+import { Store } from "@ngrx/store";
+import { take } from "rxjs/operators";
+import * as fromRoot from "./../../../app/store";
+import { CapacitacionModel } from "../../../shared/models/capacitacion.model";
+import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
 import {
     CapacitacionProcesoService,
     HasPermisionService
-} from '../../../shared/services';
-import { forkJoin } from 'rxjs';
-import { DocumentacionCapacitacionComponent } from '../../components/capacitaciones/documentacion-capacitacion/documentacion-capacitacion.component';
-import { CapacitacionAdjuntoModel } from '../../../shared/models/capacitacion-adjunto.model';
-import { CapacitacionAsistenteExternoModel } from '../../../shared/models/capacitacion-asistente-externo.model';
-import { CapacitacionAsistenteInternoModel } from '../../../shared/models/capacitacion-asistente-interno.model';
-import { UsuarioModel } from '../../../shared/models/usuario.model';
-import { EditAsistentesInternosDialogComponent } from '../../components/edit-asistentes-internos-dialog/edit-asistentes-internos-dialog.component';
-import { CapacitacionCapacitadorExternoModel } from '../../../shared/models/capacitacion-capacitador-externo.model';
-import { CapacitacioncapacitadoresInternosComponent } from '../../components/capacitaciones/capacitacion-capacitadores-internos/capacitacion-capacitadores-internos.component';
-import { CapacitacionCapacitadorInternoModel } from '../../../shared/models/capacitacion-capacitador-interno.model';
-import { environment } from '../../../environments/environment';
+} from "../../../shared/services";
+import { forkJoin } from "rxjs";
+import { DocumentacionCapacitacionComponent } from "../../components/capacitaciones/documentacion-capacitacion/documentacion-capacitacion.component";
+import { CapacitacionAdjuntoModel } from "../../../shared/models/capacitacion-adjunto.model";
+import { CapacitacionAsistenteExternoModel } from "../../../shared/models/capacitacion-asistente-externo.model";
+import { CapacitacionAsistenteInternoModel } from "../../../shared/models/capacitacion-asistente-interno.model";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
+import { EditAsistentesInternosDialogComponent } from "../../components/edit-asistentes-internos-dialog/edit-asistentes-internos-dialog.component";
+import { CapacitacionCapacitadorExternoModel } from "../../../shared/models/capacitacion-capacitador-externo.model";
+import { CapacitacioncapacitadoresInternosComponent } from "../../components/capacitaciones/capacitacion-capacitadores-internos/capacitacion-capacitadores-internos.component";
+import { CapacitacionCapacitadorInternoModel } from "../../../shared/models/capacitacion-capacitador-interno.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
-    selector: 'capacitacion-detalle-component',
-    styleUrls: ['capacitaciones-detalle.component.scss'],
+    selector: "capacitacion-detalle-component",
+    styleUrls: ["capacitaciones-detalle.component.scss"],
     template: `
 
         <edit-capacitacion-component #editCapacitacion
@@ -147,37 +147,37 @@ export class CapacitacionesDetalleComponent implements OnInit {
     capacitadorInterno: UsuarioModel[];
     capacitadoresInterno: CapacitacionCapacitadorInternoModel[];
     //properties
-    @ViewChild('editCapacitacion')
+    @ViewChild("editCapacitacion")
     editCapacitacion: EditCapacitacionComponent;
 
-    @ViewChild('procesosCapacitacion')
+    @ViewChild("procesosCapacitacion")
     procesosCapacitacion: ProcesosCapacitacionComponent;
 
-    @ViewChild('documentoCapacitacion')
+    @ViewChild("documentoCapacitacion")
     documentoCapacitacion: DocumentacionCapacitacionComponent;
 
-    @ViewChild('asistentesExternos')
+    @ViewChild("asistentesExternos")
     asistentesExternos: CapacitacionAsistentesExternosComponent;
 
-    @ViewChild('editAsistenteExterno')
+    @ViewChild("editAsistenteExterno")
     editAsistenteExterno: EditAsistentesExternosDialogComponent;
 
-    @ViewChild('asistentesInternos')
+    @ViewChild("asistentesInternos")
     asistentesInternos: CapacitacionAsistentesInternosComponent;
 
-    @ViewChild('editAsistenteInterno')
+    @ViewChild("editAsistenteInterno")
     editAsistenteInterno: EditAsistentesInternosDialogComponent;
 
-    @ViewChild('capacitadoresExternos')
+    @ViewChild("capacitadoresExternos")
     capacitadoresExternos: CapacitacionCapacitadoresExternosComponent;
 
-    @ViewChild('editCapacitadoresExterno')
+    @ViewChild("editCapacitadoresExterno")
     editCapacitadoresExterno: EditCapacitadoresExternosDialogComponent;
 
-    @ViewChild('createCapacitadorI')
+    @ViewChild("createCapacitadorI")
     capacitadoresInternos: CapacitacioncapacitadoresInternosComponent;
 
-    @ViewChild('editCapacitadorInterno')
+    @ViewChild("editCapacitadorInterno")
     editCapacitadorInterno: EditCapacitadoresInternosDialogComponent;
 
     constructor(
@@ -202,7 +202,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
 
     loadInitData() {
         this.showWaitDialog(
-            'Consultado detalle de la validación un momento por favor...'
+            "Consultado detalle de la validación un momento por favor..."
         );
 
         let aux = forkJoin([
@@ -500,11 +500,11 @@ export class CapacitacionesDetalleComponent implements OnInit {
     //documentos
 
     uploadDocumentos(files: File[]) {
-        this.showWaitDialog('Agregando documento, un momento por favor...');
+        this.showWaitDialog("Agregando documento, un momento por favor...");
 
         const form: FormData = new FormData();
         files.forEach(archivo => {
-            form.append('uploads[]', archivo, archivo.name);
+            form.append("uploads[]", archivo, archivo.name);
         });
 
         this.documentacionService
@@ -520,7 +520,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
     }
 
     deleteUsuarioDocumento(event: CapacitacionAdjuntoModel) {
-        this.showWaitDialog('Eliminando documento, un momento por favor...');
+        this.showWaitDialog("Eliminando documento, un momento por favor...");
         this.documentacionService
             .deleteDocumento(event.id)
             .subscribe(response => {
@@ -530,7 +530,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
-    ///este
+
     downloadDocumento(event: CapacitacionAdjuntoModel) {
         this.documentacionService
             .downloadDocumento({ path: event.path })
@@ -538,9 +538,9 @@ export class CapacitacionesDetalleComponent implements OnInit {
                 const blob = new Blob([file], { type: file.type });
 
                 var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
+                var a = document.createElement("a");
                 document.body.appendChild(a);
-                a.setAttribute('style', 'display: none');
+                a.setAttribute("style", "display: none");
                 a.href = url;
                 a.download = event.titulo;
                 a.click();

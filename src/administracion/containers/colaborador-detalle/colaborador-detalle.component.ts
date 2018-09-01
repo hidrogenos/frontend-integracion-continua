@@ -182,7 +182,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
-    //este
+
     createDocumentoColaborador(files: File[]) {
         this.showWaitDialog("Adjuntando documentos, un momento por favor...");
         const form: FormData = new FormData();
@@ -227,7 +227,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
-    //este
+
     deleteUsuarioDocumento(event: UsuarioDocumentoModel) {
         this.showWaitDialog("Eliminando documento, un momento por favor...");
         this.colaboradorDetalleService
@@ -239,7 +239,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
-    ///este
+
     downloadUsuarioDocumento(event: UsuarioDocumentoModel) {
         this.colaboradorDetalleService
             .downloadUsuarioDestrezaDocumento({ path: event.path })
