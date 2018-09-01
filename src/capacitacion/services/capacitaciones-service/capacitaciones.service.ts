@@ -47,9 +47,17 @@ export class CapacitacionesService {
             .get<CapacitacionModel[]>(
                 `${environment.apiUrl}/capacitacion/get-capacitaciones`
             )
-            .pipe(catchError((error: any) => Observable.throw(error.json())));
+            .pipe(
+                map(response => {
+                    return response.map(ele =>
+                        this.capacitacionService.transformResponseCapacitacion(
+                            ele
+                        )
+                    );
+                }),
+                catchError(error => Observable.throw(error.json()))
+            );
     }
-
     getCapacitacionesLazy(
         data
     ): Observable<{ totalRows: number; data: any[] }> {
@@ -96,9 +104,10 @@ export class CapacitacionesService {
             )
             .pipe(
                 map(response => {
-                    return this.capacitacionService.transformResponseCapacitacion(
+                    let capacitacion = this.capacitacionService.transformResponseCapacitacion(
                         response
                     );
+                    return capacitacion;
                 }),
                 catchError(error => Observable.throw(error.json()))
             );

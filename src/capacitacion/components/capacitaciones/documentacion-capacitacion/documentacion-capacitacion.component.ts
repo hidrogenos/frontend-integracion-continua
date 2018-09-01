@@ -4,14 +4,14 @@ import {
     EventEmitter,
     Input,
     ViewChild
-} from '@angular/core';
-import { CapacitacionAdjuntoModel } from '../../../../shared/models/capacitacion-adjunto.model';
-import { FileUpload } from 'primeng/primeng';
-import { environment } from '../../../../environments/environment';
+} from "@angular/core";
+import { CapacitacionAdjuntoModel } from "../../../../shared/models/capacitacion-adjunto.model";
+import { FileUpload } from "primeng/primeng";
+import { environment } from "../../../../environments/environment";
 
 @Component({
-    selector: 'documentacion-capacitacion-component',
-    styleUrls: ['documentacion-capacitacion.component.scss'],
+    selector: "documentacion-capacitacion-component",
+    styleUrls: ["documentacion-capacitacion.component.scss"],
     template: `
 
     <div class="ui-g">
@@ -45,7 +45,7 @@ import { environment } from '../../../../environments/environment';
                 <ng-template pTemplate="body" let-documento>
                     <tr>
                         <td>{{ documento.titulo }}</td>
-                        <td>{{ documento.fecha_carga | date: dateFormat }}</td>
+                        <td>{{ documento.fecha_carga  | date: dateFormat }}</td>
                         <td style="text-align: center;">
                             <button *ngIf="permisoVisualize" style="margin-right:10px;" pButton 
                                 type="button" 
@@ -107,7 +107,7 @@ export class DocumentacionCapacitacionComponent {
     permisoDelete: boolean;
 
     //viewchild
-    @ViewChild('fu')
+    @ViewChild("fu")
     fu: FileUpload;
 
     constructor() {}

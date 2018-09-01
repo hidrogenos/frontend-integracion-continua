@@ -6,7 +6,6 @@ import { catchError, map } from "rxjs/operators";
 import { CapacitacionAdjuntoModel } from "../../../shared/models/capacitacion-adjunto.model";
 import { CapacitacionDocumentoService } from "../../../shared/services/capacitacion-documento/capacitacion-documento-.service";
 
-
 @Injectable()
 export class DocumentacionCapacitacionService {
     constructor(
