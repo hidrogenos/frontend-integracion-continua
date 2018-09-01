@@ -6,9 +6,9 @@
 export const environment = {
     production: false,
     baseUrl: 'http://localhost:4200',
-    apiUrl: 'http://localhost:8083/APISGDv2_1/public/api',
+    apiUrl: 'http://localhost/api-base-5-6/public/api',
     auth: {
-        urlToken: 'http://localhost:8083/APISGDv2_1/public/oauth/token',
+        urlToken: 'http://localhost/api-base-5-6/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },
@@ -83,6 +83,6 @@ export const environment = {
         revisar_ajenos: 5,
         aprobar_ajenos: 6,
         ver_lista_documentos: 7,
-        ver_documentos_obsoletos: 8,
+        ver_documentos_obsoletos: 8
     }
 };
