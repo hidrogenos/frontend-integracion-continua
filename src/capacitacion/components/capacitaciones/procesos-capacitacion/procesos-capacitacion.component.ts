@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CapacitacionModel } from "../../../../shared/models/capacitacion.model";
-import { MapaProcesoHijoModel } from "../../../../shared/models/mapa_proceso_hijo.model";
-import * as fromShared from "./../../../../shared/store";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CapacitacionModel } from '../../../../shared/models/capacitacion.model';
+import { MapaProcesoHijoModel } from '../../../../shared/models/mapa_proceso_hijo.model';
+import * as fromShared from './../../../../shared/store';
 
-import { Store } from "@ngrx/store";
-import { StoreModel } from "../../../../shared/models/store.model";
+import { Store } from '@ngrx/store';
+import { StoreModel } from '../../../../shared/models/store.model';
 
 @Component({
-    selector: "procesos-capacitacion-component",
-    styleUrls: ["procesos-capacitacion.component.scss"],
+    selector: 'procesos-capacitacion-component',
+    styleUrls: ['procesos-capacitacion.component.scss'],
     template: ` 
     
     <div class="ui-g">
@@ -35,7 +35,7 @@ import { StoreModel } from "../../../../shared/models/store.model";
                     <button pButton type="submit"  [disabled]="!form.valid" *ngIf="permisoAdd" label="Adjuntar proceso" class="ui-button"></button>
                     </div>
                 </div>
-                <p-table [value]="procesosAsociados" [paginator]="true" [rows]="10" [loading]="loading">
+                <p-table [value]="procesosAsociados" [paginator]="true" [rows]="10">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
                                         <th>
@@ -93,11 +93,11 @@ export class ProcesosCapacitacionComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            proceso: ["", Validators.required]
+            proceso: ['', Validators.required]
         });
     }
     onSubmit() {
-        this.showWaitDialog("Creando un proceso un momento por favor...");
+        this.showWaitDialog('Creando un proceso un momento por favor...');
         this.addProceso.emit(this.form.value.proceso);
         this.hideWaitDialog();
     }

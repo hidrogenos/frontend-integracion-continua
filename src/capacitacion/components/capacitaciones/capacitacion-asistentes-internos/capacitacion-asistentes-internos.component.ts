@@ -1,13 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CapacitacionAsistenteInternoModel } from "../../../../shared/models/capacitacion-asistente-interno.model";
-import { UsuarioModel } from "../../../../shared/models/usuario.model";
-import * as fromShared from "./../../../../shared/store";
-import { Store } from "@ngrx/store";
-import { StoreModel } from "../../../../shared/models/store.model";
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CapacitacionAsistenteInternoModel } from '../../../../shared/models/capacitacion-asistente-interno.model';
+import { UsuarioModel } from '../../../../shared/models/usuario.model';
+import * as fromShared from './../../../../shared/store';
+import { Store } from '@ngrx/store';
+import { StoreModel } from '../../../../shared/models/store.model';
 
 @Component({
-    selector: "asistentes-internos-component",
+    selector: 'asistentes-internos-component',
     template: `
 
     <div class="ui-g">
@@ -38,7 +38,7 @@ import { StoreModel } from "../../../../shared/models/store.model";
                     <button pButton *ngIf="permisoEditAI" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
-                <p-table [value]="loadedInterno" [paginator]="true" [rows]="10" [loading]="loading">
+                <p-table [value]="loadedInterno" [paginator]="true" [rows]="10">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
                                         <th>
@@ -111,7 +111,7 @@ export class CapacitacionAsistentesInternosComponent implements OnInit {
     }
 
     onSubmit() {
-        this.showWaitDialog("Creando un asistente, un momento por favor...");
+        this.showWaitDialog('Creando un asistente, un momento por favor...');
 
         const asistentesInternos: CapacitacionAsistenteInternoModel[] = this
             .form.value.asistentes_internos;

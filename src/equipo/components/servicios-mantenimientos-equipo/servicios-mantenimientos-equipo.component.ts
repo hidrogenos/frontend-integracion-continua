@@ -1,4 +1,10 @@
-import { Component,ViewChild, Input,Output,EventEmitter } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    Input,
+    Output,
+    EventEmitter
+} from '@angular/core';
 import { CreateDocumentoEquipoComponent } from '../create-documento-equipo/create-documento-equipo.component';
 import { CreateServiciosMantenimientosEquipoComponent } from '../create-servicios-mantenimientos-equipo/create-servicios-mantenimientos-equipo.component';
 import { EquipoServicioMantenimientoModel } from '../../../shared/models/equipoServicioMantenimiento.model';
@@ -23,7 +29,7 @@ import { environment } from '../../../environments/environment';
             <div class="ui-g">
                 <div class="ui-g-12 ui-fluid">
                     <p-table [value]="servicios" [lazy]="true"  [paginator]="true" (onLazyLoad)="loadLazyEquipoServicio($event)"
-                    [rows]="10" [totalRecords]="totalRecords" [loading]="loading" sortField="nombre" #dt1>
+                    [rows]="10" [totalRecords]="totalRecords" sortField="nombre" #dt1>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th  pSortableColumn="fecha_servicio">
@@ -101,39 +107,54 @@ import { environment } from '../../../environments/environment';
     `
 })
 export class ServiciosMantenimientosEquipoComponent {
-   
     formatDate: string;
+    totalRecords: number;
 
-    @Input() servicios: EquipoServicioMantenimientoModel[];
-    @Input() proveedoresCreate: ProveedorModel;
-    @Input() tipos_servicioCreate: TipoServicioModel;
-    @Input() proveedoresEdit: ProveedorModel;
-    @Input() tipos_servicioEdit: TipoServicioModel;
-    @Input() canEditPermisionsCrearServicioMantenimiento: boolean;
-    @Input() canEditPermisionsEditarServicioMantenimiento: boolean;
-    @Input() canEditPermisionsEliminarServicioMantenimiento: boolean;
+    @Input()
+    servicios: EquipoServicioMantenimientoModel[];
+    @Input()
+    proveedoresCreate: ProveedorModel;
+    @Input()
+    tipos_servicioCreate: TipoServicioModel;
+    @Input()
+    proveedoresEdit: ProveedorModel;
+    @Input()
+    tipos_servicioEdit: TipoServicioModel;
+    @Input()
+    canEditPermisionsCrearServicioMantenimiento: boolean;
+    @Input()
+    canEditPermisionsEditarServicioMantenimiento: boolean;
+    @Input()
+    canEditPermisionsEliminarServicioMantenimiento: boolean;
 
-    @Output() onChangeFilterEquipos = new EventEmitter<any>();
-    @Output() onLoadLazy = new EventEmitter<EquipoServicioMantenimientoModel>();
-    @Output() onDeleteEquipos = new EventEmitter<any>();
-    @Output() onCreateServicioMantenimientoEquipo = new EventEmitter<any>();
-    @Output() onEditServicioMantenimientoEquipo = new EventEmitter<any>();
+    @Output()
+    onChangeFilterEquipos = new EventEmitter<any>();
+    @Output()
+    onLoadLazy = new EventEmitter<EquipoServicioMantenimientoModel>();
+    @Output()
+    onDeleteEquipos = new EventEmitter<any>();
+    @Output()
+    onCreateServicioMantenimientoEquipo = new EventEmitter<any>();
+    @Output()
+    onEditServicioMantenimientoEquipo = new EventEmitter<any>();
 
-    @ViewChild('csme') csme: CreateServiciosMantenimientosEquipoComponent;
-    @ViewChild('esme') esme: EditServiciosMantenimientosEquipoComponent;
+    @ViewChild('csme')
+    csme: CreateServiciosMantenimientosEquipoComponent;
+    @ViewChild('esme')
+    esme: EditServiciosMantenimientosEquipoComponent;
 
-    @ViewChild('dt1') dt1: DataTable;
+    @ViewChild('dt1')
+    dt1: DataTable;
 
     constructor() {
         this.formatDate = environment.dateFormatAngular;
-
     }
 
-    showCreateServicio(){
+    showCreateServicio() {
         this.csme.show();
     }
 
-    showEditServicio(servicio){
+    showEditServicio(servicio) {
         console.log(servicio);
         this.esme.loadFormData(servicio);
         this.esme.show();
@@ -144,8 +165,7 @@ export class ServiciosMantenimientosEquipoComponent {
     }
 
     deleteEquipoServicio(event) {
-        console.log(event)
+        console.log(event);
         this.onDeleteEquipos.emit(event);
     }
-
 }

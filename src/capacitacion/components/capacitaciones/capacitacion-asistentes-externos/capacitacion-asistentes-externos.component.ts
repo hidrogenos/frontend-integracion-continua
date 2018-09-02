@@ -33,7 +33,7 @@ import { CapacitacionAsistenteExternoModel } from '../../../../shared/models/cap
                     <button pButton *ngIf="permisoCreateAE" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
-                <p-table [value]="asistenteExterno" [paginator]="true" [rows]="10" [loading]="loading">
+                <p-table [value]="asistenteExterno" [paginator]="true" [rows]="10">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
                                         <th>

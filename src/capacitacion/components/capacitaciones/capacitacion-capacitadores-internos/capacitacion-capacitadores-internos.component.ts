@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { UsuarioModel } from "../../../../shared/models/usuario.model";
-import { CapacitacionCapacitadorInternoModel } from "../../../../shared/models/capacitacion-capacitador-interno.model";
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UsuarioModel } from '../../../../shared/models/usuario.model';
+import { CapacitacionCapacitadorInternoModel } from '../../../../shared/models/capacitacion-capacitador-interno.model';
 
 @Component({
-    selector: "capacitadores-internos-component",
+    selector: 'capacitadores-internos-component',
     template: `
 
     <div class="ui-g">
@@ -35,7 +35,7 @@ import { CapacitacionCapacitadorInternoModel } from "../../../../shared/models/c
                     <button pButton *ngIf="permisoCreateCI" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
-                <p-table [value]="loadedInterno" [paginator]="true" [rows]="10" [loading]="loading">
+                <p-table [value]="loadedInterno" [paginator]="true" [rows]="10">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
                                         <th>

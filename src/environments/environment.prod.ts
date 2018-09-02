@@ -1,9 +1,9 @@
 export const environment = {
     production: true,
-    baseUrl: 'http://144.217.85.84/sgd-v-2-1/app',
-    apiUrl: 'http://144.217.85.84/sgd-v-2-1/api/public/api',
+    baseUrl: 'http://localhost:4200',
+    apiUrl: 'http://localhost/sgd_backend_v_2_1/public/api',
     auth: {
-        urlToken: 'http://144.217.85.84/sgd-v-2-1/api/public/oauth/token',
+        urlToken: 'http://localhost/sgd_backend_v_2_1/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },
@@ -41,6 +41,18 @@ export const environment = {
         accion_correctiva_tarea_adjunto: {
             id: 8,
             permiso_impresion: 303
+        },
+        accion_preventiva_adjunto: {
+            id: 9,
+            permiso_impresion: 402
+        },
+        accion_preventiva_tarea_adjunto: {
+            id: 10,
+            permiso_impresion: 403
+        },
+        documento_capacitacion: {
+            id: 11,
+            permiso_impresion: 800
         }
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
@@ -57,5 +69,15 @@ export const environment = {
         obsoleto: 10,
         rechazado: 11,
         anulado: 12
+    },
+    permiso_documento: {
+        crear: 1,
+        imprimir_adjuntos: 2,
+        imprimir_adjuntos_flujo: 3,
+        elaborar_ajenos: 4,
+        revisar_ajenos: 5,
+        aprobar_ajenos: 6,
+        ver_lista_documentos: 7,
+        ver_documentos_obsoletos: 8
     }
 };

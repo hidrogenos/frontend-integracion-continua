@@ -32,7 +32,7 @@ import { CapacitacionCapacitadorExternoModel } from '../../../../shared/models/c
                     <button pButton *ngIf="permisoCreateCE" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
-                <p-table [value]="capacitadoresExternos" [paginator]="true" [rows]="10" [loading]="loading">
+                <p-table [value]="capacitadoresExternos" [paginator]="true" [rows]="10">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
                                         <th>
