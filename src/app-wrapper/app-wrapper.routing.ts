@@ -14,7 +14,7 @@ import { ChartsDemoComponent } from './demo/view/chartsdemo.component';
 import { FileDemoComponent } from './demo/view/filedemo.component';
 import { UtilsDemoComponent } from './demo/view/utilsdemo.component';
 import { DocumentationComponent } from './demo/view/documentation.component';
-import { AppWrapperComponent } from './containers';
+import { AppWrapperComponent, AccessDeniedComponent } from './containers';
 
 import * as fromSharedContainers from './../shared/containers';
 import * as fromGuards from './guards';
@@ -26,6 +26,10 @@ export const ROUTES: Routes = [
         canActivate: [fromGuards.AppMenuGuard],
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            {
+                path: 'acceso-denegado',
+                component: AccessDeniedComponent
+            },
             {
                 path: 'administracion',
                 loadChildren:
@@ -41,13 +45,27 @@ export const ROUTES: Routes = [
             },
             {
                 path: 'acciones',
-                loadChildren:
-                    './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'
+                children: [
+                    {
+                        path: '',
+                        loadChildren:
+                            './../accionescorrectivas/accionescorrectivas.module#AccionesCorrectivasModule'
+                    },
+                    {
+                        path: '',
+                        loadChildren:
+                            './../accionespreventivas/acciones-preventivas.module#AccionesPreventivasModule'
+                    }
+                ]
             },
             {
                 path: 'documentos',
                 loadChildren:
                     './../documentos/documentos.module#DocumentosModule'
+            },
+            {
+                path: 'equipos',
+                loadChildren: './../equipo/equipo.module#EquipoModule'
             },
             {
                 path: 'proveedores',
@@ -75,7 +93,12 @@ export const ROUTES: Routes = [
             { path: 'charts', component: ChartsDemoComponent },
             { path: 'file', component: FileDemoComponent },
             { path: 'utils', component: UtilsDemoComponent },
-            { path: 'documentation', component: DocumentationComponent }
+            { path: 'documentation', component: DocumentationComponent },
+            {
+                path: 'capacitaciones',
+                loadChildren:
+                    './../capacitacion/capacitacion.module#CapacitacionModule'
+            }
         ]
     }
 ];

@@ -17,7 +17,7 @@ import { CalidadModel } from '../../../shared/models/calidad.model';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <div style="text-align: right; color: #337ab7;">
+                    <div style="text-align: right; color: #337ab7;" *ngIf="permisoEditarMision">
                         <i 
                             *ngIf="!edit"
                             style="cursor: pointer;" 
@@ -71,6 +71,8 @@ export class MisionComponent implements OnInit, AfterViewInit {
     //events
     @Output()
     onUpdateMision = new EventEmitter<string>();
+    @Input()
+    permisoEditarMision: boolean;
 
     //properties
     @Input()

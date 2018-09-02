@@ -1,6 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { AccionPreventivaTareaModel } from "../../models/accion-preventiva-tarea.model";
+import { AccionPreventivaAdjuntoModel } from "../../models/accion-preventiva-adjunto.model";
+import { Observable, throwError } from "rxjs";
+import { environment } from "../../../environments/environment";
+import { catchError } from "rxjs/operators";
 
 @Injectable()
 export class AccionPreventivaTareaService {

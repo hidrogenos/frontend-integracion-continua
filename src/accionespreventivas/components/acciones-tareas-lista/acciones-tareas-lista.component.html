@@ -1,0 +1,57 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-table *ngIf="usuarioActual" #tableListaAccionPreventivaTarea [value]="data" [paginator]="true" [rows]="rows">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        Prioridad
+                    </th>
+                    <th>
+                        Tarea
+                    </th>
+                    <th>
+                        Responsables terceros
+                    </th>
+                    <th>
+                        Fecha cumplimiento
+                    </th>
+                    <th>
+                        Funciones
+                    </th>
+                </tr>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        <input pInputText type="text" (input)="tableListaAccionPreventivaTarea.filter($event.target.value, col.field, 'contains')"
+                            style="width: 100%">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-accionPreventivaTarea>
+                <tr>
+                    <td> {{ accionPreventivaTarea?.prioridad }} </td>
+                    <td> {{ accionPreventivaTarea?.tarea }} </td>
+                    <td> {{ accionPreventivaTarea?.responsables_terceros }} </td>
+                    <td> {{ accionPreventivaTarea?.fecha_cumplimiento | date: dateFormatAngular }} </td>
+                    <td style="text-align: center">
+                        <button *ngIf="usuarioEsResponsable(accionPreventivaTarea)" pButton class="ui-button-success" icon="pi pi-check" (click)="selectAccionPreventivaTarea(accionPreventivaTarea)"></button>
+                        <button *ngIf="accionPreventivaTarea.realizada" pButton class="ui-button" icon="pi pi-info-circle" (click)="selectAccionPreventivaTarea(accionPreventivaTarea)"></button>
+                        <button *ngIf="!accionPreventivaTarea.realizada && idEstadoAccionPreventiva == 5 && !disabled" pButton icon="pi pi-pencil"
+                            style="margin-left: 10px" (click)="editAccionPreventivaTarea(accionPreventivaTarea)"></button>
+                        <button *ngIf="!accionPreventivaTarea.realizada && idEstadoAccionPreventiva == 5 && !disabled" pButton class="ui-button-danger"
+                            icon="pi pi-trash" style="margin-left: 10px" (click)="deleteAccionPreventivaTarea(accionPreventivaTarea)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<edit-accion-preventiva-tarea-dialog #editarTarea [accionPreventivaTareaTipos]="accionPreventivaTareaTipos" [usuariosResponsables]="usuariosResponsables"
+    (onUpdateAccionPreventivaTarea)="updateAccionPreventivaTarea($event)">
+</edit-accion-preventiva-tarea-dialog>
+
+<realizar-tarea-dialog #realizarTarea [evidenciasTarea]="tareaSelected?.adjunto" (onCreateDocumento)="uploadAdjuntoTarea($event)"
+    (onDownloadDocumento)="downloadAdjuntoTarea($event)" (onDeleteDocumento)="deleteAdjuntoTarea($event)" (onConsultarTareaAdjunto)="onConsultarTareaAdjunto.emit($event)"
+    (onFinishTarea)="onFinishTarea.emit($event) ">
+
+</realizar-tarea-dialog>

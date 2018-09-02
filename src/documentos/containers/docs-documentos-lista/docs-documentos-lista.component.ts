@@ -5,7 +5,7 @@ import * as fromSharedStore from './../../../shared/store';
 import * as fromRouteStore from './../../../app/store';
 
 import { Observable, Subscribable, Subscription, of, forkJoin } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 
 import { DocsDocumentoService } from '../../services';
 
@@ -14,6 +14,9 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
 import { DocumentoTipoModel } from '../../../shared/models/documento-tipo.model';
 
 import { DocsNuevoDocumentoComponent } from '../../components/docs-nuevo-documento/docs-nuevo-documento.component';
+import { environment } from '../../../environments/environment';
+import { DocumentoPermisoTipoDocumentoModel } from '../../../shared/models/documento-permiso-tipo-documento.model';
+import { HasPermisionService } from '../../../shared/services';
 
 @Component({
     selector: 'docs-documentos-lista',
@@ -38,7 +41,7 @@ import { DocsNuevoDocumentoComponent } from '../../components/docs-nuevo-documen
                             </div>
                         </div>
                     </div>
-                    <div class="ui-g-6 text-aling-right">
+                    <div class="ui-g-6 text-aling-right" *ngIf="permisoCrearDocumento">
                         <button pButton type="button" (click)="dnd.display=true" label="Crear documento" class="ui-button-success"></button>
                     </div>
                 </div>
@@ -79,11 +82,14 @@ export class DocsDocumentosListaComponent implements OnInit {
     filteredRespElaboracion;
     filteredProcesos;
 
+    permisoCrearDocumento: boolean = false;
+
     @ViewChild('dnd') dnd: DocsNuevoDocumentoComponent;
 
     constructor(
         private store: Store<fromSharedStore.SharedState>,
-        private docsDocumentoService: DocsDocumentoService
+        private docsDocumentoService: DocsDocumentoService,
+        private hasPermisionService: HasPermisionService
     ) {
 
     }
@@ -92,13 +98,36 @@ export class DocsDocumentosListaComponent implements OnInit {
         this.store.select(fromSharedStore.getSelectedDocumentoTipo).subscribe(tipoDocumento => {
             this.tipoDocumento = tipoDocumento;
             this.visible = false;
-            setTimeout(() => this.visible = true, 0);
+            this.permisoCrearDocumento = false;
+            setTimeout(() => {
+                this.visible = true;
+                if (tipoDocumento) {
+                    this.consultarPermisoPuedeCrear(tipoDocumento).subscribe(permisoPuedeCrear => {
+                        this.permisoCrearDocumento = permisoPuedeCrear;
+                    });
+                }
+            }, 0);
             this.getEstadosDocumento().subscribe(estados => {
                 this.estados = estados;
             });
         })
     }
 
+    consultarPermisoPuedeCrear(tipoDoc) {
+        return this.docsDocumentoService.getPermisosByTipoDoc(tipoDoc.id)
+            .pipe(
+                switchMap((response: DocumentoPermisoTipoDocumentoModel[]) => {
+                    let permisoCrearDocumento = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.crear);
+                    return this.hasPermision(permisoCrearDocumento)
+                })
+            )
+    }
+
+    hasPermision(id: number): Observable<boolean> {
+        return this.hasPermisionService.hasPermision(id).pipe(
+            take(1)
+        );
+    }
 
     getEstadosDocumento() {
         return this.store.select(fromSharedStore.getAllDocumentoEstados);

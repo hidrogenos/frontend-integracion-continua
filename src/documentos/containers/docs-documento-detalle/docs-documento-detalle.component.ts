@@ -12,7 +12,7 @@ import { environment } from '../../../environments/environment';
 import { take, switchMap } from 'rxjs/operators';
 
 import { DocsDocumentoService } from '../../services';
-import { DocumentoProcesoService, DocumentoAdjuntoService, DocumentoDivulgacionRegistroService } from '../../../shared/services';
+import { DocumentoProcesoService, DocumentoAdjuntoService, DocumentoDivulgacionRegistroService, HasPermisionService } from '../../../shared/services';
 
 import { DocumentoProcesoModel } from '../../../shared/models/documento-proceso.model';
 import { DocumentoTipoModel } from '../../../shared/models/documento-tipo.model';
@@ -25,6 +25,8 @@ import { DocumentoAsociadoModel } from '../../../shared/models/documento-asociad
 import { DocumentoAsociadoService } from '../../../shared/services/documento-asociado/documento-asociado.service';
 import { DocsDocumentosAsociadosComponent, DocsObservacionDialogComponent } from '../../components';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
+import { DocumentoPermisoTipoDocumentoModel } from '../../../shared/models/documento-permiso-tipo-documento.model';
+import { PermisosComponent } from '../../../administracion/containers';
 
 @Component({
     selector: 'docs-documento-detalle',
@@ -74,7 +76,7 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                     </docs-documentos-asociados>
 
                     <docs-detalle-adjuntar-documento #ddadflujo
-                        *ngIf="permisoPuedePonerEnMarcha || permisoPuedePonerObsoleto"
+                        *ngIf="permisoPuedePonerEnMarcha || permisoPuedePonerObsoleto || permisoPuedeVerObsoleto"
                         [titulo]="'Adjuntar documentación del flujo'"
                         [adjuntos]="documento?.divulgacion_registros"
                         (onAdjuntarDocumento)="onAdjuntarDocumentoFlujo($event)"
@@ -164,6 +166,22 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
                             </div>
                         </div>
                     </div>
+
+
+                    <!--
+                    <div class="ui-g" *ngIf="documento 
+                        && documento?.id_estado == env?.estados_documento.vigente">
+                        <div class="ui-g">
+                            <h2>Parametros de integración SGS</h2>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                Permitir impresión desde SGS
+                                <p-checkbox [disabled]="!permiso_impl_doc_sgs" [binary]="true" (onChange)="onChangeImpSGS($event)" [(ngModel)]="documento.flag_imp_int_sgs">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                    </div>-->
                 </div>
             </div>
         </div>
@@ -244,6 +262,10 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     permisoPuedeAprobar: boolean = false;
     permisoPuedePonerEnMarcha: boolean = false;
     permisoPuedePonerObsoleto: boolean = false;
+    permisoPuedeVerObsoleto: boolean = false;
+    permisoElaborarAjenos: boolean = false;
+    permisoRevisarAjenos: boolean = false;
+    permisoAprobarAjenos: boolean = false;
 
     env = environment;
 
@@ -254,7 +276,8 @@ export class DocsDocumentoDetalleComponent implements OnInit {
         private documentoProcesoService: DocumentoProcesoService,
         private documentoAdjuntoService: DocumentoAdjuntoService,
         private documentoDivulgacionregistroService: DocumentoDivulgacionRegistroService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private hasPermisionService: HasPermisionService
     ) {
 
     }
@@ -270,24 +293,69 @@ export class DocsDocumentoDetalleComponent implements OnInit {
             switchMap(route => {
                 return forkJoin(
                     this.getDocumentoById(route.state.params.documentoId),
-                    this.getProcesosNoAsociados(route.state.params.documentoId)
+                    this.getProcesosNoAsociados(route.state.params.documentoId),
                 )
 
             })
         ).subscribe(([documento, procesos]) => {
             this.documento = documento;
             this.procesos = procesos;
-            this.permisoPuedeEditar = this.puedeEditar();
-            this.permisoPuedeEditarDocumento = this.puedeEditarDocumento();
-            this.permisoPuedeReasignar = this.puedeReasignar();
-            this.permisoPuedeReelaborar = this.puedeReelaborar();
-            this.permisoPuedeRetomar = this.puedeRetomar();
-            this.permisoPuedeAprobar = this.puedeAprobar();
-            this.permisoPuedePonerEnMarcha = this.puedePonerEnMarcha();
-            this.permisoPuedePonerObsoleto = this.puedePonerObsoleto();
-            this.digd.inicializarForm(this.documento, this.permisoPuedeEditar);
-            this.hideWaitDialog();
+            this.consultarPermisosDocumento().subscribe((
+                [permisoElaborarAjenos, permisoRevisarAjenos, permisoAprobarAjenos, permisoVerObsoleto]) => {
+                if (
+                    (this.documento.id_estado == environment.estados_documento.obsoleto ||
+                        this.documento.id_estado == environment.estados_documento.anulado)
+                    && !permisoVerObsoleto) {
+                    this.hideWaitDialog();
+                    this.store.dispatch(
+                        new fromRouteStore.Go({
+                            path: [`acceso-denegado`]
+                        })
+                    );
+                } else {
+                    this.permisoElaborarAjenos = permisoElaborarAjenos;
+                    this.permisoRevisarAjenos = permisoRevisarAjenos;
+                    this.permisoAprobarAjenos = permisoAprobarAjenos;
+                    this.permisoPuedeEditar = this.puedeEditar();
+                    this.permisoPuedeEditarDocumento = this.puedeEditarDocumento();
+                    this.permisoPuedeReasignar = this.puedeReasignar();
+                    this.permisoPuedeReelaborar = this.puedeReelaborar();
+                    this.permisoPuedeRetomar = this.puedeRetomar();
+                    this.permisoPuedeAprobar = this.puedeAprobar();
+                    this.permisoPuedePonerEnMarcha = this.puedePonerEnMarcha();
+                    this.permisoPuedePonerObsoleto = this.puedePonerObsoleto();
+                    this.permisoPuedeVerObsoleto = this.puedeVerObsoleto();
+
+                    this.digd.inicializarForm(this.documento, this.permisoPuedeEditar);
+                    this.hideWaitDialog();
+                }
+            });
         })
+    }
+
+    consultarPermisosDocumento() {
+        return this.docsDocumentoService.getPermisosByDoc(this.documento.id)
+            .pipe(
+                switchMap((response: DocumentoPermisoTipoDocumentoModel[]) => {
+                    let permisoElaborarAjenos = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.elaborar_ajenos);
+                    let permisoRevisarAjenos = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.revisar_ajenos);
+                    let permisoAprobarAjenos = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.aprobar_ajenos);
+                    let permisoVerObsoleto = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.ver_documentos_obsoletos);
+
+                    return forkJoin(
+                        this.hasPermision(permisoElaborarAjenos),
+                        this.hasPermision(permisoRevisarAjenos),
+                        this.hasPermision(permisoAprobarAjenos),
+                        this.hasPermision(permisoVerObsoleto)
+                    )
+                })
+            )
+    }
+
+    hasPermision(id: number): Observable<boolean> {
+        return this.hasPermisionService.hasPermision(id).pipe(
+            take(1)
+        );
     }
 
     getDocumentoById(id) {
@@ -638,7 +706,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 this.store.dispatch(
                     new fromRouteStore.Go({
                         path: [
-                            `documentos/${this.documento.id_tipo}`
+                            `dashboard`
                         ]
                     })
                 );
@@ -666,9 +734,11 @@ export class DocsDocumentoDetalleComponent implements OnInit {
             return true;
         }
         // usuario logueado elabora documento ó se solicitó reelaboración
-        else if (this.usuarioLogged.id == this.documento.id_responsable_elabora
+        else if (
+            (this.usuarioLogged.id == this.documento.id_responsable_elabora || this.permisoElaborarAjenos)
             && (this.documento.id_estado == environment.estados_documento.en_elaboracion
-                || this.documento.id_estado == environment.estados_documento.para_reelaboracion)) {
+                || this.documento.id_estado == environment.estados_documento.para_reelaboracion)
+        ) {
             return true;
         }
         else {
@@ -677,7 +747,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     }
 
     puedeReasignar() {
-        if (this.usuarioLogged.id == this.documento.id_responsable_elabora
+        if ((this.usuarioLogged.id == this.documento.id_responsable_elabora || this.permisoElaborarAjenos)
             && (this.documento.id_estado == environment.estados_documento.en_elaboracion
                 || this.documento.id_estado == environment.estados_documento.para_reelaboracion)) {
             return true;
@@ -688,7 +758,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     }
 
     puedeReelaborar() {
-        if (this.usuarioLogged.id == this.documento.id_responsable_revisa
+        if ((this.usuarioLogged.id == this.documento.id_responsable_revisa || this.permisoRevisarAjenos)
             && this.documento.id_estado == environment.estados_documento.en_revision) {
             return true;
         }
@@ -708,8 +778,10 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     }
 
     puedeAprobar() {
-        if (this.usuarioLogged.id == this.documento.id_responsable_aprueba
-            && this.documento.id_estado == environment.estados_documento.en_aprobacion) {
+        if (
+            (this.permisoAprobarAjenos || this.usuarioLogged.id == this.documento.id_responsable_aprueba)
+            && this.documento.id_estado == environment.estados_documento.en_aprobacion
+        ) {
             return true;
         }
         else {
@@ -737,6 +809,15 @@ export class DocsDocumentoDetalleComponent implements OnInit {
 
     puedePonerObsoleto() {
         if (this.documento.id_estado == environment.estados_documento.vigente &&
+            this.usuarioLogged.es_jefe == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    puedeVerObsoleto() {
+        if (this.documento.id_estado == environment.estados_documento.obsoleto &&
             this.usuarioLogged.es_jefe == true) {
             return true;
         } else {

@@ -6,6 +6,16 @@ export * from "./auditoria-externa/auditoria-externa.service";
 
 import { AccionCorrectivaAdjuntoService } from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
 export * from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
+import { EquipoService } from './equipo/equipo.service';
+export * from './equipo/equipo.service';
+import { CapacitacionProcesoService } from "./capacitacion-proceso/capacitacion-proceso.service";
+export * from "./capacitacion-proceso/capacitacion-proceso.service";
+
+import { EquipoAdjuntoService } from './equipo-adjunto/equipo-adjunto.service';
+export * from './equipo-adjunto/equipo-adjunto.service';
+
+import { EquipoServicioMantenimientoService } from './equipo-servicio-mantenimiento/equipo-servicio-mantenimiento.service';
+export * from './equipo-servicio-mantenimiento/equipo-servicio-mantenimiento.service';
 
 import { CalidadService } from "./calidad/calidad.service";
 export * from "./calidad/calidad.service";
@@ -21,8 +31,18 @@ export * from "./accioncorrectiva-tarea-adjunto/accioncorrectiva-tarea-adjunto.s
 
 import { DocumentoAdjuntoService } from "./documento-adjunto/documento-adjunto.service";
 export * from "./documento-adjunto/documento-adjunto.service";
+
+import { AccionPreventivaService } from "./accion-preventiva/accion-preventiva.service";
+export * from "./accion-preventiva/accion-preventiva.service";
+
+import { AccionPreventivaAdjuntoService } from "./accion-preventiva-adjunto/accion-preventiva-adjunto.service";
+export * from "./accion-preventiva-adjunto/accion-preventiva-adjunto.service";
+
 import { AccionPreventivaTareaAdjuntoService } from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
 export * from "./accionpreventiva-tarea-adjunto/accionpreventiva-tarea-adjunto.service";
+
+import { TipoServicioService } from './tipo-servicio/tipo-servicio.service';
+export * from './tipo-servicio/tipo-servicio.service';
 
 import { AccionPreventivaTareaService } from "./accionpreventiva-tarea/accionpreventiva-tarea.service";
 export * from "./accionpreventiva-tarea/accionpreventiva-tarea.service";
@@ -90,6 +110,24 @@ export * from "./usuario/usuario.service";
 import { UsuarioDocumentoService } from "./usuario-documento/usuario-documento.service";
 export * from "./usuario-documento/usuario-documento.service";
 
+import { CapacitacionService } from "./capacitacion/capacitacion.service";
+export * from "./capacitacion/capacitacion.service";
+
+import { CapacitacionAsistenteExternoService } from "./capacitacion-asistentes-externos-service/capacitacion-asistente-externo.service";
+export * from "./capacitacion-asistentes-externos-service/capacitacion-asistente-externo.service";
+
+import { CapacitacionAsistenteInternoService } from "./capacitacion-asistentes-interno-service/capacitacion-asistente-interno.service";
+export * from "./capacitacion-asistentes-interno-service/capacitacion-asistente-interno.service";
+
+import { CapacitacionCapacitadorExternService } from "./capacitacion-capacitadores-externos-service/capacitacion-capacitador-externo.service";
+export * from "./capacitacion-capacitadores-externos-service/capacitacion-capacitador-externo.service";
+
+import { CapacitacionCapacitadorInternoService } from "./capacitacion-capacitadores-internos-service/capacitacion-capacitador-interno.service";
+export * from "./capacitacion-capacitadores-internos-service/capacitacion-capacitador-interno.service";
+
+import { CapacitacionDocumentoService } from "./capacitacion-documento/capacitacion-documento-.service";
+export * from "./capacitacion-documento/capacitacion-documento-.service";
+
 export const services: any[] = [
     AdjuntoService,
     AuditoriaExternaService,
@@ -97,6 +135,8 @@ export const services: any[] = [
     AccionCorrectivaService,
     AccionCorrectivaTareaAdjuntoService,
     AccionCorrectivaTareaService,
+    AccionPreventivaAdjuntoService,
+    AccionPreventivaService,
     AccionPreventivaTareaAdjuntoService,
     AccionPreventivaTareaService,
     BancoService,
@@ -110,6 +150,12 @@ export const services: any[] = [
     DocumentoProcesoService,
     DocumentoTipoService,
     EvaluacionProveedorService,
+    EquipoService,
+    EquipoAdjuntoService,
+    EquipoServicioMantenimientoService,
+    CapacitacionService,
+    CapacitacionProcesoService,
+    CapacitacionDocumentoService,
     HasPermisionService,
     PdfViewerService,
     ProveedorFacturaService,
@@ -121,5 +167,18 @@ export const services: any[] = [
     UsuarioDestrezaDocumentoService,
     UsuarioDocumentoService,
     UsuarioService,
-    PlanoService
+    PlanoService,
+    AccionCorrectivaService,
+    UsuarioDocumentoService,
+    CiudadService,
+    RegimenService,
+    TipoCuentaService,
+    TipoServicioService,
+    BancoService,
+    ProveedorService,
+    UsuarioDestrezaDocumentoService,
+    CapacitacionAsistenteExternoService,
+    CapacitacionAsistenteInternoService,
+    CapacitacionCapacitadorExternService,
+    CapacitacionCapacitadorInternoService
 ];

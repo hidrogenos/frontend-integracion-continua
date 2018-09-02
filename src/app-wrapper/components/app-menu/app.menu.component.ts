@@ -66,7 +66,7 @@ export class AppMenuComponent implements OnInit {
                         },
                         {
                             label: 'Organigrama',
-                            icon: 'fa fa-puzzle-piece',
+                            icon: 'fa fa-sitemap',
                             routerLink: ['/calidad/nuestra-empresa/organigrama']
                         },
                         {
@@ -81,18 +81,23 @@ export class AppMenuComponent implements OnInit {
 
                 {
                     label: 'Acciones',
-                    icon: 'fa fa-fw fa-home',
+                    icon: 'fa fa-fw fa-wrench',
                     items: [
                         {
                             label: 'Correctivas',
-                            icon: 'fa fa-fw fa-tag',
+                            icon: 'fa fa-fw fa-thermometer-full',
                             routerLink: ['/acciones/acciones-correctivas']
+                        },
+                        {
+                            label: 'Preventivas',
+                            icon: 'fa fa-fw fa-thermometer-empty',
+                            routerLink: ['/acciones/acciones-preventivas']
                         }
                     ]
                 },
                 {
                     label: 'Auditorias',
-                    icon: 'fa fa-fw fa-home',
+                    icon: 'fa fa-fw fa-eye',
                     items: [
                         {
                             label: 'Adm. listas',
@@ -108,13 +113,18 @@ export class AppMenuComponent implements OnInit {
                 },
                 {
                     label: 'Documentos',
-                    icon: 'fa fa-fw fa-home',
+                    icon: 'fa fa-fw fa-book',
                     items: this.documentos
                 },
                 {
                     label: 'Planos',
-                    icon: 'fa fa-fw fa-home',
+                    icon: 'fa fa-fw fa-braille',
                     routerLink: ['/planos/lista']
+                },
+                {
+                    label: 'Capacitaciones',
+                    icon: 'fa fa-fw fa-graduation-cap',
+                    routerLink: ['/capacitaciones/lista']
                 },
                 {
                     label: 'Administración',
@@ -134,12 +144,12 @@ export class AppMenuComponent implements OnInit {
                 },
                 {
                     label: 'Equipos',
-                    icon: 'fa fa-fw fa-home',
-                    routerLink: ['/']
+                    icon: 'fa fa-fw fa-microchip',
+                    routerLink: ['/equipos']
                 },
                 {
                     label: 'Proveedores',
-                    icon: 'fa fa-fw fa-home',
+                    icon: 'fa fa-fw fa-industry',
                     routerLink: ['/proveedores/lista']
                 }
             ];
@@ -152,7 +162,7 @@ export class AppMenuComponent implements OnInit {
                 tipos.map((tipo: DocumentoTipoModel) => {
                     let item: MenuItem = {
                         label: tipo.nombre,
-                        icon: 'fa fa-fw fa-book',
+                        icon: 'fa fa-fw fa-file-text-o',
                         routerLink: [`/documentos/${tipo.id}`]
                     };
                     this.documentos = [...this.documentos, item];

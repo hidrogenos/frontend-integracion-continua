@@ -18,6 +18,7 @@ import * as fromRoot from './../../../app/store';
 import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
 import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
 import { environment } from '../../../environments/environment';
+import { HasPermisionService } from '../../../shared/services';
 
 @Component({
     selector: 'nuestra-empresa',
@@ -30,48 +31,62 @@ import { environment } from '../../../environments/environment';
                     [loadedCalidad]="loadedCalidad"
                     [blobLogo]="blobLogo"
                     (onUpdateEmpresaNombre)="updateEmpresaNombre($event)"
-                    (onUpdateEmpresaLogo)="updateLogoEmpresa($event)">
-                </titulo>
+                    (onUpdateEmpresaLogo)="updateLogoEmpresa($event)"
+                    [permisoEditarTitulo]="hasPermision([101]) | async">        
+                    </titulo>
                 <mision #mision
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
-                    (onUpdateMision)="updateMision($event)">
+                    (onUpdateMision)="updateMision($event)"
+                    [permisoEditarMision]="hasPermision(102) | async">
                 </mision>
                 <vision #vision
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
-                    (onUpdateVision)="updateVision($event)">
+                    (onUpdateVision)="updateVision($event)"
+                    [permisoEditarVision]="hasPermision(103) | async">
                 </vision>
                 <politica #politica
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
-                    (onUpdatePolitica)="updatePolitica($event)">
+                    (onUpdatePolitica)="updatePolitica($event)"
+                    [permisoEditarPolitica]="hasPermision(104) | async">
                 </politica>
                 <valores #valores
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
-                    (onUpdateValores)="updateValores($event)">
+                    (onUpdateValores)="updateValores($event)"
+                    [permisoEditarValores]="hasPermision(105) | async">
                 </valores>
                 <manual-calidad #manual
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
                     (onUpdateManual)="updateManual($event)"
                     (onDescargarManualCalidad)="descargarManual()"
-                    (onConsultarManualCalidad)="consultarManual()">
+                    (onConsultarManualCalidad)="consultarManual()"
+                    [permisoAdjuntarManualCalidad]="hasPermision(106) | async"
+                    [permisoConsultarManualCalidad]="hasPermision(107) | async"
+                    [permisoDescargarManualCalidad]="hasPermision(108) | async">
                 </manual-calidad>
                 <organigrama #organigrama
                     *ngIf="loadedCalidad"
                     [loadedCalidad]="loadedCalidad"
                     (onCreateNewCargo)="createCargo($event)"
                     (onUpdateCargo)="updateCrago($event)"
-                    (onDeleteCargo)="deleteCargo($event)">
+                    (onDeleteCargo)="deleteCargo($event)"
+                    [permisoCrearNuevoCargo]="hasPermision(109) | async"
+                    [permisoEditarCargo]="hasPermision(110) | async"
+                    [permisoEliminarCargo]="hasPermision(111) | async">
                 </organigrama>
                 <procesos
                     *ngIf="loadedCalidad"
                     [mapa]="loadedCalidad.calidad_mapa_procesos"
                     (onUpdateMapaProcesos)="updateMapaProcesos($event)"
                     (onCreateProceso)="createProceso($event)"
-                    (onUpdateProceso)="updateProceso($event)">
+                    (onUpdateProceso)="updateProceso($event)"
+                    [permisoCrearNuevoProceso]="hasPermision(112) | async"
+                    [permisoEditarEntradaSalida]="hasPermision(113) | async"
+                    [permisoEditarProceso]="hasPermision(114) | async">
                 </procesos>
             </div>
         </div> 
@@ -101,6 +116,7 @@ export class NuestraEmpresaComponent implements OnInit {
 
     constructor(
         private nuestraEmpresaService: NuestraEmpresaService,
+        private hasPermisionService: HasPermisionService,
         private store: Store<StoreModel>
     ) {}
 
@@ -208,6 +224,10 @@ export class NuestraEmpresaComponent implements OnInit {
 
     getDetalleCalidad() {
         return this.nuestraEmpresaService.getDetalleCalidad();
+    }
+
+    hasPermision(id: number){
+        return this.hasPermisionService.hasPermision(id);
     }
 
     updateCrago(cargo: CalidadOrganigramaModel) {

@@ -17,6 +17,10 @@ export class DocumentoService {
         private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
     ) { }
 
+    getDocumentoById(idDocumento: number) {
+        return this.http.get(`${environment.apiUrl}/documento/${idDocumento}`);
+    }
+
     transformDocumentoRequest(documento: DocumentoModel) {
         if (documento.adjuntos) {
             documento.adjuntos = documento.adjuntos.map(
@@ -24,7 +28,9 @@ export class DocumentoService {
             )
         }
         return {
-            ...documento
+            ...documento,
+            fecha_fin: documento.fecha_fin ? documento.fecha_fin / 1000 : null,
+            fecha_inicio: documento.fecha_fin ? documento.fecha_fin / 1000 : null
         }
     }
 
@@ -40,7 +46,17 @@ export class DocumentoService {
             )
         }
         return {
-            ...documento
+            ...documento,
+            fecha_fin: documento.fecha_fin ? documento.fecha_fin * 1000 : null,
+            fecha_inicio: documento.fecha_fin ? documento.fecha_fin * 1000 : null
         }
+    }
+
+    getPermisoByIdDocAdjunto(idDoc: number, idPermisoDocumento) {
+        return this.http.get(`${environment.apiUrl}/documentos/get-permiso-by-id-doc-adjunto/${idDoc}/${idPermisoDocumento}`);
+    }
+
+    getPermisoByIdDocAdjuntoFlujo(idDoc: number, idPermisoDocumento) {
+        return this.http.get(`${environment.apiUrl}/documentos/get-permiso-by-id-doc-adjunto-flujo/${idDoc}/${idPermisoDocumento}`);
     }
 }

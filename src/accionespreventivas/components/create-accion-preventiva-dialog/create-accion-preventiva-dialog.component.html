@@ -1,0 +1,60 @@
+<div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <p-dialog header="Nueva acción preventiva" [(visible)]="display" [modal]="true" [responsive]="true" [width]="800" [maximizable]="true"
+            [baseZIndex]="10000" (onHide)="onHideCreateAccionPreventiva()" [contentStyle]="{'overflow':'visible'}">
+
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <div>
+                        <label>Código</label>
+                    </div>
+                    <input type="text" pInputText formControlName="codigo" />
+                </div>
+                <div class="ui-g-4">
+                    <div>
+                        <label>Procesos</label>
+                    </div>
+                    <p-multiSelect [options]="procesos" [panelStyle]="{minWidth:'12em'}" [(ngModel)]="selectedProcesos" formControlName="proceso"
+                        optionLabel="proceso" defaultLabel="Seleccione múltiples..."></p-multiSelect>
+                </div>
+                <div class="ui-g-4">
+                    <div>
+                        <label>Título</label>
+                    </div>
+                    <input type="text" pInputText formControlName="titulo" />
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <div>
+                        <label>Importancia</label>
+                    </div>
+                    <p-dropdown [options]="importancias" [autoWidth]="true" formControlName="importancia" optionLabel="nombre" placeholder="Seleccione..."></p-dropdown>
+                </div>
+                <div class="ui-g-4">
+                    <div>
+                        <label>Fecha compromiso</label>
+                    </div>
+                    <p-calendar showIcon="true" [minDate]="fechaMinimaCalendario" formControlName="fecha_compromiso" [dateFormat]="dateFormatNormal"></p-calendar>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div>
+                        <label>Descripción</label>
+                    </div>
+                    <textarea formControlName="descripcion" [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" style="width: 100%"></textarea>
+                </div>
+            </div>
+            <p-footer>
+                <div class="ui-g">
+                    <div class="ui-g-12 text-aling-right">
+                        <button type="button" pButton icon="pi pi-times" (click)="display=false" label="Cancelar" class="ui-button-danger"></button>
+                        <button type="submit" pButton icon="pi pi-save" label="Crear" class="ui-button-success" style="margin-left: 10px" [disabled]="!form.valid"></button>
+                    </div>
+                </div>
+            </p-footer>
+        </p-dialog>
+    </form>
+</div>

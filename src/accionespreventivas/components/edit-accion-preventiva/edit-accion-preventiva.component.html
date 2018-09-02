@@ -1,0 +1,76 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <p-panel header="Información sobre acción preventiva  No. {{accionPreventiva?.id}}">
+                <div class="ui-g">
+                    <div class="ui-g-3">
+                        <div>
+                            <label>Fecha creación</label>
+                        </div>
+                        <p>{{ accionPreventiva?.fecha_creacion | date: dateFormatAngular }}</p>
+                    </div>
+                    <div class="ui-g-3">
+                        <div>
+                            <label>Estado</label>
+                        </div>
+                        <p>{{ accionPreventiva?.accion_estado?.nombre }}</p>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3">
+                        <div>
+                            <label>Fecha compromiso</label>
+                        </div>
+                        <p-calendar showIcon="true" formControlName="fecha_compromiso" [dateFormat]="dateFormatNormal"></p-calendar>
+                    </div>
+                    <div class="ui-g-3">
+                        <div>
+                            <label>Importancia</label>
+                        </div>
+                        <p-dropdown [options]="importancias" [autoWidth]="false" formControlName="importancia" optionLabel="nombre" placeholder="Seleccione..."></p-dropdown>
+                    </div>
+                    <div class="ui-g-3">
+                        <div>
+                            <label>Responsable</label>
+                        </div>
+                        <p> {{ accionPreventiva?.responsable?.nombre }}</p>
+                        <p *ngIf="!accionPreventiva?.responsable">
+                            Aun no se ha asignado
+                        </p>
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-3">
+                        <div>
+                            <label>Código</label>
+                        </div>
+                        <input type="text" pInputText formControlName="codigo">
+                    </div>
+                    <div class="ui-g-3">
+                        <div>
+                            <label>Título</label>
+                        </div>
+                        <input type="text" pInputText formControlName="titulo">
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                    <label>Descripción</label>
+                    <div class="ui-g-12 ui-fluid">
+                        <textarea formControlName="descripcion" [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" style="width: 100%"></textarea>
+                    </div>
+                </div>
+
+                <div class="ui-g" *ngIf="!disabled">
+                    <div class="ui-g-12 text-aling-right">
+                        <button type="submit" icon="pi pi-save" pButton label="Editar información inicial" [disabled]="!form.valid"></button>
+                    </div>
+                </div>
+            </p-panel>
+        </form>
+    </div>
+</div>

@@ -5,8 +5,8 @@ import { AccionPreventivaModel } from "./accion-preventiva.model";
 
 export interface AccionPreventivaTareaModel {
     id?: number;
-    id_accion_correctiva: number;
-    id_accion_correctiva_tarea_tipo: number;
+    id_accion_preventiva: number;
+    id_accion_preventiva_tarea_tipo: number;
     prioridad: number;
     tarea: string;
     responsables_terceros?: string;
