@@ -62,20 +62,32 @@ export class DocumentoGuard implements CanActivate {
     validateUser(idDocumento, usuario: UsuarioModel): Observable<boolean> {
         return this.documentoService.getDocumentoById(idDocumento).pipe(
             switchMap((documento: DocumentoModel) => {
-                if (documento.id_responsable_crea == usuario.id
-                    || documento.id_responsable_elabora == usuario.id
-                    || documento.id_responsable_revisa == usuario.id
-                    || documento.id_responsable_aprueba == usuario.id
-                    || usuario.es_jefe) {
-                    return of(true);
-                } else {
-                    this.store.dispatch(
-                        new fromRootStore.Go({ path: ['acceso-denegado'] })
-                    );
-                    return of(false);
-                }
+                return this.validarPermisoUsuarioDocumento(documento, usuario);
             })
         )
+    }
+
+    validarPermisoUsuarioDocumento(documento, usuario): Observable<boolean> {
+        if (documento.id_responsable_crea == usuario.id
+            || documento.id_responsable_elabora == usuario.id
+            || documento.id_responsable_revisa == usuario.id
+            || documento.id_responsable_aprueba == usuario.id
+            || usuario.es_jefe) {
+            return of(true);
+        } else {
+            return this.docsDocumentoService.usuarioPerteneceProcesoDocumento(usuario.id, documento.id).pipe(
+                switchMap((response: any[]) => {
+                    if (response.length > 0) {
+                        return of(true);
+                    } else {
+                        this.store.dispatch(
+                            new fromRootStore.Go({ path: ['acceso-denegado'] })
+                        );
+                        return of(false);
+                    }
+                })
+            )
+        }
     }
 
     tienePermisos(idDocumento: number) {
@@ -100,5 +112,5 @@ export class DocumentoGuard implements CanActivate {
         );
     }
 
-    
+
 }
