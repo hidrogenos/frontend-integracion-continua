@@ -121,4 +121,8 @@ export class DocsDocumentoService {
             return null;
         }
     }
+
+    usuarioPerteneceProcesoDocumento(idUsuario: number, idDocumento: number) {
+        return this.http.get(`${environment.apiUrl}/documentos/usuario-pertenece-proceso-documento/${idUsuario}/${idDocumento}`);
+    }
 }
