@@ -31,6 +31,9 @@ export * from './lista-permisos/lista-permisos.component';
 import { ResetContrasenaColaboradorComponent } from './reset-contrasena-colaborador/reset-contrasena-colaborador.component';
 export * from './reset-contrasena-colaborador/reset-contrasena-colaborador.component';
 
+import { UsuarioProcesosComponent } from './usuario-procesos/usuario-procesos.component';
+export * from './usuario-procesos/usuario-procesos.component';
+
 export const components: any[] = [
     AptitudesDestrezasColaboradorComponent,
     CreateAptitudDestrezaColaboradorComponent,
@@ -42,5 +45,6 @@ export const components: any[] = [
     EditPerfilComponent,
     ListaPerfilesComponent,
     ListaPermisosComponent,
-    ResetContrasenaColaboradorComponent
+    ResetContrasenaColaboradorComponent,
+    UsuarioProcesosComponent
 ];
