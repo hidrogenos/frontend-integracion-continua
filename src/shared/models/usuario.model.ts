@@ -9,7 +9,7 @@ import { CesantiaModel } from './cesantia.model';
 import { CajaCompensacionModel } from './caja-compensacion.model';
 import { UsuarioDestrezaModel } from './usuario-destreza.model';
 import { UsuarioDocumentoModel } from './usuario-documento.model';
-
+import { UsuarioProcesoModel } from './usuario-proceso.model';
 
 export interface UsuarioModel {
     id?: number;
@@ -47,4 +47,5 @@ export interface UsuarioModel {
     caja_compensacion?: CajaCompensacionModel;
     destrezas?: UsuarioDestrezaModel[];
     documentos?: UsuarioDocumentoModel[];
+    procesos?: UsuarioProcesoModel[];
 }

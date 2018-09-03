@@ -1,28 +1,30 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 //environment
-import { environment } from "../../../environments/environment";
-import { PerfilModel } from "../../../shared/models/perfil.model";
-import { CalidadOrganigramaModel } from "../../../shared/models/calidad-organigrama.model";
-import { PaisModel } from "../../../shared/models/pais.model";
-import { ArlModel } from "../../../shared/models/arl.model";
-import { CajaCompensacionModel } from "../../../shared/models/caja-compensacion.model";
-import { CesantiaModel } from "../../../shared/models/cesantia.model";
-import { EpsModel } from "../../../shared/models/eps.model";
-import { PensionModel } from "../../../shared/models/pension.model";
-import { UsuarioModel } from "../../../shared/models/usuario.model";
+import { environment } from '../../../environments/environment';
+import { PerfilModel } from '../../../shared/models/perfil.model';
+import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
+import { PaisModel } from '../../../shared/models/pais.model';
+import { ArlModel } from '../../../shared/models/arl.model';
+import { CajaCompensacionModel } from '../../../shared/models/caja-compensacion.model';
+import { CesantiaModel } from '../../../shared/models/cesantia.model';
+import { EpsModel } from '../../../shared/models/eps.model';
+import { PensionModel } from '../../../shared/models/pension.model';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
 import {
     UsuarioService,
     UsuarioDestrezaService
-} from "../../../shared/services";
-import { TipoIdentificacionModel } from "../../../shared/models/tipo-identificacion.model";
-import { UsuarioDestrezaModel } from "../../../shared/models/usuario-destreza.model";
-import { UsuarioDestrezaDocumentoModel } from "../../../shared/models/usuario-destreza-documento.model";
-import { UsuarioDocumentoModel } from "../../../shared/models/usuario-documento.model";
-import { UsuarioDocumentoService } from "../../../shared/services/usuario-documento/usuario-documento.service";
+} from '../../../shared/services';
+import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
+import { UsuarioDestrezaModel } from '../../../shared/models/usuario-destreza.model';
+import { UsuarioDestrezaDocumentoModel } from '../../../shared/models/usuario-destreza-documento.model';
+import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.model';
+import { UsuarioDocumentoService } from '../../../shared/services/usuario-documento/usuario-documento.service';
+import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
+import { UsuarioProcesoModel } from '../../../shared/models/usuario-proceso.model';
 
 @Injectable()
 export class ColaboradorDetalleService {
@@ -87,10 +89,24 @@ export class ColaboradorDetalleService {
             .pipe(catchError((error: any) => throwError(error)));
     }
 
+    deleteUsuarioProceso(data: {
+        id_usuario: number;
+        id_mapa_procesos: number;
+    }): Observable<UsuarioProcesoModel> {
+        return this.http
+            .post<UsuarioProcesoModel>(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/detalle/delete-usuario-proceso`,
+                data
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
     downloadUsuarioDestrezaDocumento(data: { path: string }) {
         return this.http
             .post(`${environment.apiUrl}/utils/get-adjunto`, data, {
-                responseType: "blob"
+                responseType: 'blob'
             })
             .pipe(catchError((error: any) => throwError(error)));
     }
@@ -120,12 +136,27 @@ export class ColaboradorDetalleService {
         pensiones: PensionModel[];
         perfiles: PerfilModel[];
         tipos_identificacion: TipoIdentificacionModel[];
+        procesos: MapaProcesoHijoModel[];
     }> {
         return this.http
             .get<any>(
                 `${
                     environment.apiUrl
                 }/administracion/colaborador/detalle/get-initial-data`
+            )
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    relacionarProcesos(
+        id,
+        data: { procesos: MapaProcesoHijoModel[] }
+    ): Observable<UsuarioModel> {
+        return this.http
+            .post<UsuarioModel>(
+                `${
+                    environment.apiUrl
+                }/administracion/colaborador/detalle/relacionar-procesos/${id}`,
+                data
             )
             .pipe(catchError((error: any) => throwError(error)));
     }

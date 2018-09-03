@@ -16,6 +16,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
@@ -28,6 +29,7 @@ const primeNgModules = [
     DropdownModule,
     FileUploadModule,
     InputTextModule,
+    MultiSelectModule,
     RadioButtonModule,
     TableModule,
     TabViewModule
@@ -38,7 +40,6 @@ import { AdministracionRoutes } from './administracion.routing';
 
 //services
 import * as fromServices from './services';
-
 
 @NgModule({
     imports: [
