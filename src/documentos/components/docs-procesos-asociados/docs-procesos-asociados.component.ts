@@ -76,5 +76,6 @@ export class DocsProcesosAsociadosComponent {
 
     relacionarProceso() {
         this.onAsociarProceso.emit(this.selectedProceso);
+        this.selectedProceso = null;
     }
 }
