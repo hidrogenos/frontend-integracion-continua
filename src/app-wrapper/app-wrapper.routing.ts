@@ -14,7 +14,7 @@ import { ChartsDemoComponent } from './demo/view/chartsdemo.component';
 import { FileDemoComponent } from './demo/view/filedemo.component';
 import { UtilsDemoComponent } from './demo/view/utilsdemo.component';
 import { DocumentationComponent } from './demo/view/documentation.component';
-import { AppWrapperComponent, AccessDeniedComponent } from './containers';
+import { AppWrapperComponent, AccessDeniedComponent, BandejaEntradaComponent } from './containers';
 
 import * as fromSharedContainers from './../shared/containers';
 import * as fromGuards from './guards';
@@ -80,7 +80,7 @@ export const ROUTES: Routes = [
                     'visor-adjunto/:id_tipo_documento/:id_documento/:nombre_doc',
                 component: fromSharedContainers.VisorAdjuntoComponent
             },
-            { path: 'dashboard', component: DashboardDemoComponent },
+            { path: 'dashboard', component: BandejaEntradaComponent },
             { path: 'sample', component: SampleDemoComponent },
             { path: 'forms', component: FormsDemoComponent },
             { path: 'data', component: DataDemoComponent },
