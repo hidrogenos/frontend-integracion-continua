@@ -201,6 +201,9 @@ import * as fromComponents from './components';
 //guards
 import * as fromGuards from './guards';
 
+//guards
+import * as fromServices from './services';
+
 @NgModule({
     imports: [CommonModule, AppWrapperRoutes, FormsModule, ...primeNgModules],
     declarations: [
@@ -210,7 +213,8 @@ import * as fromGuards from './guards';
     ],
     providers: [
         ...demoServices,
-        ...fromGuards.guards
+        ...fromGuards.guards,
+        ...fromServices.services
     ]
 })
 export class AppWrapperModule { }
