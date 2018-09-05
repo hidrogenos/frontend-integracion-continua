@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
     selector: 'bandeja-entrada',
     template: `
         <div>
-            <be-documentos-vigentes-asoc *ngIf="hasPermision([1000]) | async" 
+            <be-documentos-vigentes-asoc  
                 (onSelectDocumento)="redirectToDocumento($event)"></be-documentos-vigentes-asoc>
         </div>
     `
