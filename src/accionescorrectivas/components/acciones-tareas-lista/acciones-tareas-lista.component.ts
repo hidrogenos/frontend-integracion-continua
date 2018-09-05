@@ -144,7 +144,6 @@ export class AccionesTareasListaComponent {
     }
 
     deleteAdjuntoTarea(event) {
-        // console.log("tareasSeledDele", this.tareaSelected);
         this.onDeleteAdjuntoTarea.emit({
             idTarea: this.tareaSelected.id,
             data: event
