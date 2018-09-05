@@ -1270,8 +1270,6 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
         let esResponsableAnalisis = false;
         let analisisFinalizado = false;
         this.hasPermission(401).subscribe(tienePermiso => {
-            let metodologiaAnalisis = this.accionPreventivaActual
-                .metodologia_analisis;
             if (
                 this.idAccionPreventivaEstado == this.ACCION_EN_ANALISIS &&
                 (this.usuarioActual.id ==
@@ -1281,13 +1279,17 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
                 esResponsableAnalisis = true;
             }
             if (
-                (metodologiaAnalisis &&
-                    metodologiaAnalisis.analisis_hijo &&
-                    (metodologiaAnalisis.analisis_hijo.length > 0 ||
-                        (metodologiaAnalisis.analisis_hijo5ws &&
-                            metodologiaAnalisis.analisis_hijo5ws.length >
-                                0))) ||
-                metodologiaAnalisis.id_accion_analisis_tipo ==
+                (this.accionPreventivaActual.metodologia_analisis &&
+                    ((this.accionPreventivaActual.metodologia_analisis
+                        .analisis_hijo &&
+                        this.accionPreventivaActual.metodologia_analisis
+                            .analisis_hijo.length > 0) ||
+                        (this.accionPreventivaActual.metodologia_analisis
+                            .analisis_hijo5ws &&
+                            this.accionPreventivaActual.metodologia_analisis
+                                .analisis_hijo5ws.length > 0))) ||
+                this.accionPreventivaActual.metodologia_analisis
+                    .id_accion_analisis_tipo ==
                     this.METODOLOGIA_ANALISIS_NO_APLICA
             ) {
                 analisisFinalizado = true;

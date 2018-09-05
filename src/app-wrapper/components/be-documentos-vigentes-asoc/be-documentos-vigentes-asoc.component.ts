@@ -1,12 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { BeBandejaEntradaService } from '../../services';
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { BeBandejaEntradaService } from "../../services";
 
-import { environment } from './../../../environments/environment';
+import { environment } from "./../../../environments/environment";
 
-import { DocumentoModel } from '../../../shared/models/documento.model';
+import { DocumentoModel } from "../../../shared/models/documento.model";
 
 @Component({
-    selector: 'be-documentos-vigentes-asoc',
+    selector: "be-documentos-vigentes-asoc",
     template: `
     <div class="ui-g">
         <div class="ui-g-12">
@@ -49,20 +49,19 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
     `
 })
 export class BeDocumentosVigentesAsocComponent {
-
     documentos: DocumentoModel[];
     total: number;
     cantidadXPagina: number = 10;
     formatDate: string;
-    loading: boolean;
+    loading: boolean = true;
 
     cols: any[] = [
-        { field: 'codigo', header: 'Código' },
-        { field: 'titulo', header: 'Título' },
-        { field: 'tipo_nombre', header: 'Tipo de documento' },
-        { field: 'version', header: 'Versión' },
-        { field: 'estado_nombre', header: 'Estado' },
-        { field: 'fecha_fin', header: 'Vence' }
+        { field: "codigo", header: "Código" },
+        { field: "titulo", header: "Título" },
+        { field: "tipo_nombre", header: "Tipo de documento" },
+        { field: "version", header: "Versión" },
+        { field: "estado_nombre", header: "Estado" },
+        { field: "fecha_fin", header: "Vence" }
     ];
 
     @Output()
@@ -86,5 +85,4 @@ export class BeDocumentosVigentesAsocComponent {
     verDetalleDocumento(idDocumento: number) {
         this.onSelectDocumento.emit(idDocumento);
     }
-
 }
