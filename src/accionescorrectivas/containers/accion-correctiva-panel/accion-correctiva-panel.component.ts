@@ -1279,8 +1279,6 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         let esResponsableAnalisis = false;
         let analisisFinalizado = false;
         this.hasPermission(301).subscribe(tienePermiso => {
-            let metodologiaAnalisis = this.accionCorrectivaActual
-                .metodologia_analisis;
             if (
                 this.idAccionCorrectivaEstado == this.ACCION_EN_ANALISIS &&
                 (this.usuarioActual.id ==
@@ -1290,13 +1288,17 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 esResponsableAnalisis = true;
             }
             if (
-                (metodologiaAnalisis &&
-                    metodologiaAnalisis.analisis_hijo &&
-                    (metodologiaAnalisis.analisis_hijo.length > 0 ||
-                        (metodologiaAnalisis.analisis_hijo5ws &&
-                            metodologiaAnalisis.analisis_hijo5ws.length >
-                                0))) ||
-                metodologiaAnalisis.id_accion_analisis_tipo ==
+                (this.accionCorrectivaActual.metodologia_analisis &&
+                    ((this.accionCorrectivaActual.metodologia_analisis
+                        .analisis_hijo &&
+                        this.accionCorrectivaActual.metodologia_analisis
+                            .analisis_hijo.length > 0) ||
+                        (this.accionCorrectivaActual.metodologia_analisis
+                            .analisis_hijo5ws &&
+                            this.accionCorrectivaActual.metodologia_analisis
+                                .analisis_hijo5ws.length > 0))) ||
+                this.accionCorrectivaActual.metodologia_analisis
+                    .id_accion_analisis_tipo ==
                     this.METODOLOGIA_ANALISIS_NO_APLICA
             ) {
                 analisisFinalizado = true;
