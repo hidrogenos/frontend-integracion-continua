@@ -13,6 +13,7 @@ export class EditAccionPreventivaComponent {
     //atributos
     dateFormatAngular: string = environment.dateFormatAngular;
     dateFormatNormal: string = environment.dateFormatPrimeNg;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_preventivas;
     disabled: boolean;
 
     //atributos de entrada
@@ -26,11 +27,11 @@ export class EditAccionPreventivaComponent {
     @Output()
     onEditAccionPreventiva: EventEmitter<
         AccionPreventivaModel
-    > = new EventEmitter<AccionPreventivaModel>();
+        > = new EventEmitter<AccionPreventivaModel>();
 
     form: FormGroup;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder) { }
 
     ngOnInit() {
         this.createForm();

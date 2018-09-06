@@ -24,20 +24,21 @@ import { take } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { PermisosService } from '../../../administracion/services';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'accion-correctiva-lista',
     template: `<div class="ui-g">
                     <div class="ui-g-12">                    
                         <div class="card card-w-title">
-                            <h1> Acciones Correctivas </h1>
+                            <h1> {{nombreModulo}} </h1>
 
                              <acciones-estados-lista 
                                 [estados]="estados"> 
                             </acciones-estados-lista> 
                              <div class="ui-g">
                                 <div class="ui-g-12 text-aling-right">
-                                    <button *ngIf="(hasPermission(300) | async)" pButton type="button" (click)="cacd.display=true" label="Crear acción correctiva" class="ui-button-success">
+                                    <button *ngIf="(hasPermission(300) | async)" pButton type="button" (click)="cacd.display=true" [label]="'Crear '+(nombreModulo | lowercase)" class="ui-button-success">
                                     </button>  
                                 </div>               
                             </div> 
@@ -87,6 +88,8 @@ export class AccionCorrectivaListaComponent implements OnInit {
     usuarioActual: UsuarioModel;
 
     msgs = [];
+
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_correctivas;
 
     //viewChild
     @ViewChild('cacd')

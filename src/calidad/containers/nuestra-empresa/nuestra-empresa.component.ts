@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NuestraEmpresaService } from '../../services';
-import { forkJoin } from 'rxjs';
-import { CalidadModel } from '../../../shared/models/calidad.model';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { NuestraEmpresaService } from "../../services";
+import { forkJoin } from "rxjs";
+import { CalidadModel } from "../../../shared/models/calidad.model";
 import {
     TituloComponent,
     MisionComponent,
@@ -10,19 +10,20 @@ import {
     ValoresComponent,
     ManualCalidadComponent,
     OrganigramaComponent
-} from '../../components';
-import { StoreModel } from '../../../shared/models/store.model';
-import { Store } from '@ngrx/store';
-import * as fromShared from './../../../shared/store';
-import * as fromRoot from './../../../app/store';
-import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
-import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
-import { environment } from '../../../environments/environment';
-import { HasPermisionService } from '../../../shared/services';
+} from "../../components";
+import { StoreModel } from "../../../shared/models/store.model";
+import { Store } from "@ngrx/store";
+import * as fromShared from "./../../../shared/store";
+import * as fromRoot from "./../../../app/store";
+import { CalidadOrganigramaModel } from "../../../shared/models/calidad-organigrama.model";
+import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { environment } from "../../../environments/environment";
+import { HasPermisionService } from "../../../shared/services";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
 
 @Component({
-    selector: 'nuestra-empresa',
-    styleUrls: ['nuestra-empresa.component.scss'],
+    selector: "nuestra-empresa",
+    styleUrls: ["nuestra-empresa.component.scss"],
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
@@ -81,12 +82,15 @@ import { HasPermisionService } from '../../../shared/services';
                 <procesos
                     *ngIf="loadedCalidad"
                     [mapa]="loadedCalidad.calidad_mapa_procesos"
+                    [jefes]="jefes"
                     (onUpdateMapaProcesos)="updateMapaProcesos($event)"
                     (onCreateProceso)="createProceso($event)"
+                    (onDeleteProceso)="deleteProceso($event)"
                     (onUpdateProceso)="updateProceso($event)"
                     [permisoCrearNuevoProceso]="hasPermision(112) | async"
                     [permisoEditarEntradaSalida]="hasPermision(113) | async"
-                    [permisoEditarProceso]="hasPermision(114) | async">
+                    [permisoEditarProceso]="hasPermision(114) | async"
+                    [permisoEliminarProceso]="hasPermision(115) | async">
                 </procesos>
             </div>
         </div> 
@@ -97,37 +101,39 @@ export class NuestraEmpresaComponent implements OnInit {
     //atributos
     blobLogo: any;
     loadedCalidad: CalidadModel;
+    jefes: UsuarioModel[];
 
     //viewChild
-    @ViewChild('manual')
+    @ViewChild("manual")
     manual: ManualCalidadComponent;
-    @ViewChild('mision')
+    @ViewChild("mision")
     mision: MisionComponent;
-    @ViewChild('organigrama')
+    @ViewChild("organigrama")
     organigrama: OrganigramaComponent;
-    @ViewChild('politica')
+    @ViewChild("politica")
     politica: PoliticaComponent;
-    @ViewChild('titulo')
+    @ViewChild("titulo")
     titulo: TituloComponent;
-    @ViewChild('valores')
+    @ViewChild("valores")
     valores: ValoresComponent;
-    @ViewChild('vision')
+    @ViewChild("vision")
     vision: VisionComponent;
 
     constructor(
         private nuestraEmpresaService: NuestraEmpresaService,
         private hasPermisionService: HasPermisionService,
         private store: Store<StoreModel>
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.loadInitData();
     }
 
     loadInitData() {
-        this.showWaitDialog('Consultado datos, un momento por favor...');
-        forkJoin([this.getDetalleCalidad()]).subscribe(([calidad]) => {
+        this.showWaitDialog("Consultado datos, un momento por favor...");
+        forkJoin([this.getDetalleCalidad(), this.getUsuariosJefes()]).subscribe(([calidad, jefes]) => {
             this.loadedCalidad = calidad;
+            this.jefes = jefes;
             if (calidad.empresa_logo != null) {
                 this.getLogo();
             } else {
@@ -141,7 +147,7 @@ export class NuestraEmpresaComponent implements OnInit {
             new fromRoot.Go({
                 path: [
                     `visor-adjunto/${
-                        environment.tipos_documento.manual_calidad.id
+                    environment.tipos_documento.manual_calidad.id
                     }/${this.loadedCalidad.id}/manual_calidad.pdf`
                 ]
             })
@@ -149,7 +155,7 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     createCargo(cargo: CalidadOrganigramaModel) {
-        this.showWaitDialog('Registrando nuevo cargo, un momento por favor...');
+        this.showWaitDialog("Registrando nuevo cargo, un momento por favor...");
         this.nuestraEmpresaService.createCargo(cargo).subscribe(response => {
             this.loadedCalidad.calidad_organigrama = [
                 ...this.loadedCalidad.calidad_organigrama,
@@ -163,7 +169,7 @@ export class NuestraEmpresaComponent implements OnInit {
 
     createProceso(proceso: MapaProcesoHijoModel) {
         this.showWaitDialog(
-            'Registrando nuevo proceso, un momento por favor...'
+            "Registrando nuevo proceso, un momento por favor..."
         );
         this.nuestraEmpresaService
             .createProceso(proceso)
@@ -182,7 +188,7 @@ export class NuestraEmpresaComponent implements OnInit {
                 cargo => cargo.id_padre == id
             ) == -1
         ) {
-            this.showWaitDialog('Eliminando cargo, un momento por favor...');
+            this.showWaitDialog("Eliminando cargo, un momento por favor...");
             this.nuestraEmpresaService.deleteCargo(id).subscribe(response => {
                 this.loadedCalidad.calidad_organigrama = this.loadedCalidad.calidad_organigrama.filter(
                     cargo => cargo.id != id
@@ -195,14 +201,26 @@ export class NuestraEmpresaComponent implements OnInit {
             });
         } else {
             alert(
-                'No es posible borrar un cargo con sub alternos, por favor elimine o reasigne los subalternos del cargo a eliminar'
+                "No es posible borrar un cargo con sub alternos, por favor elimine o reasigne los subalternos del cargo a eliminar"
             );
         }
     }
 
+    deleteProceso(id: number) {
+        this.showWaitDialog(
+            "Eliminando mapa de procesos, un momento por favor..."
+        );
+        this.nuestraEmpresaService.deleteProceso(id).subscribe(mapaProcesos => {
+            this.loadedCalidad.calidad_mapa_procesos.procesos = this.loadedCalidad.calidad_mapa_procesos.procesos.filter(
+                procesoActual => mapaProcesos.id != procesoActual.id
+            );
+            this.hideWaitDialog();
+        });
+    }
+
     descargarManual() {
         this.showWaitDialog(
-            'Descargando manual de calidad, un momento por favor...'
+            "Descargando manual de calidad, un momento por favor..."
         );
         this.nuestraEmpresaService
             .downloadAdjunto({ path: this.loadedCalidad.url_manual })
@@ -210,11 +228,11 @@ export class NuestraEmpresaComponent implements OnInit {
                 const blob = new Blob([file], { type: file.type });
 
                 var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
+                var a = document.createElement("a");
                 document.body.appendChild(a);
-                a.setAttribute('style', 'display: none');
+                a.setAttribute("style", "display: none");
                 a.href = url;
-                a.download = 'Manual de calidad';
+                a.download = "Manual de calidad";
                 a.click();
                 window.URL.revokeObjectURL(url);
                 a.remove(); // remove the element
@@ -226,12 +244,16 @@ export class NuestraEmpresaComponent implements OnInit {
         return this.nuestraEmpresaService.getDetalleCalidad();
     }
 
-    hasPermision(id: number){
+    getUsuariosJefes() {
+        return this.nuestraEmpresaService.getUsuariosJefes();
+    }
+
+    hasPermision(id: number) {
         return this.hasPermisionService.hasPermision(id);
     }
 
     updateCrago(cargo: CalidadOrganigramaModel) {
-        this.showWaitDialog('Actualizando organigrama, un momento por favor..');
+        this.showWaitDialog("Actualizando organigrama, un momento por favor..");
         this.nuestraEmpresaService
             .updateCargo(cargo.id, cargo)
             .subscribe(response => {
@@ -248,7 +270,7 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     updateEmpresaNombre(empresa_nombre: string) {
-        this.showWaitDialog('Actualizando nombre, un momento por favor...');
+        this.showWaitDialog("Actualizando nombre, un momento por favor...");
         this.nuestraEmpresaService
             .updateEmpresaNombre(this.loadedCalidad.id, { empresa_nombre })
             .subscribe(response => {
@@ -262,9 +284,9 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     updateLogoEmpresa(file: File) {
-        this.showWaitDialog('Actualizando logo, un momento por favor...');
+        this.showWaitDialog("Actualizando logo, un momento por favor...");
         const form: FormData = new FormData();
-        form.append('upload', file, file.name);
+        form.append("upload", file, file.name);
         this.nuestraEmpresaService
             .updateLogoEmpresa(this.loadedCalidad.id, form)
             .subscribe(response => {
@@ -281,10 +303,10 @@ export class NuestraEmpresaComponent implements OnInit {
 
     updateManual(file: File) {
         this.showWaitDialog(
-            'Actualizando manual de calidad, un momento por favor...'
+            "Actualizando manual de calidad, un momento por favor..."
         );
         const form: FormData = new FormData();
-        form.append('upload', file, file.name);
+        form.append("upload", file, file.name);
         this.nuestraEmpresaService
             .updateManual(this.loadedCalidad.id, form)
             .subscribe(response => {
@@ -301,7 +323,7 @@ export class NuestraEmpresaComponent implements OnInit {
 
     updateMapaProcesos(data: { entrada: string; salida: string }) {
         this.showWaitDialog(
-            'Actializando mapa de procesos, un momento por favor..'
+            "Actializando mapa de procesos, un momento por favor.."
         );
         this.nuestraEmpresaService
             .updateMapaProcesos(
@@ -318,7 +340,7 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     updateMision(mision: string) {
-        this.showWaitDialog('Actualizando misión, un momento por favor...');
+        this.showWaitDialog("Actualizando misión, un momento por favor...");
         this.nuestraEmpresaService
             .updateMision(this.loadedCalidad.id, { mision })
             .subscribe(response => {
@@ -334,7 +356,7 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     updatePolitica(politica: string) {
-        this.showWaitDialog('Actualizando política, un momento por favor...');
+        this.showWaitDialog("Actualizando política, un momento por favor...");
         this.nuestraEmpresaService
             .updatePolitica(this.loadedCalidad.id, { politica })
             .subscribe(response => {
@@ -354,13 +376,13 @@ export class NuestraEmpresaComponent implements OnInit {
             .updateProceso(proceso.id, proceso)
             .subscribe(response => {
                 this.loadedCalidad.calidad_mapa_procesos.procesos = this.loadedCalidad.calidad_mapa_procesos.procesos.map(
-                    e => (e.id != proceso.id ? e : proceso)
+                    e => (e.id != proceso.id ? e : response)
                 );
             });
     }
 
     updateValores(valores: string) {
-        this.showWaitDialog('Actualizando valores, un momento por favor...');
+        this.showWaitDialog("Actualizando valores, un momento por favor...");
         this.nuestraEmpresaService
             .updateValores(this.loadedCalidad.id, { valores })
             .subscribe(response => {
@@ -376,7 +398,7 @@ export class NuestraEmpresaComponent implements OnInit {
     }
 
     updateVision(vision: string) {
-        this.showWaitDialog('Actualizando logo, un momento por favor...');
+        this.showWaitDialog("Actualizando logo, un momento por favor...");
         this.nuestraEmpresaService
             .updateVision(this.loadedCalidad.id, { vision })
             .subscribe(response => {

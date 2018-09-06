@@ -153,7 +153,7 @@ import { environment } from "../../../environments/environment";
                             <div class="ui-g ui-fluid" *ngIf="(idAccionPreventivaEstado == ACCION_EN_CALIDAD ||
                                                               idAccionPreventivaEstado == ACCION_EN_REASIGNACION) && usuarioActual?.es_jefe">
                                 <div class="ui-g-6">
-                                    <button pButton class="ui-button" label="Asignar acción" (click)="asignarAccionPreventivaComponent.display=true;"></button>
+                                    <button pButton class="ui-button" label="Asignar {{nombreModulo | lowercase}}" (click)="asignarAccionPreventivaComponent.display=true;"></button>
                                 </div>
                                 <div class="ui-g-6">
                                     <button pButton class="ui-button-danger" label="Anular" (click)="anular.displayAnularAccion=true"></button>
@@ -182,7 +182,7 @@ import { environment } from "../../../environments/environment";
 
                             <div class="ui-g ui-fluid" *ngIf="(idAccionPreventivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionPreventivaActual?.id_responsable || (hasPermission(401) | async)) && finishedTareaPermiso">
                                 <div class="ui-g-12">
-                                    <button pButton class="ui-button" label="Finalizar acción" (click)="actualizarEstadoAccionPreventiva(ACCION_FINALIZADA)"></button>
+                                    <button pButton class="ui-button" label="Finalizar {{nombreModulo | lowercase}}" (click)="actualizarEstadoAccionPreventiva(ACCION_FINALIZADA)"></button>
                                 </div>
                             </div>
 
@@ -236,6 +236,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     // atributos clase
 
     usuarioActual: UsuarioModel;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_preventivas;
 
     // listas para utilizar
 
@@ -387,16 +388,16 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
                                         let padreTempo =
                                             hijoActual.padre != null
                                                 ? {
-                                                      id: hijoActual.padre.id,
-                                                      pregunta_causa_idea:
-                                                          hijoActual.padre
-                                                              .pregunta_causa_idea
-                                                  }
+                                                    id: hijoActual.padre.id,
+                                                    pregunta_causa_idea:
+                                                        hijoActual.padre
+                                                            .pregunta_causa_idea
+                                                }
                                                 : {
-                                                      id: 0,
-                                                      pregunta_causa_idea:
-                                                          "Causa inicial"
-                                                  };
+                                                    id: 0,
+                                                    pregunta_causa_idea:
+                                                        "Causa inicial"
+                                                };
                                         return padreTempo;
                                     }
                                 );
@@ -406,16 +407,16 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
                                         let padreTempo =
                                             hijoActual.padre != null
                                                 ? {
-                                                      id: hijoActual.padre.id,
-                                                      pregunta_causa_idea:
-                                                          hijoActual.padre
-                                                              .pregunta_causa_idea
-                                                  }
+                                                    id: hijoActual.padre.id,
+                                                    pregunta_causa_idea:
+                                                        hijoActual.padre
+                                                            .pregunta_causa_idea
+                                                }
                                                 : {
-                                                      id: 0,
-                                                      pregunta_causa_idea:
-                                                          "Causa inicial"
-                                                  };
+                                                    id: 0,
+                                                    pregunta_causa_idea:
+                                                        "Causa inicial"
+                                                };
 
                                         const hijo = {
                                             ...hijoActual,
@@ -442,8 +443,8 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
                                 }
 
                                 switch (
-                                    this.accionPreventivaAnalisisActual
-                                        .id_accion_analisis_tipo
+                                this.accionPreventivaAnalisisActual
+                                    .id_accion_analisis_tipo
                                 ) {
                                     case 1: {
                                         if (
@@ -518,7 +519,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     updateAccionPreventiva(data: AccionPreventivaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Actualizando información acción preventiva, un momento por favor..."
+            "Actualizando información " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionPreventivaDetalleService
             .updateAccionPreventiva(data)
@@ -556,7 +557,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     addProcesoToAccionPreventiva(data: MapaProcesoHijoModel[]) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Relacionando proceso a acción preventiva, un momento por favor..."
+            "Relacionando proceso a " + this.nombreModulo + ", un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
@@ -599,7 +600,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     deleteProcesoFromAccionPreventiva(data: AccionPreventivaProcesoModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Eliminando proceso de acción preventiva, un momento por favor..."
+            "Eliminando proceso de " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionPreventivaDetalleService
             .deleteProcesoFromAccionPreventiva(data.id)
@@ -674,7 +675,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     deleteDocumentoFromAccionPreventiva(event: AccionPreventivaAdjuntoModel) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Eliminando documento de acción preventiva"
+            "Eliminando documento de " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionPreventivaDetalleService
             .deleteDocumentoByAccionPreventiva(event.id)
@@ -687,7 +688,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     }
 
     createAccionAnalisis(data: AccionAnalisisTipoModel) {
-        this.showWaitDialog("Accion en proceso", "Creando nueva idea");
+        this.showWaitDialog("Accion en proceso", "Creando nueva idea, un momento por favor...");
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
@@ -721,7 +722,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     createAccionAnalisisHijos(data: AccionPreventivaAnalisisHijoModel[]) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Creando nuevas ideas en análisis"
+            "Creando nuevas ideas en análisis, un momento por favor..."
         );
         this.store.select(this.fromAuth.getUser).subscribe(usuario => {
             data.forEach(accionAnalisisHijoActual => {
@@ -787,7 +788,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     }
 
     createAccionAnalisisHijo(data) {
-        this.showWaitDialog("Accion en proceso", "Creando nuevo porque");
+        this.showWaitDialog("Accion en proceso", "Creando nuevo porque, un momento por favor...");
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
@@ -805,14 +806,14 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
                         let padreTempo =
                             response[0].padre != null
                                 ? {
-                                      id: response[0].padre.id,
-                                      pregunta_causa_idea:
-                                          response[0].padre.pregunta_causa_idea
-                                  }
+                                    id: response[0].padre.id,
+                                    pregunta_causa_idea:
+                                        response[0].padre.pregunta_causa_idea
+                                }
                                 : {
-                                      id: 0,
-                                      pregunta_causa_idea: "Causa inicial"
-                                  };
+                                    id: 0,
+                                    pregunta_causa_idea: "Causa inicial"
+                                };
 
                         let hijoActual = response[0];
                         hijoActual.padre = padreTempo;
@@ -831,7 +832,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     createOrUpdateAccionAnalisisHijo(data) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Actualizando información análisis"
+            "Actualizando información análisis, un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
@@ -888,7 +889,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     updateAccionPreventivaTarea(data: AccionPreventivaTareaModel) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Actualizando información tarea acción preventiva"
+            "Actualizando información tarea " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionPreventivaDetalleService
             .updateAccionPreventivaTarea(data.id, data)
@@ -904,7 +905,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     deleteAccionPreventivaTarea(data: AccionPreventivaTareaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Eliminando tarea acción preventiva, un momento por favor..."
+            "Eliminando tarea " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionPreventivaDetalleService
             .deleteAccionPreventivaTarea(data.id)
@@ -921,7 +922,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
     realizarAccionPreventivaTarea(data: AccionPreventivaTareaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Cambiando estado acción preventiva realizado, un momento por favor..."
+            "Cambiando estado " + this.nombreModulo + " realizado, un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
@@ -1024,14 +1025,14 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
                 this.accionPreventivaActual.tareas.find(
                     tareaActual => tareaActual.id == data.idTarea
                 ).adjunto = [
-                    ...this.accionPreventivaActual.tareas
-                        .find(tareaActual => tareaActual.id == data.idTarea)
-                        .adjunto.filter(adjuntoActual => {
-                            if (adjuntoActual.id != adjuntoEliminado.id) {
-                                return adjuntoActual;
-                            }
-                        })
-                ];
+                        ...this.accionPreventivaActual.tareas
+                            .find(tareaActual => tareaActual.id == data.idTarea)
+                            .adjunto.filter(adjuntoActual => {
+                                if (adjuntoActual.id != adjuntoEliminado.id) {
+                                    return adjuntoActual;
+                                }
+                            })
+                    ];
                 this.hideWaitDialog();
             });
     }
@@ -1045,7 +1046,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionPreventivaAdjunto.id
+                    accionPreventivaAdjunto.id
                     }/${accionPreventivaAdjunto.titulo}`
                 ]
             })
@@ -1061,7 +1062,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionPreventivaTareaAdjunto.id
+                    accionPreventivaTareaAdjunto.id
                     }/${accionPreventivaTareaAdjunto.titulo}`
                 ]
             })
@@ -1290,7 +1291,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
                                 .analisis_hijo5ws.length > 0))) ||
                 this.accionPreventivaActual.metodologia_analisis
                     .id_accion_analisis_tipo ==
-                    this.METODOLOGIA_ANALISIS_NO_APLICA
+                this.METODOLOGIA_ANALISIS_NO_APLICA
             ) {
                 analisisFinalizado = true;
             }
@@ -1307,7 +1308,7 @@ export class AccionPreventivaDetalleComponent extends ComponenteCargado
         });
         if (
             contadorTareasRealizadas ==
-                this.accionPreventivaActual.tareas.length &&
+            this.accionPreventivaActual.tareas.length &&
             this.accionPreventivaActual.tareas.length > 0
         ) {
             this.finishedTareaPermiso = true;

@@ -1,8 +1,8 @@
 <div class="ui-g">
     <div class="ui-g-12">
         <form [formGroup]="form">
-            <p-dialog header="Anular acción preventiva: {{ accionPreventivaActual?.titulo }}" [(visible)]="displayAnularAccion" [modal]="true"
-                [responsive]="true" [width]="800" [maximizable]="true" [baseZIndex]="10000" (onHide)="onHideAnularAccionDialog()">
+            <p-dialog header="Anular {{nombreModulo | lowercase}}: {{ accionPreventivaActual?.titulo }}" [(visible)]="displayAnularAccion"
+                [modal]="true" [responsive]="true" [width]="800" [maximizable]="true" [baseZIndex]="10000" (onHide)="onHideAnularAccionDialog()">
 
                 <div class="ui-g">
                     <div class="ui-g-12">

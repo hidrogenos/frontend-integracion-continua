@@ -1,7 +1,7 @@
 <div class="ui-g">
     <div class="ui-g-12">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-            <p-panel header="Información sobre acción preventiva  No. {{accionPreventiva?.id}}">
+            <p-panel header="Información sobre {{ nombreModulo | lowercase}}  No. {{accionPreventiva?.id}}">
                 <div class="ui-g">
                     <div class="ui-g-3">
                         <div>

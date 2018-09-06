@@ -24,20 +24,21 @@ import {
     AccionPreventivaListaService,
     AccionPreventivaDetalleService
 } from "../../services";
+import { environment } from "../../../environments/environment";
 
 @Component({
     selector: "accion-preventiva-lista",
     template: `<div class="ui-g">
                     <div class="ui-g-12">                    
                         <div class="card card-w-title">
-                            <h1> Acciones Preventivas </h1>
+                            <h1> {{ nombreModulo }}</h1>
 
                              <acciones-estados-lista 
                                 [estados]="estados"> 
                             </acciones-estados-lista> 
                              <div class="ui-g">
                                 <div class="ui-g-12 text-aling-right">
-                                    <button *ngIf="(hasPermission(400) | async)" pButton type="button" (click)="cacd.display=true" label="Crear acción preventiva" class="ui-button-success">
+                                    <button *ngIf="(hasPermission(400) | async)" pButton type="button" (click)="cacd.display=true" label="Crear {{nombreModulo | lowercase}}" class="ui-button-success">
                                     </button>  
                                 </div>               
                             </div> 
@@ -85,6 +86,8 @@ export class AccionPreventivaListaComponent implements OnInit {
     estados: AccionPreventivaEstadoModel[];
 
     usuarioActual: UsuarioModel;
+
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_preventivas;
 
     msgs = [];
 

@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { CalidadModel } from '../../../shared/models/calidad.model';
-import { environment } from '../../../environments/environment';
-import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigrama.model';
-import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
-import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { CalidadModel } from "../../../shared/models/calidad.model";
+import { environment } from "../../../environments/environment";
+import { CalidadOrganigramaModel } from "../../../shared/models/calidad-organigrama.model";
+import { CalidadMapaProcesoModel } from "../../../shared/models/calidad-mapa-proceso.model";
+import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
 
 @Injectable()
 export class NuestraEmpresaService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getDetalleCalidad(): Observable<CalidadModel> {
         return this.http
@@ -18,6 +19,15 @@ export class NuestraEmpresaService {
                 `${environment.apiUrl}/calidad/get-detalle-calidad`
             )
             .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    getUsuariosJefes(): Observable<UsuarioModel[]> {
+        return this.http.
+            get<UsuarioModel[]>(
+                `${environment.apiUrl}/calidad/get-usuarios-jefes`)
+            .pipe(
+                catchError((error: any) => throwError(error))
+            );
     }
 
     createCargo(data: CalidadOrganigramaModel) {
@@ -46,6 +56,14 @@ export class NuestraEmpresaService {
                 `${environment.apiUrl}/calidad/delete-cargo/${id}`
             )
             .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    deleteProceso(id): Observable<CalidadMapaProcesoModel> {
+        return this.http
+            .delete<CalidadMapaProcesoModel>(
+                `${environment.apiUrl}/calidad/delete-proceso/${id}`
+            )
+            .pipe(catchError((error: any) => throwError(error.json())));
     }
 
     updateMapaProcesos(
@@ -168,7 +186,7 @@ export class NuestraEmpresaService {
     downloadAdjunto(data: { path: string }) {
         return this.http
             .post(`${environment.apiUrl}/utils/get-adjunto`, data, {
-                responseType: 'blob'
+                responseType: "blob"
             })
             .pipe(catchError((error: any) => throwError(error)));
     }

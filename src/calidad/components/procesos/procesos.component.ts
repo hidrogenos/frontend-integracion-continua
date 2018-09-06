@@ -5,14 +5,15 @@ import {
     Output,
     EventEmitter,
     ViewChild
-} from '@angular/core';
-import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
-import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
-import { CreateProcesoDialogComponent } from '../create-proceso-dialog/create-proceso-dialog.component';
+} from "@angular/core";
+import { CalidadMapaProcesoModel } from "../../../shared/models/calidad-mapa-proceso.model";
+import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { CreateProcesoDialogComponent } from "../create-proceso-dialog/create-proceso-dialog.component";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
 
 @Component({
-    selector: 'procesos',
-    styleUrls: ['procesos.component.scss'],
+    selector: "procesos",
+    styleUrls: ["procesos.component.scss"],
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
@@ -78,9 +79,12 @@ import { CreateProcesoDialogComponent } from '../create-proceso-dialog/create-pr
         </edit-mapa-procesos-dialog>
         <create-proceso-dialog #cpd
             [mapa]="mapa"
+            [jefes]="jefes"
             (onCreateProceso)="onCreateProceso.emit($event)"
             (onUpdateProceso)="onUpdateProceso.emit($event)"
-            [permisoEditarProceso]="permisoEditarProceso">
+            (onDeleteProceso)="onDeleteProceso.emit($event)"
+            [permisoEditarProceso]="permisoEditarProceso"
+            [permisoEliminarProceso]="permisoEliminarProceso">
         </create-proceso-dialog>
     `
 })
@@ -89,11 +93,15 @@ export class ProcesosComponent implements OnInit {
     @Input()
     mapa: CalidadMapaProcesoModel;
     @Input()
+    jefes: UsuarioModel[];
+    @Input()
     permisoCrearNuevoProceso: boolean;
     @Input()
     permisoEditarEntradaSalida: boolean;
     @Input()
     permisoEditarProceso: boolean;
+    @Input()
+    permisoEliminarProceso: boolean;
 
     //events
     @Output()
@@ -106,13 +114,16 @@ export class ProcesosComponent implements OnInit {
     @Output()
     onUpdateProceso = new EventEmitter<MapaProcesoHijoModel>();
 
+    @Output()
+    onDeleteProceso = new EventEmitter<number>();
+
     //viewchild
-    @ViewChild('cpd')
+    @ViewChild("cpd")
     cpd: CreateProcesoDialogComponent;
 
-    constructor() {}
+    constructor() { }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     editProceso(proceso: MapaProcesoHijoModel) {
         this.cpd.editProceso(proceso);

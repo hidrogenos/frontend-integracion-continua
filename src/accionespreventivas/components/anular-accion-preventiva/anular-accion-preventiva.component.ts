@@ -6,6 +6,7 @@ import {
     Validators
 } from "@angular/forms";
 import { AccionPreventivaModel } from "../../../shared/models/accion-preventiva.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
     selector: "anular-accion-preventiva-dialog",
@@ -13,6 +14,7 @@ import { AccionPreventivaModel } from "../../../shared/models/accion-preventiva.
 })
 export class AnularAccionPreventivaComponent implements OnInit {
     form: FormGroup;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_preventivas;
 
     @Input()
     accionPreventivaActual;
@@ -23,9 +25,9 @@ export class AnularAccionPreventivaComponent implements OnInit {
     @Output()
     onAnularAccionPreventiva: EventEmitter<
         AccionPreventivaModel
-    > = new EventEmitter<AccionPreventivaModel>();
+        > = new EventEmitter<AccionPreventivaModel>();
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder) { }
 
     ngOnInit() {
         this.form = this.fb.group({ observacion: ["", Validators.required] });

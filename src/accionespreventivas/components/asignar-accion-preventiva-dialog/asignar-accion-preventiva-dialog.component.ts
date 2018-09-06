@@ -8,6 +8,7 @@ import {
 import { AccionPreventivaModel } from "../../../shared/models/accion-preventiva.model";
 import { UsuarioModel } from "../../../shared/models/usuario.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
     selector: "asignar-accion-preventiva-dialog",
@@ -15,6 +16,7 @@ import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.m
 })
 export class AsignarAccionPreventivaDialogComponent implements OnInit {
     form: FormGroup;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_preventivas;
 
     @Input()
     accionPreventivaActual;
@@ -28,9 +30,9 @@ export class AsignarAccionPreventivaDialogComponent implements OnInit {
     @Output()
     onAsignarAccionPreventiva: EventEmitter<
         AccionPreventivaModel
-    > = new EventEmitter<AccionPreventivaModel>();
+        > = new EventEmitter<AccionPreventivaModel>();
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder) { }
 
     ngOnInit() {
         this.form = this.fb.group({

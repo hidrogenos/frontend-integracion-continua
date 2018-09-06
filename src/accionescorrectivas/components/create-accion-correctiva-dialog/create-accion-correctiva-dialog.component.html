@@ -1,7 +1,7 @@
 <div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-        <p-dialog header="Nueva acción correctiva" [(visible)]="display" [modal]="true" [responsive]="true" [width]="800" [maximizable]="true"
-            [baseZIndex]="10000" (onHide)="onHideCreateAccionCorrectiva()" [contentStyle]="{'overflow':'visible'}">
+        <p-dialog header="Nueva {{nombreModulo | lowercase }}" [(visible)]="display" [modal]="true" [responsive]="true" [width]="800"
+            [maximizable]="true" [baseZIndex]="10000" (onHide)="onHideCreateAccionCorrectiva()" [contentStyle]="{'overflow':'visible'}">
 
             <div class="ui-g">
                 <div class="ui-g-4">
