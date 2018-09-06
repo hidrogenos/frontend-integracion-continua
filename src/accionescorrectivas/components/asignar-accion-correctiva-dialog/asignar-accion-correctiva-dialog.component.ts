@@ -8,6 +8,7 @@ import {
 import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
 import { UsuarioModel } from "../../../shared/models/usuario.model";
 import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
     selector: "asignar-accion-correctiva-dialog",
@@ -15,6 +16,7 @@ import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.m
 })
 export class AsignarAccionCorrectivaComponent implements OnInit {
     form: FormGroup;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_correctivas;
 
     @Input()
     accionCorrectivaActual;
@@ -28,9 +30,9 @@ export class AsignarAccionCorrectivaComponent implements OnInit {
     @Output()
     onAsignarAccionCorrectiva: EventEmitter<
         AccionCorrectivaModel
-    > = new EventEmitter<AccionCorrectivaModel>();
+        > = new EventEmitter<AccionCorrectivaModel>();
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder) { }
 
     ngOnInit() {
         this.form = this.fb.group({

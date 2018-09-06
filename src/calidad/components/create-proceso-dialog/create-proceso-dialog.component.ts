@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
-import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { MapaProcesoHijoModel } from "../../../shared/models/mapa_proceso_hijo.model";
+import { CalidadMapaProcesoModel } from "../../../shared/models/calidad-mapa-proceso.model";
+import { UsuarioModel } from "../../../shared/models/usuario.model";
 
 @Component({
-    selector: 'create-proceso-dialog',
-    styleUrls: ['create-proceso-dialog.component.scss'],
+    selector: "create-proceso-dialog",
+    styleUrls: ["create-proceso-dialog.component.scss"],
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
             <p-dialog 
@@ -96,6 +97,27 @@ import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-pro
                     </div>
                 </div>
                 <div class="ui-g">
+                    <div class="ui-g-6">
+                        <div>
+                            <label>Jefe a cargo</label>
+                        </div>
+                        <p-dropdown [options]="jefes"  
+                                    optionLabel="nombre" 
+                                    formControlName="jefe"
+                                    placeholder="Seleccione..."
+                                    appendTo="body"
+                                    filter="true"
+                                    [style]="{'width':'100%'}">
+                                    <ng-template let-item pTemplate="selectedItem"> 
+                                        <span style="vertical-align:middle">{{item.value.nombre}}  {{item.value.apellido}}</span>
+                                    </ng-template> 
+                                    <ng-template let-data pTemplate="item"> 
+                                        <span style="vertical-align:middle">{{data.value.nombre}}  {{data.value.apellido}}</span>
+                                    </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="ui-g">
                     <div class="ui-g-12 ui-fluid">
                         <div>
                             <label>Descripción</label>
@@ -107,6 +129,13 @@ import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-pro
                     </div>
                 </div>
                 <p-footer>
+                    <button *ngIf="this.form.value.id && permisoEliminarProceso"
+                            style="margin-right:10px;" pButton 
+                            type="button" 
+                            label="Eliminar" 
+                            class="ui-button-warning"
+                            (click)="deleteProceso()">
+                    </button>
                         <button style="margin-right:10px;" pButton 
                             type="button" 
                             label="Cancelar" 
@@ -140,14 +169,20 @@ export class CreateProcesoDialogComponent implements OnInit {
     onCreateProceso = new EventEmitter<MapaProcesoHijoModel>();
     @Output()
     onUpdateProceso = new EventEmitter<MapaProcesoHijoModel>();
+    @Output()
+    onDeleteProceso = new EventEmitter<number>();
 
     //properties
     @Input()
     mapa: CalidadMapaProcesoModel;
     @Input()
+    jefes: UsuarioModel[];
+    @Input()
     permisoEditarProceso: boolean;
+    @Input()
+    permisoEliminarProceso: boolean;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder) { }
 
     ngOnInit() {
         this.createForm();
@@ -158,9 +193,10 @@ export class CreateProcesoDialogComponent implements OnInit {
             id: null,
             tipo_proceso: [1, Validators.required],
             padre: [{ id: 0 }, Validators.required],
-            flecha: ['NA', Validators.required],
-            proceso: ['', Validators.required],
-            descripcion: ['', Validators.required]
+            flecha: ["NA", Validators.required],
+            proceso: ["", Validators.required],
+            jefe: [null, Validators.required],
+            descripcion: ["", Validators.required]
         });
     }
 
@@ -172,11 +208,12 @@ export class CreateProcesoDialogComponent implements OnInit {
                 proceso.id_padre == 0
                     ? { id: 0 }
                     : this.mapa.procesos
-                          .filter(proceso => proceso.id_padre == 0)
-                          .find(e => e.id == proceso.id_padre),
+                        .filter(proceso => proceso.id_padre == 0)
+                        .find(e => e.id == proceso.id_padre),
             flecha: proceso.flecha,
             descripcion: proceso.descripcion,
-            proceso: proceso.proceso
+            proceso: proceso.proceso,
+            jefe: this.jefes.find(jefeAct => jefeAct.id == proceso.id_jefe)
         });
         this.display = true;
     }
@@ -190,13 +227,21 @@ export class CreateProcesoDialogComponent implements OnInit {
     }
 
     onSelectProcesoPrincipal() {
-        this.form.get('padre').setValue({ id: 0 });
-        this.form.get('flecha').setValue('NA');
+        this.form.get("padre").setValue({ id: 0 });
+        this.form.get("flecha").setValue("NA");
     }
 
     onSelectSubProceso() {
-        this.form.get('padre').setValue(null);
-        this.form.get('flecha').setValue('NA');
+        this.form.get("padre").setValue(null);
+        this.form.get("flecha").setValue("NA");
+    }
+
+    deleteProceso() {
+        if (this.form.value.id) {
+            const idMapaProceso = this.form.value.id;
+            this.onDeleteProceso.emit(idMapaProceso);
+        }
+        this.display = false;
     }
 
     onSubmit() {
@@ -208,7 +253,8 @@ export class CreateProcesoDialogComponent implements OnInit {
                     activo: true,
                     descripcion: this.form.value.descripcion,
                     proceso: this.form.value.proceso,
-                    flecha: this.form.value.flecha
+                    flecha: this.form.value.flecha,
+                    id_jefe: this.form.value.jefe.id
                 };
 
                 this.onCreateProceso.emit(proceso);
@@ -220,7 +266,8 @@ export class CreateProcesoDialogComponent implements OnInit {
                     activo: true,
                     descripcion: this.form.value.descripcion,
                     proceso: this.form.value.proceso,
-                    flecha: this.form.value.flecha
+                    flecha: this.form.value.flecha,
+                    id_jefe: this.form.value.jefe.id
                 };
 
                 if (
@@ -240,7 +287,7 @@ export class CreateProcesoDialogComponent implements OnInit {
             this.mapa.procesos.filter(e => e.id_padre == proceso.id).length > 0
         ) {
             alert(
-                'No es posible actualizar el proceso, ya que posee subprocesos. Reasigne los subprocesos o eliminelos previamente.'
+                "No es posible actualizar el proceso, ya que posee subprocesos. Reasigne los subprocesos o eliminelos previamente."
             );
             return false;
         } else {
@@ -250,7 +297,7 @@ export class CreateProcesoDialogComponent implements OnInit {
 
     validarIncesto(proceso: MapaProcesoHijoModel) {
         if (proceso.id == proceso.id_padre) {
-            alert('No es posible asignar un subproceso a si mismo');
+            alert("No es posible asignar un subproceso a si mismo");
             return false;
         } else {
             return true;

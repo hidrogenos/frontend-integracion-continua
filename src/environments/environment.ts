@@ -84,5 +84,9 @@ export const environment = {
         aprobar_ajenos: 6,
         ver_lista_documentos: 7,
         ver_documentos_obsoletos: 8
+    },
+    nombres_modulos_visuales: {
+        acciones_correctivas: 'Desviación',
+        acciones_preventivas: 'Análisis de riesgos'
     }
 };

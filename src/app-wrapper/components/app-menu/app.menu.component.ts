@@ -19,6 +19,7 @@ import * as fromShared from './../../../shared/store';
 import { switchMap, map } from 'rxjs/operators';
 import { DocumentoTipoModel } from '../../../shared/models/documento-tipo.model';
 import { Observable, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-menu',
@@ -44,7 +45,7 @@ export class AppMenuComponent implements OnInit {
     constructor(
         public app: AppWrapperComponent,
         private store: Store<fromShared.SharedState>
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.buildMenuDocumentos().subscribe(response => {
@@ -84,12 +85,12 @@ export class AppMenuComponent implements OnInit {
                     icon: 'fa fa-fw fa-wrench',
                     items: [
                         {
-                            label: 'Correctivas',
+                            label: environment.nombres_modulos_visuales.acciones_correctivas,
                             icon: 'fa fa-fw fa-thermometer-full',
                             routerLink: ['/acciones/acciones-correctivas']
                         },
                         {
-                            label: 'Preventivas',
+                            label: environment.nombres_modulos_visuales.acciones_preventivas,
                             icon: 'fa fa-fw fa-thermometer-empty',
                             routerLink: ['/acciones/acciones-preventivas']
                         }
@@ -314,7 +315,7 @@ export class AppSubMenuComponent {
 
     activeIndex: number;
 
-    constructor(public app: AppWrapperComponent) {}
+    constructor(public app: AppWrapperComponent) { }
 
     itemClick(event: Event, item: MenuItem, index: number) {
         if (this.root) {

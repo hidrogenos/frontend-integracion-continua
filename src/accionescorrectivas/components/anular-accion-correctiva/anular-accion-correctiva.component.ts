@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
     selector: 'anular-accion-correctiva-dialog',
@@ -9,6 +10,7 @@ import { AccionCorrectivaModel } from "../../../shared/models/accion-correctiva.
 export class AnularAccionCorrectivaComponent implements OnInit {
 
     form: FormGroup;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_correctivas;
 
     @Input()
     accionCorrectivaActual;
@@ -19,18 +21,18 @@ export class AnularAccionCorrectivaComponent implements OnInit {
     @Output()
     onAnularAccionCorrectiva: EventEmitter<AccionCorrectivaModel> = new EventEmitter<AccionCorrectivaModel>();
 
-    constructor(private fb:FormBuilder){    
+    constructor(private fb: FormBuilder) {
     }
 
-    ngOnInit(){
-        this.form = this.fb.group({observacion: ['',Validators.required]});
+    ngOnInit() {
+        this.form = this.fb.group({ observacion: ['', Validators.required] });
     }
 
-    onHideAnularAccionDialog(){
+    onHideAnularAccionDialog() {
         this.displayAnularAccion = false;
     }
 
-    anularAccionCorrectiva(){
+    anularAccionCorrectiva() {
         const accionCorrectivaActual: AccionCorrectivaModel = {
             ...this.accionCorrectivaActual,
             observacion: this.form.value.observacion

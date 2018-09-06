@@ -17,12 +17,14 @@ export class CreateAccionCorrectivaDialogComponent implements OnInit {
 
     //atributos
     dateFormatNormal: string = environment.dateFormatPrimeNg;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_correctivas;
     fechaMinimaCalendario = new Date();
+
 
     @Output()
     onCreateAccionCorrectiva: EventEmitter<
         AccionCorrectivaModel
-    > = new EventEmitter();
+        > = new EventEmitter();
 
     //listas modelos
     @Input()
@@ -61,7 +63,7 @@ export class CreateAccionCorrectivaDialogComponent implements OnInit {
                 descripcion: this.form.value.descripcion,
                 id_estado: 1,
                 id_importancia: this.form.value.importancia.id,
-                procesos: this.selectedProcesos,
+                procesos: this.form.value.proceso,
                 fecha_compromiso: (this.form.value
                     .fecha_compromiso as Date).valueOf()
             };
