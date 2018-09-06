@@ -13,6 +13,7 @@ export class EditAccionCorrectivaComponent {
     //atributos
     dateFormatAngular: string = environment.dateFormatAngular;
     dateFormatNormal: string = environment.dateFormatPrimeNg;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_correctivas;
     disabled: boolean;
 
     //atributos de entrada
@@ -26,11 +27,11 @@ export class EditAccionCorrectivaComponent {
     @Output()
     onEditAccionCorrectiva: EventEmitter<
         AccionCorrectivaModel
-    > = new EventEmitter<AccionCorrectivaModel>();
+        > = new EventEmitter<AccionCorrectivaModel>();
 
     form: FormGroup;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder) { }
 
     ngOnInit() {
         this.createForm();

@@ -1,8 +1,8 @@
 <div class="ui-g">
     <div class="ui-g-12">
         <form [formGroup]="form">
-            <p-dialog header="Asignar acción correctiva: {{ accionCorrectivaActual?.titulo }}" [(visible)]="display" [modal]="true" [responsive]="true"
-                [width]="800" [maximizable]="true" [baseZIndex]="10000" (onHide)="onHide()" [contentStyle]="{ 'overflow':
+            <p-dialog header="Asignar {{ nombreModulo | lowercase}}: {{ accionCorrectivaActual?.titulo }}" [(visible)]="display" [modal]="true"
+                [responsive]="true" [width]="800" [maximizable]="true" [baseZIndex]="10000" (onHide)="onHide()" [contentStyle]="{ 'overflow':
                 'visible'} ">
 
                 <div class="ui-g ">

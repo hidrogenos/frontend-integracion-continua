@@ -161,7 +161,7 @@ import { environment } from "../../../environments/environment";
                             <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_CALIDAD ||
                                                               idAccionCorrectivaEstado == ACCION_EN_REASIGNACION) && usuarioActual?.es_jefe">
                                 <div class="ui-g-6">
-                                    <button pButton class="ui-button" label="Asignar acción" (click)="asignarAccionCorrectivaComponent.display=true;"></button>
+                                    <button pButton class="ui-button" label="Asignar {{ nombreModulo | lowercase}}" (click)="asignarAccionCorrectivaComponent.display=true;"></button>
                                 </div>
                                 <div class="ui-g-6">
                                     <button pButton class="ui-button-danger" label="Anular" (click)="anular.displayAnularAccion=true"></button>
@@ -190,7 +190,7 @@ import { environment } from "../../../environments/environment";
 
                             <div class="ui-g ui-fluid" *ngIf="(idAccionCorrectivaEstado == ACCION_EN_ASIGNACION_ACTIVIDADES) && (usuarioActual?.id == accionCorrectivaActual?.id_responsable || (hasPermission(301) | async)) && finishedTareaPermiso">
                                 <div class="ui-g-12">
-                                    <button pButton class="ui-button" label="Finalizar acción" (click)="actualizarEstadoAccionCorrectiva(ACCION_FINALIZADA)"></button>
+                                    <button pButton class="ui-button" label="Finalizar {{ nombreModulo | lowercase}}" (click)="actualizarEstadoAccionCorrectiva(ACCION_FINALIZADA)"></button>
                                 </div>
                             </div>
 
@@ -243,6 +243,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     // atributos clase
 
     usuarioActual: UsuarioModel;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_correctivas;
 
     // listas para utilizar
 
@@ -399,16 +400,16 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                         let padreTempo =
                                             hijoActual.padre != null
                                                 ? {
-                                                      id: hijoActual.padre.id,
-                                                      pregunta_causa_idea:
-                                                          hijoActual.padre
-                                                              .pregunta_causa_idea
-                                                  }
+                                                    id: hijoActual.padre.id,
+                                                    pregunta_causa_idea:
+                                                        hijoActual.padre
+                                                            .pregunta_causa_idea
+                                                }
                                                 : {
-                                                      id: 0,
-                                                      pregunta_causa_idea:
-                                                          "Causa inicial"
-                                                  };
+                                                    id: 0,
+                                                    pregunta_causa_idea:
+                                                        "Causa inicial"
+                                                };
                                         return padreTempo;
                                     }
                                 );
@@ -418,16 +419,16 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                         let padreTempo =
                                             hijoActual.padre != null
                                                 ? {
-                                                      id: hijoActual.padre.id,
-                                                      pregunta_causa_idea:
-                                                          hijoActual.padre
-                                                              .pregunta_causa_idea
-                                                  }
+                                                    id: hijoActual.padre.id,
+                                                    pregunta_causa_idea:
+                                                        hijoActual.padre
+                                                            .pregunta_causa_idea
+                                                }
                                                 : {
-                                                      id: 0,
-                                                      pregunta_causa_idea:
-                                                          "Causa inicial"
-                                                  };
+                                                    id: 0,
+                                                    pregunta_causa_idea:
+                                                        "Causa inicial"
+                                                };
 
                                         const hijo = {
                                             ...hijoActual,
@@ -454,8 +455,8 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                 }
 
                                 switch (
-                                    this.accionCorrectivaAnalisisActual
-                                        .id_accion_analisis_tipo
+                                this.accionCorrectivaAnalisisActual
+                                    .id_accion_analisis_tipo
                                 ) {
                                     case 1: {
                                         if (
@@ -530,7 +531,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     updateAccionCorrectiva(data: AccionCorrectivaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Actualizando información acción correctiva, un momento por favor..."
+            "Actualizando información " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionCorrectivaService
             .updateAccionCorrectiva(data)
@@ -567,7 +568,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     addProcesoToAccionCorrectiva(data: MapaProcesoHijoModel[]) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Relacionando proceso a acción correctiva, un momento por favor..."
+            "Relacionando proceso a " + this.nombreModulo + ", un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
@@ -610,7 +611,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     deleteProcesoFromAccionCorrectiva(data: AccionProcesoModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Eliminando proceso de acción correctiva, un momento por favor..."
+            "Eliminando proceso de " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionesCorrectivasProcesoService
             .deleteProcesoFromAccionCorrectiva(data.id)
@@ -685,7 +686,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     deleteDocumentoFromAccionCorrectiva(event: AccionCorrectivaAdjuntoModel) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Eliminando documento de acción correctiva"
+            "Eliminando documento de " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionCorrectivaDocumentoService
             .deleteDocumentoByAccionCorrectiva(event.id)
@@ -698,7 +699,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     }
 
     createAccionAnalisis(data: AccionAnalisisTipoModel) {
-        this.showWaitDialog("Accion en proceso", "Creando nueva idea");
+        this.showWaitDialog("Accion en proceso", "Creando nueva idea, un momento por favor...");
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
@@ -732,7 +733,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     createAccionAnalisisHijos(data: AccionCorrectivaAnalisisHijoModel[]) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Creando nuevas ideas en análisis"
+            "Creando nuevas ideas en análisis, un momento por favor..."
         );
         this.store.select(this.fromAuth.getUser).subscribe(usuario => {
             data.forEach(accionAnalisisHijoActual => {
@@ -771,7 +772,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     }
 
     createAccionAnalisisHijo5ws(data: AccionCorrectivaAnalisisHijo5wsModel[]) {
-        this.showWaitDialog("Accion en proceso", "Creando nuevo porque");
+        this.showWaitDialog("Accion en proceso", "Creando nuevo porque, un momento por favor...");
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
@@ -795,7 +796,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     }
 
     createAccionAnalisisHijo(data) {
-        this.showWaitDialog("Accion en proceso", "Creando nuevo porque");
+        this.showWaitDialog("Accion en proceso", "Creando nuevo porque, un momento por favor...");
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
@@ -813,14 +814,14 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                         let padreTempo =
                             response[0].padre != null
                                 ? {
-                                      id: response[0].padre.id,
-                                      pregunta_causa_idea:
-                                          response[0].padre.pregunta_causa_idea
-                                  }
+                                    id: response[0].padre.id,
+                                    pregunta_causa_idea:
+                                        response[0].padre.pregunta_causa_idea
+                                }
                                 : {
-                                      id: 0,
-                                      pregunta_causa_idea: "Causa inicial"
-                                  };
+                                    id: 0,
+                                    pregunta_causa_idea: "Causa inicial"
+                                };
 
                         let hijoActual = response[0];
                         hijoActual.padre = padreTempo;
@@ -839,7 +840,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     createOrUpdateAccionAnalisisHijo(data) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Actualizando información análisis"
+            "Actualizando información análisis, un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
@@ -867,7 +868,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     }
 
     createAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
-        this.showWaitDialog("Accion en proceso", "Creando una nueva tarea");
+        this.showWaitDialog("Accion en proceso", "Creando una nueva tarea, un momento por favor...");
         this.store
             .select(this.fromAuth.getUser)
             .pipe(take(1))
@@ -893,7 +894,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     updateAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
         this.showWaitDialog(
             "Accion en proceso",
-            "Actualizando información tarea acción correctiva"
+            "Actualizando información tarea " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionesCorrectivasTareaService
             .updateAccionCorrectivaTarea(data.id, data)
@@ -909,7 +910,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     deleteAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Eliminando tarea acción correctiva, un momento por favor..."
+            "Eliminando tarea " + this.nombreModulo + ", un momento por favor..."
         );
         this.accionesCorrectivasTareaService
             .deleteAccionCorrectivaTarea(data.id)
@@ -926,7 +927,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
     realizarAccionCorrectivaTarea(data: AccionCorrectivaTareaModel) {
         this.showWaitDialog(
             "Acción en proceso",
-            "Cambiando estado acción correctiva realizado, un momento por favor..."
+            "Cambiando estado " + this.nombreModulo + " realizado, un momento por favor..."
         );
         this.store
             .select(this.fromAuth.getUser)
@@ -1029,14 +1030,14 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                 this.accionCorrectivaActual.tareas.find(
                     tareaActual => tareaActual.id == data.idTarea
                 ).adjunto = [
-                    ...this.accionCorrectivaActual.tareas
-                        .find(tareaActual => tareaActual.id == data.idTarea)
-                        .adjunto.filter(adjuntoActual => {
-                            if (adjuntoActual.id != adjuntoEliminado.id) {
-                                return adjuntoActual;
-                            }
-                        })
-                ];
+                        ...this.accionCorrectivaActual.tareas
+                            .find(tareaActual => tareaActual.id == data.idTarea)
+                            .adjunto.filter(adjuntoActual => {
+                                if (adjuntoActual.id != adjuntoEliminado.id) {
+                                    return adjuntoActual;
+                                }
+                            })
+                    ];
                 this.hideWaitDialog();
             });
     }
@@ -1050,7 +1051,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionCorrectivaAdjunto.id
+                    accionCorrectivaAdjunto.id
                     }/${accionCorrectivaAdjunto.titulo}`
                 ]
             })
@@ -1066,7 +1067,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionCorrectivaTareaAdjunto.id
+                    accionCorrectivaTareaAdjunto.id
                     }/${accionCorrectivaTareaAdjunto.titulo}`
                 ]
             })
@@ -1299,7 +1300,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                                 .analisis_hijo5ws.length > 0))) ||
                 this.accionCorrectivaActual.metodologia_analisis
                     .id_accion_analisis_tipo ==
-                    this.METODOLOGIA_ANALISIS_NO_APLICA
+                this.METODOLOGIA_ANALISIS_NO_APLICA
             ) {
                 analisisFinalizado = true;
             }
@@ -1316,7 +1317,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
         });
         if (
             contadorTareasRealizadas ==
-                this.accionCorrectivaActual.tareas.length &&
+            this.accionCorrectivaActual.tareas.length &&
             this.accionCorrectivaActual.tareas.length > 0
         ) {
             this.finishedTareaPermiso = true;

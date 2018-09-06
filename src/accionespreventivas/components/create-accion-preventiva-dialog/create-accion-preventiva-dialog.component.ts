@@ -14,6 +14,7 @@ export class CreateAccionPreventivaDialogComponent implements OnInit {
     //formulario
     display: boolean;
     form: FormGroup;
+    nombreModulo: string = environment.nombres_modulos_visuales.acciones_preventivas;
 
     //atributos
     dateFormatNormal: string = environment.dateFormatPrimeNg;
@@ -22,7 +23,7 @@ export class CreateAccionPreventivaDialogComponent implements OnInit {
     @Output()
     onCreateAccionPreventiva: EventEmitter<
         AccionPreventivaModel
-    > = new EventEmitter();
+        > = new EventEmitter();
 
     //listas modelos
     @Input()
@@ -61,7 +62,7 @@ export class CreateAccionPreventivaDialogComponent implements OnInit {
                 descripcion: this.form.value.descripcion,
                 id_estado: 1,
                 id_importancia: this.form.value.importancia.id,
-                procesos: this.selectedProcesos,
+                procesos: this.form.value.proceso,
                 fecha_compromiso: (this.form.value
                     .fecha_compromiso as Date).valueOf()
             };

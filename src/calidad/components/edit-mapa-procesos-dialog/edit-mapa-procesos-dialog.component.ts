@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { CalidadMapaProcesoModel } from "../../../shared/models/calidad-mapa-proceso.model";
 
 @Component({
-    selector: 'edit-mapa-procesos-dialog',
-    styleUrls: ['edit-mapa-procesos-dialog.component.scss'],
+    selector: "edit-mapa-procesos-dialog",
+    styleUrls: ["edit-mapa-procesos-dialog.component.scss"],
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
             <p-dialog 
@@ -61,7 +61,6 @@ export class EditMapaProcesosDialogComponent implements OnInit {
         entrada: string;
         salida: string;
     }>();
-
     //properties
     @Input()
     mapa: CalidadMapaProcesoModel;
@@ -76,8 +75,8 @@ export class EditMapaProcesosDialogComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            entrada: ['', Validators.required],
-            salida: ['', Validators.required]
+            entrada: ["", Validators.required],
+            salida: ["", Validators.required]
         });
     }
 
