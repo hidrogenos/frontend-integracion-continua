@@ -1,17 +1,17 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { BeBandejaEntradaService } from "../../services";
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { BeBandejaEntradaService } from '../../services';
 
-import { environment } from "./../../../environments/environment";
+import { environment } from './../../../environments/environment';
 
-import { DocumentoModel } from "../../../shared/models/documento.model";
+import { DocumentoModel } from '../../../shared/models/documento.model';
 
 @Component({
-    selector: "be-documentos-vigentes-asoc",
+    selector: 'be-documentos-tabla',
     template: `
     <div class="ui-g">
         <div class="ui-g-12">
             <div class="card card-w-title">
-                <h1>Mis documentos vigentes</h1>
+                <h1>{{ titulo }}</h1>
                 <p-table #dt [columns]="cols" [value]="documentos" [lazy]="true" (onLazyLoad)="loadDocumentosLazy($event)" [paginator]="true" 
                     [rows]="10" [totalRecords]="total" lazyLoadOnInit="false" [loading]="loading">
                     <ng-template pTemplate="header" let-columns>
@@ -48,7 +48,8 @@ import { DocumentoModel } from "../../../shared/models/documento.model";
     </div>
     `
 })
-export class BeDocumentosVigentesAsocComponent {
+export class BeDocumentosTablaComponent {
+
     documentos: DocumentoModel[];
     total: number;
     cantidadXPagina: number = 10;
@@ -56,16 +57,20 @@ export class BeDocumentosVigentesAsocComponent {
     loading: boolean = true;
 
     cols: any[] = [
-        { field: "codigo", header: "Código" },
-        { field: "titulo", header: "Título" },
-        { field: "tipo_nombre", header: "Tipo de documento" },
-        { field: "version", header: "Versión" },
-        { field: "estado_nombre", header: "Estado" },
-        { field: "fecha_fin", header: "Vence" }
+        { field: 'codigo', header: 'Código' },
+        { field: 'titulo', header: 'Título' },
+        { field: 'tipo_nombre', header: 'Tipo de documento' },
+        { field: 'version', header: 'Versión' },
+        { field: 'estado_nombre', header: 'Estado' },
+        { field: 'fecha_fin', header: 'Vence' }
     ];
 
+    @Input()
+    titulo: string;
     @Output()
     onSelectDocumento = new EventEmitter<number>();
+    @Output()
+    onConsultarDocumentos = new EventEmitter<any>();
 
     constructor(private beBandejaEntradaService: BeBandejaEntradaService) {
         this.formatDate = environment.dateFormatAngular;
@@ -73,16 +78,11 @@ export class BeDocumentosVigentesAsocComponent {
 
     loadDocumentosLazy(event) {
         this.loading = true;
-        this.beBandejaEntradaService
-            .getDocumentosVigentesAsoc(event)
-            .subscribe((items: any) => {
-                this.documentos = items.documentos;
-                this.total = items.total;
-                this.loading = false;
-            });
+        this.onConsultarDocumentos.emit(event);
     }
 
     verDetalleDocumento(idDocumento: number) {
         this.onSelectDocumento.emit(idDocumento);
     }
+
 }
