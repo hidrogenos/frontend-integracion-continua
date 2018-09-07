@@ -33,6 +33,9 @@ import { ComponenteCargado } from "../../../shared/services/utils/abstract-clase
             <be-documentos-tabla #docobs [titulo]="'Documentos obsoletos'" *ngIf="hasPermision(1000) | async"
                 (onSelectDocumento)="redirectToDocumento($event)"
                 (onConsultarDocumentos)="consultarLazyObsoletos($event)"></be-documentos-tabla>
+            <be-documentos-tabla #docvencer [titulo]="'Documentos próximos a vencer'"
+                (onSelectDocumento)="redirectToDocumento($event)"
+                (onConsultarDocumentos)="consultarLazyProxVencer($event)"></be-documentos-tabla>
             <be-documentos-tabla #docobs [titulo]="'Vistos buenos pendientes de garantía'" *ngIf="hasPermision(11000) | async"
                 (onSelectDocumento)="redirectToDocumento($event)"
                 (onConsultarDocumentos)="consultarLazyVistoBueno($event)"></be-documentos-tabla>
@@ -95,6 +98,7 @@ export class BandejaEntradaComponent extends ComponenteCargado {
 
     @ViewChild('misdoc') misdoc: BeDocumentosTablaComponent;
     @ViewChild('docobs') docobs: BeDocumentosTablaComponent;
+    @ViewChild('docvencer') docvencer: BeDocumentosTablaComponent;
 
     constructor(
         private hasPermisionService: HasPermisionService,
@@ -126,6 +130,16 @@ export class BandejaEntradaComponent extends ComponenteCargado {
                 this.docobs.documentos = items.documentos;
                 this.docobs.total = items.total;
                 this.docobs.loading = false;
+            });
+    }
+
+    consultarLazyProxVencer(event) {
+        this.beBandejaEntradaService
+            .getDocumentosProxVencer(event)
+            .subscribe((items: any) => {
+                this.docvencer.documentos = items.documentos;
+                this.docvencer.total = items.total;
+                this.docvencer.loading = false;
             });
     }
 
@@ -298,7 +312,7 @@ export class BandejaEntradaComponent extends ComponenteCargado {
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionCorrectivaTareaAdjunto.id
+                    accionCorrectivaTareaAdjunto.id
                     }/${accionCorrectivaTareaAdjunto.titulo}`
                 ]
             })
@@ -434,7 +448,7 @@ export class BandejaEntradaComponent extends ComponenteCargado {
             new fromRootStore.Go({
                 path: [
                     `visor-adjunto/${idTipoDocumento}/${
-                        accionPreventivaTareaAdjunto.id
+                    accionPreventivaTareaAdjunto.id
                     }/${accionPreventivaTareaAdjunto.titulo}`
                 ]
             })

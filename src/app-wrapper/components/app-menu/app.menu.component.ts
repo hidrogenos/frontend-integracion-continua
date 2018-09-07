@@ -118,6 +118,17 @@ export class AppMenuComponent implements OnInit {
                     items: this.documentos
                 },
                 {
+                    label: 'Informes',
+                    icon: 'fa fa-fw fa-file-pdf-o',
+                    items: [
+                        {
+                            label: 'Listado documentos',
+                            icon: 'fa fa-fw fa-file-pdf-o',
+                            routerLink: ['/informes/listado-documentos']
+                        }
+                    ]
+                },
+                {
                     label: 'Planos',
                     icon: 'fa fa-fw fa-braille',
                     routerLink: ['/planos/lista']
