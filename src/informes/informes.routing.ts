@@ -1,6 +1,9 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 
+// guards shared
+import * as fromGuardsShared from './../shared/guards';
+
 //containers
 import * as fromContainers from './containers';
 
@@ -13,7 +16,11 @@ export const ROUTES: Routes = [
         children: [
             {
                 path: 'listado-documentos',
-                component: fromContainers.InfListadoMaestroDocumentosComponent
+                component: fromContainers.InfListadoMaestroDocumentosComponent,
+                canActivate: [fromGuardsShared.HasPermisionGuard],
+                data: {
+                    requiredPermision: 2100
+                }
             },
         ]
     }
