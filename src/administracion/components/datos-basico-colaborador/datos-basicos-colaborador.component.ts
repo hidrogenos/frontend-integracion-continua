@@ -257,13 +257,13 @@ import { StoreModel } from '../../../shared/models/store.model';
             <div class="ui-g" *ngIf="loadedUsuario">
                 <div class="ui-g-12 text-aling-right">
                     <button style="margin-right:10px;" pButton 
-                        *ngIf="formUser.disabled"
+                        *ngIf="formUser.disabled && permisoRestablecerContrasena"
                         type="button" 
                         label="Restablecer contraseña" 
                         class="ui-button-warning"
                         (click)="rcc.display = true">
                     </button>
-                    <button style="margin-right:10px;" *ngIf="formUser.disabled" pButton type="button" label="Editar datos basicos" (click)="formUser.enable()" class="ui-button-success"></button>
+                    <button style="margin-right:10px;" *ngIf="formUser.disabled && permisoEditarDatosBasicos" pButton type="button" label="Editar datos basicos"  (click)="formUser.enable()" class="ui-button-success"></button>
                     <button style="margin-right:10px;" *ngIf="formUser.enabled" pButton type="button" label="Descartar cambios" (click)="loadFormData()" class="ui-button-danger"></button>
                     <button style="margin-right:10px;" *ngIf="formUser.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
                 </div>
@@ -294,6 +294,8 @@ export class DatosBasicosColaboradorComponent implements OnInit {
     @Input() pensiones: PensionModel[];
     @Input() perfilesActivos: PerfilModel[];
     @Input() tiposIdentificacion: TipoIdentificacionModel[];
+    @Input() permisoEditarDatosBasicos: boolean;
+    @Input() permisoRestablecerContrasena: boolean;
 
     //eventos
     @Output() onResetPassword = new EventEmitter<any>();

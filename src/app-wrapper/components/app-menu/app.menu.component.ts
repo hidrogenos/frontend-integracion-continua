@@ -139,6 +139,37 @@ export class AppMenuComponent implements OnInit {
                             label: 'Permisos',
                             icon: 'fa fa-fw fa-unlock',
                             routerLink: ['/administracion/permisos']
+                        },
+                        {
+                            label: 'Eps',
+                            icon: 'fa fa-fw fa-heartbeat',
+                            routerLink: ['/administracion/eps']
+                        },
+                        {
+                            label: 'Arl',
+                            icon: 'fa fa-fw fa-building',
+                            routerLink: ['/administracion/arl']
+                        },
+                        {
+                            label: 'Pensión',
+                            icon :'fa fa-fw fa-institution',
+                            routerLink: ['/administracion/pension']
+                        },
+                        {
+                            label: 'Cesantías',
+                            icon: 'fa fa-fw fa-institution',
+                            routerLink: ['/administracion/cesantias']
+
+                        },
+                        {
+                            label: 'Caja de compensación',
+                            icon: 'fa fa-fw fa-briefcase',
+                            routerLink: ['/administracion/caja-compensacion']
+                        },
+                        {
+                            label: 'Pais',
+                            icon: 'fa fa-fw fa-globe',
+                            routerLink: ['/administracion/pais']
                         }
                     ]
                 },

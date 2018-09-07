@@ -1,15 +1,29 @@
 import { AdjuntoService } from "./utils/adjunto/adjunto.service";
 export * from "./utils/adjunto/adjunto.service";
 
+import { ArlService } from "./arl/arl.service";
+export * from "./arl/arl.service";
+
 import { AuditoriaExternaService } from "./auditoria-externa/auditoria-externa.service";
 export * from "./auditoria-externa/auditoria-externa.service";
 
 import { AccionCorrectivaAdjuntoService } from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
 export * from "./accion-correctiva-adjunto/accion-correctiva-adjunto.service";
+
 import { EquipoService } from './equipo/equipo.service';
 export * from './equipo/equipo.service';
+
+import { EpsService } from './eps/eps.service';
+export * from './eps/eps.service';
+
 import { CapacitacionProcesoService } from "./capacitacion-proceso/capacitacion-proceso.service";
 export * from "./capacitacion-proceso/capacitacion-proceso.service";
+
+import { CesantiaService } from "./cesantia/cesantia.service";
+export * from "./cesantia/cesantia.service";
+
+import { CajaCompensacionService } from './caja-compensacion/caja-compensacion.service';
+export * from './caja-compensacion/caja-compensacion.service';
 
 import { EquipoAdjuntoService } from './equipo-adjunto/equipo-adjunto.service';
 export * from './equipo-adjunto/equipo-adjunto.service';
@@ -89,6 +103,12 @@ export * from "./proveedor/proveedor.service";
 import { PlanoService } from "./plano/plano.service";
 export * from "./plano/plano.service";
 
+import { PensionService } from './pension/pension.service';
+export * from './pension/pension.service';
+
+import { PaisService } from './pais/pais.service';
+export * from './pais/pais.service';
+
 import { RegimenService } from "./regimen/regimen.service";
 export * from "./regimen/regimen.service";
 
@@ -139,9 +159,11 @@ export const services: any[] = [
     AccionPreventivaService,
     AccionPreventivaTareaAdjuntoService,
     AccionPreventivaTareaService,
+    ArlService,
     BancoService,
     CalidadService,
     CiudadService,
+    CesantiaService,
     DocumentoService,
     DocumentoAdjuntoService,
     DocumentoAsociadoService,
@@ -153,13 +175,17 @@ export const services: any[] = [
     EquipoService,
     EquipoAdjuntoService,
     EquipoServicioMantenimientoService,
+    EpsService,
     CapacitacionService,
     CapacitacionProcesoService,
     CapacitacionDocumentoService,
+    CajaCompensacionService,
     HasPermisionService,
     PdfViewerService,
     ProveedorFacturaService,
     ProveedorService,
+    PensionService,
+    PaisService,
     RegimenService,
     TipoCuentaService,
     TipoIdentificacionService,

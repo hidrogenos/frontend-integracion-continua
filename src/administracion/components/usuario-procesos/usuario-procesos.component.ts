@@ -6,7 +6,7 @@ import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.m
     selector: 'usuario-procesos',
     styleUrls: ['usuario-procesos.component.scss'],
     template: `
-        <div class="ui-g">
+        <div class="ui-g" *ngIf="permisoRelacionaroceso">
             <div class="ui-g-4 ui-fluid">
                 <p-multiSelect [options]="procesos" [(ngModel)]="selectedProcesos" optionLabel="proceso" defaultLabel="Seleccione..."></p-multiSelect>
             </div>
@@ -33,6 +33,7 @@ import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.m
                             <td>{{ usuarioProceso.proceso }}</td>
                             <td>
                                 <button pButton 
+                                    *ngIf="permisoBorrarProceso"
                                     type="button" 
                                     icon="fa fa-trash" 
                                     class="ui-button-danger"
@@ -55,13 +56,18 @@ export class UsuarioProcesosComponent {
     onDeleteUsuarioProceso = new EventEmitter<MapaProcesoHijoModel>();
     @Output()
     onRelacionarProcesos = new EventEmitter<MapaProcesoHijoModel[]>();
+    
 
     //properties
     @Input()
     procesos: MapaProcesoHijoModel[];
     @Input()
     usuarioProcesos: MapaProcesoHijoModel[];
-
+    @Input()
+    permisoRelacionaroceso: boolean;
+    @Input()
+    permisoBorrarProceso: boolean;
+    
     constructor() {}
 
     relacionarProcesos() {}

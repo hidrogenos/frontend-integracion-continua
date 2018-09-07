@@ -21,7 +21,8 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import {
     UsuarioService,
-    UsuarioDestrezaService
+    UsuarioDestrezaService,
+    HasPermisionService
 } from '../../../shared/services';
 import {
     DatosBasicosColaboradorComponent,
@@ -57,7 +58,9 @@ import { UsuarioProcesoModel } from '../../../shared/models/usuario-proceso.mode
                                 [perfilesActivos]="perfilesActivos"
                                 [tiposIdentificacion]="tiposIdentificacion"
                                 (onResetPassword)="resetPassword($event)"
-                                (onUpdateUsuario)="updateUsuario($event)">
+                                (onUpdateUsuario)="updateUsuario($event)"
+                                [permisoRestablecerContrasena]="hasPermision(1104) | async"
+                                [permisoEditarDatosBasicos]="hasPermision(1105) | async">
                             </datos-basicos-colaborador>
                         </div>
                     </div>
@@ -70,7 +73,7 @@ import { UsuarioProcesoModel } from '../../../shared/models/usuario-proceso.mode
                         <div class="ui-g-12">
                             <p-tabView>
                                 <p-tabPanel header="Aptitudes y destrezas">
-                                    <div class="ui-g">
+                                    <div class="ui-g" *ngIf="hasPermision(1106) | async">
                                         <div class="ui-g-12">
                                             <aptitudes-destrezas-colaborador
                                                 *ngIf="loadedUsuario"
@@ -80,28 +83,43 @@ import { UsuarioProcesoModel } from '../../../shared/models/usuario-proceso.mode
                                                 (onDownloadDestrezaDocumento)="downloadUsuarioDestrezaDocumento($event)"
                                                 (onUpdateDestreza)="updateDestreza($event)"
                                                 (onDeleteDestrezaDocumento)="deleteDestrezaDocumento($event)"
-                                                (onDeleteDestreza)="deleteDestreza($event)">
+                                                (onDeleteDestreza)="deleteDestreza($event)"
+                                                [permisoAgregarAptitudDestreza]="hasPermision(1107) | async"
+                                                [permisoConsultarDocumentoAptitudDestreza]="hasPermision(1108) | async"
+                                                [permisoDescargarDocumentoAptitudDestreza]="hasPermision(1109) | async"
+                                                [permisoBorrarDocumentoAptitudDestreza]="hasPermision(1110) | async"
+                                                [permisoEditarAptitudDestreza]="hasPermision(1111) | async"
+                                                [permisoBorrarAptitupDestreza]="hasPermision(1112) | async">
                                             </aptitudes-destrezas-colaborador>
                                         </div>
                                     </div>
                                 </p-tabPanel>
                                 <p-tabPanel header="Documentación y certificados">
-                                    <create-documento-colaborador #cdc
+                                    <div class="ui-g" *ngIf="hasPermision(1113) | async">
+                                        <create-documento-colaborador #cdc
                                         *ngIf="loadedUsuario"
                                         [documentos]="loadedUsuario.documentos"
                                         (onCreateDocumentoColaborador)="createDocumentoColaborador($event)"
                                         (onDeleteUsuarioDocumento)="deleteUsuarioDocumento($event)"
-                                        (onDownloadUsuarioDocumento)="downloadUsuarioDocumento($event)">
+                                        (onDownloadUsuarioDocumento)="downloadUsuarioDocumento($event)"
+                                        [permisoAdjuntarDocumentos]="hasPermision(1114) | async"
+                                        [permisoDescargarCertificado]="hasPermision(1115) | async"
+                                        [permisoBorrarCertificado]="hasPermision(1116) | async">
                                     </create-documento-colaborador>
+                                    </div>
                                 </p-tabPanel>
                                 <p-tabPanel header="Procesos relacionados">
-                                    <usuario-procesos
+                                    <div class="ui-g" *ngIf="hasPermision(1117) | async">
+                                        <usuario-procesos
                                         *ngIf="loadedUsuario"
                                         [procesos]="procesos"
                                         [usuarioProcesos]="loadedUsuario.procesos"
                                         (onDeleteUsuarioProceso)="deleteUsuarioProceso($event)"
-                                        (onRelacionarProcesos)="relacionarProcesos($event)">
+                                        (onRelacionarProcesos)="relacionarProcesos($event)"
+                                        [permisoRelacionaroceso]="hasPermision(1118) | async"
+                                        [permisoBorrarProceso]="hasPermision(1119) | async">
                                     </usuario-procesos>
+                                    </div>
                                 </p-tabPanel>
                             </p-tabView>
                         </div>
@@ -135,6 +153,7 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     constructor(
         private colaboradorDetalleService: ColaboradorDetalleService,
+        private hasPermisionService: HasPermisionService,
         private store: Store<StoreModel>,
         private usuarioDestrezaService: UsuarioDestrezaService
     ) {}
@@ -354,6 +373,10 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     hideWaitDialog() {
         this.store.dispatch(new fromSahred.HideWaitDialog());
+    }
+
+    hasPermision(id: number){
+        return this.hasPermisionService.hasPermision(id);
     }
 
     relacionarProcesos(procesos: MapaProcesoHijoModel[]) {

@@ -37,6 +37,7 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
                         <td> {{ perfil.nombre }} </td>
                         <td style="text-align: center;">
                             <button style="margin-right:10px;" pButton 
+                                *ngIf="permisoEditarPerfil"
                                 type="button" 
                                 icon="fa fa-pencil" 
                                 class="ui-button-primary"
@@ -53,6 +54,8 @@ export class ListaPerfilesComponent {
     //properties
     @Input()
     perfiles: PerfilModel[];
+    @Input()
+    permisoEditarPerfil: boolean;
 
     //events
     @Output()
