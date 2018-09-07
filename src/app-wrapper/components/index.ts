@@ -13,8 +13,8 @@ export * from "./app-profile/app.profile.component";
 import { AppTopBarComponent } from "./app-top-bar/app.topbar.component";
 export * from "./app-top-bar/app.topbar.component";
 
-import { BeDocumentosVigentesAsocComponent } from "./be-documentos-vigentes-asoc/be-documentos-vigentes-asoc.component";
-export * from "./be-documentos-vigentes-asoc/be-documentos-vigentes-asoc.component";
+import { BeDocumentosTablaComponent } from './be-documentos-tabla/be-documentos-tabla.component';
+export * from './be-documentos-tabla/be-documentos-tabla.component';
 
 import { BeAccionesCorrectivasAsocComponent } from "./be-acciones-correctivas-asoc/be-acciones-correctivas-asoc.component";
 export * from "./be-acciones-correctivas-asoc/be-acciones-correctivas-asoc.component";
@@ -36,7 +36,7 @@ export const components: any[] = [
     AppTopBarComponent,
     BeAccionesCorrectivasAsocComponent,
     BeAccionesPreventivasAsocComponent,
-    BeDocumentosVigentesAsocComponent,
     BeTareasAccionesCorrectivasAsocComponent,
-    BeTareasAccionesPreventivasAsocComponent
+    BeTareasAccionesPreventivasAsocComponent,
+    BeDocumentosTablaComponent
 ];
