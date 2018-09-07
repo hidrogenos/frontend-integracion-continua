@@ -27,6 +27,8 @@ const primeNgModules = [
 //services
 import * as fromServices from "./services";
 
+import * as fromGuards from "./guards";
+
 // store
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -45,7 +47,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
         EffectsModule.forFeature(effects),
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
-    providers: [...fromServices.services],
+    providers: [...fromServices.services, ...fromGuards.guard],
     exports: [...fromComponents.components],
     entryComponents: [
         fromComponents.ImageViewerComponentComponent,

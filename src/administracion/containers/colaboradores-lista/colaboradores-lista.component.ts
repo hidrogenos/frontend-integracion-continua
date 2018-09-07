@@ -9,7 +9,8 @@ import * as fromShared from './../../../shared/store';
 import * as fromRoot from './../../../app/store';
 import {
     TipoIdentificacionService,
-    UsuarioService
+    UsuarioService,
+    HasPermisionService
 } from '../../../shared/services';
 import { forkJoin } from 'rxjs';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
@@ -39,7 +40,7 @@ import { DataTable } from 'primeng/primeng';
                     <h1><i class="fa fa-users" aria-hidden="true"></i> Colaboradores</h1>
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
-                            <button pButton type="button" (click)="cncd.display=true" label="Crear nuevo colaborador" class="ui-button-success"></button>
+                            <button pButton type="button" (click)="cncd.display=true" *ngIf="hasPermision(1101) | async" label="Crear nuevo colaborador" class="ui-button-success"></button>
                         </div>
                     </div>
                     <div class="ui-g">
@@ -92,8 +93,8 @@ import { DataTable } from 'primeng/primeng';
                                         <td>{{ usuario.identificacion }}</td>
                                         <td>{{ usuario.perfil }}</td>
                                         <td style="text-align: center;">
-                                            <button style="margin-right: 10px;" pButton type="button" (click)="detalleUsuario(usuario.id)" icon="pi pi-search" class="ui-button-primary"></button>
-                                            <button pButton type="button" icon="pi pi-trash" class="ui-button-danger"></button>
+                                            <button style="margin-right: 10px;" pButton type="button" *ngIf="hasPermision(1102) | async" (click)="detalleUsuario(usuario.id)" icon="pi pi-search" class="ui-button-primary"></button>
+                                            <button pButton type="button" icon="pi pi-trash" *ngIf="hasPermision(1103) | async" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -138,6 +139,7 @@ export class ColaboradoresListaComponent implements OnInit {
 
     constructor(
         private colaboradoresListaService: ColaboradoresListaService,
+        private hasPermisionService: HasPermisionService,
         private store: Store<StoreModel>,
         private tipoIdentificacionService: TipoIdentificacionService,
         private usuarioService: UsuarioService
@@ -274,6 +276,10 @@ export class ColaboradoresListaComponent implements OnInit {
 
     hideWaitDialog() {
         this.store.dispatch(new fromShared.HideWaitDialog());
+    }
+
+    hasPermision(id: number){
+        return this.hasPermisionService.hasPermision(id);
     }
 
     showWaitDialog(header: string, body?: string) {

@@ -12,6 +12,7 @@ import { Store } from "@ngrx/store";
 import * as fromAuth from "./../../../auth/store";
 import * as fromShared from "./../../../shared/store";
 import { ModuloModel } from "../../../shared/models/modulo.model";
+import { HasPermisionService } from "../../../shared/services";
 
 @Component({
     selector: "permisos",
@@ -24,6 +25,7 @@ import { ModuloModel } from "../../../shared/models/modulo.model";
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button style="margin-right:10px;" pButton 
+                                *ngIf="hasPermision(1202) | async"
                                 type="button" 
                                 label="Crear nuevo perfil" 
                                 class="ui-button-primary"
@@ -36,7 +38,8 @@ import { ModuloModel } from "../../../shared/models/modulo.model";
                             <lista-perfiles
                                 [perfiles]="perfiles"
                                 (onSelectPerfil)="selectPerfil($event)"
-                                (onEditPerfil)="ep.setPerfil($event); ep.display = true;">
+                                (onEditPerfil)="ep.setPerfil($event); ep.display = true;"
+                                [permisoEditarPerfil]="hasPermision(1201) | async">
                             </lista-perfiles>
                         </div>
                         <div class="ui-g-6">
@@ -44,7 +47,8 @@ import { ModuloModel } from "../../../shared/models/modulo.model";
                                 [modulos]="modulos"
                                 [selectedPerfil]="selectedPerfil"
                                 (onAddPermiso)="addPermiso($event)"
-                                (onRemovePermiso)="removePermiso($event)">
+                                (onRemovePermiso)="removePermiso($event)"
+                                [permisoSeleccionarPermiso]="hasPermision(1203) | async">
                             </lista-permisos>
                         </div>
                     </div>
@@ -59,7 +63,8 @@ import { ModuloModel } from "../../../shared/models/modulo.model";
         <edit-perfil #ep
             *ngIf="perfiles"
             [perfiles]="perfiles"
-            (onEditPerfil)="editPerfil($event)">
+            (onEditPerfil)="editPerfil($event)"
+            >
         </edit-perfil>
     `
 })
@@ -79,6 +84,7 @@ export class PermisosComponent implements OnInit {
 
     constructor(
         private permisosService: PermisosService,
+        private hasPermisionService: HasPermisionService,
         private store: Store<StoreModel>
     ) {}
 
@@ -164,6 +170,10 @@ export class PermisosComponent implements OnInit {
 
     hideWaitDialog() {
         this.store.dispatch(new fromShared.HideWaitDialog());
+    }
+
+    hasPermision(id: number){
+        return this.hasPermisionService.hasPermision(id);
     }
 
     removePermiso(id_permiso: number) {

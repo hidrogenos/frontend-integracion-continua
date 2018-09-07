@@ -6,6 +6,7 @@ import * as fromContainers from './containers';
 
 //guards
 import * as fromGuards from './../auth/guards';
+import * as fromGuardsShareds from './../shared/guards';
 
 export const ROUTES: Routes = [
     {
@@ -22,13 +23,66 @@ export const ROUTES: Routes = [
                     },
                     {
                         path: 'lista',
-                        component: fromContainers.ColaboradoresListaComponent
+                        component: fromContainers.ColaboradoresListaComponent,
+                        canActivate: [fromGuardsShareds.HasPermisionGuard],
+                        data: {
+                            requiredPermision: 1120
+                        }
+
                     }
                 ]
             },
             {
                 path: 'permisos',
-                component: fromContainers.PermisosComponent
+                component: fromContainers.PermisosComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1200
+                }
+            },
+            {
+                path: 'eps',
+                component: fromContainers.EpsComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1303
+                }
+            },
+            {
+                path: 'arl',
+                component: fromContainers.ArlComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1313
+                }
+            },
+            {
+                path: 'pension',
+                component: fromContainers.PensionComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1323
+                }
+            },
+            {
+                path: 'cesantias',
+                component: fromContainers.CesantiasComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data:{
+                    requiredPermision: 1333
+                }
+            },
+            {
+                path: 'caja-compensacion',
+                component: fromContainers.CajaCompensacionComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1343
+                }
+            },
+            {
+                path: 'pais',
+                component: fromContainers.PaisComponent
             }
         ]
     }
