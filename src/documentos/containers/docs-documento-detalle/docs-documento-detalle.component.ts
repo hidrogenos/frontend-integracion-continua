@@ -133,6 +133,14 @@ import { PermisosComponent } from '../../../administracion/containers';
                                 (click)="dialogReelaboracion.display = true"
                                 ></button>
                             </div>
+                            <!-- Visto bueno de calidad -->
+                            <div class="ui-g-6 ui-md-4 ui-md-offset-4"
+                                *ngIf="documento?.id_estado == env?.estados_documento.aprobado
+                                && (hasPermision(11000) | async)">
+                                <button pButton type="button" label="Dar visto bueno" 
+                                (click)="dialogVistoBueno.display = true"
+                                ></button>
+                            </div>
                             <!-- Enviar a divulgación -->
                             <div class="ui-g-6 ui-md-4 ui-md-offset-4"
                                 *ngIf="puedeDivulgar()">
@@ -212,6 +220,10 @@ import { PermisosComponent } from '../../../administracion/containers';
 
         <docs-observaciones-dialog #dialogAprobar [tipo]="'Aprobar ' + documento?.titulo"
         (onConfirmDialog)="aprobarDocumento($event)"
+        ></docs-observaciones-dialog>
+
+        <docs-observaciones-dialog #dialogVistoBueno [tipo]="'Dar visto bueno ' + documento?.titulo"
+        (onConfirmDialog)="darVistoBuenoDocumento($event)"
         ></docs-observaciones-dialog>
 
         <docs-divulgacion-dialog #dialogDivulgar [tipo]="'Divulgar ' + documento?.titulo"
@@ -664,6 +676,17 @@ export class DocsDocumentoDetalleComponent implements OnInit {
         this.cambiarEstadoDocumento(data);
     }
 
+    darVistoBuenoDocumento(observacion) {
+        this.showWaitDialog('Documentos', 'Dando visto bueno, un momento por favor...');
+        let data = {
+            estado: environment.estados_documento.visto_bueno_calidad,
+            data: {
+                observacion: observacion
+            }
+        };
+        this.cambiarEstadoDocumento(data);
+    }
+
     solDivulgacionDocumento(formData) {
         this.showWaitDialog('Documentos', 'Solicitando divulgación de documento, un momento por favor...');
         let data = {
@@ -790,7 +813,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     }
 
     puedeDivulgar() {
-        if (this.documento.id_estado == environment.estados_documento.aprobado &&
+        if (this.documento.id_estado == environment.estados_documento.visto_bueno_calidad &&
             this.usuarioLogged.es_jefe == true) {
             return true;
         } else {

@@ -73,7 +73,8 @@ export const environment = {
         para_reelaboracion: 9,
         obsoleto: 10,
         rechazado: 11,
-        anulado: 12
+        anulado: 12,
+        visto_bueno_calidad: 13
     },
     permiso_documento: {
         crear: 1,

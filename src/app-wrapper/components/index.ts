@@ -13,8 +13,8 @@ export * from './app-profile/app.profile.component';
 import { AppTopBarComponent } from './app-top-bar/app.topbar.component';
 export * from './app-top-bar/app.topbar.component';
 
-import { BeDocumentosVigentesAsocComponent } from './be-documentos-vigentes-asoc/be-documentos-vigentes-asoc.component';
-export * from './be-documentos-vigentes-asoc/be-documentos-vigentes-asoc.component';
+import { BeDocumentosTablaComponent } from './be-documentos-tabla/be-documentos-tabla.component';
+export * from './be-documentos-tabla/be-documentos-tabla.component';
 
 export const components: any[] = [
     AppFooterComponent,
@@ -22,5 +22,5 @@ export const components: any[] = [
     AppSubMenuComponent,
     AppProfileComponent,
     AppTopBarComponent,
-    BeDocumentosVigentesAsocComponent
+    BeDocumentosTablaComponent
 ];

@@ -28,4 +28,32 @@ export class BeBandejaEntradaService {
                 catchError(error => throwError(error.json())));
     }
 
+    getDocumentosObsoletos(filtros) {
+        return this.http
+            .post(`${environment.apiUrl}/bandeja-entrada/be-documentos-obsoletos`, filtros)
+            .pipe(
+                map((response: any) => {
+                    return {
+                        ...response,
+                        documentos: response.documentos
+                            .map(documento => this.documentoService.transformDocumentoResponse(documento))
+                    }
+                }),
+                catchError(error => throwError(error.json())));
+    }
+
+    getDocumentosVistoBueno(filtros) {
+        return this.http
+            .post(`${environment.apiUrl}/bandeja-entrada/be-documentos-visto-bueno`, filtros)
+            .pipe(
+                map((response: any) => {
+                    return {
+                        ...response,
+                        documentos: response.documentos
+                            .map(documento => this.documentoService.transformDocumentoResponse(documento))
+                    }
+                }),
+                catchError(error => throwError(error.json())));
+    }
+
 }
