@@ -50,6 +50,7 @@ import { PermisoModel } from "../../../shared/models/permiso.model";
                         <td>{{rowData.nombre}}</td>
                         <td style="text-align: center;">
                             <p-checkbox 
+                                *ngIf="permisoSeleccionarPermiso"
                                 binary="true" 
                                 name="groupname" 
                                 [(ngModel)]="rowData.check"
@@ -79,6 +80,8 @@ export class ListaPermisosComponent implements OnInit {
     modulos: ModuloModel[];
     @Input()
     selectedPerfil: PerfilModel;
+    @Input()
+    permisoSeleccionarPermiso: boolean;
 
     constructor() {}
 

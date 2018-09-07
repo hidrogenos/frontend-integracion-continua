@@ -16,6 +16,7 @@ import { EditAptitudDestrezaColaboradorComponent } from '../edit-aptitud-destrez
         <div class="ui-g">
             <div class="ui-g-12 text-aling-right">
                 <button style="margin-right:10px;" pButton 
+                    *ngIf="permisoAgregarAptitudDestreza"
                     type="button" 
                     label="Agregar aptitud o desterza" 
                     class="ui-button-warning"
@@ -47,18 +48,21 @@ import { EditAptitudDestrezaColaboradorComponent } from '../edit-aptitud-destrez
                                             <td>{{ documento.titulo }}</td>
                                             <td style="text-align: center;">
                                                 <button style="margin-right:10px;" pButton 
+                                                    *ngIf="permisoConsultarDocumentoAptitudDestreza"
                                                     type="button" 
                                                     icon="fa fa-eye" 
                                                     class="ui-button-primary"
                                                     (click)="onConsultarDestrezaDocumento.emit(documento)">
                                                 </button>
                                                 <button style="margin-right:10px;" pButton 
+                                                    *ngIf="permisoDescargarDocumentoAptitudDestreza"
                                                     type="button" 
                                                     icon="fa fa-download" 
                                                     (click)="onDownloadDestrezaDocumento.emit(documento)"
                                                     class="ui-button-success">
                                                 </button>
                                                 <button style="margin-right:10px;" pButton 
+                                                    *ngIf="permisoBorrarDocumentoAptitudDestreza"
                                                     type="button" 
                                                     icon="fa fa-trash" 
                                                     class="ui-button-danger"
@@ -71,12 +75,14 @@ import { EditAptitudDestrezaColaboradorComponent } from '../edit-aptitud-destrez
                             </td>
                             <td style="text-lign: center;">
                                 <button style="margin-right:10px;" pButton 
+                                    *ngIf="permisoEditarAptitudDestreza"
                                     type="button" 
                                     icon="fa fa-pencil" 
                                     (click)="editDestreza(destreza)"
                                     class="ui-button-primary">
                                 </button>
-                                <button style="margin-right:10px;" pButton 
+                                <button style="margin-right:10px;" pButton
+                                    *ngIf="permisoBorrarAptitupDestreza"
                                     type="button" 
                                     icon="fa fa-trash" 
                                     class="ui-button-danger"
@@ -101,6 +107,18 @@ export class AptitudesDestrezasColaboradorComponent {
     //properties
     @Input()
     destrezas: UsuarioDestrezaModel[];
+    @Input()
+    permisoAgregarAptitudDestreza: boolean;
+    @Input()
+    permisoConsultarDocumentoAptitudDestreza: boolean;
+    @Input()
+    permisoDescargarDocumentoAptitudDestreza: boolean;
+    @Input()
+    permisoBorrarDocumentoAptitudDestreza: boolean;
+    @Input()
+    permisoEditarAptitudDestreza: boolean;
+    @Input()
+    permisoBorrarAptitupDestreza: boolean;
 
     //events
     @Output()

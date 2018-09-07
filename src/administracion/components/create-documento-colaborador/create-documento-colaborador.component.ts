@@ -17,6 +17,7 @@ import { environment } from "../../../environments/environment";
         <div class="ui-g">
             <div class="ui-g-12 text-aling-right">
                 <p-fileUpload #fu
+                    *ngIf="permisoAdjuntarDocumentos"
                     customUpload="true"
                     name="demo[]"
                     (uploadHandler)="uploadFiles($event)"
@@ -43,12 +44,14 @@ import { environment } from "../../../environments/environment";
                             <td>{{ documento.fecha_carga | date: dateFormatAngular }}</td>
                             <td style="text-align: center;">
                                 <button style="margin-right:10px;" pButton 
+                                    *ngIf="permisoDescargarCertificado"
                                     type="button" 
                                     icon="fa fa-download" 
                                     (click)="onDownloadUsuarioDocumento.emit(documento)"
                                     class="ui-button-success">
                                 </button>
                                 <button style="margin-right:10px;" pButton 
+                                    *ngIf="permisoBorrarCertificado"
                                     type="button" 
                                     icon="fa fa-trash" 
                                     class="ui-button-danger"
@@ -76,6 +79,12 @@ export class CreateDocumentoColaboradorComponent {
     //properties
     @Input()
     documentos: UsuarioDestrezaDocumentoModel;
+    @Input()
+    permisoAdjuntarDocumentos: boolean;
+    @Input()
+    permisoDescargarCertificado: boolean;
+    @Input()
+    permisoBorrarCertificado: boolean;
 
     //viewchild
     @ViewChild("fu")
