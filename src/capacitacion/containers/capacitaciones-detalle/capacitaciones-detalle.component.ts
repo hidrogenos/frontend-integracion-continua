@@ -40,6 +40,9 @@ import { CapacitacionCapacitadorExternoModel } from "../../../shared/models/capa
 import { CapacitacioncapacitadoresInternosComponent } from "../../components/capacitaciones/capacitacion-capacitadores-internos/capacitacion-capacitadores-internos.component";
 import { CapacitacionCapacitadorInternoModel } from "../../../shared/models/capacitacion-capacitador-interno.model";
 import { environment } from "../../../environments/environment";
+import * as fromRouteStore from "./../../../app/store";
+import { IfStmt } from "@angular/compiler";
+import * as fromAuth from "./../../../auth/store";
 
 @Component({
     selector: "capacitacion-detalle-component",
@@ -48,7 +51,7 @@ import { environment } from "../../../environments/environment";
 
         <edit-capacitacion-component #editCapacitacion
             (edit)="onUpdate($event)"
-            [permisoEdicion]="(hasPermision(804)| async)">
+            [permisoEdicion]="(hasPermision(803)| async) || permisoEditar">
         </edit-capacitacion-component>
 
         <procesos-capacitacion-component #procesosCapacitacion
@@ -57,8 +60,8 @@ import { environment } from "../../../environments/environment";
             [procesosAsociados]="loadedCapacitaciones?.procesos"
             (deleteProceso)="onDeleteProceso($event)"
             (addProceso)="onUpdateproceso($event)"
-            [permisoAdd]="(hasPermision(805)| async)"
-            [permisoDelete]="(hasPermision(806)| async)">
+            [permisoAdd]="(hasPermision(803)| async) || permisoEditar"
+            [permisoDelete]="(hasPermision(803)| async) || permisoEditar">
         </procesos-capacitacion-component>
 
         <documentacion-capacitacion-component #documentoCapacitacion
@@ -67,10 +70,10 @@ import { environment } from "../../../environments/environment";
             (onDeleteDocumento)="deleteUsuarioDocumento($event)"
             (onDownloadDocumento)="downloadDocumento($event)"
             (onConsultarDocumento)="consultarDocumentoCapacitacion($event)"
-            [permisoAdd]="hasPermision(807)| async"
-            [permisoVisualize]="hasPermision(808)| async"
-            [permisoDowload]="hasPermision(809)| async"
-            [permisoDelete]="hasPermision(810)| async">
+            [permisoAdd]="(hasPermision(803)| async) || permisoEditar"
+            [permisoVisualize]="(hasPermision(803)| async) || permisoEditar"
+            [permisoDowload]="(hasPermision(803)| async) || permisoEditar"
+            [permisoDelete]="(hasPermision(803)| async) || permisoEditar">
         </documentacion-capacitacion-component>
 
         <asistentes-externos-component #asistentesExternos
@@ -78,9 +81,9 @@ import { environment } from "../../../environments/environment";
             [asistenteExterno]="loadedCapacitaciones?.asistentes_externos"
             (editAE)="showAE($event)"
             (deleteAE)="onDeleteAE($event)"
-            [permisoCreateAE]="hasPermision(811)| async"
-            [permisoEditAE]="hasPermision(812)| async"
-            [permisoDeleteAE]="hasPermision(813)| async">
+            [permisoCreateAE]="(hasPermision(803)| async) || permisoEditar"
+            [permisoEditAE]="(hasPermision(803)| async)|| permisoEditar"
+            [permisoDeleteAE]="(hasPermision(803)| async)|| permisoEditar">
         </asistentes-externos-component>
 
         <edit-asistente-externo-component #editAsistenteExterno
@@ -93,9 +96,9 @@ import { environment } from "../../../environments/environment";
             (editAI)="showAI($event)"
             (createAI)="onCreateAI($event)"
             (deleteAI)="onDeleteAI($event)"
-            [permisoCreateAI]="hasPermision(814)| async"
-            [permisoEditAI]="hasPermision(815)| async"
-            [permisoDeleteAI]="hasPermision(816)| async">
+            [permisoCreateAI]="(hasPermision(803)| async)|| permisoEditar"
+            [permisoEditAI]="(hasPermision(803)| async) || permisoEditar"
+            [permisoDeleteAI]="(hasPermision(803)| async) || permisoEditar">
         </asistentes-internos-component>
 
         <edit-asistente-interno-component #editAsistenteInterno
@@ -107,9 +110,9 @@ import { environment } from "../../../environments/environment";
             (createCE)="onCreateCE($event)"
             (deleteCE)="onDeleteCE($event)"
             (editCE)="showCE($event)"
-            [permisoCreateCE]="hasPermision(817)| async"
-            [permisoEditCE]="hasPermision(818)| async"
-            [permisoDeleteCE]="hasPermision(819)| async">
+            [permisoCreateCE]="(hasPermision(803)| async) || permisoEditar"
+            [permisoEditCE]="(hasPermision(803)| async)|| permisoEditar"
+            [permisoDeleteCE]="(hasPermision(803)| async) || permisoEditar">
         </capacitadores-externos-component>
 
         <edit-capacitadores-externo-component #editCapacitadoresExterno
@@ -122,14 +125,22 @@ import { environment } from "../../../environments/environment";
             (createCI)="onCreateCI($event)"
             (editCI)="showCI($event)"
             (deleteCI)="onDeleteCI($event)"
-            [permisoCreateCI]="hasPermision(820)| async"
-            [permisoEditCI]="hasPermision(821)| async"
-            [permisoDeleteCI]="hasPermision(822)| async">
+            [permisoCreateCI]="(hasPermision(803)| async) || permisoEditar"
+            [permisoEditCI]="(hasPermision(803)| async) || permisoEditar"
+            [permisoDeleteCI]="(hasPermision(803)| async) || permisoEditar">
         </capacitadores-internos-component>
 
         <edit-capacitador-interno-component #editCapacitadorInterno
             (editCI)="onUpdateCI($event)">
         </edit-capacitador-interno-component>
+        <div class="ui-g">
+            <div class="ui-g-12 text-aling-center">
+                <div class="card card-w-title">
+                    <button *ngIf="loadedCapacitaciones?.id_estado != 1 && loadedCapacitaciones?.id_estado !=2" pButton type="button" label="Abrir Capacitación"  class="ui-button-success" (click)="openCapacitacion()"></button>
+                    <button *ngIf="loadedCapacitaciones?.id_estado == 1" pButton type="button" label="Cerrar Capacitación"  class="ui-button-danger" (click)="closeCapacitacion()" (click)="directPage()"></button>
+                </div>
+            </div>
+        </div>
            
     
 
@@ -141,6 +152,8 @@ export class CapacitacionesDetalleComponent implements OnInit {
     documentosCapacitacion: CapacitacionAdjuntoModel[];
     loadedUsuario: UsuarioModel;
     totalRecords: number;
+    user: UsuarioModel;
+    permisoEditar: boolean;
 
     procesos: MapaProcesoHijoModel[];
     asistenteInterno: UsuarioModel[];
@@ -221,28 +234,40 @@ export class CapacitacionesDetalleComponent implements OnInit {
             ]) => {
                 this.getCapacitacion(idCapacitacion.state.params.id).subscribe(
                     capacitacion => {
-                        this.procesos = procesos;
-                        this.loadedCapacitaciones = capacitacion;
-                        this.asistenteInterno = asistenteInternos;
-                        this.capacitadorInterno = capacitadorInterno;
+                        if (this.validarAcceso(capacitacion)) {
+                            this.procesos = procesos;
+                            this.loadedCapacitaciones = capacitacion;
+                            this.asistenteInterno = asistenteInternos;
+                            this.capacitadorInterno = capacitadorInterno;
 
-                        this.editCapacitacion.loadForm(capacitacion);
+                            this.editCapacitacion.loadForm(capacitacion);
+                            this.metodo();
 
-                        this.refreshListaProcesos();
+                            this.refreshListaProcesos();
+                            this.desabilitarComponentes();
+
+                            setTimeout(time => {
+                                this.capacitadoresInternos.filtrarUsuariosInternos(
+                                    capacitacion.capacitadores_internos
+                                );
+                                this.asistentesInternos.filtrarUsuariosInternos(
+                                    capacitacion.asistentes_internos
+                                );
+                            }, 1);
+                        } else {
+                            this.store.dispatch(
+                                new fromRoute.Go({ path: ["acceso-denegado"] })
+                            );
+                        }
                         this.hideWaitDialog();
-
-                        setTimeout(time => {
-                            this.capacitadoresInternos.filtrarUsuariosInternos(
-                                capacitacion.capacitadores_internos
-                            );
-                            this.asistentesInternos.filtrarUsuariosInternos(
-                                capacitacion.asistentes_internos
-                            );
-                        }, 1);
                     }
                 );
             }
         );
+    }
+
+    validarAcceso(capacitacion: CapacitacionModel): Boolean {
+        return true;
     }
 
     getIdCapacitacionRoute() {
@@ -274,12 +299,17 @@ export class CapacitacionesDetalleComponent implements OnInit {
     getCapacitadoresInternos() {
         return this.capacitacionCI.getCapacitadoresInternos();
     }
+    //aca
 
     onUpdate(capacitacion: CapacitacionModel) {
         this.capacitacionesService
             .onUpdate(capacitacion.id, capacitacion)
             .subscribe(response => {
-                this.loadedCapacitaciones = response;
+                this.loadedCapacitaciones = {
+                    ...this.loadedCapacitaciones,
+                    ...response
+                };
+                console.log(response);
             });
     }
     onDeleteProceso(id: number) {
@@ -564,7 +594,64 @@ export class CapacitacionesDetalleComponent implements OnInit {
         );
     }
 
+    openCapacitacion(event: CapacitacionModel) {
+        this.capacitacionesService
+            .openCapacitacionEstado(this.loadedCapacitaciones.id, event)
+            .subscribe(response => {
+                this.loadedCapacitaciones = {
+                    ...this.loadedCapacitaciones,
+                    ...response
+                };
+                console.log(response);
+                console.log(this.loadedCapacitaciones);
+            });
+    }
+
+    closeCapacitacion(event: CapacitacionModel) {
+        this.capacitacionesService
+            .closeCapacitacionEstado(this.loadedCapacitaciones.id, event)
+            .subscribe(response => {
+                this.loadedCapacitaciones = {
+                    ...this.loadedCapacitaciones,
+                    ...response
+                };
+            });
+    }
+
+    desabilitarComponentes() {
+        let estado = this.loadedCapacitaciones.id_estado;
+        if (estado == 2) {
+            this.editCapacitacion.disableComponent();
+            this.procesosCapacitacion.disableComponent();
+            this.documentoCapacitacion.disableComponent();
+            this.asistentesExternos.disableComponent();
+            this.asistentesInternos.disableComponent();
+            this.capacitadoresExternos.disableComponent();
+            this.capacitadoresInternos.disableComponent();
+        }
+    }
+
+    directPage() {
+        this.store.dispatch(
+            new fromRouteStore.Go({
+                path: [`dashboard`]
+            })
+        );
+    }
+
     hasPermision(id: number) {
         return this.hasPermisionService.hasPermision(id);
+    }
+
+    metodo() {
+        this.store
+            .select(fromAuth.getUser)
+            .pipe(take(1))
+            .subscribe(response => {
+                this.user = response;
+            });
+        if (this.user.id == this.loadedCapacitaciones.id_usuario) {
+            this.permisoEditar = true;
+        }
     }
 }

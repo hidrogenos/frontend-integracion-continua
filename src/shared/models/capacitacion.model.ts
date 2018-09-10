@@ -10,10 +10,10 @@ export interface CapacitacionModel {
     fecha_inicio?: number;
     fecha_fin?: number;
     cantidad_asistentes?: number;
-    tema: string;
-    objetivo: string;
-    lugar: string;
-    observaciones: string;
+    tema?: string;
+    objetivo?: string;
+    lugar?: string;
+    observaciones?: string;
     id_usuario?: number;
     fecha?: number;
     procesos?: MapaProcesoHijoModel[];
@@ -22,4 +22,5 @@ export interface CapacitacionModel {
     capacitadores_externos?: CapacitacionCapacitadorExternoModel[];
     capacitadores_internos?: CapacitacionCapacitadorInternoModel[];
     documentos?: CapacitacionAdjuntoModel[];
+    id_estado?: number;
 }

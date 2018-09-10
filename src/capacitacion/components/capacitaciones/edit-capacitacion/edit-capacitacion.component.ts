@@ -1,14 +1,14 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CapacitacionModel } from '../../../../shared/models/capacitacion.model';
-import * as fromShared from './../../../../shared/store';
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CapacitacionModel } from "../../../../shared/models/capacitacion.model";
+import * as fromShared from "./../../../../shared/store";
 
-import { Store } from '@ngrx/store';
-import { StoreModel } from '../../../../shared/models/store.model';
+import { Store } from "@ngrx/store";
+import { StoreModel } from "../../../../shared/models/store.model";
 
 @Component({
-    selector: 'edit-capacitacion-component',
-    styleUrls: ['edit-capacitacion.component.scss'],
+    selector: "edit-capacitacion-component",
+    styleUrls: ["edit-capacitacion.component.scss"],
     template: `
     <div class="ui-g">
     <div class="ui-g-12">
@@ -57,7 +57,7 @@ import { StoreModel } from '../../../../shared/models/store.model';
                 </div>
                 <div class="ui-g">
                 <div class="ui-g-12 text-aling-right">
-                    <button style="margin-right:10px;" *ngIf="form.disabled && permisoEdicion" pButton type="button" label="Editar datos" (click)="form.enable()" class="ui-button-success"></button>
+                    <button style="margin-right:10px;" *ngIf="form.disabled && permisoEdicion && !disable" pButton type="button" label="Editar datos" (click)="form.enable()" class="ui-button-success"></button>
                     <button style="margin-right:10px;" *ngIf="form.enabled" pButton type="button" label="Descartar cambios" (click)="loadForm(capacitaciones)" class="ui-button-danger"></button>
                     <button style="margin-right:10px;" *ngIf="form.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
                     </div>
@@ -73,6 +73,7 @@ import { StoreModel } from '../../../../shared/models/store.model';
 export class EditCapacitacionComponent implements OnInit {
     //atributos
     form: FormGroup;
+    disable: boolean;
 
     //properties
     @Input()
@@ -91,13 +92,13 @@ export class EditCapacitacionComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            tema: ['', Validators.required],
-            objetivo: ['', Validators.required],
+            tema: ["", Validators.required],
+            objetivo: ["", Validators.required],
             fecha_inicio: [new Date(), Validators.required],
             fecha_fin: [new Date(), Validators.required],
-            lugar: ['', Validators.required],
-            observaciones: ['', Validators.required],
-            id: ['']
+            lugar: ["", Validators.required],
+            observaciones: ["", Validators.required],
+            id: [""]
         });
     }
 
@@ -116,7 +117,7 @@ export class EditCapacitacionComponent implements OnInit {
     }
 
     onSubmit() {
-        this.showWaitDialog('Editando capacitación un momento por favor...');
+        this.showWaitDialog("Editando capacitación un momento por favor...");
         const newCapacitacion: CapacitacionModel = {
             id: this.form.value.id,
             tema: this.form.value.tema,
@@ -129,6 +130,11 @@ export class EditCapacitacionComponent implements OnInit {
         this.edit.emit(newCapacitacion);
         this.form.disable();
         this.hideWaitDialog();
+    }
+
+    disableComponent() {
+        this.form.disable();
+        this.disable = true;
     }
 
     showWaitDialog(header: string, body?: string) {
