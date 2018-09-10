@@ -37,8 +37,7 @@ export class CapacitacionesService {
                     return this.capacitacionService.transformResponseCapacitacion(
                         response
                     );
-                }),
-                catchError(error => Observable.throw(error.json()))
+                })
             );
     }
 
@@ -127,6 +126,20 @@ export class CapacitacionesService {
     ): Observable<MapaProcesoHijoModel[]> {
         return this.http.post<MapaProcesoHijoModel[]>(
             `${environment.apiUrl}/capacitacion/add-proceso-capacitacion/${id}`,
+            data
+        );
+    }
+
+    openCapacitacionEstado(id, data) {
+        return this.http.post<CapacitacionModel>(
+            `${environment.apiUrl}/capacitacion/open-capacitacion/${id}`,
+            data
+        );
+    }
+
+    closeCapacitacionEstado(id, data) {
+        return this.http.post<CapacitacionModel>(
+            `${environment.apiUrl}/capacitacion/close-capacitacion/${id}`,
             data
         );
     }

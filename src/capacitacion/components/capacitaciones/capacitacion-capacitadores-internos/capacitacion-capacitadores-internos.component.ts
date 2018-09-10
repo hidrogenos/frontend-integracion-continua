@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UsuarioModel } from '../../../../shared/models/usuario.model';
-import { CapacitacionCapacitadorInternoModel } from '../../../../shared/models/capacitacion-capacitador-interno.model';
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UsuarioModel } from "../../../../shared/models/usuario.model";
+import { CapacitacionCapacitadorInternoModel } from "../../../../shared/models/capacitacion-capacitador-interno.model";
 
 @Component({
-    selector: 'capacitadores-internos-component',
+    selector: "capacitadores-internos-component",
     template: `
 
     <div class="ui-g">
@@ -32,7 +32,7 @@ import { CapacitacionCapacitadorInternoModel } from '../../../../shared/models/c
                     </div>
                     
                     <div class="ui-g-4">
-                    <button pButton *ngIf="permisoCreateCI" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
+                    <button pButton *ngIf="permisoCreateCI && !disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
                 <p-table [value]="loadedInterno" [paginator]="true" [rows]="10">
@@ -54,8 +54,8 @@ import { CapacitacionCapacitadorInternoModel } from '../../../../shared/models/c
                                         <td>{{asistenteActual?.usuario.nombre}} </td>
                                         <td>{{asistenteActual?.calificacion}}</td>
                                         <td style="text-align: center;">
-                                        <button pButton *ngIf="permisoEditCI" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteActual)" ></button>
-                                        <button pButton *ngIf="permisoDeleteCI" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteActual)" class="ui-button-danger"></button>
+                                        <button pButton *ngIf="permisoEditCI && !disable" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteActual)" ></button>
+                                        <button pButton *ngIf="permisoDeleteCI && !disable" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteActual)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -74,6 +74,7 @@ export class CapacitacioncapacitadoresInternosComponent implements OnInit {
     constructor(private fb: FormBuilder) {}
     //atributos
     form: FormGroup;
+    disable: boolean;
 
     //properties
     @Output()
@@ -141,5 +142,10 @@ export class CapacitacioncapacitadoresInternosComponent implements OnInit {
             ];
             return this.capacitadorInterno;
         }
+    }
+
+    disableComponent() {
+        this.form.disable();
+        this.disable = true;
     }
 }

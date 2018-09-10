@@ -1,13 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CapacitacionAsistenteInternoModel } from '../../../../shared/models/capacitacion-asistente-interno.model';
-import { UsuarioModel } from '../../../../shared/models/usuario.model';
-import * as fromShared from './../../../../shared/store';
-import { Store } from '@ngrx/store';
-import { StoreModel } from '../../../../shared/models/store.model';
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CapacitacionAsistenteInternoModel } from "../../../../shared/models/capacitacion-asistente-interno.model";
+import { UsuarioModel } from "../../../../shared/models/usuario.model";
+import * as fromShared from "./../../../../shared/store";
+import { Store } from "@ngrx/store";
+import { StoreModel } from "../../../../shared/models/store.model";
 
 @Component({
-    selector: 'asistentes-internos-component',
+    selector: "asistentes-internos-component",
     template: `
 
     <div class="ui-g">
@@ -35,7 +35,7 @@ import { StoreModel } from '../../../../shared/models/store.model';
                     </div>
                     
                     <div class="ui-g-4">
-                    <button pButton *ngIf="permisoEditAI" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
+                    <button pButton *ngIf="permisoEditAI && !disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
                 <p-table [value]="loadedInterno" [paginator]="true" [rows]="10">
@@ -57,8 +57,8 @@ import { StoreModel } from '../../../../shared/models/store.model';
                                         <td>{{asistenteActual?.usuario.nombre}} </td>
                                         <td>{{asistenteActual?.calificacion}}</td>
                                         <td style="text-align: center;">
-                                        <button pButton *ngIf="permisoEditAI" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteActual)" ></button>
-                                            <button pButton *ngIf="permisoDeleteAI" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteActual)" class="ui-button-danger"></button>
+                                        <button pButton *ngIf="permisoEditAI && !disable" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteActual)" ></button>
+                                            <button pButton *ngIf="permisoDeleteAI && !disable" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteActual)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -74,6 +74,7 @@ export class CapacitacionAsistentesInternosComponent implements OnInit {
     constructor(private fb: FormBuilder, private store: Store<StoreModel>) {}
     //atributos
     form: FormGroup;
+    disable: boolean;
 
     //properties
     @Output()
@@ -111,7 +112,7 @@ export class CapacitacionAsistentesInternosComponent implements OnInit {
     }
 
     onSubmit() {
-        this.showWaitDialog('Creando un asistente, un momento por favor...');
+        this.showWaitDialog("Creando un asistente, un momento por favor...");
 
         const asistentesInternos: CapacitacionAsistenteInternoModel[] = this
             .form.value.asistentes_internos;
@@ -144,6 +145,10 @@ export class CapacitacionAsistentesInternosComponent implements OnInit {
             ];
             return this.asistenteInterno;
         }
+    }
+    disableComponent() {
+        this.form.disable();
+        this.disable = true;
     }
 
     showWaitDialog(header: string, body?: string) {

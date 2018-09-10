@@ -49,6 +49,10 @@ import { ComponenteCargado } from "../../../shared/services/utils/abstract-clase
             #accionesPreventivasTareasAsoc (onSelectTareaAccionPreventiva)="selectAccionPreventivaTarea($event)" >
             </be-tareas-acciones-preventivas-asoc>
         </div> 
+        <div>
+        <be-capacitaciones-asoc #capacitacionesAsoc>
+        </be-capacitaciones-asoc>
+        </div>
 
         <realizar-tarea-dialog #realizarTareaACDialog
             [evidenciasTarea]="tareaSelectedAC?.adjunto"
@@ -79,6 +83,9 @@ export class BandejaEntradaComponent extends ComponenteCargado {
 
     @ViewChild("realizarTareaAPDialog")
     realizarTareaAPDialog: RealizarTareaDialogComponent;
+
+    @ViewChild("capacitacionesAsoc")
+    capacitacionesAsoc: RealizarTareaDialogComponent;
 
     tareaSelectedAC: AccionCorrectivaTareaModel;
 

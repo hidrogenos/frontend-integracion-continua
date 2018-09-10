@@ -312,4 +312,12 @@ export class BeBandejaEntradaService {
                 catchError((error: any) => Observable.throw(error.json()))
             );
     }
+    getCapacitacionesLazyAsc(
+        data
+    ): Observable<{ totalRows: number; data: any[] }> {
+        return this.http.post<{ totalRows: number; data: any[] }>(
+            `${environment.apiUrl}/capacitacion/get-capacitaciones-lazy-asoc`,
+            data
+        );
+    }
 }

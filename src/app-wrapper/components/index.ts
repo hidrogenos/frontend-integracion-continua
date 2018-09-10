@@ -28,6 +28,9 @@ export * from "./be-tareas-acciones-correctivas-asoc/be-tareas-acciones-correcti
 import { BeTareasAccionesPreventivasAsocComponent } from "./be-tareas-acciones-preventivas-asoc/be-tareas-acciones-preventivas-asoc.component";
 export * from "./be-tareas-acciones-preventivas-asoc/be-tareas-acciones-preventivas-asoc.component";
 
+import { BeCapacitacionesAsocComponent } from "./be-capacitaciones-asoc/be-capacitaciones-asoc.component";
+export * from "./be-capacitaciones-asoc/be-capacitaciones-asoc.component";
+
 export const components: any[] = [
     AppFooterComponent,
     AppMenuComponent,
@@ -38,5 +41,6 @@ export const components: any[] = [
     BeAccionesPreventivasAsocComponent,
     BeDocumentosVigentesAsocComponent,
     BeTareasAccionesCorrectivasAsocComponent,
-    BeTareasAccionesPreventivasAsocComponent
+    BeTareasAccionesPreventivasAsocComponent,
+    BeCapacitacionesAsocComponent
 ];

@@ -6,9 +6,9 @@ export interface MapaProcesoHijoModel {
     id_padre?: number;
     proceso?: string;
     codigo?: string;
-    flecha: string;
-    descripcion: string;
-    activo: boolean;
+    flecha?: string;
+    descripcion?: string;
+    activo?: boolean;
     pivot?: any;
     id_jefe?: number;
     jefe?: UsuarioModel;

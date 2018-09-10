@@ -20,7 +20,7 @@ import { environment } from "../../../../environments/environment";
         </div>
     </div>
     <div class="ui-g">
-        <div class="ui-g-12 text-aling-right" *ngIf="permisoAdd">
+        <div class="ui-g-12 text-aling-right" *ngIf="permisoAdd && !disable">
             <p-fileUpload #fu
                 customUpload="true"
                 name="demo[]"
@@ -47,19 +47,19 @@ import { environment } from "../../../../environments/environment";
                         <td>{{ documento.titulo }}</td>
                         <td>{{ documento.fecha_carga  | date: dateFormat }}</td>
                         <td style="text-align: center;">
-                            <button *ngIf="permisoVisualize" style="margin-right:10px;" pButton 
+                            <button *ngIf="permisoVisualize && !disable" style="margin-right:10px;" pButton 
                                 type="button" 
                                 icon="fa fa-eye" 
                                 class="ui-button-primary"
                                 (click)="onConsultarDocumento.emit(documento)">
                             </button>
-                            <button *ngIf="permisoDowload" style="margin-right:10px;" pButton 
+                            <button *ngIf="permisoDowload  && !disable" style="margin-right:10px;" pButton 
                                 type="button" 
                                 icon="fa fa-download" 
                                 (click)="onDownloadDocumento.emit(documento)"
                                 class="ui-button-success">
                             </button>
-                            <button *ngIf="permisoDelete" style="margin-right:10px;" pButton 
+                            <button *ngIf="permisoDelete  && !disable" style="margin-right:10px;" pButton 
                                 type="button" 
                                 icon="fa fa-trash" 
                                 class="ui-button-danger"
@@ -76,6 +76,7 @@ import { environment } from "../../../../environments/environment";
 export class DocumentacionCapacitacionComponent {
     //atributos
     dateFormat = environment.dateFormatAngular;
+    disable: boolean;
 
     //events
     @Output()
@@ -115,5 +116,8 @@ export class DocumentacionCapacitacionComponent {
     uploadFiles(event) {
         const files: File[] = event.files;
         this.onCreateDocumento.emit(files);
+    }
+    disableComponent() {
+        this.disable = true;
     }
 }
