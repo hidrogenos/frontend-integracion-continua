@@ -27,7 +27,7 @@ import { HasPermisionService } from "../../../shared/services";
             <div class="ui-g-12 text-aling-right">
                 <button pButton type="button" *ngIf="hasPermision(801)|async" (click)="createCapacitacion.show()" label="Crear nueva Capacitación" class="ui-button-success"></button>
                 </div>
-                <p-table [value]="capacitaciones" [lazy]="true" (onLazyLoad)="loadCapacitacionesLazy($event)" [paginator]="true" 
+                <p-table  *ngIf="hasPermision(800)|async" [value]="capacitaciones" [lazy]="true" (onLazyLoad)="loadCapacitacionesLazy($event)" [paginator]="true" 
                                 [rows]="10" [totalRecords]="totalRecords" [loading]="loading" sortField="tema" #dt>
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
@@ -42,6 +42,9 @@ import { HasPermisionService } from "../../../shared/services";
                                         <th pSortableColumn="fecha_fin">
                                             Fecha Fin
                                             <p-sortIcon field="fecha_fin"></p-sortIcon>
+                                        </th>
+                                        <th>
+                                            Estado
                                         </th>
                                         <th>
                                             Acciones
@@ -59,6 +62,7 @@ import { HasPermisionService } from "../../../shared/services";
                                         </th>
                                         <th>
                                         </th>
+                                        
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-capacitaciones>
@@ -66,6 +70,13 @@ import { HasPermisionService } from "../../../shared/services";
                                         <td>{{ capacitaciones.tema }}</td>
                                         <td>{{ capacitaciones.fecha_inicio | date : dateFormat }}</td>
                                         <td>{{ capacitaciones.fecha_fin | date : dateFormat  }}</td>
+                                        <td>
+                                            <span *ngIf="capacitaciones.id_estado == 2">Cerrado</span>
+                                            <span *ngIf="capacitaciones.id_estado == 1">Abierto</span>
+                                            <span *ngIf="capacitaciones.id_estado != 1 && capacitaciones.id_estado !=2">Sin asignar</span>
+
+                                        </td>
+
                                         <td style="text-align: center;">
                                             <button style="margin-right: 10px;" *ngIf="hasPermision(802)|async" pButton type="button" (click)="detailCapacitacion(capacitaciones)" icon="pi pi-search" class="ui-button-primary"></button>
                                             <button pButton type="button" *ngIf="hasPermision(803)|async" icon="pi pi-trash" (click)="onDeleteCapacitacion(capacitaciones)" class="ui-button-danger"></button>
@@ -150,6 +161,7 @@ export class CapacitacionesComponent implements OnInit {
                 this.capacitaciones = response.data;
                 this.totalRecords = response.totalRows;
                 this.loading = false;
+                console.log(this.capacitaciones);
             });
     }
 
@@ -197,6 +209,7 @@ export class CapacitacionesComponent implements OnInit {
             })
         );
     }
+
     hasPermision(id: number) {
         return this.hasPermisionService.hasPermision(id);
     }

@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CapacitacionAsistenteExternoModel } from '../../../../shared/models/capacitacion-asistente-externo.model';
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/capacitacion-asistente-externo.model";
 
 @Component({
-    selector: 'asistentes-externos-component',
-    styleUrls: ['capacitacion-asistentes-externos.component.scss'],
+    selector: "asistentes-externos-component",
+    styleUrls: ["capacitacion-asistentes-externos.component.scss"],
     template: `
 
     <div class="ui-g">
@@ -30,7 +30,7 @@ import { CapacitacionAsistenteExternoModel } from '../../../../shared/models/cap
                             <input type="number" pInputText formControlName="identificacion_asistente" />
                     </div>
                     <div class="ui-g-4">
-                    <button pButton *ngIf="permisoCreateAE" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
+                    <button pButton *ngIf="permisoCreateAE && !disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
                 <p-table [value]="asistenteExterno" [paginator]="true" [rows]="10">
@@ -56,8 +56,8 @@ import { CapacitacionAsistenteExternoModel } from '../../../../shared/models/cap
                                         <td>{{asistenteExterno?.identificacion_asistente}} </td>
                                         <td>{{asistenteExterno?.calificacion}}</td>
                                         <td style="text-align: center;">
-                                        <button pButton *ngIf="permisoEditAE" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteExterno)" ></button>
-                                            <button pButton *ngIf="permisoDeleteAE" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteExterno)" class="ui-button-danger"></button>
+                                        <button pButton *ngIf="permisoEditAE && !disable" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteExterno)" ></button>
+                                            <button pButton *ngIf="permisoDeleteAE && !disable" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteExterno)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -73,6 +73,7 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
     constructor(private fb: FormBuilder) {}
     //atributos
     form: FormGroup;
+    disable: boolean;
 
     //properties
     @Output()
@@ -102,9 +103,9 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            id: [''],
-            nombre_asistente: ['', Validators.required],
-            identificacion_asistente: ['', Validators.required],
+            id: [""],
+            nombre_asistente: ["", Validators.required],
+            identificacion_asistente: ["", Validators.required],
             fecha: [new Date()]
         });
     }
@@ -123,5 +124,9 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
 
     onDelete(asistenteExterno: CapacitacionAsistenteExternoModel) {
         this.deleteAE.emit(asistenteExterno);
+    }
+    disableComponent() {
+        this.form.disable();
+        this.disable = true;
     }
 }

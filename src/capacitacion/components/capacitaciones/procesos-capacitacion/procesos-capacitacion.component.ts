@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CapacitacionModel } from '../../../../shared/models/capacitacion.model';
-import { MapaProcesoHijoModel } from '../../../../shared/models/mapa_proceso_hijo.model';
-import * as fromShared from './../../../../shared/store';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CapacitacionModel } from "../../../../shared/models/capacitacion.model";
+import { MapaProcesoHijoModel } from "../../../../shared/models/mapa_proceso_hijo.model";
+import * as fromShared from "./../../../../shared/store";
 
-import { Store } from '@ngrx/store';
-import { StoreModel } from '../../../../shared/models/store.model';
+import { Store } from "@ngrx/store";
+import { StoreModel } from "../../../../shared/models/store.model";
 
 @Component({
-    selector: 'procesos-capacitacion-component',
-    styleUrls: ['procesos-capacitacion.component.scss'],
+    selector: "procesos-capacitacion-component",
+    styleUrls: ["procesos-capacitacion.component.scss"],
     template: ` 
     
     <div class="ui-g">
@@ -32,7 +32,7 @@ import { StoreModel } from '../../../../shared/models/store.model';
                         </p-dropdown>
                     </div>
                     <div class="ui-g-2 text-aling-right">
-                    <button pButton type="submit"  [disabled]="!form.valid" *ngIf="permisoAdd" label="Adjuntar proceso" class="ui-button"></button>
+                    <button pButton type="submit"  [disabled]="!form.valid" *ngIf="permisoAdd && !disable" label="Adjuntar proceso" class="ui-button"></button>
                     </div>
                 </div>
                 <p-table [value]="procesosAsociados" [paginator]="true" [rows]="10">
@@ -51,7 +51,7 @@ import { StoreModel } from '../../../../shared/models/store.model';
                                         <td>{{proceso.proceso}}</td>
                                         
                                         <td style="text-align: center;">
-                                            <button pButton type="button" icon="pi pi-trash" *ngIf="permisoDelete" (click)="onDeleteProceso(proceso)" class="ui-button-danger"></button>
+                                            <button pButton type="button" icon="pi pi-trash" *ngIf="permisoDelete && !disable" (click)="onDeleteProceso(proceso)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -66,6 +66,7 @@ import { StoreModel } from '../../../../shared/models/store.model';
 export class ProcesosCapacitacionComponent implements OnInit {
     //atributos
     form: FormGroup;
+    disable: boolean;
 
     @Input()
     loadedCapacitaciones: CapacitacionModel;
@@ -93,17 +94,22 @@ export class ProcesosCapacitacionComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            proceso: ['', Validators.required]
+            proceso: ["", Validators.required]
         });
     }
     onSubmit() {
-        this.showWaitDialog('Creando un proceso un momento por favor...');
+        this.showWaitDialog("Creando un proceso un momento por favor...");
         this.addProceso.emit(this.form.value.proceso);
         this.hideWaitDialog();
     }
 
     onDeleteProceso(proceso) {
         this.deleteProceso.emit(proceso.pivot.id);
+    }
+
+    disableComponent() {
+        this.form.disable();
+        this.disable = true;
     }
 
     showWaitDialog(header: string, body?: string) {
