@@ -69,6 +69,9 @@ export class InfListaDocumentosComponent {
     onLoadDocumentosLazy = new EventEmitter<any>();
 
     @Output()
+    onVerDetalleDocumento = new EventEmitter<number>();
+
+    @Output()
     onExportPDF = new EventEmitter<any>();
 
     cols: any[] = [
@@ -90,5 +93,9 @@ export class InfListaDocumentosComponent {
 
     exportPDF() {
         this.onExportPDF.emit(this.filtros);
+    }
+
+    verDetalleDocumento(idDocumento: number) {
+        this.onVerDetalleDocumento.emit(idDocumento)
     }
 }
