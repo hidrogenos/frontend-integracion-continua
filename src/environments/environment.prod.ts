@@ -1,9 +1,9 @@
 export const environment = {
     production: true,
-    baseUrl: 'http://144.217.89.76/sgd/app',
-    apiUrl: 'http://144.217.89.76/sgd/api/public/api',
+    baseUrl: 'http://localhost:4200',
+    apiUrl: 'http://localhost/sgd_backend_v_2_1/public/api',
     auth: {
-        urlToken: 'http://144.217.89.76/sgd/api/public/oauth/token',
+        urlToken: 'http://localhost/sgd_backend_v_2_1/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },
