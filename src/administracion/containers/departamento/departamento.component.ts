@@ -1,35 +1,40 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnInit } from "@angular/core";
+import { DataTable } from "primeng/primeng";
+import { EditDepartamentoDialogComponent } from "../../components";
+import { DepartamentoModel } from "../../../shared/models/departamento.model";
+import { HasPermisionService, DepartamentoService, PaisService } from "../../../shared/services";
+import { AdmDepartamentoService, AdmPaisService } from "../../services";
 import { PaisModel } from "../../../shared/models/pais.model";
-import { AdmPaisService } from "../../services";
-import { PaisService, HasPermisionService } from "../../../shared/services";
+import { forkJoin } from "rxjs";
+
+//store
+import * as fromShared from './../../../shared/store';
 import { StoreModel } from "../../../shared/models/store.model";
 import { Store } from "@ngrx/store";
-import { DataTable, Message } from "primeng/primeng";
-import * as fromShared from './../../../shared/store';
-import { EditPaisDialogComponent } from "../../components";
 
 @Component({
-    selector: 'pais-component',
-    styleUrls: ['pais.component.scss'],
+
+    selector: 'departamento-component',
+    styleUrls: ['departamento.component.scss'],
     template: `
-       <div class="ui-g">
+        <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <h1><i class="fa fa-globe" aria-hidden="true"></i> País</h1>
+                    <h1><i class="fa fa-map" aria-hidden="true"></i> Departamentos</h1>
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button pButton 
-                                *ngIf="hasPermision(1350) | async"
-                                (click)="cpdc.show()"
+                                (click)="cddc.show()"
+                                *ngIf="hasPermision(1360) | async"
                                 type="button" 
-                                label="Crear nuevo país" 
+                                label="Crear nuevo departamento" 
                                 class="ui-button-success">
                             </button>
                         </div>
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-12 ui-fluid">
-                            <p-table [value]="pais" [lazy]="true" (onLazyLoad)="loadPaisesLazy($event)" [paginator]="true" 
+                            <p-table [value]="departamento" [lazy]="true" (onLazyLoad)="loadDepartamentosLazy($event)" [paginator]="true" 
                             [rows]="10" [totalRecords]="totalRecords" [loading]="loading" sortField="nombre" #dt>
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
@@ -49,21 +54,21 @@ import { EditPaisDialogComponent } from "../../components";
                                         </th>
                                     </tr>
                                 </ng-template>
-                                <ng-template pTemplate="body" let-pais>
+                                <ng-template pTemplate="body" let-departamento>
                                     <tr>
-                                        <td>{{ pais.nombre }}</td>
+                                        <td>{{ departamento.nombre }}</td>
                                         <td style="text-align: center;">
                                             <button style="margin-right: 10px;" pButton
-                                                *ngIf="hasPermision(1352) | async"
-                                                (click)="onEditPais(pais)"
+                                                *ngIf="hasPermision(1362) | async"
+                                                (click)="onEditDepartamento(departamento)"
                                                 type="button" 
                                                 icon="pi pi-pencil" class="ui-button-primary">
                                              </button>
                                             <button pButton 
-                                                *ngIf="hasPermision(1351) | async"
+                                                *ngIf="hasPermision(1361) | async"
                                                 type="button"
                                                 icon="pi pi-trash" 
-                                                (click)="deletePais(pais)"
+                                                (click)="deleteDepartamento(departamento)"
                                                 class="ui-button-danger">
                                              </button>
                                         </td>
@@ -73,65 +78,69 @@ import { EditPaisDialogComponent } from "../../components";
                         </div>
                     </div>
                 </div>
-                <create-pais-dialog #cpdc
-                     (create)="onCreate($event)">
-                </create-pais-dialog>
-                <edit-pais-dialog #epdc
-                     (edit)="onEdit($event)">
-                </edit-pais-dialog>
+                <create-departamento-dialog #cddc 
+                    [paises]="paises"
+                    (create)="onCreate($event)">
+                </create-departamento-dialog>
+                <edit-departamento-dialog #eddc
+                    *ngIf="paises"
+                    [paises]="paises"
+                    (edit)="onEdit($event)">
+                </edit-departamento-dialog>
             </div>
         </div>
     `
 
 })
 
-export class PaisComponent {
+export class DepartamentoComponent implements OnInit{
 
     //atributos
-    pais: PaisModel[];
+    departamento: DepartamentoModel[];
+    paises: PaisModel[];
     totalRecords: number;
     loading: boolean = true;
-    msgs: Message[] = [];
-
 
     //properties
     constructor(
-        private admPaisService: AdmPaisService,
-        private paisService: PaisService,
         private hasPermisionService: HasPermisionService,
         private store: Store<StoreModel>,
-        //private confirmationService: ConfirmationService
+        private admDepartamentoService: AdmDepartamentoService,
+        private admPaisService: AdmPaisService,
+        private departamentoService: DepartamentoService
     ){}
 
+    //Viewchild
     @ViewChild('dt') dt: DataTable;
-    @ViewChild('epdc') epdc: EditPaisDialogComponent;
+    @ViewChild('eddc') eddc: EditDepartamentoDialogComponent;
 
 
-    // borrarPais(event: PaisModel) {
-    //     this.confirmationService.confirm({
-    //         message: '¿desea borrar el país? con esto se eliminaran los departamentos y ciudades asociadas al país ',
-    //         header: 'Borrar pais',
-    //         icon: 'pi pi-info-circle',
-    //         accept: () => {
-    //             this.deletePais(event);
-    //             this.msgs = [{severity:'info', summary:'Aceptar', detail:'País borrado'}];
-    //         },
-    //         reject: () => {
-    //             this.msgs = [{severity:'info', summary:'Cancelar', detail:''}];
-    //         }
-    //     });
-    // }
+    ngOnInit(){
+        this.getinitialData()
+    }
 
-    deletePais(event: PaisModel){
-        this.showWaitDialog('Eliminando país, un momento por favor...')
-        this.admPaisService.onEliminar(event).subscribe((data: PaisModel) =>{
-            this.pais = this.pais.filter(
-                (pais: PaisModel) => {
-                    return pais.id != event.id
+    deleteDepartamento(event: DepartamentoModel){
+        this.showWaitDialog('Eliminando departamento, un momento por favor...')
+        this.admDepartamentoService.onEliminar(event).subscribe((data: DepartamentoModel) =>{
+            this.departamento = this.departamento.filter(
+                (departamento: DepartamentoModel) => {
+                    return departamento.id != event.id
                 }
             );
             this.hideWaitDialog();
         })
+    }
+
+    getinitialData() {
+        forkJoin([this.getPaises()]).subscribe(
+            ([paises]) => {
+                this.paises = paises;
+            }
+        );
+    }
+
+    getPaises(){
+        return this.admPaisService.getPaises();
     }
     
     hideWaitDialog(){
@@ -142,11 +151,11 @@ export class PaisComponent {
         return this.hasPermisionService.hasPermision(id);
     }
 
-    loadPaisesLazy(event){
+    loadDepartamentosLazy(event){
         this.showWaitDialog('Consultando datos, un momento por favor...');
         this.loading = true;
-        this.admPaisService.getPaisLazy(event).subscribe(response => {
-            this.pais = response.data;
+        this.admDepartamentoService.getDepartamentosLazy(event).subscribe(response => {
+            this.departamento = response.data;
             this.totalRecords = response.totalRows;
             this.loading = false;
             this.hideWaitDialog();
@@ -155,33 +164,32 @@ export class PaisComponent {
 
     onCreate(event){
         console.log(event);
-        this.showWaitDialog('Creando país, un momento por favor...');
-        this.paisService.createPais(event).subscribe(response => {
-            this.pais = [
-                ...this.pais,
+        this.showWaitDialog('Creando departamento, un momento por favor...');
+        this.departamentoService.createDepartamento(event).subscribe(response => {
+            this.departamento = [
+                ...this.departamento,
                 response
             ];
             this.hideWaitDialog();
         })
     }
 
-    onEdit(event: PaisModel){
-        this.showWaitDialog('Editando país, un momento por favor...');
-        this.admPaisService.updatePais(event.id, event).subscribe(response => {
-            return this.pais = this.pais.map(element => {
+    onEdit(event: DepartamentoModel){
+        console.log(event)
+        this.showWaitDialog('Editando departamento, un momento por favor...');
+        this.admDepartamentoService.updateDepartamento(event.id, event).subscribe(response => {
+            return this.departamento = this.departamento.map(element => {
                 this.hideWaitDialog();
                 return element.id == response.id ? response : element;
             });
         });
     }
 
-    onEditPais(pais: PaisModel){
-        this.epdc.show(pais);
+    onEditDepartamento(departamento: DepartamentoModel){
+        this.eddc.show(departamento);
     }
 
     showWaitDialog(header: string, body?: string){
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body}));
     }
-
-
 }

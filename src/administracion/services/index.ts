@@ -15,6 +15,12 @@ export * from './adm-caja-compensacion/adm-caja-compensacion.service';
 
 import { AdmPaisService } from './adm-pais/adm-pais.service';
 export * from './adm-pais/adm-pais.service';
+
+import { AdmDepartamentoService } from './adm-departamento/adm-departamento.service';
+export * from './adm-departamento/adm-departamento.service';
+
+import { AdmCiudadService } from './adm-ciudad/adm-ciudad.service';AdmCiudadService
+export * from './adm-ciudad/adm-ciudad.service';
  
 import { ColaboradorDetalleService } from './colaborador-detalle/colaborador-detalle.service';
 export * from './colaborador-detalle/colaborador-detalle.service';
@@ -32,6 +38,8 @@ export const services: any[] = [
     AdmPensionService,
     AdmCajaCompensacionSevice,
     AdmPaisService,
+    AdmDepartamentoService,
+    AdmCiudadService,
     ColaboradorDetalleService,
     ColaboradoresListaService,
     PermisosService

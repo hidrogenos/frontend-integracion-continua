@@ -21,6 +21,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 
+
 const primeNgModules = [
     ButtonModule,
     CalendarModule,
@@ -32,7 +33,7 @@ const primeNgModules = [
     MultiSelectModule,
     RadioButtonModule,
     TableModule,
-    TabViewModule
+    TabViewModule,
 ];
 
 //routes

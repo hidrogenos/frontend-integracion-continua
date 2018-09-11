@@ -12,6 +12,15 @@ export class AdmPaisService{
         private http: HttpClient
     ){}
 
+    getPaises(): Observable<PaisModel[]> {
+        return this.http
+            .get<PaisModel[]>(
+                `${environment.apiUrl}/administracion/pais/get-paises
+                `
+            )
+            .pipe(catchError((error: any) => Observable.throw(error.json())));
+    }
+
     getPaisLazy(data): Observable<{ totalRows: number; data: any[] }> {
         return this.http
             .post<{ totalRows: number; data: any[] }>(

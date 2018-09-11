@@ -13,7 +13,16 @@ export class PaisService{
     ){}
 
     createPais(event: PaisModel): Observable<PaisModel>{
+        console.log(event)
         return this.http.post<PaisModel>(`${environment.apiUrl}/pais`, event).pipe(
             catchError(error => Observable.throw(error.json())))
+    }
+
+    getPais(): Observable<PaisModel[]> {
+        return this.http
+            .get<PaisModel[]>(
+                `${environment.apiUrl}/pais`
+            )
+            .pipe(catchError((error: any) => Observable.throw(error.json())));
     }
 }
