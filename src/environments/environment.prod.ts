@@ -68,7 +68,8 @@ export const environment = {
         para_reelaboracion: 9,
         obsoleto: 10,
         rechazado: 11,
-        anulado: 12
+        anulado: 12,
+        visto_bueno_calidad: 13
     },
     permiso_documento: {
         crear: 1,
@@ -79,5 +80,9 @@ export const environment = {
         aprobar_ajenos: 6,
         ver_lista_documentos: 7,
         ver_documentos_obsoletos: 8
+    },
+    nombres_modulos_visuales: {
+        acciones_correctivas: 'Desviación',
+        acciones_preventivas: 'Análisis de riesgos'
     }
 };

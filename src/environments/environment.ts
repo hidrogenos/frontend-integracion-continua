@@ -6,9 +6,9 @@
 export const environment = {
     production: false,
     baseUrl: 'http://localhost:4200',
-    apiUrl: 'http://localhost:8083/APISGDv2_1/public/api',
+    apiUrl: 'http://localhost/sgd_backend_v_2_1/public/api',
     auth: {
-        urlToken: 'http://localhost:8083/APISGDv2_1/public/oauth/token',
+        urlToken: 'http://localhost/sgd_backend_v_2_1/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },

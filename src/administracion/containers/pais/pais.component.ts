@@ -17,8 +17,7 @@ import * as fromShared from './../../../shared/store';
                     <h1><i class="fa fa-hearth" aria-hidden="true"></i> Pais</h1>
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
-                            <button pButton 
-                                (click)="cpdc.show()"
+                            <button pButton
                                 type="button" 
                                 label="Crear nuevo pais" 
                                 class="ui-button-success">
@@ -69,12 +68,6 @@ import * as fromShared from './../../../shared/store';
                         </div>
                     </div>
                 </div>
-                <!--<create-pension-dialog #cpdc
-                     (create)="onCreate($event)">
-                </create-pension-dialog>
-                <edit-pension-dialog #epdc
-                     (edit)="onEdit($event)">
-                </edit-pension-dialog>-->
             </div>
         </div>
     
@@ -83,7 +76,7 @@ import * as fromShared from './../../../shared/store';
 
 })
 
-export class PaisComponent{
+export class PaisComponent {
 
     //atributos
     pais: PaisModel[];
@@ -95,11 +88,11 @@ export class PaisComponent{
         private admPaisService: AdmPaisService,
         private paisService: PaisService,
         private store: Store<StoreModel>
-    ){}
+    ) { }
 
     @ViewChild('dt') dt: DataTable;
 
-    loadPaisesLazy(event){
+    loadPaisesLazy(event) {
         this.showWaitDialog('Consultando datos, un momento por favor...');
         this.loading = true;
         this.admPaisService.getPaisLazy(event).subscribe(response => {
@@ -110,11 +103,11 @@ export class PaisComponent{
         })
     }
 
-    hideWaitDialog(){
+    hideWaitDialog() {
         this.store.dispatch(new fromShared.HideWaitDialog());
     }
 
-    showWaitDialog(header: string, body?: string){
-        this.store.dispatch(new fromShared.ShowWaitDialog({ header, body}));
+    showWaitDialog(header: string, body?: string) {
+        this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
     }
 }
