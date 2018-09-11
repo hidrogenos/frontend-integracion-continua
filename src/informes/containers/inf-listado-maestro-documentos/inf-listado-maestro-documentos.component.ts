@@ -4,6 +4,7 @@ import { InfListaDocumentosComponent } from '../../components';
 
 import * as fromSharedStore from './../../../shared/store';
 import { Store } from '@ngrx/store';
+import * as fromRootStore from './../../../app/store';
 
 @Component({
     selector: 'inf-listado-maestro-documentos',
@@ -11,7 +12,8 @@ import { Store } from '@ngrx/store';
         <div>
             <inf-lista-documentos #infListaDocs 
             (onExportPDF)="onExportPDF($event)"
-            (onLoadDocumentosLazy)="onLoadDocumentosLazy($event)"></inf-lista-documentos>
+            (onLoadDocumentosLazy)="onLoadDocumentosLazy($event)"
+            (onVerDetalleDocumento)="onVerDetalleDocumento($event)"></inf-lista-documentos>
         </div>
     `
 })
@@ -21,7 +23,8 @@ export class InfListadoMaestroDocumentosComponent {
 
     constructor(
         private informeService: InformeService,
-        private sharedStore: Store<fromSharedStore.SharedState>
+        private sharedStore: Store<fromSharedStore.SharedState>,
+        private store: Store<fromRootStore.State>
     ) { }
 
     onLoadDocumentosLazy(event) {
@@ -42,6 +45,14 @@ export class InfListadoMaestroDocumentosComponent {
             window.open(url);
             this.hideWaitDialog();
         })
+    }
+
+    onVerDetalleDocumento(idDocumento: number) {
+        this.store.dispatch(
+            new fromRootStore.Go({
+                path: [`/documentos/detalle/${idDocumento}`]
+            })
+        );
     }
 
     hideWaitDialog() {
