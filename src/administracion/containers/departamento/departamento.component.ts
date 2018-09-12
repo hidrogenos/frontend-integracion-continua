@@ -1,9 +1,11 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
-import { DataTable } from "primeng/primeng";
-import { EditDepartamentoDialogComponent } from "../../components";
+import { DataTable, ConfirmationService } from "primeng/primeng";
+import { EditDepartamentoDialogComponent } from "../../components/edit-departamento-dialog/edit-departamento-dialog.component";
 import { DepartamentoModel } from "../../../shared/models/departamento.model";
-import { HasPermisionService, DepartamentoService, PaisService } from "../../../shared/services";
-import { AdmDepartamentoService, AdmPaisService } from "../../services";
+import { HasPermisionService, PaisService } from "../../../shared/services";
+import {  AdmPaisService } from "../../services";
+import { DepartamentoService } from '../../../shared/services/departamento/departamento.service';
+import { AdmDepartamentoService } from '../../services/adm-departamento/adm-departamento.service';
 import { PaisModel } from "../../../shared/models/pais.model";
 import { forkJoin } from "rxjs";
 
@@ -42,6 +44,10 @@ import { Store } from "@ngrx/store";
                                             Nombre
                                             <p-sortIcon field="nombre" ></p-sortIcon>
                                         </th>
+                                        <th pSortableColumn="id_pais">
+                                            Pais
+                                            <p-sortIcon field="id_pais" ></p-sortIcon>
+                                        </th>
                                         <th>
                                             Acciones
                                         </th>
@@ -51,12 +57,17 @@ import { Store } from "@ngrx/store";
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
                                         </th>
                                         <th>
+                                            <input pInputText type="text" (input)="dt.filter($event.target.value, 'id_pais', 'contains')">
+                                        </th>
+                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-departamento>
                                     <tr>
                                         <td>{{ departamento.nombre }}</td>
+                                        <td>{{ departamento?.pais.nombre }}</td>
+
                                         <td style="text-align: center;">
                                             <button style="margin-right: 10px;" pButton
                                                 *ngIf="hasPermision(1362) | async"
@@ -68,7 +79,7 @@ import { Store } from "@ngrx/store";
                                                 *ngIf="hasPermision(1361) | async"
                                                 type="button"
                                                 icon="pi pi-trash" 
-                                                (click)="deleteDepartamento(departamento)"
+                                                (click)="confirm(departamento)"
                                                 class="ui-button-danger">
                                              </button>
                                         </td>
@@ -89,6 +100,8 @@ import { Store } from "@ngrx/store";
                 </edit-departamento-dialog>
             </div>
         </div>
+        <p-confirmDialog header="Borrar departamento" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>
+
     `
 
 })
@@ -107,7 +120,8 @@ export class DepartamentoComponent implements OnInit{
         private store: Store<StoreModel>,
         private admDepartamentoService: AdmDepartamentoService,
         private admPaisService: AdmPaisService,
-        private departamentoService: DepartamentoService
+        private departamentoService: DepartamentoService,
+        private confirmationService: ConfirmationService
     ){}
 
     //Viewchild
@@ -137,6 +151,16 @@ export class DepartamentoComponent implements OnInit{
                 this.paises = paises;
             }
         );
+    }
+
+
+    confirm(event: DepartamentoModel) {
+        this.confirmationService.confirm({
+            message: 'al momento de borrar el departamento se borrara la ciudad asociada, desea continuar?',
+            accept: () => {
+                this.deleteDepartamento(event);
+            }
+        });
     }
 
     getPaises(){

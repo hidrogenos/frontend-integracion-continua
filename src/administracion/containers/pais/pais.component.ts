@@ -4,9 +4,9 @@ import { AdmPaisService } from "../../services";
 import { PaisService, HasPermisionService } from "../../../shared/services";
 import { StoreModel } from "../../../shared/models/store.model";
 import { Store } from "@ngrx/store";
-import { DataTable, Message } from "primeng/primeng";
+import { DataTable, Message, ConfirmationService } from "primeng/primeng";
 import * as fromShared from './../../../shared/store';
-import { EditPaisDialogComponent } from "../../components";
+import { EditPaisDialogComponent } from "../../components/edit-pais-dialog/edit-pais-dialog.component"
 
 @Component({
     selector: 'pais-component',
@@ -63,7 +63,7 @@ import { EditPaisDialogComponent } from "../../components";
                                                 *ngIf="hasPermision(1351) | async"
                                                 type="button"
                                                 icon="pi pi-trash" 
-                                                (click)="deletePais(pais)"
+                                                (click)="confirm(pais)"
                                                 class="ui-button-danger">
                                              </button>
                                         </td>
@@ -81,6 +81,8 @@ import { EditPaisDialogComponent } from "../../components";
                 </edit-pais-dialog>
             </div>
         </div>
+        <p-confirmDialog header="Borrar país" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>
+
     `
 
 })
@@ -100,27 +102,21 @@ export class PaisComponent {
         private paisService: PaisService,
         private hasPermisionService: HasPermisionService,
         private store: Store<StoreModel>,
-        //private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService
     ){}
 
     @ViewChild('dt') dt: DataTable;
     @ViewChild('epdc') epdc: EditPaisDialogComponent;
 
 
-    // borrarPais(event: PaisModel) {
-    //     this.confirmationService.confirm({
-    //         message: '¿desea borrar el país? con esto se eliminaran los departamentos y ciudades asociadas al país ',
-    //         header: 'Borrar pais',
-    //         icon: 'pi pi-info-circle',
-    //         accept: () => {
-    //             this.deletePais(event);
-    //             this.msgs = [{severity:'info', summary:'Aceptar', detail:'País borrado'}];
-    //         },
-    //         reject: () => {
-    //             this.msgs = [{severity:'info', summary:'Cancelar', detail:''}];
-    //         }
-    //     });
-    // }
+    confirm(event: PaisModel) {
+        this.confirmationService.confirm({
+            message: 'al momento de borrar el país se borrara el departamento y la ciudad asociada, desea continuar?',
+            accept: () => {
+                this.deletePais(event);
+            }
+        });
+    }
 
     deletePais(event: PaisModel){
         this.showWaitDialog('Eliminando país, un momento por favor...')

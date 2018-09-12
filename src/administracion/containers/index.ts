@@ -3,6 +3,7 @@ export * from './arl/arl.component';
 
 import { DepartamentoComponent } from './departamento/departamento.component';
 export * from './departamento/departamento.component';
+
 import { EpsComponent } from './eps/eps.component';
 export * from './eps/eps.component';
 
