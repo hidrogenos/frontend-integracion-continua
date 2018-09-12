@@ -118,6 +118,17 @@ export class AppMenuComponent implements OnInit {
                     items: this.documentos
                 },
                 {
+                    label: 'Informes',
+                    icon: 'fa fa-fw fa-file-pdf-o',
+                    items: [
+                        {
+                            label: 'Listado documentos',
+                            icon: 'fa fa-fw fa-file-pdf-o',
+                            routerLink: ['/informes/listado-documentos']
+                        }
+                    ]
+                },
+                {
                     label: 'Planos',
                     icon: 'fa fa-fw fa-braille',
                     routerLink: ['/planos/lista']
@@ -168,9 +179,19 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/administracion/caja-compensacion']
                         },
                         {
-                            label: 'Pais',
+                            label: 'País',
                             icon: 'fa fa-fw fa-globe',
                             routerLink: ['/administracion/pais']
+                        },
+                        {
+                            label: 'Departamento',
+                            icon: 'fa fa-fw fa-map',
+                            routerLink: ['/administracion/departamento']
+                        },
+                        {
+                            label: 'Ciudad',
+                            icon :'fa fa-fw fa-map-signs',
+                            routerLink: ['/administracion/ciudad']
                         }
                     ]
                 },

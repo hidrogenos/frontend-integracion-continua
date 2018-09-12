@@ -68,6 +68,11 @@ export const ROUTES: Routes = [
                 loadChildren: './../equipo/equipo.module#EquipoModule'
             },
             {
+                path: 'informes',
+                loadChildren:
+                    './../informes/informes.module#InformesModule'
+            },
+            {
                 path: 'proveedores',
                 loadChildren: './../proveedor/proveedor.module#ProveedorModule'
             },

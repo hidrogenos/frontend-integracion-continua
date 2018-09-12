@@ -1,9 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CapacitacionCapacitadorExternoModel } from '../../../../shared/models/capacitacion-capacitador-externo.model';
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/capacitacion-capacitador-externo.model";
 
 @Component({
-    selector: 'capacitadores-externos-component',
+    selector: "capacitadores-externos-component",
     template: `
 
     <div class="ui-g">
@@ -29,7 +29,7 @@ import { CapacitacionCapacitadorExternoModel } from '../../../../shared/models/c
                             <input type="number" pInputText formControlName="identificacion_capacitador" />
                     </div>
                     <div class="ui-g-4">
-                    <button pButton *ngIf="permisoCreateCE" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
+                    <button pButton *ngIf="permisoCreateCE && !disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
                 <p-table [value]="capacitadoresExternos" [paginator]="true" [rows]="10">
@@ -55,8 +55,8 @@ import { CapacitacionCapacitadorExternoModel } from '../../../../shared/models/c
                                         <td>{{capacitadoresExternos?.identificacion_capacitador}}</td>
                                         <td>{{capacitadoresExternos?.calificacion}}</td>
                                         <td style="text-align: center;">
-                                        <button pButton type="button" *ngIf="permisoEditCE" icon="pi pi-pencil" (click)="showEdit(capacitadoresExternos)" ></button>
-                                         <button style="margin-left: 10px"*ngIf="permisoDeleteCE" pButton type="button" icon="pi pi-trash" (click)="onDelete(capacitadoresExternos)" class="ui-button-danger"></button>
+                                        <button pButton type="button" *ngIf="permisoEditCE && !disable" icon="pi pi-pencil" (click)="showEdit(capacitadoresExternos)" ></button>
+                                         <button style="margin-left: 10px"*ngIf="permisoDeleteCE  && !disable" pButton type="button" icon="pi pi-trash" (click)="onDelete(capacitadoresExternos)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -72,6 +72,7 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
     constructor(private fb: FormBuilder) {}
     //atributos
     form: FormGroup;
+    disable: boolean;
 
     //properties
     @Output()
@@ -101,9 +102,9 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            id: [''],
-            nombre_capacitador: ['', Validators.required],
-            identificacion_capacitador: ['', Validators.required],
+            id: [""],
+            nombre_capacitador: ["", Validators.required],
+            identificacion_capacitador: ["", Validators.required],
             fecha: [new Date()]
         });
     }
@@ -123,5 +124,9 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
 
     onDelete(capacitadorExterno: CapacitacionCapacitadorExternoModel) {
         this.deleteCE.emit(capacitadorExterno);
+    }
+    disableComponent() {
+        this.form.disable();
+        this.disable = true;
     }
 }

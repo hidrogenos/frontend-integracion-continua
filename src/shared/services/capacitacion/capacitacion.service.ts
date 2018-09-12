@@ -33,9 +33,11 @@ export class CapacitacionService {
             ...capacitacion,
             fecha_inicio: capacitacion.fecha_inicio * 1000,
             fecha_fin: capacitacion.fecha_fin * 1000,
-            documentos: capacitacion.documentos.map(respose => {
-                return this.documentosService.transformResponse(respose);
-            })
+            documentos: capacitacion.documentos
+                ? capacitacion.documentos.map(respose => {
+                      return this.documentosService.transformResponse(respose);
+                  })
+                : null
         };
     }
 }

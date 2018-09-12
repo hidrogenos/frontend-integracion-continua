@@ -18,4 +18,12 @@ export class CiudadService {
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
     }
+
+    createCiudad(ciudad: CiudadModel): Observable<CiudadModel> {
+        return this.http
+            .post<CiudadModel>(`${environment.apiUrl}/ciudades`, ciudad)
+            .pipe(catchError(error => Observable.throw(error.json())));
+    }
+
+
 }

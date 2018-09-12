@@ -32,13 +32,13 @@ export class BeBandejaEntradaService {
         private accionPreventivaTareaService: AccionPreventivaTareaService,
         private tareaAdjuntoService: AccionCorrectivaTareaAdjuntoService,
         private tareaAdjuntoPreService: AccionPreventivaTareaAdjuntoService
-    ) {}
+    ) { }
 
     getDocumentosVigentesAsoc(filtros) {
         return this.http
             .post(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/bandeja-entrada/be-documentos-vigentes-asoc`,
                 filtros
             )
@@ -61,7 +61,7 @@ export class BeBandejaEntradaService {
         return this.http
             .post(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/bandeja-entrada/be-acciones-correctivas-asoc`,
                 filtros
             )
@@ -84,7 +84,7 @@ export class BeBandejaEntradaService {
         return this.http
             .post(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/bandeja-entrada/be-acciones-preventivas-asoc`,
                 filtros
             )
@@ -107,7 +107,7 @@ export class BeBandejaEntradaService {
         return this.http
             .post(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/bandeja-entrada/be-tareas-acciones-correctivas-asoc`,
                 filtros
             )
@@ -141,7 +141,7 @@ export class BeBandejaEntradaService {
         return this.http
             .post(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/bandeja-entrada/be-tareas-acciones-preventivas-asoc`,
                 filtros
             )
@@ -186,7 +186,7 @@ export class BeBandejaEntradaService {
         return this.http
             .post<AccionCorrectivaTareaAdjuntoModel[]>(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/acciones/accion-correctiva-tarea-adjunto/upload-tarea-adjunto/${idAccionCorrectivaTarea}`,
                 data
             )
@@ -208,9 +208,9 @@ export class BeBandejaEntradaService {
         return this.http
             .delete<AccionCorrectivaTareaAdjuntoModel>(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/acciones/accion-correctiva-tarea-adjunto/delete-tarea-adjunto/${
-                    data.id
+                data.id
                 }`
             )
             .pipe(
@@ -227,7 +227,7 @@ export class BeBandejaEntradaService {
         return this.http
             .post<AccionCorrectivaTareaModel>(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/acciones/accion-correctiva-tarea/realizar-tarea/${data.id}`,
                 data
             )
@@ -256,7 +256,7 @@ export class BeBandejaEntradaService {
         return this.http
             .post<AccionPreventivaTareaAdjuntoModel[]>(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/acciones/acciones-preventivas/detalle/upload-tarea-adjunto/${idAccionPreventivaTarea}`,
                 data
             )
@@ -278,9 +278,9 @@ export class BeBandejaEntradaService {
         return this.http
             .delete<AccionPreventivaTareaAdjuntoModel>(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/acciones/acciones-preventivas/detalle/delete-tarea-adjunto/${
-                    data.id
+                data.id
                 }`
             )
             .pipe(
@@ -297,9 +297,9 @@ export class BeBandejaEntradaService {
         return this.http
             .post<AccionPreventivaTareaModel>(
                 `${
-                    environment.apiUrl
+                environment.apiUrl
                 }/acciones/acciones-preventivas/detalle/realizar-tarea/${
-                    data.id
+                data.id
                 }`,
                 data
             )
@@ -326,6 +326,20 @@ export class BeBandejaEntradaService {
                 catchError(error => throwError(error.json())));
     }
 
+    getDocumentosProxVencer(filtros) {
+        return this.http
+            .post(`${environment.apiUrl}/bandeja-entrada/be-documentos-prox-vencer`, filtros)
+            .pipe(
+                map((response: any) => {
+                    return {
+                        ...response,
+                        documentos: response.documentos
+                            .map(documento => this.documentoService.transformDocumentoResponse(documento))
+                    }
+                }),
+                catchError(error => throwError(error.json())));
+    }
+
     getDocumentosVistoBueno(filtros) {
         return this.http
             .post(`${environment.apiUrl}/bandeja-entrada/be-documentos-visto-bueno`, filtros)
@@ -340,4 +354,12 @@ export class BeBandejaEntradaService {
                 catchError(error => throwError(error.json())));
     }
 
+    getCapacitacionesLazyAsc(
+        data
+    ): Observable<{ totalRows: number; data: any[] }> {
+        return this.http.post<{ totalRows: number; data: any[] }>(
+            `${environment.apiUrl}/capacitacion/get-capacitaciones-lazy-asoc`,
+            data
+        );
+    }
 }
