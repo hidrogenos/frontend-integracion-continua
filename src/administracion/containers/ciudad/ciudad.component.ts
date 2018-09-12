@@ -154,8 +154,7 @@ export class CiudadComponent implements OnInit{
                 ...this.ciudades,
                 response
             ];
-            this.getInitialData();
-            console.log(response)
+            this.totalRecords ++;
             this.hideWaitDialog();
         })
     }
@@ -178,17 +177,20 @@ export class CiudadComponent implements OnInit{
                 return ciudad.id != event.id
             }
         );
-        this.hideWaitDialog();
+            this.totalRecords --;
+            this.hideWaitDialog();
         })
     }
 
     onEdit(event: CiudadModel){
         this.showWaitDialog('Editando ciudad, un momento por favor...');
         this.admCiudadService.updateCiudad(event.id, event).subscribe(response => {
-            return this.ciudades = this.ciudades.map(element => {
-                this.hideWaitDialog();
-                return element.id ==response.id ? response : element;
+            
+            this.ciudades = this.ciudades.map(element => {
+                return element.id == response.id ? response : element;
             })
+            
+            this.hideWaitDialog();
         })
     }
 
