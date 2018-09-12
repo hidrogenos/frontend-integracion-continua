@@ -28,6 +28,15 @@ export * from './create-eps-dialog/create-eps-dialog.component';
 import { CreateCajaCompensacionDialogComponent } from './create-caja-compensacion-dialog/create-caja-compensacion-dialog.component';
 export * from './create-caja-compensacion-dialog/create-caja-compensacion-dialog.component';
 
+import { CreatePaisDialogComponent } from './create-pais-dialog/create-pais-dialog.component';
+export * from './create-pais-dialog/create-pais-dialog.component';
+
+import { CreateDepartamentoDialogComponent } from './create-departamento/create-departamento.component';
+export * from './create-departamento/create-departamento.component';
+
+import { CreateCiudadDialogComponent } from './create-ciudad-dialog/create-ciudad-dialog.component';
+export * from './create-ciudad-dialog/create-ciudad-dialog.component';
+
 import { DatosBasicosColaboradorComponent } from './datos-basico-colaborador/datos-basicos-colaborador.component';
 export * from './datos-basico-colaborador/datos-basicos-colaborador.component';
 
@@ -52,6 +61,15 @@ export * from './edit-pension-dialog/edit-pension-dialog.component';
 import { EditCajaCompensacionDialogComponent } from './edit-caja-compensacion-dialog/edit-caja-compensacion-dialog.component';
 export * from './edit-caja-compensacion-dialog/edit-caja-compensacion-dialog.component';
 
+import { EditPaisDialogComponent } from './edit-pais-dialog/edit-pais-dialog.component';
+export * from './edit-pais-dialog/edit-pais-dialog.component';
+
+import { EditDepartamentoDialogComponent } from './edit-departamento-dialog/edit-departamento-dialog.component';
+export * from './edit-departamento-dialog/edit-departamento-dialog.component';
+
+import { EditCiudadDialogComponent } from './edit-ciudad-dialog/edit-ciudad-dialog.component';
+export * from './edit-ciudad-dialog/edit-ciudad-dialog.component';
+ 
 import { ListaPerfilesComponent } from './lista-perfiles/lista-perfiles.component';
 export * from './lista-perfiles/lista-perfiles.component';
 
@@ -76,6 +94,9 @@ export const components: any[] = [
     CreateCajaCompensacionDialogComponent,
     CreateArlDialogComponent,
     CreatePensionDIalogComponent,
+    CreatePaisDialogComponent,
+    CreateDepartamentoDialogComponent,
+    CreateCiudadDialogComponent,
     DatosBasicosColaboradorComponent,
     EditAptitudDestrezaColaboradorComponent,
     EditPerfilComponent,
@@ -84,6 +105,9 @@ export const components: any[] = [
     EditPensionDialogComponent,
     EditCesantiaDialogComponent,
     EditCajaCompensacionDialogComponent,
+    EditPaisDialogComponent,
+    EditDepartamentoDialogComponent,
+    EditCiudadDialogComponent,
     ListaPerfilesComponent,
     ListaPermisosComponent,
     ResetContrasenaColaboradorComponent,
