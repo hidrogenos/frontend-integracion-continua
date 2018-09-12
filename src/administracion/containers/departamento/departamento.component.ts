@@ -141,6 +141,7 @@ export class DepartamentoComponent implements OnInit{
                     return departamento.id != event.id
                 }
             );
+            this.totalRecords --;
             this.hideWaitDialog();
         })
     }
@@ -156,7 +157,7 @@ export class DepartamentoComponent implements OnInit{
 
     confirm(event: DepartamentoModel) {
         this.confirmationService.confirm({
-            message: 'al momento de borrar el departamento se borrara la ciudad asociada, desea continuar?',
+            message: 'al momento de borrar el departamento se borrará la ciudad asociada, ¿desea continuar?',
             accept: () => {
                 this.deleteDepartamento(event);
             }
@@ -187,19 +188,18 @@ export class DepartamentoComponent implements OnInit{
     }
 
     onCreate(event){
-        console.log(event);
         this.showWaitDialog('Creando departamento, un momento por favor...');
         this.departamentoService.createDepartamento(event).subscribe(response => {
             this.departamento = [
                 ...this.departamento,
                 response
             ];
+            this.totalRecords ++;
             this.hideWaitDialog();
         })
     }
 
     onEdit(event: DepartamentoModel){
-        console.log(event)
         this.showWaitDialog('Editando departamento, un momento por favor...');
         this.admDepartamentoService.updateDepartamento(event.id, event).subscribe(response => {
             return this.departamento = this.departamento.map(element => {

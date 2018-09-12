@@ -111,7 +111,7 @@ export class PaisComponent {
 
     confirm(event: PaisModel) {
         this.confirmationService.confirm({
-            message: 'al momento de borrar el país se borrara el departamento y la ciudad asociada, desea continuar?',
+            message: 'al momento de borrar el país se borrará el departamento y la ciudad asociada, ¿desea continuar?',
             accept: () => {
                 this.deletePais(event);
             }
