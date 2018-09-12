@@ -179,9 +179,19 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/administracion/caja-compensacion']
                         },
                         {
-                            label: 'Pais',
+                            label: 'País',
                             icon: 'fa fa-fw fa-globe',
                             routerLink: ['/administracion/pais']
+                        },
+                        {
+                            label: 'Departamento',
+                            icon: 'fa fa-fw fa-map',
+                            routerLink: ['/administracion/departamento']
+                        },
+                        {
+                            label: 'Ciudad',
+                            icon :'fa fa-fw fa-map-signs',
+                            routerLink: ['/administracion/ciudad']
                         }
                     ]
                 },

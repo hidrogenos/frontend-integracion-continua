@@ -1,6 +1,9 @@
 import { ArlComponent } from './arl/arl.component';
 export * from './arl/arl.component';
 
+import { DepartamentoComponent } from './departamento/departamento.component';
+export * from './departamento/departamento.component';
+
 import { EpsComponent } from './eps/eps.component';
 export * from './eps/eps.component';
 
@@ -16,6 +19,9 @@ export * from './cesantias/cesantias.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 export * from './caja-compensacion/caja-compensacion.component';
 
+import { CiudadComponent } from './ciudad/ciudad.component';
+export * from './ciudad/ciudad.component';
+
 import { PermisosComponent } from './permisos/permisos.component';
 export * from './permisos/permisos.component';
 
@@ -28,11 +34,13 @@ export * from './pais/pais.component';
 
 export const containers: any[] = [
     ArlComponent,
+    DepartamentoComponent,
     EpsComponent,
     ColaboradorDetalleComponent,
     ColaboradoresListaComponent,
     CajaCompensacionComponent,
     CesantiasComponent,
+    CiudadComponent,
     PermisosComponent,
     PensionComponent,
     PaisComponent

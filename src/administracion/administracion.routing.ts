@@ -82,7 +82,27 @@ export const ROUTES: Routes = [
             },
             {
                 path: 'pais',
-                component: fromContainers.PaisComponent
+                component: fromContainers.PaisComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1353
+                }
+            },
+            {
+                path: 'departamento',
+                component: fromContainers.DepartamentoComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1363
+                }
+            },
+            {
+                path: 'ciudad',
+                component: fromContainers.CiudadComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1373
+                }
             }
         ]
     }
