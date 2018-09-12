@@ -20,6 +20,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+
 
 
 const primeNgModules = [
@@ -34,6 +36,7 @@ const primeNgModules = [
     RadioButtonModule,
     TableModule,
     TabViewModule,
+    ConfirmDialogModule
 ];
 
 //routes
@@ -41,6 +44,7 @@ import { AdministracionRoutes } from './administracion.routing';
 
 //services
 import * as fromServices from './services';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
     imports: [
@@ -51,6 +55,6 @@ import * as fromServices from './services';
         FormsModule
     ],
     declarations: [...fromContainers.containers, ...fromComponents.components],
-    providers: [...fromServices.services]
+    providers: [...fromServices.services,ConfirmationService]
 })
 export class AdministracionModule {}

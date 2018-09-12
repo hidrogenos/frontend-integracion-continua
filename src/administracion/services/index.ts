@@ -19,7 +19,7 @@ export * from './adm-pais/adm-pais.service';
 import { AdmDepartamentoService } from './adm-departamento/adm-departamento.service';
 export * from './adm-departamento/adm-departamento.service';
 
-import { AdmCiudadService } from './adm-ciudad/adm-ciudad.service';AdmCiudadService
+import { AdmCiudadService } from './adm-ciudad/adm-ciudad.service';
 export * from './adm-ciudad/adm-ciudad.service';
  
 import { ColaboradorDetalleService } from './colaborador-detalle/colaborador-detalle.service';

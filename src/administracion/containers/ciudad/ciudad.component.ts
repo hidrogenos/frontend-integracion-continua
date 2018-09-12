@@ -1,15 +1,17 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { StoreModel } from "../../../shared/models/store.model";
-import { AdmCiudadService, AdmDepartamentoService } from "../../services";
-import { DepartamentoService, CiudadService, HasPermisionService } from "../../../shared/services";
+import { AdmDepartamentoService } from "../../services/adm-departamento/adm-departamento.service";
+import { AdmCiudadService } from '../../services/adm-ciudad/adm-ciudad.service';
+import { CiudadService, HasPermisionService } from "../../../shared/services";
+import { DepartamentoService } from '../../../shared/services/departamento/departamento.service';
 import { DepartamentoModel } from "../../../shared/models/departamento.model";
 import { CiudadModel } from "../../../shared/models/ciudad.model";
 import { DataTable } from "primeng/primeng";
 
 import * as fromShared from './../../../shared/store';
 import { forkJoin } from "rxjs";
-import { EditCiudadDialogComponent } from "../../components";
+import { EditCiudadDialogComponent } from "../../components/edit-ciudad-dialog/edit-ciudad-dialog.component";
 
 
 @Component({
