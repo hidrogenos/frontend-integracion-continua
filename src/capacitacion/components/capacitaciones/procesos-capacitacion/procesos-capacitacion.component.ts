@@ -97,6 +97,7 @@ export class ProcesosCapacitacionComponent implements OnInit {
             proceso: ["", Validators.required]
         });
     }
+    
     onSubmit() {
         this.showWaitDialog("Creando un proceso un momento por favor...");
         this.addProceso.emit(this.form.value.proceso);

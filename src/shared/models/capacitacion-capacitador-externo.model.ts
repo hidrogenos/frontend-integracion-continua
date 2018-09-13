@@ -1,3 +1,5 @@
+import { UsuarioModel } from "./usuario.model";
+
 export interface CapacitacionCapacitadorExternoModel {
     id?: number;
     id_capacitacion?: number;
