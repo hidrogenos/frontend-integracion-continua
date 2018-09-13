@@ -265,7 +265,7 @@ import { StoreModel } from '../../../shared/models/store.model';
                     </button>
                     <button style="margin-right:10px;" *ngIf="formUser.disabled && permisoEditarDatosBasicos" pButton type="button" label="Editar datos basicos"  (click)="formUser.enable()" class="ui-button-success"></button>
                     <button style="margin-right:10px;" *ngIf="formUser.enabled" pButton type="button" label="Descartar cambios" (click)="loadFormData()" class="ui-button-danger"></button>
-                    <button style="margin-right:10px;" *ngIf="formUser.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
+                    <button style="margin-right:10px;" *ngIf="formUser.enabled" [disabled]="!formUser.valid" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
                 </div>
             </div>
         </form>
@@ -327,7 +327,7 @@ export class DatosBasicosColaboradorComponent implements OnInit {
             ciudad: [null, Validators.required],
             telefono: ['', Validators.required],
             direccion: ['', Validators.required],
-            profesion: ['', Validators.required],
+            profesion: [''],
             fecha_ingreso: [new Date(), Validators.required],
             eps: [null, Validators.required],
             arl: [null, Validators.required],

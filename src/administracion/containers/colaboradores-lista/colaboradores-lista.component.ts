@@ -94,7 +94,7 @@ import { DataTable } from 'primeng/primeng';
                                         <td>{{ usuario.perfil }}</td>
                                         <td style="text-align: center;">
                                             <button style="margin-right: 10px;" pButton type="button" *ngIf="hasPermision(1102) | async" (click)="detalleUsuario(usuario.id)" icon="pi pi-search" class="ui-button-primary"></button>
-                                            <button pButton type="button" icon="pi pi-trash" *ngIf="hasPermision(1103) | async" class="ui-button-danger"></button>
+                                            <button pButton type="button" icon="pi pi-trash" (click)="deleteColaborador(usuario)" *ngIf="hasPermision(1103) | async" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -155,6 +155,15 @@ export class ColaboradoresListaComponent implements OnInit {
                 path: [`administracion/colaboradores/detalle/${idUsuario}`]
             })
         );
+    }
+
+    deleteColaborador(event: UsuarioModel){
+        this.showWaitDialog('Eliminando colaborador, un momento por favor...')
+        this.colaboradoresListaService.onEliminar(event).subscribe((data: UsuarioModel)=> {
+            this.dt.reset();
+            this.hideWaitDialog();
+        })
+
     }
 
     loadInitData() {
@@ -226,9 +235,9 @@ export class ColaboradoresListaComponent implements OnInit {
     }
 
     createUsuario(usuario: UsuarioModel) {
-        // this.showWaitDialog(
-        //     'Registrando nuevo colaborador, un momento por favor...'
-        // );
+        this.showWaitDialog(
+            'Registrando nuevo colaborador, un momento por favor...'
+        );
         let aux = this.usuarioService.transformRequestUsuario(usuario);
         this.colaboradoresListaService
             .createUsuario(aux)

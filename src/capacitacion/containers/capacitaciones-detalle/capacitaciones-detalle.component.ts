@@ -413,6 +413,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
             this.loadedCapacitaciones.asistentes_internos = this.loadedCapacitaciones.asistentes_internos.filter(
                 ele => ele.id != response.id
             );
+            this.asistenteInterno = [...this.asistenteInterno, response.usuario]
         });
     }
 
@@ -494,6 +495,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
             this.loadedCapacitaciones.capacitadores_internos = this.loadedCapacitaciones.capacitadores_internos.filter(
                 ele => ele.id != response.id
             );
+            this.capacitadorInterno = [...this.capacitadorInterno, response.usuario];
         });
     }
 
@@ -511,6 +513,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
                 );
             });
     }
+    
     showCI(capacitadorInterno: CapacitacionCapacitadorInternoModel) {
         this.editCapacitadorInterno.show(capacitadorInterno);
     }
@@ -558,7 +561,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
                     element => element.id != event.id
                 );
                 this.hideWaitDialog();
-            });
+        });
     }
 
     downloadDocumento(event: CapacitacionAdjuntoModel) {

@@ -157,7 +157,7 @@ export class DepartamentoComponent implements OnInit{
 
     confirm(event: DepartamentoModel) {
         this.confirmationService.confirm({
-            message: 'al momento de borrar el departamento se borrará la ciudad asociada, ¿desea continuar?',
+            message: 'al momento de borrar el departamento se borrará la ciudad asociada, ¿des ea continuar?',
             accept: () => {
                 this.deleteDepartamento(event);
             }
