@@ -34,6 +34,29 @@ export class BeBandejaEntradaService {
         private tareaAdjuntoPreService: AccionPreventivaTareaAdjuntoService
     ) { }
 
+    getDocumentosPorGestionarAsoc(filtros) {
+        return this.http
+            .post(
+                `${
+                environment.apiUrl
+                }/bandeja-entrada/be-documentos-por-gestionar-asoc`,
+                filtros
+            )
+            .pipe(
+                map((response: any) => {
+                    return {
+                        ...response,
+                        documentos: response.documentos.map(documento =>
+                            this.documentoService.transformDocumentoResponse(
+                                documento
+                            )
+                        )
+                    };
+                }),
+                catchError(error => throwError(error.json()))
+            );
+    }
+
     getDocumentosVigentesAsoc(filtros) {
         return this.http
             .post(

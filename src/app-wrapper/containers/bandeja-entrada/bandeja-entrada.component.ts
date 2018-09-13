@@ -27,6 +27,9 @@ import { ComponenteCargado } from "../../../shared/services/utils/abstract-clase
     selector: "bandeja-entrada",
     template: `
         <div>
+            <be-documentos-tabla #misdocpgest [titulo]="'Mis documentos por gestionar'"
+                (onSelectDocumento)="redirectToDocumento($event)"
+                (onConsultarDocumentos)="consultarLazyMisDocumentosPorGestionar($event)"></be-documentos-tabla>
             <be-documentos-tabla #misdoc [titulo]="'Mis documentos vigentes'"
                 (onSelectDocumento)="redirectToDocumento($event)"
                 (onConsultarDocumentos)="consultarLazyMisDocumentos($event)"></be-documentos-tabla>
@@ -103,6 +106,7 @@ export class BandejaEntradaComponent extends ComponenteCargado {
 
     tareaSelectedAP: AccionPreventivaTareaModel;
 
+    @ViewChild('misdocpgest') misdocpgest: BeDocumentosTablaComponent;
     @ViewChild('misdoc') misdoc: BeDocumentosTablaComponent;
     @ViewChild('docobs') docobs: BeDocumentosTablaComponent;
     @ViewChild('docvencer') docvencer: BeDocumentosTablaComponent;
@@ -120,6 +124,16 @@ export class BandejaEntradaComponent extends ComponenteCargado {
         return this.hasPermisionService.hasPermision(requiredPermision);
     }
 
+    consultarLazyMisDocumentosPorGestionar(event) {
+        this.beBandejaEntradaService
+            .getDocumentosPorGestionarAsoc(event)
+            .subscribe((items: any) => {
+                this.misdocpgest.documentos = items.documentos;
+                this.misdocpgest.total = items.total;
+                this.misdocpgest.loading = false;
+            });
+    }
+
     consultarLazyMisDocumentos(event) {
         this.beBandejaEntradaService
             .getDocumentosVigentesAsoc(event)
@@ -129,6 +143,7 @@ export class BandejaEntradaComponent extends ComponenteCargado {
                 this.misdoc.loading = false;
             });
     }
+
 
     consultarLazyObsoletos(event) {
         this.beBandejaEntradaService
