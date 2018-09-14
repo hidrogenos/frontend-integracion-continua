@@ -19,14 +19,14 @@ import * as fromRoot from './../../../app/store';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <h1><i class="fa fa-users" aria-hidden="true"></i> Proveedores</h1>
+                    <h1><i class="fa fa-industry" aria-hidden="true"></i> Proveedores</h1>
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button pButton 
                                 *ngIf="hasPermision(201) | async"
                                 type="button" 
                                 (click)="createProveedor.show()" 
-                                label="Crear nuevo Proveedor" 
+                                label="Crear nuevo proveedor" 
                                 class="ui-button-success">
                             </button>
                         </div>
@@ -53,7 +53,7 @@ import * as fromRoot from './../../../app/store';
                                             Teléfono 
                                             <p-sortIcon field="tel1" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
@@ -69,8 +69,6 @@ import * as fromRoot from './../../../app/store';
                                         </th>
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'tel1', 'contains')">
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>

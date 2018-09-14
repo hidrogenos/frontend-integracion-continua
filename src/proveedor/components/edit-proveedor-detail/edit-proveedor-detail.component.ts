@@ -11,7 +11,7 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
     selector: 'edit-proveedor-detail',
     template: `
                         <form [formGroup]="detailProveedor" (ngSubmit)="onSubmit()" novalidate>
-                            <h2>Datos Básicos</h2>
+                            <h2>Datos básicos</h2>
                             <div class="ui-g">
                                 <div class="ui-g-8 ui-fluid">
                                     <div>
@@ -94,22 +94,22 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
                                 </div>
                                 <div class="ui-g-6 ui-fluid">
                                     <div>
-                                        <label>Email Contacto 2:</label>
+                                        <label>Email contacto 2:</label>
                                     </div>
                                     <input type="text" pInputText formControlName="email_contacto2" />
                                 </div>
                             </div>
-                            <h2>Datos Representante Legal</h2>
+                            <h2>Datos representante legal</h2>
                             <div class="ui-g">
                                 <div class="ui-g-6 ui-fluid">
                                     <div>
-                                        <label>Nombre Representante Legal:</label>
+                                        <label>Nombre representante legal:</label>
                                     </div>
                                     <input type="text" pInputText formControlName="representante_legal" />
                                 </div>
                                 <div class="ui-g-6 ui-fluid">
                                         <div>
-                                            <label>Tipo de Identificación:</label>
+                                            <label>Tipo de identificación:</label>
                                         </div>
                                         <p-dropdown 
                                             [options]="identificacion" 
@@ -123,18 +123,18 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
                             <div class="ui-g">
                                 <div class="ui-g-6 ui-fluid">
                                     <div>
-                                        <label>Número de Identificacion:</label>
+                                        <label>Número de identificación:</label>
                                     </div>
                                     <input type="text" pInputText formControlName="identificacion_representante_legal" />
                                 </div>
                                 <div class="ui-g-6 ui-fluid">
                                     <div>
-                                        <label>Email Representante:</label>
+                                        <label>Email representante:</label>
                                     </div>
                                     <input type="text" pInputText formControlName="email_representante_legal" />
                                 </div>
                             </div>
-                            <h2>Infromación Legal</h2>
+                            <h2>Infromación legal</h2>
                             <div class="ui-g">
                                     <div class="ui-g-6 ui-fluid">
                                         <div>
@@ -179,7 +179,7 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
                                     </div>
                                 <div class="ui-g-3 ui-fluid">
                                     <div>
-                                        <label>Gran Contribuyente:</label>
+                                        <label>Gran contribuyente:</label>
                                     </div>
                                     <p-checkbox binary="false" [formControl]="detailProveedor.controls['grancontrib']"></p-checkbox>
                                 </div>
@@ -200,7 +200,7 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
                                     
                                     <div class="ui-g-4 ui-fluid">
                                     <div>
-                                        <label>Tipo de Cuenta:</label>
+                                        <label>Tipo de cuenta:</label>
                                     </div>
                                     <p-dropdown 
                                         [options]="tipoCuenta" 
@@ -212,7 +212,7 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
                                 </div>
                                 <div class="ui-g-8 ui-fluid">
                                     <div>
-                                        <label>Número de Cuenta:</label>
+                                        <label>Número de cuenta:</label>
                                     </div>
                                     <input type="text" pInputText formControlName="cuenta" />
                                 </div>

@@ -55,7 +55,7 @@ import { HasPermisionService } from "../../../shared/services";
                                                     Fecha de Carga
                                                     <p-sortIcon field="fecha_carga" ></p-sortIcon>
                                                 </th>
-                                                <th>
+                                                <th rowspan="2">
                                                     Acciones
                                                 </th>
                                             </tr>
@@ -68,8 +68,6 @@ import { HasPermisionService } from "../../../shared/services";
                                                 </th>
                                                 <th>
                                                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'fecha_carga', 'contains')">
-                                                </th>
-                                                <th>
                                                 </th>
                                             </tr>
                                         </ng-template>

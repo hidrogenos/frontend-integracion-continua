@@ -23,7 +23,6 @@ import * as fromShared from './../../../shared/store';
     <div class="ui-g">
     <div class="ui-g-12">
         <div class="card card-w-title">
-            <h1><i class="fa fa-users" aria-hidden="true"></i> Evaluaciones</h1>
             <div class="ui-g">
                 <div class="ui-g-12 text-aling-right">
                     <button pButton type="button" *ngIf="permisoCrearEvaluacion" (click)="createEvaluacion.show()" label="Crear nueva Evaluación" class="ui-button-success"></button>
@@ -51,7 +50,7 @@ import * as fromShared from './../../../shared/store';
                                     Observaciones 
                                     <p-sortIcon field="observaciones" ></p-sortIcon>
                                 </th>
-                                <th>
+                                <th rowspan="2">
                                     Acciones
                                 </th>
                             </tr>
@@ -67,8 +66,6 @@ import * as fromShared from './../../../shared/store';
                                 </th>
                                 <th>
                                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'observaciones', 'contains')">
-                                </th>
-                                <th>
                                 </th>
                             </tr>
                         </ng-template>
