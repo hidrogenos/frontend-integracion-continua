@@ -335,7 +335,7 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     getInitialData() {
         this.showWaitDialog(
-            'COnsultando datos del colaborador, un momento por favor'
+            'Consultando datos del colaborador, un momento por favor'
         );
         forkJoin([this.getUsuario(), this.getAuxData()]).subscribe(
             ([usuario, auxData]) => {

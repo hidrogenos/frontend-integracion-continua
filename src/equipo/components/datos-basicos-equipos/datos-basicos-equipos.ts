@@ -169,7 +169,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                             <div>
                                 <label>Prox mantenimiento correctivo:</label>
                             </div>
-                                <p-calendar  [minDate]="formEquipoDetalle.value.fecha_mantenimiento_correctivo" appendTo="body" showIcon="true" formControlName="fecha_proximo_mantenimiento_correctivo"></p-calendar>
+                                <p-calendar [minDate]="formEquipoDetalle.value.fecha_mantenimiento_correctivo" appendTo="body" showIcon="true" formControlName="fecha_proximo_mantenimiento_correctivo"></p-calendar>
                         </div>
                     </div>
                     <div class="ui-g">
@@ -178,8 +178,8 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                         </div>
                     </div>
                 <div class="ui-g">
-                    <div class="ui-g-12">
-                        <textarea [rows]="5" [cols]="115" pInputTextarea formControlName="observaciones"></textarea>
+                    <div class="ui-g-12 ui-fluid">
+                        <textarea [rows]="5" [cols]="95" pInputTextarea formControlName="observaciones"></textarea>
                     </div>
                 </div>
             </div>

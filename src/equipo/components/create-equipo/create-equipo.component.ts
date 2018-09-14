@@ -11,7 +11,9 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                 header="Registrar nuevo equipo" 
                 [(visible)]="display" 
                 [width]="800"
-                [modal]="true">
+                [modal]="true"
+                [responsive]="true" 
+                [maximizable]="true" >
                 <h2>Datos básicos</h2>
                     <div class="ui-g">
                         <div class="ui-g-4 ui-fluid">
@@ -175,13 +177,13 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                         </div>
                     </div>
                     <div class="ui-g">
-                        <div class="ui-g-12">
+                        <div class="ui-g-12 ui-fluid">
                             <label>Observaciones:</label>
                         </div>
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-12 ui-fluid">
-                            <textarea [rows]="5" [cols]="105" pInputTextarea formControlName="observaciones"></textarea>
+                            <textarea [rows]="5" [cols]="90" pInputTextarea formControlName="observaciones"></textarea>
                         </div>
                     </div>
                     <p-footer>
