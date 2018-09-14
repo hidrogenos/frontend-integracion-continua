@@ -12,7 +12,7 @@ import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigr
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
             <p-dialog 
-                header="Nueva cargo" 
+                header="Nuevo cargo" 
                 [(visible)]="display" 
                 [modal]="true" 
                 [responsive]="true" 
@@ -20,24 +20,27 @@ import { CalidadOrganigramaModel } from '../../../shared/models/calidad-organigr
                 [maximizable]="true" 
                 (onHide)="onHideEditCalidadOrganigrama()">
                 <div class="ui-g">
-                    <div class="ui-g-6 ui-fluid">
+                    <div class="ui-g-12 ui-fluid">
                         <div>
                             <label>Jefe directo</label>
                         </div>
-                        <p-dropdown 
+                        <p-dropdown
                             [options]="cargos"  
                             optionLabel="cargo" 
                             formControlName="jefe_directo"
                             placeholder="Seleccione..."
                             appendTo="body"
-                            filter="true">
+                            filter="true"
+                            [autoWidth]="false">
                         </p-dropdown>
                     </div>
-                    <div class="ui-g-6 ui-fluid">
+                    </div>
+                    <div class="ui-g">   
+                    <div class="ui-g-12 ui-fluid">
                         <div>
                             <label>Cargo</label>
                         </div>
-                        <input type="text" pInputText formControlName="cargo" />
+                        <input type="text" pInputText formControlName="cargo">
                     </div>
                 </div>
                 <div class="ui-g">

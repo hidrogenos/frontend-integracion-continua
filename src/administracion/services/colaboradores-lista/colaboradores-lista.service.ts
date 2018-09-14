@@ -120,4 +120,10 @@ export class ColaboradoresListaService {
             )
             .pipe(catchError((error: any) => Observable.throw(error.json())));
     }
+
+    onEliminar(event: UsuarioModel): Observable<UsuarioModel> {
+        return this.http.delete<UsuarioModel>(
+            `${environment.apiUrl}/administracion/colaborador/lista/delete-usuario/${event.id}`
+        );
+    }
 }

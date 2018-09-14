@@ -25,13 +25,13 @@ import { StoreModel } from "../../../../shared/models/store.model";
                             <label>Asistente:</label>
                         </div>
                         <p-multiSelect 
-                        [options]="asistenteInterno"
-                        appendTo="body"
-                        [panelStyle]="{minWidth:'12em'}"
-                        formControlName="asistentes_internos"
-                        optionLabel="nombre"
-                        defaultLabel="Seleccione múltiples...">
-                    </p-multiSelect>
+                            [options]="asistenteInterno"
+                            appendTo="body"
+                            [panelStyle]="{minWidth:'12em'}"
+                            formControlName="asistentes_internos"
+                            optionLabel="nombre"
+                            defaultLabel="Seleccione múltiples...">
+                         </p-multiSelect>
                     </div>
                     
                     <div class="ui-g-4">
