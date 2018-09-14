@@ -325,6 +325,7 @@ export class CreateNuevoColaboradorDialogComponent implements OnInit {
     }
 
     onSubmit() {
+        this.display = false;
         if (this.form.valid) {
             const usuario: UsuarioModel = {
                 nombre: this.form.value.nombre,
