@@ -63,7 +63,7 @@ export class ListaPerfilesComponent {
     @Output()
     onSelectPerfil = new EventEmitter<PerfilModel>();
 
-    constructor() {}
+    constructor() { }
 
     onRowSelect(event) {
         const selectedPerfil: PerfilModel = event.data;
