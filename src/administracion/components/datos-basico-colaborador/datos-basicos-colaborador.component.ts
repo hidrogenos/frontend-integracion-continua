@@ -19,6 +19,7 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
 import { ResetContrasenaColaboradorComponent } from '../reset-contrasena-colaborador/reset-contrasena-colaborador.component';
 import { StoreModel } from '../../../shared/models/store.model';
+import { MessageService, Message } from 'primeng/api';
 
 @Component({
     selector: 'datos-basicos-colaborador',
@@ -26,8 +27,7 @@ import { StoreModel } from '../../../shared/models/store.model';
     template: `
         <form [formGroup]="formUser" (ngSubmit)="onSubmit()" novalidate>
             <div class="ui-g">
-                <div class="ui-g-12">
-                    
+                <div class="ui-g-12"> 
                     <div class="ui-g">
                         <div class="ui-g-4 ui-fluid">
                             <div>
@@ -265,7 +265,7 @@ import { StoreModel } from '../../../shared/models/store.model';
                     </button>
                     <button style="margin-right:10px;" *ngIf="formUser.disabled && permisoEditarDatosBasicos" pButton type="button" label="Editar datos basicos"  (click)="formUser.enable()" class="ui-button-success"></button>
                     <button style="margin-right:10px;" *ngIf="formUser.enabled" pButton type="button" label="Descartar cambios" (click)="loadFormData()" class="ui-button-danger"></button>
-                    <button style="margin-right:10px;" *ngIf="formUser.enabled" [disabled]="!formUser.valid" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
+                    <button style="margin-right:10px;" *ngIf="formUser.enabled" [disabled]="!formUser.valid" pButton type="submit" label="Actualizar" (click)="messageEdit()" class="ui-button-primary"></button>
                 </div>
             </div>
         </form>
@@ -304,7 +304,10 @@ export class DatosBasicosColaboradorComponent implements OnInit {
     //viewChild
     @ViewChild('rcc') rcc: ResetContrasenaColaboradorComponent;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private messageService: MessageService
+        ) {}
 
     ngOnInit() {
         this.createForm();
@@ -405,6 +408,10 @@ export class DatosBasicosColaboradorComponent implements OnInit {
     onChangePais() {
         this.formUser.get('departamento').setValue(null);
         this.formUser.get('ciudad').setValue(null);
+    }
+
+    messageEdit() {
+        this.messageService.add({severity:'success', summary:'Actualización exitosa', detail:'Datos básicos actualizados'});
     }
 
     onSubmit() {

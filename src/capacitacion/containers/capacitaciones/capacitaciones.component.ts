@@ -53,9 +53,6 @@ import { HasPermisionService } from "../../../shared/services";
                                             <p-sortIcon field="fecha_fin"></p-sortIcon>
                                         </th>
                                         <th rowspan="2">
-                                            Estado
-                                        </th>
-                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
@@ -76,11 +73,6 @@ import { HasPermisionService } from "../../../shared/services";
                                         <td>{{ capacitaciones.tema }}</td>
                                         <td>{{ capacitaciones.fecha_inicio | date : dateFormat }}</td>
                                         <td>{{ capacitaciones.fecha_fin | date : dateFormat  }}</td>
-                                        <td>
-                                            <span *ngIf="capacitaciones.id_estado == 2">Cerrado</span>
-                                            <span *ngIf="capacitaciones.id_estado == 1">Abierto</span>
-                                            <span *ngIf="capacitaciones.id_estado != 1 && capacitaciones.id_estado !=2">Sin asignar</span>
-                                        </td>
                                         <td style="text-align: center;">
                                             <button style="margin-right: 10px;" *ngIf="hasPermision(802)|async" pButton type="button" (click)="detailCapacitacion(capacitaciones)" icon="pi pi-search" class="ui-button-primary"></button>
                                             <button pButton type="button" *ngIf="hasPermision(803)|async" icon="pi pi-trash" (click)="onDeleteCapacitacion(capacitaciones)" class="ui-button-danger"></button>
@@ -159,6 +151,7 @@ export class CapacitacionesComponent implements OnInit {
     }
 
     loadCapacitacionesLazy(event) {
+        this.showWaitDialog('Consultando datos requeridos, un momento por favor...')
         this.loading = true;
         this.capacitacionesService
             .getCapacitacionesLazy(event)
@@ -166,11 +159,12 @@ export class CapacitacionesComponent implements OnInit {
                 this.capacitaciones = response.data;
                 this.totalRecords = response.totalRows;
                 this.loading = false;
-                console.log(this.capacitaciones);
+                this.hideWaitDialog();
             });
     }
 
     oncreateCapacitacion(data: CapacitacionModel) {
+        this.showWaitDialog('Creando capacitación, un momento por favor...')
         this.store
             .select(this.fromAuth.getUser)
             .pipe(map(usuario => usuario.id))
@@ -183,19 +177,20 @@ export class CapacitacionesComponent implements OnInit {
                             ...this.capacitaciones,
                             response
                         ];
-
-                        console.log(this.capacitaciones, "hi");
+                        this.hideWaitDialog();
                     });
             });
     }
 
     onDeleteCapacitacion(event: CapacitacionModel) {
+        this.showWaitDialog('Eliminando capacitación, un momento por favor...')
         this.capacitacionesService.onEliminar(event).subscribe(() => {
             this.capacitaciones = this.capacitaciones.filter(
                 (capacitaciones: CapacitacionModel) => {
                     return capacitaciones.id != event.id;
                 }
             );
+            this.hideWaitDialog();
         });
     }
 

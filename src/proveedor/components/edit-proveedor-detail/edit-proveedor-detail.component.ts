@@ -6,6 +6,7 @@ import { BancoModel } from '../../../shared/models/banco.model';
 import { RegimenModel } from '../../../shared/models/regimen.model';
 import { CiudadModel } from '../../../shared/models/ciudad.model';
 import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificacion.model';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'edit-proveedor-detail',
@@ -80,7 +81,7 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
                                 </div>
                                 <div class="ui-g-6 ui-fluid">
                                     <div>
-                                        <label>Email Contacto 1:</label>
+                                        <label>Email contacto 1:</label>
                                     </div>
                                     <input type="email" pInputText formControlName="email_contacto1" />
                                 </div>
@@ -235,7 +236,7 @@ import { TipoIdentificacionModel } from '../../../shared/models/tipo-identificac
                             <div class="ui-g-12 text-aling-right">
                                 <button style="margin-right:10px;" *ngIf="detailProveedor.disabled && permisoEditar" pButton type="button" label="Editar datos" (click)="detailProveedor.enable()" class="ui-button-success"></button>
                                 <button style="margin-right:10px;" *ngIf="detailProveedor.enabled" pButton type="button" label="Descartar cambios" (click)="loadFormData(proveedor)" class="ui-button-danger"></button>
-                                <button style="margin-right:10px;" *ngIf="detailProveedor.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
+                                <button style="margin-right:10px;" *ngIf="detailProveedor.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary" (click)="messageEdit()"></button>
                                 </div>
                             </div>
                     </form>
@@ -261,7 +262,10 @@ export class EditProveedorDetalComponent implements OnInit {
     
 
     //properties
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private messageService: MessageService
+        ) {}
 
     ngOnInit(){ 
         this.createForm();
@@ -297,6 +301,10 @@ export class EditProveedorDetalComponent implements OnInit {
         moneda: ['',Validators.required],
         calificacion: ['',Validators.required],
         });
+    }
+
+    messageEdit(){
+        this.messageService.add({severity: 'success', summary: 'Actualización exitosa', detail: 'Datos básicos actualizados'});
     }
 
     loadFormData( proveedor : ProveedorModel){

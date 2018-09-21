@@ -30,7 +30,7 @@ import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/cap
                             <input type="number" pInputText formControlName="identificacion_asistente" />
                     </div>
                     <div class="ui-g-4">
-                    <button pButton *ngIf="permisoCreateAE && !disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
+                    <button pButton *ngIf="!disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
                 <p-table [value]="asistenteExterno" [paginator]="true" [rows]="10">
@@ -56,8 +56,8 @@ import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/cap
                                         <td>{{asistenteExterno?.identificacion_asistente}} </td>
                                         <td>{{asistenteExterno?.calificacion}}</td>
                                         <td style="text-align: center;">
-                                        <button pButton *ngIf="permisoEditAE && !disable" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteExterno)" ></button>
-                                            <button pButton *ngIf="permisoDeleteAE && !disable" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteExterno)" class="ui-button-danger"></button>
+                                        <button pButton *ngIf="!disable" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteExterno)" ></button>
+                                            <button pButton *ngIf="!disable" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteExterno)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -88,14 +88,6 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
     @Input()
     asistenteExterno: CapacitacionAsistenteExternoModel;
 
-    @Input()
-    permisoCreateAE: boolean;
-
-    @Input()
-    permisoEditAE: boolean;
-
-    @Input()
-    permisoDeleteAE: boolean;
 
     ngOnInit() {
         this.createForm();

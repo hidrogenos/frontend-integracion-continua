@@ -44,15 +44,13 @@ import { CesantiaModel } from "../../../shared/models/cesantia.model";
                                             Nombre
                                             <p-sortIcon field="nombre" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
                                     <tr>
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>

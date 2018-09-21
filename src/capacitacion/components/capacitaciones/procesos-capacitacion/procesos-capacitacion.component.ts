@@ -32,7 +32,7 @@ import { StoreModel } from "../../../../shared/models/store.model";
                         </p-dropdown>
                     </div>
                     <div class="ui-g-2 text-aling-right">
-                    <button pButton type="submit"  [disabled]="!form.valid" *ngIf="permisoAdd && !disable" label="Adjuntar proceso" class="ui-button"></button>
+                    <button pButton type="submit"  [disabled]="!form.valid" *ngIf="!disable" label="Adjuntar proceso" class="ui-button"></button>
                     </div>
                 </div>
                 <p-table [value]="procesosAsociados" [paginator]="true" [rows]="10">
@@ -51,7 +51,7 @@ import { StoreModel } from "../../../../shared/models/store.model";
                                         <td>{{proceso.proceso}}</td>
                                         
                                         <td style="text-align: center;">
-                                            <button pButton type="button" icon="pi pi-trash" *ngIf="permisoDelete && !disable" (click)="onDeleteProceso(proceso)" class="ui-button-danger"></button>
+                                            <button pButton type="button" icon="pi pi-trash" *ngIf="!disable" (click)="onDeleteProceso(proceso)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -80,12 +80,6 @@ export class ProcesosCapacitacionComponent implements OnInit {
 
     @Output()
     addProceso = new EventEmitter<MapaProcesoHijoModel>();
-
-    @Input()
-    permisoAdd: boolean;
-
-    @Input()
-    permisoDelete: boolean;
 
     constructor(private fb: FormBuilder, private store: Store<StoreModel>) {}
     ngOnInit() {

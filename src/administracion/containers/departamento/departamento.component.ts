@@ -48,7 +48,7 @@ import { Store } from "@ngrx/store";
                                             Pais
                                             <p-sortIcon field="id_pais" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
@@ -58,8 +58,6 @@ import { Store } from "@ngrx/store";
                                         </th>
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'id_pais', 'contains')">
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>

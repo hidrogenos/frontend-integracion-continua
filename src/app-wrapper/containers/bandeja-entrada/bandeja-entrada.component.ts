@@ -39,7 +39,7 @@ import { ComponenteCargado } from "../../../shared/services/utils/abstract-clase
             <be-documentos-tabla #docvencer [titulo]="'Documentos próximos a vencer'"
                 (onSelectDocumento)="redirectToDocumento($event)"
                 (onConsultarDocumentos)="consultarLazyProxVencer($event)"></be-documentos-tabla>
-            <be-documentos-tabla #docobs [titulo]="'Vistos buenos pendientes de garantía'" *ngIf="hasPermision(11000) | async"
+            <be-documentos-tabla #docobs [titulo]="'Vistos buenos pendientes de garantía de calidad'" *ngIf="hasPermision(11000) | async"
                 (onSelectDocumento)="redirectToDocumento($event)"
                 (onConsultarDocumentos)="consultarLazyVistoBueno($event)"></be-documentos-tabla>
         </div>

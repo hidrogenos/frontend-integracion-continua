@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import { DocumentoModel } from '../../models/documento.model';
 import { DocumentoAdjuntoService } from '../documento-adjunto/documento-adjunto.service';
 import { DocumentoDivulgacionRegistroService } from '../documento-divulgacion-registro/documento-divulgacion-registro.service';
+import { DocumentoArchivoSoporteService } from '../documento-archivo-soporte/documento-archivo-soporte.service';
 
 @Injectable()
 export class DocumentoService {
@@ -15,6 +16,7 @@ export class DocumentoService {
         private http: HttpClient,
         private documentoAdjuntoService: DocumentoAdjuntoService,
         private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
+        private documentoArchivosSoporte: DocumentoArchivoSoporteService
     ) { }
 
     getDocumentoById(idDocumento: number) {
@@ -43,6 +45,10 @@ export class DocumentoService {
         if (documento.divulgacion_registros) {
             documento.divulgacion_registros = documento.divulgacion_registros.map(
                 adjunto => this.documentoDivulgacionService.transformDocumentoDivulgacionRegistroResponse(adjunto)
+            )
+        }if (documento.archivos_soporte) {
+            documento.archivos_soporte = documento.archivos_soporte.map(
+                archivo_soporte => this.documentoArchivosSoporte.transformDocumentoArchivoSoporteResponse(archivo_soporte)
             )
         }
         return {
