@@ -181,8 +181,18 @@ export class ColaboradorDetalleService {
                 }/administracion/colaborador/detalle/update-usuario/${id}`,
                 aux
             )
-            .pipe(catchError((error: any) => throwError(error)));
+            .pipe(
+                map(usuario =>
+                    
+                        this.usuarioService.transformResponseUsuario(
+                            usuario
+                        )
+                    
+                ),
+                catchError((error: any) => throwError(error))
+            );
     }
+
 
     updateDestreza(
         id: number,

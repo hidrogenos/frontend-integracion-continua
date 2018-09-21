@@ -48,7 +48,7 @@ import { EditCiudadDialogComponent } from "../../components/edit-ciudad-dialog/e
                                             Departamento
                                             <p-sortIcon field="id_departamento" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
@@ -58,8 +58,6 @@ import { EditCiudadDialogComponent } from "../../components/edit-ciudad-dialog/e
                                         </th>
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'id_departamento  ', 'contains')">
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>

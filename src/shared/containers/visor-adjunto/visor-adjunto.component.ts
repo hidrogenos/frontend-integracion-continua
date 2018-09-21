@@ -27,7 +27,8 @@ import {
     AccionCorrectivaTareaAdjuntoService,
     AccionPreventivaAdjuntoService,
     DocumentoService,
-    CapacitacionDocumentoService
+    CapacitacionDocumentoService,
+    DocumentoArchivoSoporteService
 } from "../../services";
 import { DomSanitizer } from "@angular/platform-browser";
 import { PdfViewerComponent } from "./../../components/pdf-viewer/pdf-viewer.component";
@@ -65,6 +66,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private store: Store<StoreModel>,
         private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
         private documentoAdjuntoService: DocumentoAdjuntoService,
+        private documentoArchivoSoporteService: DocumentoArchivoSoporteService,
         private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
         private capacitacionDocumentoService: CapacitacionDocumentoService,
         private documentoService: DocumentoService,
@@ -143,6 +145,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             case environment.tipos_documento.accion_preventiva_tarea_adjunto.id:
                 this.getAccionPreventivaTareaAdjunto(idDocumento);
                 break;
+            case environment.tipos_documento.documento_archivo_soporte.id:
+                this.getDocumentoArchivoSoporte(idDocumento);
+                break;
             default:
                 break;
         }
@@ -200,6 +205,29 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 this.showImage(response.path);
             } else {
                 this.downloadFile(response.path, response.nombre);
+            }
+        });
+    }
+
+    getDocumentoArchivoSoporte(idDocumento) {
+        this.documentoArchivoSoporteService.getArchivoSoporte(idDocumento).subscribe(response => {
+            if (response.extension == "pdf") {
+                this.hasPermisionService
+                    .hasPermision(
+                        environment.tipos_documento.documento_archivo_soporte
+                            .permiso_impresion
+                    )
+                    .subscribe(permisoImpresion => {
+                        this.showPdf(response.path, permisoImpresion);
+                    });
+            } else if (
+                environment.extensiones_imagen.findIndex(
+                    e => e == response.extension
+                ) != -1
+            ) {
+                this.showImage(response.path);
+            } else {
+                this.downloadFile(response.path, response.titulo);
             }
         });
     }

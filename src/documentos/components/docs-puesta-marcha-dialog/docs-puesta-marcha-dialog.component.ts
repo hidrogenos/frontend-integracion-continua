@@ -80,7 +80,7 @@ import { FileUpload } from 'primeng/primeng';
                 </div>
             </div>
             <p-footer>
-                <button type="button" pButton icon="pi pi-times" (click)="onHideDialog()" label="Cancelar" class="ui-button-danger"></button>
+                <button type="button" pButton icon="pi pi-times" (click)="onHideDialog()" (click)="form.reset()" label="Cancelar" class="ui-button-danger"></button>
                 <button type="button" pButton icon="pi pi-save" label="Vigente" 
                 (click)="confirmDialog()" class="ui-button-primary" [disabled]="form.invalid"></button>
             </p-footer>
@@ -115,8 +115,8 @@ export class DocsPuestaMarchaDialogComponent implements OnInit {
         private fb: FormBuilder
     ) {
         this.form = this.fb.group({
-            fecha_inicio: [null, Validators.required],
-            fecha_fin: [null, Validators.required],
+            fecha_inicio: [new Date(), Validators.required],
+            fecha_fin: [new Date(), Validators.required],
             observacion: [null, Validators.required],
         })
     }

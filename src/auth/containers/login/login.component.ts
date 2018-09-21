@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit() {
-        this.store.dispatch(
+         this.store.dispatch(
             new fromAuth.GetToken({
                 grant_type: 'password',
                 client_id: environment.auth.clientId,
@@ -92,5 +92,6 @@ export class LoginComponent implements OnInit {
                 scope: ''
             })
         );
+        
     }
 }

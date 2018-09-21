@@ -35,7 +35,7 @@ import { StoreModel } from "../../../../shared/models/store.model";
                     </div>
                     
                     <div class="ui-g-4">
-                    <button pButton *ngIf="permisoEditAI && !disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
+                    <button pButton *ngIf="!disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
                 <p-table [value]="loadedInterno" [paginator]="true" [rows]="10">
@@ -57,8 +57,8 @@ import { StoreModel } from "../../../../shared/models/store.model";
                                         <td>{{asistenteActual?.usuario.nombre}} </td>
                                         <td>{{asistenteActual?.calificacion}}</td>
                                         <td style="text-align: center;">
-                                        <button pButton *ngIf="permisoEditAI && !disable" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteActual)" ></button>
-                                            <button pButton *ngIf="permisoDeleteAI && !disable" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteActual)" class="ui-button-danger"></button>
+                                        <button pButton *ngIf="!disable" type="button" icon="pi pi-pencil" (click)="showEdit(asistenteActual)" ></button>
+                                            <button pButton *ngIf="!disable" style="margin-left: 10px" type="button" icon="pi pi-trash" (click)="onDelete(asistenteActual)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -91,15 +91,6 @@ export class CapacitacionAsistentesInternosComponent implements OnInit {
 
     @Input()
     loadedInterno: CapacitacionAsistenteInternoModel[];
-
-    @Input()
-    permisoCreateAI: boolean;
-
-    @Input()
-    permisoEditAI: boolean;
-
-    @Input()
-    permisoDeleteAI: boolean;
 
     ngOnInit() {
         this.createForm();

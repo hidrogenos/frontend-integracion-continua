@@ -82,6 +82,9 @@ export * from "./documento-tipo/documento-tipo.service";
 import { DepartamentoService } from "./departamento/departamento.service";
 export * from "./departamento/departamento.service";
 
+import { DocumentoArchivoSoporteService } from './documento-archivo-soporte/documento-archivo-soporte.service';
+export * from './documento-archivo-soporte/documento-archivo-soporte.service';
+
 import { HasPermisionService } from "./utils/auth-has-permision/auth-has-permision.service";
 export * from "./utils/auth-has-permision/auth-has-permision.service";
 
@@ -174,6 +177,7 @@ export const services: any[] = [
     DocumentoEstadoService,
     DocumentoProcesoService,
     DocumentoTipoService,
+    DocumentoArchivoSoporteService,
     DepartamentoService,
     EvaluacionProveedorService,
     EquipoService,

@@ -38,9 +38,9 @@ export class UsuarioService {
         return {
             ...usuario,
             fecha_ingreso: usuario.fecha_ingreso * 1000,
-            documentos: usuario.documentos.map(documento =>
+            documentos: usuario.documentos ? usuario.documentos.map(documento =>
                 this.usuarioDocumentoService.transformResponse(documento)
-            )
+            ): []
         };
     }
 }

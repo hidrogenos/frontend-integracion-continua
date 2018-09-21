@@ -15,7 +15,7 @@ import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.m
                     type="button" 
                     label="Relacionar procesos" 
                     class="ui-button-primary"
-                    (click)="onRelacionarProcesos.emit(selectedProcesos)">
+                    (click)="relacionarProcesos()">
                 </button>
             </div>
         </div>
@@ -49,6 +49,7 @@ import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.m
 })
 export class UsuarioProcesosComponent {
     //atributos
+
     selectedProcesos: MapaProcesoHijoModel[];
 
     //events
@@ -70,5 +71,13 @@ export class UsuarioProcesosComponent {
     
     constructor() {}
 
-    relacionarProcesos() {}
+    relacionarProcesos() { 
+        let procesosNoRepetidos = this.selectedProcesos.filter(selectedProceso => {
+            const procesoBuscado = this.usuarioProcesos.find(usuarioProceso => usuarioProceso.id == selectedProceso.id);
+            if(!procesoBuscado){
+                return selectedProceso;
+            }
+        } );
+        this.onRelacionarProcesos.emit(procesosNoRepetidos);
+    }
 }

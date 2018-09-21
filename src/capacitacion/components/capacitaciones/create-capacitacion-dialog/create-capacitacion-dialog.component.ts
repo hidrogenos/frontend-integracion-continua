@@ -128,7 +128,6 @@ export class CreateCapacitacionDialogComponent implements OnInit {
             observaciones: this.form.value.observaciones,
             procesos: this.form.value.procesos
         };
-        console.log(capacitacion, "create");
         this.create.emit(capacitacion);
         this.display = false;
         this.form.reset();
