@@ -31,6 +31,8 @@ export * from './pension/pension.component';
 import { PaisComponent } from './pais/pais.component';
 export * from './pais/pais.component';
 
+import { DocumentosRestringidosListaComponent } from './documentos-restringidos-lista/documentos-restringidos-lista.component';
+export * from './documentos-restringidos-lista/documentos-restringidos-lista.component';
 
 export const containers: any[] = [
     ArlComponent,
@@ -41,6 +43,7 @@ export const containers: any[] = [
     CajaCompensacionComponent,
     CesantiasComponent,
     CiudadComponent,
+    DocumentosRestringidosListaComponent,
     PermisosComponent,
     PensionComponent,
     PaisComponent

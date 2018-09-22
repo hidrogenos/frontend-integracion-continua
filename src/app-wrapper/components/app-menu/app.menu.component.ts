@@ -192,6 +192,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Ciudad',
                             icon :'fa fa-fw fa-map-signs',
                             routerLink: ['/administracion/ciudad']
+                        },
+                        {
+                            label: 'Documentos restringidos',
+                            icon: 'fa fa-shield',
+                            routerLink: ['/administracion/lista-documentos-restringidos']
                         }
                     ]
                 },
