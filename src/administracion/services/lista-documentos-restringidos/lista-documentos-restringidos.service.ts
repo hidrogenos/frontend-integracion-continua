@@ -5,6 +5,7 @@ import { map, catchError } from "rxjs/operators";
 import { throwError, Observable } from "rxjs";
 import { DocumentoModel } from "../../../shared/models/documento.model";
 import { ListaDocumentoRestringidoModel } from "../../../shared/models/lista-documento-restringido.model";
+import { DocumentoRestringidoModel } from "../../../shared/models/documento-restringido.model";
 
 
 const url_point_api = "/administracion/lista-documentos-restringidos";
@@ -13,8 +14,8 @@ const url_point_api = "/administracion/lista-documentos-restringidos";
 export class ListaDocumentosRestringidosService {
     constructor(private http: HttpClient) { }
 
-    addDocumentosToListaRestringidos(id: number, data: DocumentoModel[]) {
-        return this.http.post(`${environment.apiUrl}${url_point_api}/add-documentos-restringidos/${id}`, data)
+    addDocumentosToListaRestringidos(id: number, data: DocumentoModel[]) : Observable<DocumentoRestringidoModel[]> {
+        return this.http.post<DocumentoRestringidoModel[]>(`${environment.apiUrl}${url_point_api}/add-documentos-restringidos/${id}`, data)
             .pipe(
                 map(response => response),
                 catchError((error: any) => throwError(error)
@@ -31,8 +32,8 @@ export class ListaDocumentosRestringidosService {
             );
     }
 
-    getDocumentosByCodigo(filtro): Observable<DocumentoModel[]> {
-        return this.http.post<DocumentoModel[]>(`${environment.apiUrl}${url_point_api}/get-documentos-by-codigo`, filtro)
+    getDocumentosByCodigo(data): Observable<DocumentoModel[]> {
+        return this.http.post<DocumentoModel[]>(`${environment.apiUrl}${url_point_api}/get-documentos-by-codigo`, data)
             .pipe(
                 map(response => response),
                 catchError((error: any) => throwError(error)
@@ -60,6 +61,15 @@ export class ListaDocumentosRestringidosService {
 
     deleteListaDocumentosRestringidos(id: number) {
         return this.http.delete<ListaDocumentoRestringidoModel>(`${environment.apiUrl}${url_point_api}/delete-lista-documentos-restringidos/${id}`)
+            .pipe(
+                map(response => response),
+                catchError((error: any) => throwError(error)
+                )
+            );
+    }
+
+    deleteDocumentoRestringido(id: number){
+        return this.http.delete<DocumentoRestringidoModel>(`${environment.apiUrl}${url_point_api}/delete-documento-restringido/${id}`)
             .pipe(
                 map(response => response),
                 catchError((error: any) => throwError(error)

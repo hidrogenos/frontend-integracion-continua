@@ -15,7 +15,8 @@ import { ListaDocumentoRestringidoModel } from "../../../shared/models/lista-doc
                 sortField="nombre"
                 selectionMode="single"
                 (onLazyLoad)="onLoadListaDocumentosRestringidos.emit($event)"
-                (onRowSelect)="onRowSelect($event)">
+                (onRowSelect)="onRowSelect($event)"
+                (onRowUnselect)="onRowUnselect()">
 
                 <ng-template pTemplate="header">
                             <tr>
@@ -37,17 +38,22 @@ import { ListaDocumentoRestringidoModel } from "../../../shared/models/lista-doc
                             <tr [pSelectableRow]="rowData">
                                 <td> {{ lista.nombre }} </td>
                                 <td style="text-align: center;">
-                                    <button style="margin-right:10px;" pButton
+                                    <button
+                                        *ngIf="permisoEditarListaDocumentosRestringidos" 
+                                        style="margin-right:10px;"
+                                        pButton
                                         type="button"
                                         icon="pi pi-pencil"
-                                        class="ui-button-primary"
+                                        class="ui-button-warning"
                                         (click)="onEditListaDocumentosRestringidos.emit(lista)">
                                     </button>
-                                    <button style="margin-right:10px;" pButton 
+                                    <button
+                                        *ngIf="permisoEliminarListaDocumentosRestringidos" 
+                                        style="margin-right:10px;" pButton 
                                         type="button"
                                         icon="pi pi-trash"
                                         class="ui-button-danger"
-                                        (click)="onDeleteListaDocumentosRestringidos.emit(lista)">
+                                        (click)="onDeleteListaDocumentosRestringidos.emit(lista); onRowUnselect()">
                                     </button>
                                 </td>
                             </tr>
@@ -94,6 +100,11 @@ export class ListaDocumentosRestringidosComponent {
 
     onRowSelect(event) {
         const selectedLista = event.data;
+        this.onSelectListaDocumentosRestringidos.emit(selectedLista);
+    }
+
+    onRowUnselect(){
+        const selectedLista = null;
         this.onSelectListaDocumentosRestringidos.emit(selectedLista);
     }
 

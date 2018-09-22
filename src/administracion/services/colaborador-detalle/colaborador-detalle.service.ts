@@ -25,6 +25,8 @@ import { UsuarioDocumentoModel } from '../../../shared/models/usuario-documento.
 import { UsuarioDocumentoService } from '../../../shared/services/usuario-documento/usuario-documento.service';
 import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
 import { UsuarioProcesoModel } from '../../../shared/models/usuario-proceso.model';
+import { ListaDocumentoRestringidoModel } from '../../../shared/models/lista-documento-restringido.model';
+import { UsuarioListaDocumentosRestringidosModel } from '../../../shared/models/usuario-lista-documentos-restringidos.model';
 
 @Injectable()
 export class ColaboradorDetalleService {
@@ -103,6 +105,20 @@ export class ColaboradorDetalleService {
             .pipe(catchError((error: any) => throwError(error)));
     }
 
+    deleteUsuarioListaDocumentosRestringidos(data : {
+        id_usuario,
+        id_lista_documentos_restringidos
+    }): Observable<UsuarioListaDocumentosRestringidosModel>{
+        return this.http
+        .post<UsuarioListaDocumentosRestringidosModel>(
+            `${
+                environment.apiUrl
+            }/administracion/colaborador/detalle/delete-usuario-lista-documentos-restringidos`,data
+        )
+        .pipe(catchError((error: any) => throwError(error)));
+    }
+
+
     downloadUsuarioDestrezaDocumento(data: { path: string }) {
         return this.http
             .post(`${environment.apiUrl}/utils/get-adjunto`, data, {
@@ -137,6 +153,7 @@ export class ColaboradorDetalleService {
         perfiles: PerfilModel[];
         tipos_identificacion: TipoIdentificacionModel[];
         procesos: MapaProcesoHijoModel[];
+        listasDocumentosRestringidos: ListaDocumentoRestringidoModel[]
     }> {
         return this.http
             .get<any>(
@@ -159,6 +176,17 @@ export class ColaboradorDetalleService {
                 data
             )
             .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    relacionarListasDocumentosRestringidos(id, data: {listas : ListaDocumentoRestringidoModel[]}): Observable<UsuarioModel>{
+        return this.http
+        .post<UsuarioModel>(
+            `${
+                environment.apiUrl
+            }/administracion/colaborador/detalle/relacionar-listas-documentos-restringidos/${id}`,
+            data
+        )
+        .pipe(catchError((error: any) => throwError(error)));
     }
 
     resetPassword(data): Observable<UsuarioModel> {

@@ -88,6 +88,9 @@ export * from './lista-permisos/lista-permisos.component';
 import { ListaDocumentosRestringidosComponent } from './lista-documentos-restringidos/lista-documentos-restringidos.component';
 export * from './lista-documentos-restringidos/lista-documentos-restringidos.component';
 
+import { UsuarioListaDocumentosRestringidosComponent } from './usuario-lista-documentos-restringidos/usuario-lista-documentos-restringidos.component';
+export * from './usuario-lista-documentos-restringidos/usuario-lista-documentos-restringidos.component';
+
 import { ResetContrasenaColaboradorComponent } from './reset-contrasena-colaborador/reset-contrasena-colaborador.component';
 export * from './reset-contrasena-colaborador/reset-contrasena-colaborador.component';
 
@@ -126,5 +129,6 @@ export const components: any[] = [
     ListaPermisosComponent,
     ListaDocumentosRestringidosComponent,
     ResetContrasenaColaboradorComponent,
-    UsuarioProcesosComponent
+    UsuarioProcesosComponent,
+    UsuarioListaDocumentosRestringidosComponent
 ];

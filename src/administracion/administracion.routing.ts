@@ -107,6 +107,10 @@ export const ROUTES: Routes = [
             {
                 path: 'lista-documentos-restringidos',
                 component: fromContainers.DocumentosRestringidosListaComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1383
+                }
             }
         ]
     }
