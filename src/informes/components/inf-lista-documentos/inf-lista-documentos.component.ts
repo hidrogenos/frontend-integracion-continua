@@ -37,7 +37,7 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
                             <ng-template pTemplate="body" let-rowData let-columns="columns">
                                 <tr [pSelectableRow]="rowData">
                                     <td>
-                                        <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleDocumento(rowData.id)"
+                                        <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleDocumento(rowData.id, $event)"
                                         [ngStyle]="{'background-color': rowData.estado.color ,'border-radius': '100%'}">                
                                         </button>
                                     </td>
@@ -69,7 +69,7 @@ export class InfListaDocumentosComponent {
     onLoadDocumentosLazy = new EventEmitter<any>();
 
     @Output()
-    onVerDetalleDocumento = new EventEmitter<number>();
+    onVerDetalleDocumento = new EventEmitter<any>();
 
     @Output()
     onExportPDF = new EventEmitter<any>();
@@ -95,7 +95,11 @@ export class InfListaDocumentosComponent {
         this.onExportPDF.emit(this.filtros);
     }
 
-    verDetalleDocumento(idDocumento: number) {
-        this.onVerDetalleDocumento.emit(idDocumento)
+    verDetalleDocumento(idDocumento: number, event: MouseEvent) {
+        let infoDocumento = {
+            idDocumento: idDocumento, event: event
+        }
+        this.onVerDetalleDocumento.emit(infoDocumento)
+        
     }
 }

@@ -1,24 +1,22 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { StoreModel } from "../../../shared/models/store.model";
 import { AdmDepartamentoService } from "../../services/adm-departamento/adm-departamento.service";
 import { AdmCiudadService } from '../../services/adm-ciudad/adm-ciudad.service';
 import { CiudadService, HasPermisionService } from "../../../shared/services";
-import { DepartamentoService } from '../../../shared/services/departamento/departamento.service';
 import { DepartamentoModel } from "../../../shared/models/departamento.model";
 import { CiudadModel } from "../../../shared/models/ciudad.model";
 import { DataTable } from "primeng/primeng";
-
-import * as fromShared from './../../../shared/store';
 import { forkJoin } from "rxjs";
 import { EditCiudadDialogComponent } from "../../components/edit-ciudad-dialog/edit-ciudad-dialog.component";
 
+//store
+import { Store } from "@ngrx/store";
+import { StoreModel } from "../../../shared/models/store.model";
+import * as fromShared from './../../../shared/store';
 
 @Component({
     selector: 'ciudad-component',
     styleUrls: ['ciudad.component.scss'],
     template: `
-
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
@@ -42,7 +40,7 @@ import { EditCiudadDialogComponent } from "../../components/edit-ciudad-dialog/e
                                     <tr>
                                         <th pSortableColumn="nombre">
                                             Nombre
-                                            <p-sortIcon field="nombre" ></p-sortIcon>
+                                            <p-sortIcon field="nombre"></p-sortIcon>
                                         </th>
                                         <th pSortableColumn="id_departamento">
                                             Departamento
@@ -165,7 +163,6 @@ export class CiudadComponent implements OnInit{
             this.loading = false;
             this.hideWaitDialog();
         })
-
     }
 
     deleteCiudad(event: CiudadModel){
@@ -187,7 +184,6 @@ export class CiudadComponent implements OnInit{
             this.ciudades = this.ciudades.map(element => {
                 return element.id == response.id ? response : element;
             })
-            
             this.hideWaitDialog();
         })
     }
@@ -196,7 +192,6 @@ export class CiudadComponent implements OnInit{
         this.store.dispatch(new fromShared.HideWaitDialog());
     }
 
-    
     showWaitDialog(header: string, body?: string){
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body}));
     }

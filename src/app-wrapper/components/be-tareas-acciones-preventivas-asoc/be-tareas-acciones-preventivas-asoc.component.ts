@@ -14,14 +14,13 @@ import { AccionPreventivaTareaModel } from "../../../shared/models/accion-preven
                 [rows]="10" [totalRecords]="total" lazyLoadOnInit="false" [loading]="loading">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                    <th style="width:50px">Ver</th>
+                    <th style="width:50px" rowspan="2">Ver</th>
                         <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                             {{col.header}}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
                     </tr>
                     <tr>
-                        <th></th>
                         <th *ngFor="let col of cols" class="ui-fluid">
                             <input pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
                         </th>
@@ -81,9 +80,7 @@ export class BeTareasAccionesPreventivasAsocComponent {
             });
     }
 
-    verDetalleTareaAccionPreventiva(
-        tareaAccionPreventiva: AccionPreventivaTareaModel
-    ) {
+    verDetalleTareaAccionPreventiva(tareaAccionPreventiva: AccionPreventivaTareaModel) {
         this.onSelectTareaAccionPreventiva.emit(tareaAccionPreventiva);
     }
 }

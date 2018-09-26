@@ -221,10 +221,12 @@ export class AccionCorrectivaListaComponent implements OnInit {
             });
     }
 
-    selectAccionCorrectiva(data: AccionCorrectivaModel) {
+    selectAccionCorrectiva(data) {
+        data.event.ctrlKey
+        ? window.open(`${environment.baseUrl}/acciones/acciones-correctivas/detalle/${data.idAccionC}`):
         this.store.dispatch(
             new fromRootStore.Go({
-                path: [`/acciones/acciones-correctivas/detalle/${data.id}`]
+                path: [`/acciones/acciones-correctivas/detalle/${data.idAccionC}`]
             })
         );
     }

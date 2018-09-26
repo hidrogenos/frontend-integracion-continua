@@ -14,7 +14,7 @@ import { ChartsDemoComponent } from './demo/view/chartsdemo.component';
 import { FileDemoComponent } from './demo/view/filedemo.component';
 import { UtilsDemoComponent } from './demo/view/utilsdemo.component';
 import { DocumentationComponent } from './demo/view/documentation.component';
-import { AppWrapperComponent, AccessDeniedComponent, BandejaEntradaComponent } from './containers';
+import { AppWrapperComponent, AccessDeniedComponent, BandejaEntradaComponent, DocumentAccessDeniedComponent } from './containers';
 
 import * as fromSharedContainers from './../shared/containers';
 import * as fromGuards from './guards';
@@ -29,6 +29,10 @@ export const ROUTES: Routes = [
             {
                 path: 'acceso-denegado',
                 component: AccessDeniedComponent
+            },
+            {
+                path: 'documento-vencido',
+                component: DocumentAccessDeniedComponent
             },
             {
                 path: 'administracion',

@@ -50,7 +50,7 @@ import { environment } from "../../../environments/environment";
                             <ng-template pTemplate="body" let-capacitaciones>
                                 <tr>
                                     <td style="text-align: center;">
-                                        <button style="margin-right: 10px;" pButton type="button" (click)="detailCapacitacion(capacitaciones)" icon="pi pi-search" class="ui-button-primary"></button>
+                                        <button style="margin-right: 10px;" pButton type="button" (click)="detailCapacitacion(capacitaciones.id, $event)" icon="pi pi-search" class="ui-button-primary"></button>
                                     </td>
                                     <td>{{ capacitaciones.tema }}</td>
                                     <td>{{ capacitaciones.fecha_inicio | date : dateFormat }}</td>
@@ -88,10 +88,13 @@ export class BeCapacitacionesAsocComponent {
                 console.log(this.capacitaciones);
             });
     }
-    detailCapacitacion(event: CapacitacionModel) {
+    detailCapacitacion(id: number, event: MouseEvent) {
+
+        event.ctrlKey
+        ? window.open(`capacitaciones/detalle/${id}`):
         this.store.dispatch(
             new fromRoot.Go({
-                path: [`capacitaciones/detalle/${event.id}`]
+                path: [`capacitaciones/detalle/${id}`]
             })
         );
     }

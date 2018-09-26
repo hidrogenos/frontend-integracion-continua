@@ -1,7 +1,5 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
-import { ArlModel } from "../../../shared/models/arl.model";
-import { CesantiaModel } from "../../../shared/models/cesantia.model";
 import { DepartamentoModel } from "../../../shared/models/departamento.model";
 import { PaisModel } from "../../../shared/models/pais.model";
 

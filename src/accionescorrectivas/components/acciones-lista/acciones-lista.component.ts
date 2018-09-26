@@ -28,7 +28,7 @@ export class AccionesListaComponent {
     onLazy: EventEmitter<any>;
 
     @Output()
-    onEdit: EventEmitter<AccionCorrectivaModel>;
+    onEdit: EventEmitter<any>;
 
     @Output()
     onDeleteAccionCorrectiva: EventEmitter<AccionCorrectivaModel>;
@@ -47,8 +47,11 @@ export class AccionesListaComponent {
         this.onLazy.emit( event );
     }
 
-    selectAccionCorrectiva(data: AccionCorrectivaModel) {
-        this.onEdit.emit(data);
+    selectAccionCorrectiva(idAccionC: number, event: MouseEvent) {
+        let infoAcccionCorrectiva = {
+            idAccionC: idAccionC, event: event
+        }
+        this.onEdit.emit(infoAcccionCorrectiva);
     }
 
     deleteAccionCorrectiva(data: AccionCorrectivaModel) {
