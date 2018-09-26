@@ -26,7 +26,6 @@ import { HasPermisionService } from '../../../shared/services';
         <div class="ui-g-12">
             <div class="card card-w-title">
                 <h1><i class="fa fa-book" aria-hidden="true"></i> {{ tipoDocumento?.nombre }}</h1>
-                
                 <div class="ui-g">
                     <div class="ui-g-6">
                         <div class="tooltip">
@@ -50,7 +49,10 @@ import { HasPermisionService } from '../../../shared/services';
                         <docs-tabla-documentos #dtd *ngIf="tipoDocumento && visible" [total]="totalRecords"
                         [documentos]="documentos"
                         [estados]="estados"
-                        (onLoadDocumentosLazy)="onLoadDocumentosLazy($event)"></docs-tabla-documentos>
+                        (onLoadDocumentosLazy)="onLoadDocumentosLazy($event)"
+                        [permisoVerDocumentoVencido]="hasPermision(2101) | async"
+                        ></docs-tabla-documentos
+                        >
                     </div>
                 </div>
             </div>

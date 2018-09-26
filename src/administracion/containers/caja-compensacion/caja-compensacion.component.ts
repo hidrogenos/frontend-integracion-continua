@@ -3,13 +3,12 @@ import { DataTable } from "primeng/primeng";
 import { HasPermisionService, CajaCompensacionService } from "../../../shared/services";
 import { EditCajaCompensacionDialogComponent } from "../../components";
 import { CajaCompensacionModel } from "../../../shared/models/caja-compensacion.model";
-
+import { AdmCajaCompensacionSevice } from "../../services";
 
 //Store
 import { Store } from "@ngrx/store";
 import { StoreModel } from "../../../shared/models/store.model";
 import * as fromShared from './../../../shared/store';
-import { AdmCajaCompensacionSevice } from "../../services";
 
 @Component({
     selector: 'caja-compensacion-component',
@@ -139,7 +138,6 @@ export class CajaCompensacionComponent{
     }
 
     onCreate($event) {
-        console.log($event)
         this.showWaitDialog('Creando caja de compensación, un momento por favor...')
         this.cajaCompensacionService.createCajaCompensacion($event).subscribe(response => {
             this.cajaCompensacion = [
@@ -151,7 +149,6 @@ export class CajaCompensacionComponent{
     }
 
     onEdit(event: CajaCompensacionModel){ 
-        console.log(event.id)
         this.showWaitDialog('Editando caja de compensación, un momento por favor...')
         this.admCajaCompensacionService.editCajaCompensacion(event.id, event).subscribe(response => {
             return this.cajaCompensacion = this.cajaCompensacion.map(element => {

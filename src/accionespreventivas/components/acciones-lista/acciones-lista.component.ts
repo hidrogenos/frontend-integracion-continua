@@ -27,7 +27,7 @@ export class AccionesListaComponent {
     onLazy: EventEmitter<any>;
 
     @Output()
-    onEdit: EventEmitter<AccionPreventivaModel>;
+    onEdit: EventEmitter<any>;
 
     @Output()
     onDeleteAccionPreventiva: EventEmitter<AccionPreventivaModel>;
@@ -47,8 +47,11 @@ export class AccionesListaComponent {
         this.onLazy.emit(event);
     }
 
-    selectAccionPreventiva(data: AccionPreventivaModel) {
-        this.onEdit.emit(data);
+    selectAccionPreventiva(idAccionP: number, event: MouseEvent) {
+        let infoAccionPreventiva ={
+            idAccionP: idAccionP, event: event
+        }
+        this.onEdit.emit(infoAccionPreventiva);
     }
 
     deleteAccionPreventiva(data: AccionPreventivaModel) {

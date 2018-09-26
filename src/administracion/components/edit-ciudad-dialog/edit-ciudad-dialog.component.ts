@@ -86,7 +86,6 @@ export class EditCiudadDialogComponent {
     }
     
     loadForm(ciudad: CiudadModel){
-        console.log(ciudad)
         this.editCiudad.setValue({
             id: ciudad.id,
             nombre: ciudad.nombre,

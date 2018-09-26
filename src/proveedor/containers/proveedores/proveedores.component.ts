@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { StoreModel } from '../../../shared/models/store.model';
 import * as fromShared from './../../../shared/store';
 import * as fromRoot from './../../../app/store';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'proveedores',
@@ -82,7 +83,7 @@ import * as fromRoot from './../../../app/store';
                                             <button style="margin-right: 10px;" pButton
                                                 *ngIf="hasPermision(202) | async"
                                                 type="button" 
-                                                (click)="detalleProveedor(proveedor)" 
+                                                (click)="detalleProveedor(proveedor.id, $event)" 
                                                 icon="pi pi-search" class="ui-button-primary">
                                              </button>
                                             <button pButton 
@@ -132,10 +133,12 @@ export class ProveedoresComponent implements OnInit {
         this.loadInitData();
     }
 
-    detalleProveedor(event: ProveedorModel) {
+    detalleProveedor(id: number, event: MouseEvent) {
+        event.ctrlKey
+        ? window.open(`${environment.baseUrl}/proveedores/detalle/${id}`):
         this.store.dispatch(
             new fromRoot.Go({
-                path: [`proveedores/detalle/${event.id}`]
+                path: [`proveedores/detalle/${id}`]
             })
         );
     }

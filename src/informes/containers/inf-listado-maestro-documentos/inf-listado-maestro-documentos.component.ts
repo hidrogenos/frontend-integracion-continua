@@ -5,6 +5,7 @@ import { InfListaDocumentosComponent } from '../../components';
 import * as fromSharedStore from './../../../shared/store';
 import { Store } from '@ngrx/store';
 import * as fromRootStore from './../../../app/store';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'inf-listado-maestro-documentos',
@@ -13,7 +14,8 @@ import * as fromRootStore from './../../../app/store';
             <inf-lista-documentos #infListaDocs 
             (onExportPDF)="onExportPDF($event)"
             (onLoadDocumentosLazy)="onLoadDocumentosLazy($event)"
-            (onVerDetalleDocumento)="onVerDetalleDocumento($event)"></inf-lista-documentos>
+            (onVerDetalleDocumento)="onVerDetalleDocumento($event)">
+            </inf-lista-documentos>
         </div>
     `
 })
@@ -47,10 +49,12 @@ export class InfListadoMaestroDocumentosComponent {
         })
     }
 
-    onVerDetalleDocumento(idDocumento: number) {
+    onVerDetalleDocumento(data) {
+        data.event.ctrlKey
+        ? window.open(`${environment.baseUrl}/documentos/detalle/${data.idDocumento}`):
         this.store.dispatch(
             new fromRootStore.Go({
-                path: [`/documentos/detalle/${idDocumento}`]
+                path: [`/documentos/detalle/${data.idDocumento}`]
             })
         );
     }

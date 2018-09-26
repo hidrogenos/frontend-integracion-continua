@@ -221,11 +221,13 @@ export class AccionPreventivaListaComponent implements OnInit {
             });
     }
 
-    selectAccionPreventiva(data: AccionPreventivaModel) {
+    selectAccionPreventiva(data) {
+        data.event.ctrlKey
+        ? window.open(`${environment.baseUrl}/acciones/acciones-preventivas/detalle/${data.idAccionP}`):
         // if (this.usuarioActual.es_jefe) {
         this.store.dispatch(
             new fromRootStore.Go({
-                path: [`/acciones/acciones-preventivas/detalle/${data.id}`]
+                path: [`/acciones/acciones-preventivas/detalle/${data.idAccionP}`]
             })
         );
         // } else {

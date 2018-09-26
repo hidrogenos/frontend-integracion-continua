@@ -134,7 +134,6 @@ export class ArlComponent{
     }
     
     onEdit(event: ArlModel){ 
-        console.log(event.id)
         this.showWaitDialog('Editando arl, un momento por favor...')
         this.admArlService.editArl(event.id, event).subscribe(response => {
             return this.arl = this.arl.map(element => {
@@ -145,7 +144,6 @@ export class ArlComponent{
     }
 
     onCreate($event){
-        console.log($event)
         this.showWaitDialog('Creando arl, un momento por favor...');
         this.arlService.createArl($event).subscribe(response => {
             this.arl =[

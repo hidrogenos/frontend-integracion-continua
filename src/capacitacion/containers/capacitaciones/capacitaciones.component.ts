@@ -74,7 +74,7 @@ import { HasPermisionService } from "../../../shared/services";
                                         <td>{{ capacitaciones.fecha_inicio | date : dateFormat }}</td>
                                         <td>{{ capacitaciones.fecha_fin | date : dateFormat  }}</td>
                                         <td style="text-align: center;">
-                                            <button style="margin-right: 10px;" *ngIf="hasPermision(802)|async" pButton type="button" (click)="detailCapacitacion(capacitaciones)" icon="pi pi-search" class="ui-button-primary"></button>
+                                            <button style="margin-right: 10px;" *ngIf="hasPermision(802)|async" pButton type="button" (click)="detailCapacitacion(capacitaciones.id, $event)" icon="pi pi-search" class="ui-button-primary"></button>
                                             <button pButton type="button" *ngIf="hasPermision(803)|async" icon="pi pi-trash" (click)="onDeleteCapacitacion(capacitaciones)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
@@ -202,10 +202,12 @@ export class CapacitacionesComponent implements OnInit {
         this.store.dispatch(new fromShared.ShowWaitDialog({ header, body }));
     }
 
-    detailCapacitacion(event: CapacitacionModel) {
+    detailCapacitacion(id: number, event: MouseEvent) {
+        event.ctrlKey
+        ? window.open(`/capacitaciones/detalle/${id}`):
         this.store.dispatch(
             new fromRoot.Go({
-                path: [`capacitaciones/detalle/${event.id}`]
+                path: [`capacitaciones/detalle/${id}`]
             })
         );
     }

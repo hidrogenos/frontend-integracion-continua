@@ -65,7 +65,7 @@ import { DataTable } from 'primeng/primeng';
                                             Perfil
                                             <p-sortIcon field="perfil" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
@@ -82,8 +82,6 @@ import { DataTable } from 'primeng/primeng';
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'perfil', 'contains')">
                                         </th>
-                                        <th>
-                                        </th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-usuario>
@@ -93,7 +91,7 @@ import { DataTable } from 'primeng/primeng';
                                         <td>{{ usuario.identificacion }}</td>
                                         <td>{{ usuario.perfil }}</td>
                                         <td style="text-align: center;">
-                                            <button style="margin-right: 10px;" pButton type="button" *ngIf="hasPermision(1102) | async" (click)="detalleUsuario(usuario.id)" icon="pi pi-search" class="ui-button-primary"></button>
+                                            <button style="margin-right: 10px;" pButton type="button" *ngIf="hasPermision(1102) | async" (click)="detalleUsuario(usuario.id, $event)" icon="pi pi-search" class="ui-button-primary"></button>
                                             <button pButton type="button" icon="pi pi-trash" (click)="deleteColaborador(usuario)" *ngIf="hasPermision(1103) | async" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
@@ -149,7 +147,9 @@ export class ColaboradoresListaComponent implements OnInit {
         this.loadInitData();
     }
 
-    detalleUsuario(idUsuario: number) {
+    detalleUsuario(idUsuario: number, event: MouseEvent) {
+        event.ctrlKey
+        ? window.open(`/administracion/colaboradores/detalle/${idUsuario}`):
         this.store.dispatch(
             new fromRoot.Go({
                 path: [`administracion/colaboradores/detalle/${idUsuario}`]
@@ -163,7 +163,6 @@ export class ColaboradoresListaComponent implements OnInit {
             this.dt.reset();
             this.hideWaitDialog();
         })
-
     }
 
     loadInitData() {

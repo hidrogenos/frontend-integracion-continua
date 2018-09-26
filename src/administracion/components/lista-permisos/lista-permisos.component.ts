@@ -23,15 +23,13 @@ import { PermisoModel } from "../../../shared/models/permiso.model";
                         <th>
                             Permisos
                         </th>
-                        <th style="width: 70px;">
+                        <th style="width: 70px;" rowspan="2">
                             Estado
                         </th>
                     </tr>
                     <tr>
                         <th class="ui-fluid">
                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
-                        </th>
-                        <th>
                         </th>
                     </tr>
                 </ng-template>

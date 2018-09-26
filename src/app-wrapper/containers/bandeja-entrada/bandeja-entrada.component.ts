@@ -39,7 +39,7 @@ import { ComponenteCargado } from "../../../shared/services/utils/abstract-clase
             <be-documentos-tabla #docvencer [titulo]="'Documentos próximos a vencer'"
                 (onSelectDocumento)="redirectToDocumento($event)"
                 (onConsultarDocumentos)="consultarLazyProxVencer($event)"></be-documentos-tabla>
-            <be-documentos-tabla #docobs [titulo]="'Vistos buenos pendientes de garantía de calidad'" *ngIf="hasPermision(11000) | async"
+            <be-documentos-tabla #docbpgc [titulo]="'Vistos buenos pendientes de garantía de calidad'" *ngIf="hasPermision(11000) | async"
                 (onSelectDocumento)="redirectToDocumento($event)"
                 (onConsultarDocumentos)="consultarLazyVistoBueno($event)"></be-documentos-tabla>
         </div>
@@ -109,6 +109,7 @@ export class BandejaEntradaComponent extends ComponenteCargado {
     @ViewChild('misdocpgest') misdocpgest: BeDocumentosTablaComponent;
     @ViewChild('misdoc') misdoc: BeDocumentosTablaComponent;
     @ViewChild('docobs') docobs: BeDocumentosTablaComponent;
+    @ViewChild('docbpgc') docbpgc: BeDocumentosTablaComponent;
     @ViewChild('docvencer') docvencer: BeDocumentosTablaComponent;
 
     constructor(
@@ -169,35 +170,41 @@ export class BandejaEntradaComponent extends ComponenteCargado {
         this.beBandejaEntradaService
             .getDocumentosVistoBueno(event)
             .subscribe((items: any) => {
-                this.docobs.documentos = items.documentos;
-                this.docobs.total = items.total;
-                this.docobs.loading = false;
+                this.docbpgc.documentos = items.documentos;
+                this.docbpgc.total = items.total;
+                this.docbpgc.loading = false;
             });
     }
 
-    redirectToDocumento(idDocumento: number) {
+    redirectToDocumento(data) {
+        data.event.ctrlKey
+        ? window.open(`${environment.baseUrl}/documentos/detalle/${data.idDocumento}`):
         this.store.dispatch(
             new fromRootStore.Go({
-                path: [`/documentos/detalle/${idDocumento}`]
+                path: [`/documentos/detalle/${data.idDocumento}`]
             })
         );
     }
 
-    redirectToAccionCorrectiva(idAccionCorrectiva: number) {
+    redirectToAccionCorrectiva(data) {
+        data.event.ctrlKey
+        ? window.open(`${environment.baseUrl}/acciones/acciones-correctivas/detalle/${data.idAccionCorrectiva}`):
         this.store.dispatch(
             new fromRootStore.Go({
                 path: [
-                    `/acciones/acciones-correctivas/detalle/${idAccionCorrectiva}`
+                    `/acciones/acciones-correctivas/detalle/${data.idAccionCorrectiva}`
                 ]
             })
         );
     }
 
-    redirectToAccionPreventiva(idAccionPreventiva: number) {
+    redirectToAccionPreventiva(data) {
+        data.event.ctrlKey
+        ? window.open(`${environment.baseUrl}/acciones/acciones-preventivas/detalle/${data.idAccionPreventiva}`):
         this.store.dispatch(
             new fromRootStore.Go({
                 path: [
-                    `/acciones/acciones-preventivas/detalle/${idAccionPreventiva}`
+                    `/acciones/acciones-preventivas/detalle/${data.idAccionPreventiva}`
                 ]
             })
         );
