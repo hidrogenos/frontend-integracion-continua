@@ -26,24 +26,38 @@ export class DocumentoGuard implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ) {
-        return this.tienePermisos(route.params.documentoId).pipe(
-            switchMap(([permisoElaborar, permisoRevisar, permisoAprobar]) => {
-                if (permisoElaborar || permisoRevisar || permisoAprobar) {
-                    return of(true)
+        return this.checkStoreUser().pipe(
+            switchMap((usuario: any) => {
+                let permiso = this.tienePermisos(route.params.documentoId).pipe(
+                    switchMap(([permisoElaborar, permisoRevisar, permisoAprobar]) => {
+                        let permiso = false;
+                        if (permisoElaborar || permisoRevisar || permisoAprobar) {
+                            permiso = true;
+                        }
+                        return of(permiso);
+                    }));
+                if (usuario) {
+
+                    let puedeEntrar = false;
+                    this.validarUsuarioTieneDocumentoRestringido(route.params.documentoId, usuario)
+                        .subscribe(response => puedeEntrar = response);
+
+                    let esResponsable = false;
+                    permiso.subscribe(response => esResponsable = response);
+
+                    let usuarioValido = false;
+                    this.validateUser(route.params.documentoId, usuario)
+                        .subscribe(response => usuarioValido = response);
+
+                    return of(puedeEntrar && (esResponsable || usuarioValido));
+
                 } else {
-                    return this.checkStoreUser().pipe(
-                        switchMap((usuario: any) => {
-                            if (usuario) {
-                                return this.validateUser(route.params.documentoId, usuario);
-                            } else {
-                                return of(false);
-                            }
-                        })
-                    )
+                    return of(false);
                 }
             })
         )
     }
+
 
 
     checkStoreUser() {
@@ -65,6 +79,23 @@ export class DocumentoGuard implements CanActivate {
                 return this.validarPermisoUsuarioDocumento(documento, usuario);
             })
         )
+    }
+
+    validarUsuarioTieneDocumentoRestringido(idDocumento, usuario): Observable<boolean> {
+        return this.docsDocumentoService.usuarioTieneDocumentoRestringido(usuario.id, idDocumento)
+            .pipe(
+                switchMap((response: any[]) => {
+                    if (response.length > 0) {
+                        this.store.dispatch(
+                            new fromRootStore.Go({ path: ['acceso-denegado'] })
+                        );
+                        return of(false);
+                    } else {
+
+                        return of(true);
+                    }
+                })
+            );
     }
 
     validarPermisoUsuarioDocumento(documento, usuario): Observable<boolean> {

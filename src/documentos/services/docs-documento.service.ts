@@ -128,6 +128,9 @@ export class DocsDocumentoService {
         return this.http.get(`${environment.apiUrl}/documentos/usuario-pertenece-proceso-documento/${idUsuario}/${idDocumento}`);
     }
 
+    usuarioTieneDocumentoRestringido(idUsuario: number, idDocumento: number) {
+        return this.http.get(`${environment.apiUrl}/documentos/usuario-tiene-documento-restringido/${idUsuario}/${idDocumento}`);
+    }
 
     deleteArchivoSoporte(id: number): Observable<DocumentoArchivoSoporteModel> {
         return this.http
