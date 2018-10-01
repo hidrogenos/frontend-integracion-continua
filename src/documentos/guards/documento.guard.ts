@@ -28,29 +28,8 @@ export class DocumentoGuard implements CanActivate {
     ) {
         return this.checkStoreUser().pipe(
             switchMap((usuario: any) => {
-                let permiso = this.tienePermisos(route.params.documentoId).pipe(
-                    switchMap(([permisoElaborar, permisoRevisar, permisoAprobar]) => {
-                        let permiso = false;
-                        if (permisoElaborar || permisoRevisar || permisoAprobar) {
-                            permiso = true;
-                        }
-                        return of(permiso);
-                    }));
                 if (usuario) {
-
-                    let puedeEntrar = false;
-                    this.validarUsuarioTieneDocumentoRestringido(route.params.documentoId, usuario)
-                        .subscribe(response => puedeEntrar = response);
-
-                    let esResponsable = false;
-                    permiso.subscribe(response => esResponsable = response);
-
-                    let usuarioValido = false;
-                    this.validateUser(route.params.documentoId, usuario)
-                        .subscribe(response => usuarioValido = response);
-
-                    return of(puedeEntrar && (esResponsable || usuarioValido));
-
+                     return this.validarUsuarioTieneDocumentoRestringido(route.params.documentoId,usuario);
                 } else {
                     return of(false);
                 }
@@ -91,8 +70,23 @@ export class DocumentoGuard implements CanActivate {
                         );
                         return of(false);
                     } else {
-
-                        return of(true);
+                        return this.tienePermisos(idDocumento).pipe(
+                            switchMap(([permisoElaborar, permisoRevisar, permisoAprobar]) => {
+                                if (permisoElaborar || permisoRevisar || permisoAprobar) {
+                                    return of(true)
+                                } else {
+                                    return this.checkStoreUser().pipe(
+                                        switchMap((usuario: any) => {
+                                            if (usuario) {
+                                                return this.validateUser(idDocumento, usuario);
+                                            } else {
+                                                return of(false);
+                                            }
+                                        })
+                                    )
+                                }
+                            })
+                        );
                     }
                 })
             );
