@@ -26,24 +26,17 @@ export class DocumentoGuard implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ) {
-        return this.tienePermisos(route.params.documentoId).pipe(
-            switchMap(([permisoElaborar, permisoRevisar, permisoAprobar]) => {
-                if (permisoElaborar || permisoRevisar || permisoAprobar) {
-                    return of(true)
+        return this.checkStoreUser().pipe(
+            switchMap((usuario: any) => {
+                if (usuario) {
+                     return this.validarUsuarioTieneDocumentoRestringido(route.params.documentoId,usuario);
                 } else {
-                    return this.checkStoreUser().pipe(
-                        switchMap((usuario: any) => {
-                            if (usuario) {
-                                return this.validateUser(route.params.documentoId, usuario);
-                            } else {
-                                return of(false);
-                            }
-                        })
-                    )
+                    return of(false);
                 }
             })
         )
     }
+
 
 
     checkStoreUser() {
@@ -65,6 +58,38 @@ export class DocumentoGuard implements CanActivate {
                 return this.validarPermisoUsuarioDocumento(documento, usuario);
             })
         )
+    }
+
+    validarUsuarioTieneDocumentoRestringido(idDocumento, usuario): Observable<boolean> {
+        return this.docsDocumentoService.usuarioTieneDocumentoRestringido(usuario.id, idDocumento)
+            .pipe(
+                switchMap((response: any[]) => {
+                    if (response.length > 0) {
+                        this.store.dispatch(
+                            new fromRootStore.Go({ path: ['acceso-denegado'] })
+                        );
+                        return of(false);
+                    } else {
+                        return this.tienePermisos(idDocumento).pipe(
+                            switchMap(([permisoElaborar, permisoRevisar, permisoAprobar]) => {
+                                if (permisoElaborar || permisoRevisar || permisoAprobar) {
+                                    return of(true)
+                                } else {
+                                    return this.checkStoreUser().pipe(
+                                        switchMap((usuario: any) => {
+                                            if (usuario) {
+                                                return this.validateUser(idDocumento, usuario);
+                                            } else {
+                                                return of(false);
+                                            }
+                                        })
+                                    )
+                                }
+                            })
+                        );
+                    }
+                })
+            );
     }
 
     validarPermisoUsuarioDocumento(documento, usuario): Observable<boolean> {
