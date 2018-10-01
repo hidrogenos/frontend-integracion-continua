@@ -5,7 +5,7 @@ import { Component, EventEmitter, Output } from "@angular/core";
     selector: 'reportes-acciones',
     template: `
         <button pButton class="ui-button ui-button-success" 
-        label="descargar reporte desviación" (click)="exportarReporteDesviacion()"></button>
+        label="descargar informe lista de chequeo" (click)="exportarReporteDesviacion()"></button>
     `
 })
 export class ReporteDesviacionComponent {

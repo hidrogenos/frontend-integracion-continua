@@ -16,10 +16,6 @@ import { environment } from '../../../environments/environment';
             (onLoadDocumentosLazy)="onLoadDocumentosLazy($event)"
             (onVerDetalleDocumento)="onVerDetalleDocumento($event)">
             </inf-lista-documentos>
-
-            <reportes-acciones 
-            (onExportarReporteDesviacion)="onExportReportePDF()">
-            </reportes-acciones>
         </div>
     `
 })
