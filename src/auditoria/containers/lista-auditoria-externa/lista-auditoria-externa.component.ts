@@ -109,7 +109,7 @@ import { environment } from '../../../environments/environment';
                                         <td style="text-align: center;">
                                             <button pButton 
                                                 style="margin-right: 5px;"
-                                                (click)="detalleAuditoria(auditoria.id)"
+                                                (click)="detalleAuditoria(auditoria.id, $event)"
                                                 type="button" 
                                                 icon="fa fa-search"
                                                 class="ui-button-primary">
@@ -191,7 +191,9 @@ export class ListaAuditoriaExternaComponent implements OnInit {
             });
     }
 
-    detalleAuditoria(id: number) {
+    detalleAuditoria(id: number, event: MouseEvent) {
+        event.ctrlKey
+        ? window.open(`${environment.baseUrl}/auditoria/externa/detalle/${id}`):
         this.store.dispatch(
             new fromRoot.Go({ path: [`auditoria/externa/detalle/${id}`] })
         );

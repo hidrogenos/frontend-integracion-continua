@@ -21,12 +21,15 @@ export * from './adm-departamento/adm-departamento.service';
 
 import { AdmCiudadService } from './adm-ciudad/adm-ciudad.service';
 export * from './adm-ciudad/adm-ciudad.service';
- 
+
 import { ColaboradorDetalleService } from './colaborador-detalle/colaborador-detalle.service';
 export * from './colaborador-detalle/colaborador-detalle.service';
 
 import { ColaboradoresListaService } from './colaboradores-lista/colaboradores-lista.service';
 export * from './colaboradores-lista/colaboradores-lista.service';
+
+import { ListaDocumentosRestringidosService } from './lista-documentos-restringidos/lista-documentos-restringidos.service';
+export * from './lista-documentos-restringidos/lista-documentos-restringidos.service';
 
 import { PermisosService } from './permisos/permisos.service';
 export * from './permisos/permisos.service';
@@ -42,5 +45,6 @@ export const services: any[] = [
     AdmCiudadService,
     ColaboradorDetalleService,
     ColaboradoresListaService,
+    ListaDocumentosRestringidosService,
     PermisosService
 ];

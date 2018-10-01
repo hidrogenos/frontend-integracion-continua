@@ -20,7 +20,7 @@ import { environment } from "../../../../environments/environment";
         </div>
     </div>
     <div class="ui-g">
-        <div class="ui-g-12 text-aling-right" *ngIf="permisoAdd && !disable">
+        <div class="ui-g-12 text-aling-right" *ngIf="!disable">
             <p-fileUpload #fu
                 customUpload="true"
                 name="demo[]"
@@ -47,19 +47,19 @@ import { environment } from "../../../../environments/environment";
                         <td>{{ documento.titulo }}</td>
                         <td>{{ documento.fecha_carga  | date: dateFormat }}</td>
                         <td style="text-align: center;">
-                            <button *ngIf="permisoVisualize && !disable" style="margin-right:10px;" pButton 
+                            <button *ngIf="!disable" style="margin-right:10px;" pButton 
                                 type="button" 
                                 icon="fa fa-eye" 
                                 class="ui-button-primary"
                                 (click)="onConsultarDocumento.emit(documento)">
                             </button>
-                            <button *ngIf="permisoDowload  && !disable" style="margin-right:10px;" pButton 
+                            <button *ngIf="!disable" style="margin-right:10px;" pButton 
                                 type="button" 
                                 icon="fa fa-download" 
                                 (click)="onDownloadDocumento.emit(documento)"
                                 class="ui-button-success">
                             </button>
-                            <button *ngIf="permisoDelete  && !disable" style="margin-right:10px;" pButton 
+                            <button *ngIf="!disable" style="margin-right:10px;" pButton 
                                 type="button" 
                                 icon="fa fa-trash" 
                                 class="ui-button-danger"
@@ -94,18 +94,6 @@ export class DocumentacionCapacitacionComponent {
     //properties
     @Input()
     documentos: CapacitacionAdjuntoModel;
-
-    @Input()
-    permisoAdd: boolean;
-
-    @Input()
-    permisoVisualize: boolean;
-
-    @Input()
-    permisoDowload: boolean;
-
-    @Input()
-    permisoDelete: boolean;
 
     //viewchild
     @ViewChild("fu")

@@ -23,10 +23,11 @@ import { DocsInformacionGeneralDocumentoComponent } from '../../components/docs-
 import { DocsDetalleAdjuntarDocumentoComponent } from '../../components/docs-detalle-adjuntar-documento/docs-detalle-adjuntar-documento.component';
 import { DocumentoAsociadoModel } from '../../../shared/models/documento-asociado.model';
 import { DocumentoAsociadoService } from '../../../shared/services/documento-asociado/documento-asociado.service';
-import { DocsDocumentosAsociadosComponent, DocsObservacionDialogComponent } from '../../components';
+import { DocsDocumentosAsociadosComponent, DocsObservacionDialogComponent, DocsDetalleArchivoSoporteComponent } from '../../components';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { DocumentoPermisoTipoDocumentoModel } from '../../../shared/models/documento-permiso-tipo-documento.model';
 import { PermisosComponent } from '../../../administracion/containers';
+import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-archivo-soporte.model';
 
 @Component({
     selector: 'docs-documento-detalle',
@@ -74,7 +75,6 @@ import { PermisosComponent } from '../../../administracion/containers';
                         (onDeleteDocumento)="onDeleteDocumentoAsociado($event)"
                         [puedeEditar]="permisoPuedeEditarDocumento">
                     </docs-documentos-asociados>
-
                     <docs-detalle-adjuntar-documento #ddadflujo
                         *ngIf="permisoPuedePonerEnMarcha || permisoPuedePonerObsoleto || permisoPuedeVerObsoleto"
                         [titulo]="'Adjuntar documentación del flujo'"
@@ -83,7 +83,21 @@ import { PermisosComponent } from '../../../administracion/containers';
                         (onDeleteAdjunto)="onDeleteAdjuntoFlujo($event)"
                         (onVerAdjunto)="onVerAdjuntoFlujo($event)"
                         [puedeEditar]="permisoPuedePonerEnMarcha">
-                    </docs-detalle-adjuntar-documento>
+        <!---->     </docs-detalle-adjuntar-documento>
+        
+                    <docs-detalle-archivo-soporte #dArchivoSoporte
+                    [archivosSoporte]="documento?.archivos_soporte"
+                    [titulo]="'Adjuntar archivos de soporte'"
+                    (onCreateArchivoSoporte)="createArchivoSoporte($event)"
+                    (onDeleteArchivoSoporte)="onDeleteArchivoSoporte($event)"
+                    (onDownloadArchivoSoporte)="onDescargarArchivoSoporte($event)"
+                    [permisoCrearArchivoSoporte]="hasPermision(11100) | async"
+                    [permisoConsultarArchivoSoporte]="hasPermision(11101) | async"
+                    [permisoDescargarArchivoSoporte]="hasPermision(11102) | async"
+                    [permisoEliminarArchivoSoporte]="hasPermision(11103) | async"
+                    [permisoVerArchivosSoporte]="hasPermision(11104) | async"
+                    (onVerAdjunto)="consultarArchivoSoporte($event)">
+                    </docs-detalle-archivo-soporte>
 
                     <div class="ui-g" *ngIf="documento">
                         <div class="ui-g-12 text-aling-center ui-fluid">
@@ -250,6 +264,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
 
     documento: DocumentoModel;
     procesos: MapaProcesoHijoModel[];
+    archivosSoporte: DocumentoArchivoSoporteModel[];
 
     filteredRespAprobacion;
     filteredRespRevision;
@@ -265,6 +280,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     @ViewChild('ddadflujo') ddadflujo: DocsDetalleAdjuntarDocumentoComponent;
     @ViewChild('docasoc') docasoc: DocsDocumentosAsociadosComponent;
     @ViewChild('dialogAnular') dialogAnular: DocsObservacionDialogComponent;
+    @ViewChild('dArchivoSoporte') dArchivoSoporte: DocsDetalleArchivoSoporteComponent;
 
     permisoPuedeEditar: boolean = false;
     permisoPuedeEditarDocumento: boolean = false;
@@ -557,6 +573,60 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 ]
             })
         );
+    }
+
+    createArchivoSoporte(files: File[]) {
+        this.showWaitDialog('Adjuntando archivos soporte, un momento por favor...');
+        const form: FormData = new FormData();
+        files.forEach(element =>
+            form.append('uploads[]', element, element.name)
+        );
+        this.docsDocumentoService
+            .uploadArchivoSoporte(this.documento.id, form)
+            .subscribe(response => {
+                this.documento.archivos_soporte = [
+                    ...this.documento.archivos_soporte,
+                    ...response
+                ];  
+                this.dArchivoSoporte.fu.clear();
+                this.hideWaitDialog();
+            });
+    }
+
+    onDeleteArchivoSoporte(event: DocumentoArchivoSoporteModel){
+        this.showWaitDialog('Eliminando archivo de soporte, un momento por favor...');
+        this.docsDocumentoService
+            .deleteArchivoSoporte(event.id)
+            .subscribe(response => {
+                this.documento.archivos_soporte = this.documento.archivos_soporte.filter(
+                    element => element.id != event.id,
+                );
+                this.hideWaitDialog();
+            });
+    }
+
+    onDescargarArchivoSoporte(event: DocumentoArchivoSoporteModel){
+        this.showWaitDialog('Descargando archivo de soporte, un momento por favor...');
+        this.docsDocumentoService
+            .downloadArchivoSoporte({ path: event.path })
+            .subscribe(file => {
+                const blob = new Blob([file], { type: file.type });
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                document.body.appendChild(a);
+                a.setAttribute('style', 'display: none');
+                a.href = url;
+                a.download = event.titulo;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove(); // remove the element
+                this.hideWaitDialog();
+        });
+    }
+
+    consultarArchivoSoporte(archivo: DocumentoArchivoSoporteModel){
+        const idTipoDocumento = environment.tipos_documento.documento_archivo_soporte.id;
+        this.store.dispatch(new fromRouteStore.Go({path: [`visor-adjunto/${idTipoDocumento}/${archivo.id}/${archivo.titulo}`]}))
     }
 
     onFilterDocumento(filter: { query: string, id_tipo_documento: number, id_documento: number }) {

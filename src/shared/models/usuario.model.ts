@@ -10,6 +10,8 @@ import { CajaCompensacionModel } from './caja-compensacion.model';
 import { UsuarioDestrezaModel } from './usuario-destreza.model';
 import { UsuarioDocumentoModel } from './usuario-documento.model';
 import { UsuarioProcesoModel } from './usuario-proceso.model';
+import {  UsuarioListaDocumentosRestringidosModel } from './usuario-lista-documentos-restringidos.model';
+import { ListaDocumentoRestringidoModel } from './lista-documento-restringido.model';
 
 export interface UsuarioModel {
     id?: number;
@@ -48,4 +50,5 @@ export interface UsuarioModel {
     destrezas?: UsuarioDestrezaModel[];
     documentos?: UsuarioDocumentoModel[];
     procesos?: UsuarioProcesoModel[];
+    listas_documentos_restringidos?: ListaDocumentoRestringidoModel[];
 }

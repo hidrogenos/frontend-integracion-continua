@@ -68,7 +68,6 @@ export class EditEpsDialogComponent implements OnInit{
     }
 
     loadForm(eps: EpsModel){
-        console.log(eps)
         this.editEps.setValue({
             id: eps.id,
             nombre: eps.nombre

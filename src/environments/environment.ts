@@ -58,6 +58,10 @@ export const environment = {
         documento_capacitacion: {
             id: 11,
             permiso_impresion: 800
+        },
+        documento_archivo_soporte: {
+            id: 12,
+            permiso_impresion: 900
         }
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],

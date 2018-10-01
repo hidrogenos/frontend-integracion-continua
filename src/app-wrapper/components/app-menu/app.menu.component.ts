@@ -125,6 +125,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Listado documentos',
                             icon: 'fa fa-fw fa-file-pdf-o',
                             routerLink: ['/informes/listado-documentos']
+                        },
+                        {
+                            label: 'Informes acciones',
+                            icon: 'fa fa-fw fa-file-pdf-o',
+                            routerLink: ['/informes/listado-reportes-acciones']
                         }
                     ]
                 },
@@ -192,6 +197,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Ciudad',
                             icon :'fa fa-fw fa-map-signs',
                             routerLink: ['/administracion/ciudad']
+                        },
+                        {
+                            label: 'Documentos restringidos',
+                            icon: 'fa fa-shield',
+                            routerLink: ['/administracion/lista-documentos-restringidos']
                         }
                     ]
                 },

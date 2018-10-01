@@ -118,7 +118,7 @@ import { Table } from 'primeng/table';
                                     <td>{{ equipos.fecha_proximo_mantenimiento_correctivo | date: formatDate}}</td>
 
                                     <td style="text-align: center;">
-                                        <button style="margin-right: 10px;" pButton type="button" (click)="detalleEquipo(equipos)" icon="pi pi-search" class="ui-button-primary"></button>
+                                        <button style="margin-right: 10px;" pButton type="button" (click)="detalleEquipo(equipos.id, $event)" icon="pi pi-search" class="ui-button-primary"></button>
                                         <button pButton type="button" icon="pi pi-trash"  *ngIf="hasPermision([702]) | async" (click)="deleteProveedor(equipos)" class="ui-button-danger"></button>
                                     </td>
                                 </tr>
@@ -181,10 +181,12 @@ export class EquipoComponent implements OnInit {
             });
     }
 
-    detalleEquipo(item) {
+    detalleEquipo(id: number, event: MouseEvent) {
+        event.ctrlKey
+        ? window.open(`${environment.baseUrl}/equipos/detalle/${id}`):
         this.store.dispatch(
             new fromRoot.Go({
-                path: [`equipos/detalle/${item.id}`]
+                path: [`equipos/detalle/${id}`]
             })
         );
     }

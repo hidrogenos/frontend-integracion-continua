@@ -2,8 +2,8 @@ import { Component, ViewChild, OnInit } from "@angular/core";
 import { DataTable, ConfirmationService } from "primeng/primeng";
 import { EditDepartamentoDialogComponent } from "../../components/edit-departamento-dialog/edit-departamento-dialog.component";
 import { DepartamentoModel } from "../../../shared/models/departamento.model";
-import { HasPermisionService, PaisService } from "../../../shared/services";
-import {  AdmPaisService } from "../../services";
+import { HasPermisionService } from "../../../shared/services";
+import { AdmPaisService } from "../../services";
 import { DepartamentoService } from '../../../shared/services/departamento/departamento.service';
 import { AdmDepartamentoService } from '../../services/adm-departamento/adm-departamento.service';
 import { PaisModel } from "../../../shared/models/pais.model";
@@ -48,7 +48,7 @@ import { Store } from "@ngrx/store";
                                             Pais
                                             <p-sortIcon field="id_pais" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
@@ -58,8 +58,6 @@ import { Store } from "@ngrx/store";
                                         </th>
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'id_pais', 'contains')">
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>
@@ -79,7 +77,7 @@ import { Store } from "@ngrx/store";
                                                 *ngIf="hasPermision(1361) | async"
                                                 type="button"
                                                 icon="pi pi-trash" 
-                                                (click)="confirm(departamento)"
+                                                (click)="confirmDeleteDepartamento(departamento)"
                                                 class="ui-button-danger">
                                              </button>
                                         </td>
@@ -155,9 +153,9 @@ export class DepartamentoComponent implements OnInit{
     }
 
 
-    confirm(event: DepartamentoModel) {
+    confirmDeleteDepartamento(event: DepartamentoModel) {
         this.confirmationService.confirm({
-            message: 'al momento de borrar el departamento se borrará la ciudad asociada, ¿des ea continuar?',
+            message: 'Al momento de borrar el departamento se borrará la ciudad asociada, ¿desea continuar?',
             accept: () => {
                 this.deleteDepartamento(event);
             }

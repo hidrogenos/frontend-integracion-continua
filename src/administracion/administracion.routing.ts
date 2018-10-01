@@ -68,7 +68,7 @@ export const ROUTES: Routes = [
                 path: 'cesantias',
                 component: fromContainers.CesantiasComponent,
                 canActivate: [fromGuardsShareds.HasPermisionGuard],
-                data:{
+                data: {
                     requiredPermision: 1333
                 }
             },
@@ -102,6 +102,14 @@ export const ROUTES: Routes = [
                 canActivate: [fromGuardsShareds.HasPermisionGuard],
                 data: {
                     requiredPermision: 1373
+                }
+            },
+            {
+                path: 'lista-documentos-restringidos',
+                component: fromContainers.DocumentosRestringidosListaComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 1383
                 }
             }
         ]

@@ -22,14 +22,13 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
         [rows]="10" [totalRecords]="total" lazyLoadOnInit="false">
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th style="width:3em">Ver</th>
+                <th style="width:3em" rowspan="2">Ver</th>
                 <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                     {{col.header}}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
             </tr>
             <tr>
-                <th></th>
                 <th *ngFor="let col of cols" class="ui-fluid">
                     <!--<p-multiSelect *ngSwitchCase="'estado_nombre'" [options]="estados"
                      optionLabel="nombre" defaultLabel="Todos"
@@ -41,7 +40,7 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
                 <td>
-                    <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleDocumento(rowData.id)"
+                    <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleDocumento($event,rowData)"
                     [ngStyle]="{'background-color': rowData.estado.color ,'border-radius': '100%'}">                
                     </button>
                 </td>
@@ -66,12 +65,16 @@ export class DocsTablaDocumentosComponent {
 
     @Input()
     documentos: DocumentoModel[];
+    documento: DocumentoModel;
 
     @Input()
     total: number;
 
     @Input()
     estados: DocumentoEstadoModel[];
+
+    @Input()
+    permisoVerDocumentoVencido: boolean;
 
     @Output()
     onLoadDocumentosLazy = new EventEmitter<any>();
@@ -97,11 +100,42 @@ export class DocsTablaDocumentosComponent {
         this.dt.filter(value, field, filterMatchMode);
     }
 
-    verDetalleDocumento(id) {
-        this.store.dispatch(
-            new fromRootStore.Go({
-                path: [`/documentos/detalle/${id}`]
-            })
-        );
+    verDetalleDocumento(event: MouseEvent, documento: DocumentoModel) {
+
+        if (documento.estado.nombre != 'Vigente') {
+            event.ctrlKey
+            ? window.open(`${environment.baseUrl}/documentos/detalle/${documento.id}`): 
+            this.store.dispatch(
+                new fromRootStore.Go({
+                    path: [`/documentos/detalle/${documento.id}`]
+                })
+            );
+        } else {
+            if (documento.fecha_fin < Date.now()) {
+                if (this.permisoVerDocumentoVencido == true) {
+                    event.ctrlKey
+                    ? window.open(`${environment.baseUrl}/documentos/detalle/${documento.id}`):
+                    this.store.dispatch(
+                        new fromRootStore.Go({
+                            path: [`/documentos/detalle/${documento.id}`]
+                        })
+                    );
+                } else {
+                    event.ctrlKey
+                    ? window.open(`${environment.baseUrl}/documento-vencido`):
+                    this.store.dispatch(
+                        new fromRootStore.Go({ path: ['documento-vencido'] })
+                    );
+                }                   
+            } else {
+                event.ctrlKey
+                ? window.open(`${environment.baseUrl}/documentos/detalle/${documento.id}`):
+                this.store.dispatch(
+                    new fromRootStore.Go({
+                        path: [`/documentos/detalle/${documento.id}`]
+                    })
+                );
+            }
+        }
     }
 }

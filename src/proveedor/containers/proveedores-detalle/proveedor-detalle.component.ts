@@ -39,7 +39,7 @@ import * as fromShared from './../../../shared/store';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <h1><i class="fa fa-user" aria-hidden="true"></i> Detalles: {{ proveedor?.nombre }}</h1>
+                    <h1><i class="fa fa-industry" aria-hidden="true"></i> Detalles: {{ proveedor?.nombre }}</h1>
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <edit-proveedor-detail #epd

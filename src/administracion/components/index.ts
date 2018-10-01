@@ -37,14 +37,20 @@ export * from './create-departamento/create-departamento.component';
 import { CreateCiudadDialogComponent } from './create-ciudad-dialog/create-ciudad-dialog.component';
 export * from './create-ciudad-dialog/create-ciudad-dialog.component';
 
+import { CreateListaDocumentosRestringidosDialogComponent } from './create-lista-documentos-restringidos-dialog/create-lista-documentos-restringidos-dialog.component';
+export * from './create-lista-documentos-restringidos-dialog/create-lista-documentos-restringidos-dialog.component';
+
 import { DatosBasicosColaboradorComponent } from './datos-basico-colaborador/datos-basicos-colaborador.component';
 export * from './datos-basico-colaborador/datos-basicos-colaborador.component';
+
+import { DocumentosRestringidosPanelComponent } from './documentos-restringidos-panel/documentos-restringidos-panel.component';
+export * from './documentos-restringidos-panel/documentos-restringidos-panel.component';
 
 import { EditAptitudDestrezaColaboradorComponent } from './edit-aptitud-destreza-colaborador/edit-aptitud-destreza-colaborador.component';
 export * from './edit-aptitud-destreza-colaborador/edit-aptitud-destreza-colaborador.component';
 
 import { EditArlDialogComponent } from './edit-arl-dialog/edit-arl-dialog.component';
-export * from './edit-arl-dialog/edit-arl-dialog.component'; 
+export * from './edit-arl-dialog/edit-arl-dialog.component';
 
 import { EditPerfilComponent } from './edit-perfil/edit-perfil.component';
 export * from './edit-perfil/edit-perfil.component';
@@ -69,12 +75,21 @@ export * from './edit-departamento-dialog/edit-departamento-dialog.component';
 
 import { EditCiudadDialogComponent } from './edit-ciudad-dialog/edit-ciudad-dialog.component';
 export * from './edit-ciudad-dialog/edit-ciudad-dialog.component';
- 
+
+import { EditListaDocumentosRestringidosDialogComponent } from './edit-lista-documentos-restringidos-dialog/edit-lista-documentos-restringidos-dialog.component';
+export * from './edit-lista-documentos-restringidos-dialog/edit-lista-documentos-restringidos-dialog.component';
+
 import { ListaPerfilesComponent } from './lista-perfiles/lista-perfiles.component';
 export * from './lista-perfiles/lista-perfiles.component';
 
 import { ListaPermisosComponent } from './lista-permisos/lista-permisos.component';
 export * from './lista-permisos/lista-permisos.component';
+
+import { ListaDocumentosRestringidosComponent } from './lista-documentos-restringidos/lista-documentos-restringidos.component';
+export * from './lista-documentos-restringidos/lista-documentos-restringidos.component';
+
+import { UsuarioListaDocumentosRestringidosComponent } from './usuario-lista-documentos-restringidos/usuario-lista-documentos-restringidos.component';
+export * from './usuario-lista-documentos-restringidos/usuario-lista-documentos-restringidos.component';
 
 import { ResetContrasenaColaboradorComponent } from './reset-contrasena-colaborador/reset-contrasena-colaborador.component';
 export * from './reset-contrasena-colaborador/reset-contrasena-colaborador.component';
@@ -83,7 +98,6 @@ import { UsuarioProcesosComponent } from './usuario-procesos/usuario-procesos.co
 export * from './usuario-procesos/usuario-procesos.component';
 
 export const components: any[] = [
-
     AptitudesDestrezasColaboradorComponent,
     CreateAptitudDestrezaColaboradorComponent,
     CreateDocumentoColaboradorComponent,
@@ -97,7 +111,9 @@ export const components: any[] = [
     CreatePaisDialogComponent,
     CreateDepartamentoDialogComponent,
     CreateCiudadDialogComponent,
+    CreateListaDocumentosRestringidosDialogComponent,
     DatosBasicosColaboradorComponent,
+    DocumentosRestringidosPanelComponent,
     EditAptitudDestrezaColaboradorComponent,
     EditPerfilComponent,
     EditEpsDialogComponent,
@@ -108,8 +124,11 @@ export const components: any[] = [
     EditPaisDialogComponent,
     EditDepartamentoDialogComponent,
     EditCiudadDialogComponent,
+    EditListaDocumentosRestringidosDialogComponent,
     ListaPerfilesComponent,
     ListaPermisosComponent,
+    ListaDocumentosRestringidosComponent,
     ResetContrasenaColaboradorComponent,
-    UsuarioProcesosComponent
+    UsuarioProcesosComponent,
+    UsuarioListaDocumentosRestringidosComponent
 ];

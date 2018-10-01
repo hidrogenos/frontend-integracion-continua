@@ -18,7 +18,7 @@
         <tr>
             <td>
                 <button pButton class="ui-button-rounded shadow-box ui-shadow-2" [ngStyle]="{'background-color': accionCorrectiva?.accion_estado?.color ,'border-radius': '100%','width':'25px'}"
-                    (click)="selectAccionCorrectiva(accionCorrectiva)">
+                    (click)="selectAccionCorrectiva(accionCorrectiva.id, $event)">
                 </button>
             </td>
             <td> {{ accionCorrectiva?.codigo }} </td>
@@ -29,7 +29,7 @@
             <td> {{ accionCorrectiva?.fecha_creacion | date: dateFormatAngular }} </td>
             <td> {{ accionCorrectiva?.fecha_compromiso | date: dateFormatAngular }}</td>
             <td>
-                <button pButton class="ui-button" icon="pi pi-search" (click)="selectAccionCorrectiva(accionCorrectiva)"></button>
+                <button pButton class="ui-button" icon="pi pi-search" (click)="selectAccionCorrectiva(accionCorrectiva.id, $event)"></button>
             </td>
         </tr>
     </ng-template>

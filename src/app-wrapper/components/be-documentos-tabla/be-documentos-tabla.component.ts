@@ -16,14 +16,13 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
                     [rows]="10" [totalRecords]="total" lazyLoadOnInit="false" [loading]="loading">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th style="width:3em">Ver</th>
+                            <th style="width:3em" rowspan="2">Ver</th>
                             <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                                 {{col.header}}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                             </th>
                         </tr>
                         <tr>
-                            <th></th>
                             <th *ngFor="let col of cols" class="ui-fluid">
                                 <input pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
                             </th>
@@ -32,7 +31,7 @@ import { DocumentoModel } from '../../../shared/models/documento.model';
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
                         <tr [pSelectableRow]="rowData">
                             <td>
-                                <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleDocumento(rowData.id)"
+                                <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleDocumento(rowData.id, $event)"
                                 [ngStyle]="{'background-color': rowData.estado.color ,'border-radius': '100%'}">                
                                 </button>
                             </td>
@@ -68,7 +67,7 @@ export class BeDocumentosTablaComponent {
     @Input()
     titulo: string;
     @Output()
-    onSelectDocumento = new EventEmitter<number>();
+    onSelectDocumento = new EventEmitter<any>();
     @Output()
     onConsultarDocumentos = new EventEmitter<any>();
 
@@ -79,10 +78,14 @@ export class BeDocumentosTablaComponent {
     loadDocumentosLazy(event) {
         this.loading = true;
         this.onConsultarDocumentos.emit(event);
+        
     }
 
-    verDetalleDocumento(idDocumento: number) {
-        this.onSelectDocumento.emit(idDocumento);
+    verDetalleDocumento(idDocumento: number, event: MouseEvent) {
+        let infoDocGestionar = {
+            idDocumento: idDocumento, event: event
+        }
+        this.onSelectDocumento.emit(infoDocGestionar);
     }
 
 }

@@ -68,14 +68,16 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                     </div>
                     <p-footer>
                         <button style="margin-right:10px;" pButton 
+                            icon="fa fa-close"
                             type="button" 
                             label="Cancelar" 
                             class="ui-button-danger"
                             (click)="display = false">
                         </button>
                         <button style="margin-right:10px;" pButton 
+                            icon="fa fa-check"
                             type="submit" 
-                            label="Crear" 
+                            label="Actualizar" 
                             class="ui-button-primary"
                             [disabled]="!formEditServicio.valid">
                         </button>

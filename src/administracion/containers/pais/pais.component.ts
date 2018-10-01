@@ -37,15 +37,13 @@ import { EditPaisDialogComponent } from "../../components/edit-pais-dialog/edit-
                                             Nombre
                                             <p-sortIcon field="nombre" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
                                     <tr>
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>
@@ -63,7 +61,7 @@ import { EditPaisDialogComponent } from "../../components/edit-pais-dialog/edit-
                                                 *ngIf="hasPermision(1351) | async"
                                                 type="button"
                                                 icon="pi pi-trash" 
-                                                (click)="confirm(pais)"
+                                                (click)="confirmDeletePais(pais)"
                                                 class="ui-button-danger">
                                              </button>
                                         </td>
@@ -109,9 +107,9 @@ export class PaisComponent {
     @ViewChild('epdc') epdc: EditPaisDialogComponent;
 
 
-    confirm(event: PaisModel) {
+    confirmDeletePais(event: PaisModel) {
         this.confirmationService.confirm({
-            message: 'al momento de borrar el país se borrará el departamento y la ciudad asociada, ¿desea continuar?',
+            message: 'Al momento de borrar el país se borrará el departamento y la ciudad asociada, ¿desea continuar?',
             accept: () => {
                 this.deletePais(event);
             }

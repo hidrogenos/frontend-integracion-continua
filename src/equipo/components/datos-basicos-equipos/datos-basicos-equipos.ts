@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 //MODEL
 import { EquipoModel } from '../../../shared/models/equipo.model';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'datos-basicos-equipo',
@@ -169,7 +170,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                             <div>
                                 <label>Prox mantenimiento correctivo:</label>
                             </div>
-                                <p-calendar  [minDate]="formEquipoDetalle.value.fecha_mantenimiento_correctivo" appendTo="body" showIcon="true" formControlName="fecha_proximo_mantenimiento_correctivo"></p-calendar>
+                                <p-calendar [minDate]="formEquipoDetalle.value.fecha_mantenimiento_correctivo" appendTo="body" showIcon="true" formControlName="fecha_proximo_mantenimiento_correctivo"></p-calendar>
                         </div>
                     </div>
                     <div class="ui-g">
@@ -178,8 +179,8 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                         </div>
                     </div>
                 <div class="ui-g">
-                    <div class="ui-g-12">
-                        <textarea [rows]="5" [cols]="115" pInputTextarea formControlName="observaciones"></textarea>
+                    <div class="ui-g-12 ui-fluid">
+                        <textarea [rows]="5" [cols]="95" pInputTextarea formControlName="observaciones"></textarea>
                     </div>
                 </div>
             </div>
@@ -188,7 +189,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
             <div class="ui-g-12 text-aling-right">
                 <button style="margin-right:10px;"  *ngIf="formEquipoDetalle.disabled && canEditPermisionsEditarDatosBasicosEquipo" pButton type="button" label="Editar datos" (click)="formEquipoDetalle.enable()" class="ui-button-success"></button>
                 <button style="margin-right:10px;"  *ngIf="formEquipoDetalle.enabled" pButton type="button" label="Descartar cambios" (click)="loadFormData(equipo)" class="ui-button-danger"></button>
-                <button style="margin-right:10px;" *ngIf="formEquipoDetalle.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
+                <button style="margin-right:10px;" *ngIf="formEquipoDetalle.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary" (click)="messageEditEquipo()"></button>
             </div>
         </div>
     </form>
@@ -207,7 +208,10 @@ export class DatosBasicosEquiposComponent implements OnInit {
     //properties
     @Output() onUpdateEquipo = new EventEmitter<EquipoModel>();
 
-    constructor(private fb: FormBuilder) { }
+    constructor(
+        private fb: FormBuilder,
+        private messageService: MessageService
+        ) { }
 
     ngOnInit() {
         this.createForm();
@@ -246,6 +250,10 @@ export class DatosBasicosEquiposComponent implements OnInit {
             id_proveedor1: ['', Validators.required],
             id_proveedor2: ['', Validators.required],
         })
+    }
+
+    messageEditEquipo(){
+        this.messageService.add({severity: 'success', summary: 'Actualización exitosa', detail: 'Datos básicos actualizados'});
     }
 
     loadFormData(equipo: EquipoModel) {

@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from './../../environments/environment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { DocumentoAdjuntoModel } from '../../shared/models/documento-adjunto.model';
 
 import { DocumentoService } from '../../shared/services/documento/documento.service';
 
-import { DocumentoDivulgacionRegistroService, DocumentoAdjuntoService } from '../../shared/services';
+import { DocumentoDivulgacionRegistroService, DocumentoAdjuntoService, DocumentoArchivoSoporteService } from '../../shared/services';
 import { DocumentoPermisoTipoDocumentoModel } from '../../shared/models/documento-permiso-tipo-documento.model';
+import { DocumentoArchivoSoporteModel } from '../../shared/models/documento-archivo-soporte.model';
 
 export interface DataEstado {
     estado: number,
@@ -28,7 +29,8 @@ export class DocsDocumentoService {
         private http: HttpClient,
         private documentoService: DocumentoService,
         private documentoAdjuntoService: DocumentoAdjuntoService,
-        private documentoDivulgacionRegistroService: DocumentoDivulgacionRegistroService
+        private documentoDivulgacionRegistroService: DocumentoDivulgacionRegistroService,
+        private documentoArchivoSoporteService: DocumentoArchivoSoporteService
     ) { }
 
     getDocumentosByIdTipo(filtros, idTipoDocumento: number): any {
@@ -125,4 +127,32 @@ export class DocsDocumentoService {
     usuarioPerteneceProcesoDocumento(idUsuario: number, idDocumento: number) {
         return this.http.get(`${environment.apiUrl}/documentos/usuario-pertenece-proceso-documento/${idUsuario}/${idDocumento}`);
     }
+
+    usuarioTieneDocumentoRestringido(idUsuario: number, idDocumento: number) {
+        return this.http.get(`${environment.apiUrl}/documentos/usuario-tiene-documento-restringido/${idUsuario}/${idDocumento}`);
+    }
+
+    deleteArchivoSoporte(id: number): Observable<DocumentoArchivoSoporteModel> {
+        return this.http
+            .get<DocumentoArchivoSoporteModel>(`${environment.apiUrl}/documentos/delete-archivo-soporte/${id}`)
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    downloadArchivoSoporte(data: { path: string }) {
+        return this.http
+            .post(`${environment.apiUrl}/utils/get-adjunto`, data, {
+                responseType: 'blob'
+            })
+            .pipe(catchError((error: any) => throwError(error)));
+    }
+
+    uploadArchivoSoporte(idDocumento: number, data): Observable<DocumentoArchivoSoporteModel[]> {
+        return this.http.post<DocumentoArchivoSoporteModel[]>(`${environment.apiUrl}/documentos/upload-archivo-soporte/${idDocumento}`, data)
+            .pipe(
+                map(adjuntos => {
+                    return adjuntos.map(adjunto => this.documentoArchivoSoporteService.transformDocumentoArchivoSoporteResponse(adjunto))
+                })
+            );
+    }
+
 }

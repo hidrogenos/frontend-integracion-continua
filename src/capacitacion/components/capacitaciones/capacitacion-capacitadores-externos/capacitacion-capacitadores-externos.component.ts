@@ -29,7 +29,7 @@ import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/c
                             <input type="number" pInputText formControlName="identificacion_capacitador" />
                     </div>
                     <div class="ui-g-4">
-                    <button pButton *ngIf="permisoCreateCE && !disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
+                    <button pButton *ngIf="!disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
                 <p-table [value]="capacitadoresExternos" [paginator]="true" [rows]="10">
@@ -55,8 +55,8 @@ import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/c
                                         <td>{{capacitadoresExternos?.identificacion_capacitador}}</td>
                                         <td>{{capacitadoresExternos?.calificacion}}</td>
                                         <td style="text-align: center;">
-                                        <button pButton type="button" *ngIf="permisoEditCE && !disable" icon="pi pi-pencil" (click)="showEdit(capacitadoresExternos)" ></button>
-                                         <button style="margin-left: 10px"*ngIf="permisoDeleteCE  && !disable" pButton type="button" icon="pi pi-trash" (click)="onDelete(capacitadoresExternos)" class="ui-button-danger"></button>
+                                        <button pButton type="button" *ngIf="!disable" icon="pi pi-pencil" (click)="showEdit(capacitadoresExternos)" ></button>
+                                         <button style="margin-left: 10px"*ngIf="!disable" pButton type="button" icon="pi pi-trash" (click)="onDelete(capacitadoresExternos)" class="ui-button-danger"></button>
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -87,15 +87,7 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
     @Input()
     capacitadoresExternos: CapacitacionCapacitadorExternoModel;
 
-    @Input()
-    permisoCreateCE: boolean;
-
-    @Input()
-    permisoEditCE: boolean;
-
-    @Input()
-    permisoDeleteCE: boolean;
-
+ 
     ngOnInit() {
         this.createForm();
     }

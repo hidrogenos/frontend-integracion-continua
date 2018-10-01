@@ -5,6 +5,7 @@ import * as fromShared from "./../../../../shared/store";
 
 import { Store } from "@ngrx/store";
 import { StoreModel } from "../../../../shared/models/store.model";
+import { MessageService } from "primeng/api";
 
 @Component({
     selector: "edit-capacitacion-component",
@@ -18,13 +19,13 @@ import { StoreModel } from "../../../../shared/models/store.model";
                 <div class="ui-g-12">
                 <form [formGroup]='form' (ngSubmit)='onSubmit()' novalidate>
                 <div class="ui-g">
-                    <div class="ui-g-8 ui-fluid">
+                    <div class="ui-g-12 ui-fluid">
                         <div>
                             <label> Tema</label>
                         </div>
                         <input type="text" pInputText formControlName="tema"/>
                     </div>
-                    <div class="ui-g-8 ui-fluid">
+                    <div class="ui-g-12 ui-fluid">
                         <div>
                             <label> Objetivo</label>
                         </div>
@@ -42,13 +43,13 @@ import { StoreModel } from "../../../../shared/models/store.model";
                         </div>
                         <p-calendar showIcon="true" formControlName="fecha_fin" appendTo="body"></p-calendar>
                     </div>
-                    <div class="ui-g-8 ui-fluid">
+                    <div class="ui-g-12 ui-fluid">
                         <div>
                             <label> Lugar </label>
                         </div>
                         <input type="text" pInputText formControlName="lugar"/>
                     </div>
-                    <div class="ui-g-8 ui-fluid">
+                    <div class="ui-g-12 ui-fluid">
                         <div>
                             <label> Observaciones</label>
                         </div>
@@ -59,7 +60,7 @@ import { StoreModel } from "../../../../shared/models/store.model";
                 <div class="ui-g-12 text-aling-right">
                     <button style="margin-right:10px;" *ngIf="form.disabled && permisoEdicion && !disable" pButton type="button" label="Editar datos" (click)="form.enable()" class="ui-button-success"></button>
                     <button style="margin-right:10px;" *ngIf="form.enabled" pButton type="button" label="Descartar cambios" (click)="loadForm(capacitaciones)" class="ui-button-danger"></button>
-                    <button style="margin-right:10px;" *ngIf="form.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary"></button>
+                    <button style="margin-right:10px;" *ngIf="form.enabled" pButton type="submit" label="Actualizar"  class="ui-button-primary" (click)="messageEdit()"></button>
                     </div>
                 </div>
             </form>
@@ -85,7 +86,11 @@ export class EditCapacitacionComponent implements OnInit {
     @Input()
     permisoEdicion: boolean;
 
-    constructor(private fb: FormBuilder, private store: Store<StoreModel>) {}
+    constructor(
+        private fb: FormBuilder, private store: Store<StoreModel>,
+        private messageService: MessageService
+
+        ) {}
     ngOnInit() {
         this.createForm();
     }
@@ -100,6 +105,10 @@ export class EditCapacitacionComponent implements OnInit {
             observaciones: ["", Validators.required],
             id: [""]
         });
+    }
+
+    messageEdit() {
+        this.messageService.add({severity:'success', summary:'Actualización exitosa', detail:'Datos básicos actualizados'});
     }
 
     loadForm(capacitaciones: CapacitacionModel) {

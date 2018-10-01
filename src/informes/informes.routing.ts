@@ -22,6 +22,10 @@ export const ROUTES: Routes = [
                     requiredPermision: 2100
                 }
             },
+            {
+                path: 'listado-reportes-acciones',
+                component: fromContainers.InfAccionesComponent
+            }
         ]
     }
 ];

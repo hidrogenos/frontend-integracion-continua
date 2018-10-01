@@ -51,89 +51,71 @@ import * as fromAuth from "./../../../auth/store";
 
         <edit-capacitacion-component #editCapacitacion
             (edit)="onUpdate($event)"
-            [permisoEdicion]="(hasPermision(803)| async) || permisoEditar">
+            [permisoEdicion]="permisoEditar">
         </edit-capacitacion-component>
 
-        <procesos-capacitacion-component #procesosCapacitacion
+        <procesos-capacitacion-component #procesosCapacitacion *ngIf="hasPermision(805) | async"
             [loadedCapacitaciones]="loadedCapacitaciones"
             [procesos]="procesos"
             [procesosAsociados]="loadedCapacitaciones?.procesos"
             (deleteProceso)="onDeleteProceso($event)"
-            (addProceso)="onUpdateproceso($event)"
-            [permisoAdd]="(hasPermision(803)| async) || permisoEditar"
-            [permisoDelete]="(hasPermision(803)| async) || permisoEditar">
+            (addProceso)="onUpdateproceso($event)">
         </procesos-capacitacion-component>
 
-        <documentacion-capacitacion-component #documentoCapacitacion
+        <documentacion-capacitacion-component #documentoCapacitacion *ngIf="hasPermision(806) | async"
             [documentos]="loadedCapacitaciones?.documentos"
             (onCreateDocumento)="uploadDocumentos($event)"
             (onDeleteDocumento)="deleteUsuarioDocumento($event)"
             (onDownloadDocumento)="downloadDocumento($event)"
-            (onConsultarDocumento)="consultarDocumentoCapacitacion($event)"
-            [permisoAdd]="(hasPermision(803)| async) || permisoEditar"
-            [permisoVisualize]="(hasPermision(803)| async) || permisoEditar"
-            [permisoDowload]="(hasPermision(803)| async) || permisoEditar"
-            [permisoDelete]="(hasPermision(803)| async) || permisoEditar">
+            (onConsultarDocumento)="consultarDocumentoCapacitacion($event)">
         </documentacion-capacitacion-component>
 
-        <asistentes-externos-component #asistentesExternos
+        <asistentes-externos-component #asistentesExternos *ngIf="hasPermision(807) | async"
             (createAE)="onCreateAE($event)"
             [asistenteExterno]="loadedCapacitaciones?.asistentes_externos"
             (editAE)="showAE($event)"
-            (deleteAE)="onDeleteAE($event)"
-            [permisoCreateAE]="(hasPermision(803)| async) || permisoEditar"
-            [permisoEditAE]="(hasPermision(803)| async)|| permisoEditar"
-            [permisoDeleteAE]="(hasPermision(803)| async)|| permisoEditar">
+            (deleteAE)="onDeleteAE($event)">
         </asistentes-externos-component>
 
         <edit-asistente-externo-component #editAsistenteExterno
             (editAE)="onUpdateAE($event)">
         </edit-asistente-externo-component>
 
-        <asistentes-internos-component #asistentesInternos
+        <asistentes-internos-component #asistentesInternos *ngIf="hasPermision(808 ) | async"
             [asistenteInterno]="asistenteInterno"
             [loadedInterno]="loadedCapacitaciones?.asistentes_internos"
             (editAI)="showAI($event)"
             (createAI)="onCreateAI($event)"
-            (deleteAI)="onDeleteAI($event)"
-            [permisoCreateAI]="(hasPermision(803)| async)|| permisoEditar"
-            [permisoEditAI]="(hasPermision(803)| async) || permisoEditar"
-            [permisoDeleteAI]="(hasPermision(803)| async) || permisoEditar">
+            (deleteAI)="onDeleteAI($event)">
         </asistentes-internos-component>
 
         <edit-asistente-interno-component #editAsistenteInterno
             (editAI)="onUpdateAI($event)">
         </edit-asistente-interno-component>
 
-        <capacitadores-externos-component #capacitadoresExternos
+        <capacitadores-externos-component #capacitadoresExternos *ngIf="hasPermision(809 ) | async"
             [capacitadoresExternos]='loadedCapacitaciones?.capacitadores_externos'
             (createCE)="onCreateCE($event)"
             (deleteCE)="onDeleteCE($event)"
-            (editCE)="showCE($event)"
-            [permisoCreateCE]="(hasPermision(803)| async) || permisoEditar"
-            [permisoEditCE]="(hasPermision(803)| async)|| permisoEditar"
-            [permisoDeleteCE]="(hasPermision(803)| async) || permisoEditar">
+            (editCE)="showCE($event)">
         </capacitadores-externos-component>
 
         <edit-capacitadores-externo-component #editCapacitadoresExterno
             (editCE)="onUpdateCE($event)">
         </edit-capacitadores-externo-component>
 
-        <capacitadores-internos-component #createCapacitadorI
+        <capacitadores-internos-component #createCapacitadorI *ngIf="hasPermision(810) | async"
             [capacitadorInterno]="capacitadorInterno"
             [loadedInterno]="loadedCapacitaciones?.capacitadores_internos"
             (createCI)="onCreateCI($event)"
             (editCI)="showCI($event)"
-            (deleteCI)="onDeleteCI($event)"
-            [permisoCreateCI]="(hasPermision(803)| async) || permisoEditar"
-            [permisoEditCI]="(hasPermision(803)| async) || permisoEditar"
-            [permisoDeleteCI]="(hasPermision(803)| async) || permisoEditar">
+            (deleteCI)="onDeleteCI($event)">
         </capacitadores-internos-component>
 
         <edit-capacitador-interno-component #editCapacitadorInterno
             (editCI)="onUpdateCI($event)">
         </edit-capacitador-interno-component>
-        <div class="ui-g">
+        <div class="ui-g" *ngIf="hasPermision(811) | async">
             <div class="ui-g-12 text-aling-center">
                 <div class="card card-w-title">
                     <button *ngIf="loadedCapacitaciones?.id_estado != 1 && loadedCapacitaciones?.id_estado !=2" pButton type="button" label="Abrir Capacitación"  class="ui-button-success" (click)="openCapacitacion()"></button>
@@ -247,12 +229,16 @@ export class CapacitacionesDetalleComponent implements OnInit {
                             this.desabilitarComponentes();
 
                             setTimeout(time => {
-                                this.capacitadoresInternos.filtrarUsuariosInternos(
-                                    capacitacion.capacitadores_internos
-                                );
-                                this.asistentesInternos.filtrarUsuariosInternos(
-                                    capacitacion.asistentes_internos
-                                );
+                                if (this.capacitadoresInternos) {
+                                    this.capacitadoresInternos.filtrarUsuariosInternos(
+                                        capacitacion.capacitadores_internos
+                                    );
+                                }
+                                if (this.asistentesInternos) {
+                                    this.asistentesInternos.filtrarUsuariosInternos(
+                                        capacitacion.asistentes_internos
+                                    );
+                                }
                             }, 1);
                         } else {
                             this.store.dispatch(
@@ -309,10 +295,10 @@ export class CapacitacionesDetalleComponent implements OnInit {
                     ...this.loadedCapacitaciones,
                     ...response
                 };
-                console.log(response);
             });
     }
     onDeleteProceso(id: number) {
+        this.showWaitDialog('Eliminando proceso, un momento por favor...')
         this.capacitacionProcesoService
             .deleteCapacitacionProcesobyId(id)
             .subscribe(response => {
@@ -329,6 +315,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
 
                 this.procesos.push(procesoEliminado);
                 this.refreshListaProcesos();
+                this.hideWaitDialog();
             });
     }
 
@@ -341,6 +328,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
     }
 
     onUpdateproceso(proceso: MapaProcesoHijoModel) {
+        this.showWaitDialog('Actualizando datos, un momento por favor...')
         this.capacitacionesService
             .addProcesoCapacitacion(this.loadedCapacitaciones.id, proceso)
             .subscribe(response => {
@@ -349,11 +337,15 @@ export class CapacitacionesDetalleComponent implements OnInit {
                 );
                 proceso.pivot = response;
                 this.loadedCapacitaciones.procesos.push(proceso);
+                this.procesosCapacitacion.form.reset();
+                this.hideWaitDialog();
+
             });
     }
 
     //asistente Externo
     onCreateAE(asistenteExterno) {
+        this.showWaitDialog('Creando asistente externo, un momento por favor...');
         this.capacitacionAE
             .createAsistenteExterno(
                 asistenteExterno,
@@ -364,12 +356,15 @@ export class CapacitacionesDetalleComponent implements OnInit {
                     ...this.loadedCapacitaciones.asistentes_externos,
                     response
                 ];
+                this.hideWaitDialog();
             });
     }
     onUpdateAE(asistenteExterno: CapacitacionAsistenteExternoModel) {
+        this.showWaitDialog('Actualizando datos, un momento por favor...');
         this.capacitacionAE
             .updateAsistenteExterno(asistenteExterno.id, asistenteExterno)
             .subscribe(response => {
+                this.hideWaitDialog();
                 return (this.loadedCapacitaciones.asistentes_externos = this.loadedCapacitaciones.asistentes_externos.map(
                     ele => {
                         return ele.id == response.id ? response : ele;
@@ -379,9 +374,11 @@ export class CapacitacionesDetalleComponent implements OnInit {
     }
 
     onDeleteAE(asistenteExterno: CapacitacionAsistenteExternoModel) {
+        this.showWaitDialog('Eliminando asistente externo, un momento por favor...');
         this.capacitacionAE
             .deleteAsistenteExterno(asistenteExterno.id)
             .subscribe(response => {
+                this.hideWaitDialog();
                 this.loadedCapacitaciones.asistentes_externos = this.loadedCapacitaciones.asistentes_externos.filter(
                     ele => ele.id != response.id
                 );
@@ -391,12 +388,14 @@ export class CapacitacionesDetalleComponent implements OnInit {
     //asistente interno
 
     onCreateAI(asistentesInternos: CapacitacionAsistenteInternoModel[]) {
+        this.showWaitDialog('Creando Asistente interno, un mometo por favor...');
         this.capacitacionAI
             .createAsistenteInterno(
                 asistentesInternos,
                 this.loadedCapacitaciones.id
             )
             .subscribe(response => {
+                this.hideWaitDialog();
                 this.loadedCapacitaciones.asistentes_internos = [
                     ...this.loadedCapacitaciones.asistentes_internos,
                     ...response
@@ -409,18 +408,22 @@ export class CapacitacionesDetalleComponent implements OnInit {
     }
 
     onDeleteAI(id: number) {
+        this.showWaitDialog('Eliminando asistente interno, un momento por favor...');
         this.capacitacionAI.deleteAsistenteinterno(id).subscribe(response => {
             this.loadedCapacitaciones.asistentes_internos = this.loadedCapacitaciones.asistentes_internos.filter(
                 ele => ele.id != response.id
             );
             this.asistenteInterno = [...this.asistenteInterno, response.usuario]
+            this.hideWaitDialog();
         });
     }
 
     onUpdateAI(asistenteInterno: CapacitacionAsistenteInternoModel) {
+        this.showWaitDialog('Actualizando datos, un momento por favor...');
         this.capacitacionAI
             .updateAsistenteinterno(asistenteInterno.id, asistenteInterno)
             .subscribe(response => {
+                this.hideWaitDialog();
                 this.loadedCapacitaciones.asistentes_internos = this.loadedCapacitaciones.asistentes_internos.map(
                     ele => {
                         if (ele.id == response.id) {
@@ -435,6 +438,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
     //capacitadores externos
 
     onCreateCE(capacitadorExterno) {
+        this.showWaitDialog('Creando capacitador externo, un momento por favor...');
         this.capacitacionCE
             .createCapacitadorExterno(
                 capacitadorExterno,
@@ -445,13 +449,16 @@ export class CapacitacionesDetalleComponent implements OnInit {
                     ...this.loadedCapacitaciones.capacitadores_externos,
                     response
                 ];
+                this.hideWaitDialog();
             });
     }
 
     onUpdateCE(capacitadorExterno: CapacitacionCapacitadorExternoModel) {
+        this.showWaitDialog('Actualizando datos, un momento por favor...')
         this.capacitacionCE
             .updateCapacitadorExterno(capacitadorExterno.id, capacitadorExterno)
             .subscribe(response => {
+                this.hideWaitDialog();
                 return (this.loadedCapacitaciones.capacitadores_externos = this.loadedCapacitaciones.capacitadores_externos.map(
                     ele => {
                         return ele.id == response.id ? response : ele;
@@ -461,18 +468,21 @@ export class CapacitacionesDetalleComponent implements OnInit {
     }
 
     onDeleteCE(capacitadorExterno: CapacitacionCapacitadorExternoModel) {
+        this.showWaitDialog('Eliminando capacitador externo, un momento por favor...');
         this.capacitacionCE
             .deleteCapacitadorExterno(capacitadorExterno.id)
             .subscribe(response => {
                 this.loadedCapacitaciones.capacitadores_externos = this.loadedCapacitaciones.capacitadores_externos.filter(
                     ele => ele.id != response.id
                 );
+                this.hideWaitDialog();
             });
     }
 
     //capacitadores internos
 
     onCreateCI(capacitadoresInternos: CapacitacionCapacitadorInternoModel[]) {
+        this.showWaitDialog('Creando capacitador interno, un momento por favor...');
         this.capacitacionCI
             .createCapacitadorInterno(
                 capacitadoresInternos,
@@ -487,22 +497,27 @@ export class CapacitacionesDetalleComponent implements OnInit {
                     this.loadedCapacitaciones.capacitadores_internos
                 );
                 this.capacitadorInterno = [...capacitadorInterno];
+                this.hideWaitDialog();
             });
     }
 
     onDeleteCI(id: number) {
+        this.showWaitDialog('Eliminado capacitador interno, un momento por favor...');
         this.capacitacionCI.deleteCapacitadorInterno(id).subscribe(response => {
             this.loadedCapacitaciones.capacitadores_internos = this.loadedCapacitaciones.capacitadores_internos.filter(
                 ele => ele.id != response.id
             );
             this.capacitadorInterno = [...this.capacitadorInterno, response.usuario];
+            this.hideWaitDialog();
         });
     }
 
     onUpdateCI(capacitadorInterno: CapacitacionCapacitadorInternoModel) {
+        this.showWaitDialog('Actualizando datos, un momento por favor...');
         this.capacitacionCI
             .updateCapacitadorInterno(capacitadorInterno.id, capacitadorInterno)
             .subscribe(response => {
+                this.hideWaitDialog();
                 this.loadedCapacitaciones.capacitadores_internos = this.loadedCapacitaciones.capacitadores_internos.map(
                     ele => {
                         if (ele.id == response.id) {
@@ -598,6 +613,7 @@ export class CapacitacionesDetalleComponent implements OnInit {
     }
 
     openCapacitacion(event: CapacitacionModel) {
+        this.showWaitDialog('Abriendo capacitación un momento por fvaor...');
         this.capacitacionesService
             .openCapacitacionEstado(this.loadedCapacitaciones.id, event)
             .subscribe(response => {
@@ -605,12 +621,12 @@ export class CapacitacionesDetalleComponent implements OnInit {
                     ...this.loadedCapacitaciones,
                     ...response
                 };
-                console.log(response);
-                console.log(this.loadedCapacitaciones);
+                this.hideWaitDialog();
             });
     }
 
     closeCapacitacion(event: CapacitacionModel) {
+        this.showWaitDialog('Cerrando capacitación, un momento por favor...');
         this.capacitacionesService
             .closeCapacitacionEstado(this.loadedCapacitaciones.id, event)
             .subscribe(response => {
@@ -618,19 +634,29 @@ export class CapacitacionesDetalleComponent implements OnInit {
                     ...this.loadedCapacitaciones,
                     ...response
                 };
+                this.hideWaitDialog();
             });
     }
 
     desabilitarComponentes() {
         let estado = this.loadedCapacitaciones.id_estado;
         if (estado == 2) {
-            this.editCapacitacion.disableComponent();
-            this.procesosCapacitacion.disableComponent();
-            this.documentoCapacitacion.disableComponent();
-            this.asistentesExternos.disableComponent();
-            this.asistentesInternos.disableComponent();
-            this.capacitadoresExternos.disableComponent();
-            this.capacitadoresInternos.disableComponent();
+            if(this.editCapacitacion)
+            {
+                this.editCapacitacion.disableComponent();
+            } if(this.procesosCapacitacion){
+                this.procesosCapacitacion.disableComponent();
+            } if (this.documentoCapacitacion) {
+                this.documentoCapacitacion.disableComponent();    
+            } if (this.asistentesExternos) {
+                this.asistentesExternos.disableComponent();
+            } if (this.asistentesInternos) {
+                this.asistentesInternos.disableComponent();
+            } if (this.capacitadoresExternos) {
+                this.capacitadoresExternos.disableComponent();
+            } if (this.capacitadoresInterno) {
+                this.capacitadoresInternos.disableComponent();
+            }
         }
     }
 

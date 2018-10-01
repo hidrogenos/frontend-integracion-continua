@@ -41,15 +41,13 @@ import * as fromShared from './../../../shared/store';
                                     Nombre
                                     <p-sortIcon field="nombre" ></p-sortIcon>
                                 </th>
-                                <th>
+                                <th rowspan="2">
                                     Acciones
                                 </th>
                             </tr>
                             <tr>
                                 <th>
                                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
-                                </th>
-                                <th>
                                 </th>
                             </tr>
                         </ng-template>
@@ -136,7 +134,6 @@ export class ArlComponent{
     }
     
     onEdit(event: ArlModel){ 
-        console.log(event.id)
         this.showWaitDialog('Editando arl, un momento por favor...')
         this.admArlService.editArl(event.id, event).subscribe(response => {
             return this.arl = this.arl.map(element => {
@@ -147,7 +144,6 @@ export class ArlComponent{
     }
 
     onCreate($event){
-        console.log($event)
         this.showWaitDialog('Creando arl, un momento por favor...');
         this.arlService.createArl($event).subscribe(response => {
             this.arl =[

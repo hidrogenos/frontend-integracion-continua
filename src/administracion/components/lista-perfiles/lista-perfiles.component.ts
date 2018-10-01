@@ -19,16 +19,13 @@ import { PerfilModel } from '../../../shared/models/perfil.model';
                             Perfiles
                             <p-sortIcon field="nombre"></p-sortIcon>
                         </th>
-                        <th style="width: 80px;">
+                        <th style="width: 80px;" rowspan="2">
                             Editar
                         </th>
                     </tr>
                     <tr>
                         <th class="ui-fluid">
                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
-                        </th>
-                        <th>
-
                         </th>
                     </tr>
                 </ng-template>
@@ -63,7 +60,7 @@ export class ListaPerfilesComponent {
     @Output()
     onSelectPerfil = new EventEmitter<PerfilModel>();
 
-    constructor() {}
+    constructor() { }
 
     onRowSelect(event) {
         const selectedPerfil: PerfilModel = event.data;

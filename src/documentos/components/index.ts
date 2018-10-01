@@ -10,6 +10,9 @@ export * from './docs-divulgacion-dialog/docs-divulgacion-dialog.component';
 import { DocsDocumentosAsociadosComponent } from './docs-documentos-asociados/docs-documentos-asociados.component';
 export * from './docs-documentos-asociados/docs-documentos-asociados.component';
 
+import { DocsDetalleArchivoSoporteComponent } from './docs-detalle-archivo-soporte/docs-detalle-archivo-soporte.component';
+export * from './docs-detalle-archivo-soporte/docs-detalle-archivo-soporte.component';
+
 import { DocsInformacionGeneralDocumentoComponent } from './docs-informacion-general-documento/docs-informacion-general-documento.component';
 export * from './docs-informacion-general-documento/docs-informacion-general-documento.component';
 
@@ -34,6 +37,7 @@ export * from './docs-tabla-documentos/docs-tabla-documentos.component';
 export const components: any[] = [
     DocsDetalleAdjuntarDocumentoComponent,
     DocsDetalleEditorDocumentoComponent,
+    DocsDetalleArchivoSoporteComponent,
     DocsDivulgacionDialogComponent,
     DocsDocumentosAsociadosComponent,
     DocsInformacionGeneralDocumentoComponent,

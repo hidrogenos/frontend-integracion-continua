@@ -1,18 +1,15 @@
-
 import { Component, ViewChild } from "@angular/core";
-import { AdmEpsService } from "../../services/adm-eps/adm-eps.service";
-import { EpsModel } from "../../../shared/models/eps.model";
 import { DataTable } from "primeng/primeng";
-import { EpsService, HasPermisionService, PensionService, CesantiaService } from "../../../shared/services";
-import { EditEpsDialogComponent, EditPensionDialogComponent } from "../../components";
+import { HasPermisionService, CesantiaService } from "../../../shared/services";
+import { EditPensionDialogComponent } from "../../components";
+import { PensionModel } from "../../../shared/models/pension.model";
+import { AdmCesantiaService } from "../../services";
+import { CesantiaModel } from "../../../shared/models/cesantia.model";
 
 //Store
 import { Store } from "@ngrx/store";
 import { StoreModel } from "../../../shared/models/store.model";
 import * as fromShared from './../../../shared/store';
-import { PensionModel } from "../../../shared/models/pension.model";
-import { AdmPensionService, AdmCesantiaService } from "../../services";
-import { CesantiaModel } from "../../../shared/models/cesantia.model";
 
 @Component({
     selector:'cesantias-component',
@@ -44,15 +41,13 @@ import { CesantiaModel } from "../../../shared/models/cesantia.model";
                                             Nombre
                                             <p-sortIcon field="nombre" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
                                     <tr>
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'nombre', 'contains')">
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </ng-template>
@@ -88,7 +83,6 @@ import { CesantiaModel } from "../../../shared/models/cesantia.model";
                 </edit-cesantia-dialog>
             </div>
         </div>
-    
     `
 })
 
@@ -119,7 +113,6 @@ export class CesantiasComponent{
             this.totalRecords = response.totalRows;
             this.loading = false;
             this.hideWaitDialog();
-
         })
     }
 
@@ -134,8 +127,7 @@ export class CesantiasComponent{
                     }
                 );
                 this.hideWaitDialog();
-            });
-            
+            }); 
     }
 
     hideWaitDialog() {
@@ -158,7 +150,6 @@ export class CesantiasComponent{
     }
 
     onEdit(event: PensionModel){ 
-        console.log(event.id)
         this.showWaitDialog('Editando cesantía, un momento por favor...')
         this.admCesantiaService.editCesantias(event.id, event).subscribe(response => {
             return this.cesantia = this.cesantia.map(element => {

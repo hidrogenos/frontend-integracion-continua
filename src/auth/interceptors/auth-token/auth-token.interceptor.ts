@@ -51,6 +51,8 @@ export class AuthTokenInterceptor implements HttpInterceptor {
                 message = err.message;
             }
             this.messageService.add({ severity: 'error', summary: err.status.toString(), detail: message });
+        } else if (err.status == 401) {
+            this.messageService.add({ severity: 'severity', summary: 'Credenciales incorrectas', detail: 'Verifique los datos e intentelo nuevamente' });
         } else if (err.status !== 401) {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Contacte con el administrador' });
         }

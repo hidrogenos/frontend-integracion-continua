@@ -10,7 +10,7 @@ import { environment } from "../../../../environments/environment";
     template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
             <p-dialog 
-                header="Registrar nueva Capacitación" 
+                header="Registrar nueva capacitación" 
                 [(visible)]="display" 
                 [width]="900"
                 [modal]="true">
@@ -29,14 +29,14 @@ import { environment } from "../../../../environments/environment";
                 </div>
             <div class="ui-g-6 ui-fluid">
                 <div>
-                    <label>Fecha Inicio:</label>
+                    <label>Fecha inicio:</label>
                 </div>
                 <p-calendar showIcon="true" formControlName="fecha_inicio" appendTo="body"></p-calendar>
 
             </div>
             <div class="ui-g-6 ui-fluid">
                 <div>
-                    <label>Fecha Fin:</label>
+                    <label>Fecha fin:</label>
                 </div>
                 <p-calendar showIcon="true" formControlName="fecha_fin" appendTo="body"></p-calendar>
 
@@ -128,7 +128,6 @@ export class CreateCapacitacionDialogComponent implements OnInit {
             observaciones: this.form.value.observaciones,
             procesos: this.form.value.procesos
         };
-        console.log(capacitacion, "create");
         this.create.emit(capacitacion);
         this.display = false;
         this.form.reset();

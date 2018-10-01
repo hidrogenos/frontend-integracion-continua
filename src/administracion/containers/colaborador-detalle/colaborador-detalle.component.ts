@@ -35,6 +35,9 @@ import { environment } from '../../../environments/environment';
 import { CalidadMapaProcesoModel } from '../../../shared/models/calidad-mapa-proceso.model';
 import { MapaProcesoHijoModel } from '../../../shared/models/mapa_proceso_hijo.model';
 import { UsuarioProcesoModel } from '../../../shared/models/usuario-proceso.model';
+import { ListaDocumentoRestringidoModel } from '../../../shared/models/lista-documento-restringido.model';
+import { UsuarioListaDocumentosRestringidosModel } from '../../../shared/models/usuario-lista-documentos-restringidos.model';
+import { DocumentosRestringidosListaComponent } from '../documentos-restringidos-lista/documentos-restringidos-lista.component';
 
 @Component({
     selector: 'colaborador-detalle',
@@ -121,6 +124,19 @@ import { UsuarioProcesoModel } from '../../../shared/models/usuario-proceso.mode
                                     </usuario-procesos>
                                     </div>
                                 </p-tabPanel>
+                                <p-tabPanel header="Listas de documentos restringidos">
+                                    <div class="ui-g" *ngIf="hasPermision(1121) | async">
+                                            <usuario-lista-documentos-restringidos
+                                            *ngIf="loadedUsuario"
+                                            [listasDocumentosRestringidos]="listasDocumentosRestringidos"
+                                            [listasUsuarioDocumentosRestringidos]="loadedUsuario.listas_documentos_restringidos"
+                                            (onDeleteUsuarioListaDocumentosRestringidos)="deleteUsuarioListaDocumentosRestringidos($event)"
+                                            (onRelateListaDocumentosRestringidos)="relacionarListasDocumentosRestringidos($event)"
+                                            [permisoRelacionarListaDocumentosRestringidos]="hasPermision(1122) | async"
+                                            [permisoBorrarListaDocumentosRestringidos]="hasPermision(1123) | async">
+                                        </usuario-lista-documentos-restringidos>
+                                    </div>
+                                </p-tabPanel>
                             </p-tabView>
                         </div>
                     </div>
@@ -144,6 +160,7 @@ export class ColaboradorDetalleComponent implements OnInit {
     perfilesActivos: PerfilModel[];
     procesos: MapaProcesoHijoModel[];
     tiposIdentificacion: TipoIdentificacionModel[];
+    listasDocumentosRestringidos: ListaDocumentoRestringidoModel[];
 
     //viewChild
     @ViewChild('cdc')
@@ -290,6 +307,19 @@ export class ColaboradorDetalleComponent implements OnInit {
             });
     }
 
+    deleteUsuarioListaDocumentosRestringidos(listaDocumentosRestringidos: ListaDocumentoRestringidoModel){
+        this.colaboradorDetalleService
+        .deleteUsuarioListaDocumentosRestringidos( {
+                id_usuario: this.loadedUsuario.id,
+                id_lista_documentos_restringidos: listaDocumentosRestringidos.id
+            }
+        )
+        .subscribe(usuarioListaDocumentoRestringido => {
+            this.loadedUsuario.listas_documentos_restringidos = 
+            this.loadedUsuario.listas_documentos_restringidos.filter(listaActual => listaActual.id != usuarioListaDocumentoRestringido.id_lista_documentos_restringidos);
+        })
+    }
+
     downloadUsuarioDocumento(event: UsuarioDocumentoModel) {
         this.colaboradorDetalleService
             .downloadUsuarioDestrezaDocumento({ path: event.path })
@@ -335,7 +365,7 @@ export class ColaboradorDetalleComponent implements OnInit {
 
     getInitialData() {
         this.showWaitDialog(
-            'COnsultando datos del colaborador, un momento por favor'
+            'Consultando datos del colaborador, un momento por favor'
         );
         forkJoin([this.getUsuario(), this.getAuxData()]).subscribe(
             ([usuario, auxData]) => {
@@ -350,7 +380,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.perfilesActivos = auxData.perfiles;
                 this.tiposIdentificacion = auxData.tipos_identificacion;
                 this.procesos = auxData.procesos;
-                console.log(auxData.procesos);
+                this.listasDocumentosRestringidos = auxData.listasDocumentosRestringidos;
 
                 setTimeout(() => {
                     this.dbc.loadFormData();
@@ -379,6 +409,19 @@ export class ColaboradorDetalleComponent implements OnInit {
         return this.hasPermisionService.hasPermision(id);
     }
 
+    relacionarListasDocumentosRestringidos(data: ListaDocumentoRestringidoModel[]){
+        this.showWaitDialog('Relacionando listas documentosRestringidos...');
+        this.colaboradorDetalleService
+            .relacionarListasDocumentosRestringidos(this.loadedUsuario.id, { listas: data })
+            .subscribe(response => {
+                this.loadedUsuario = {
+                    ...this.loadedUsuario,
+                    ...response
+                };
+                this.hideWaitDialog();
+            });
+    }
+
     relacionarProcesos(procesos: MapaProcesoHijoModel[]) {
         this.showWaitDialog('Relacionando proceso, un momento por favor...');
         this.colaboradorDetalleService
@@ -391,6 +434,7 @@ export class ColaboradorDetalleComponent implements OnInit {
                 this.hideWaitDialog();
             });
     }
+
 
     resetPassword(data) {
         this.showWaitDialog('Actualizando la contraseña, un momento por favor');

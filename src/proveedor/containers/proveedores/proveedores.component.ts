@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { StoreModel } from '../../../shared/models/store.model';
 import * as fromShared from './../../../shared/store';
 import * as fromRoot from './../../../app/store';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'proveedores',
@@ -19,14 +20,14 @@ import * as fromRoot from './../../../app/store';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <h1><i class="fa fa-users" aria-hidden="true"></i> Proveedores</h1>
+                    <h1><i class="fa fa-industry" aria-hidden="true"></i> Proveedores</h1>
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button pButton 
                                 *ngIf="hasPermision(201) | async"
                                 type="button" 
                                 (click)="createProveedor.show()" 
-                                label="Crear nuevo Proveedor" 
+                                label="Crear nuevo proveedor" 
                                 class="ui-button-success">
                             </button>
                         </div>
@@ -53,7 +54,7 @@ import * as fromRoot from './../../../app/store';
                                             Teléfono 
                                             <p-sortIcon field="tel1" ></p-sortIcon>
                                         </th>
-                                        <th>
+                                        <th rowspan="2">
                                             Acciones
                                         </th>
                                     </tr>
@@ -70,8 +71,6 @@ import * as fromRoot from './../../../app/store';
                                         <th>
                                             <input pInputText type="text" (input)="dt.filter($event.target.value, 'tel1', 'contains')">
                                         </th>
-                                        <th>
-                                        </th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-proveedor>
@@ -84,7 +83,7 @@ import * as fromRoot from './../../../app/store';
                                             <button style="margin-right: 10px;" pButton
                                                 *ngIf="hasPermision(202) | async"
                                                 type="button" 
-                                                (click)="detalleProveedor(proveedor)" 
+                                                (click)="detalleProveedor(proveedor.id, $event)" 
                                                 icon="pi pi-search" class="ui-button-primary">
                                              </button>
                                             <button pButton 
@@ -134,10 +133,12 @@ export class ProveedoresComponent implements OnInit {
         this.loadInitData();
     }
 
-    detalleProveedor(event: ProveedorModel) {
+    detalleProveedor(id: number, event: MouseEvent) {
+        event.ctrlKey
+        ? window.open(`${environment.baseUrl}/proveedores/detalle/${id}`):
         this.store.dispatch(
             new fromRoot.Go({
-                path: [`proveedores/detalle/${event.id}`]
+                path: [`proveedores/detalle/${id}`]
             })
         );
     }

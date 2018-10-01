@@ -64,7 +64,6 @@ export class EditDepartamentoDialogComponent {
     
     ngOnInit(){ 
         this.createForm();
-        console.log(this.paises)
     }
 
     createForm() {
@@ -87,7 +86,6 @@ export class EditDepartamentoDialogComponent {
     
     loadForm(departamento: DepartamentoModel){
         this.departamento = departamento;
-        console.log(departamento)
         this.editDepartamento.setValue({
             id: departamento.id,
             nombre: departamento.nombre,
