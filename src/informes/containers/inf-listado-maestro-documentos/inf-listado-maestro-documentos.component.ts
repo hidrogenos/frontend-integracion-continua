@@ -49,15 +49,6 @@ export class InfListadoMaestroDocumentosComponent {
         })
     }
 
-    onExportReportePDF() {
-        this.informeService.getReporteDesviacion().subscribe(response => {
-            const blob = new Blob([response], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            window.open(url);
-            this.hideWaitDialog();
-        });
-    }
-
     onVerDetalleDocumento(data) {
         data.event.ctrlKey
             ? window.open(`${environment.baseUrl}/documentos/detalle/${data.idDocumento}`) :

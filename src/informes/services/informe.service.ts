@@ -27,8 +27,8 @@ export class InformeService {
         )
     }
 
-    getReporteDesviacion() {
-        return this.http.get(`${environment.apiUrl}/informes/export-reporte-lista-chequeo`, { responseType: 'blob' });
+    getInformeListaChequeoPDF() {
+        return this.http.get(`${environment.apiUrl}/informes/export-informe-lista-chequeo`, { responseType: 'blob' });
     }
 
     exportPDF(filtros) {
