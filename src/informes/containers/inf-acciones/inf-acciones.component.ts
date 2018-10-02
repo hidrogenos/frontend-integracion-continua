@@ -5,13 +5,14 @@ import * as fromSharedStore from './../../../shared/store';
 import { Store } from '@ngrx/store';
 import * as fromRootStore from './../../../app/store';
 
-@Component({selector: 'inf-acciones',
-template: `
+@Component({
+    selector: 'inf-acciones',
+    template: `
         <reportes-acciones 
-        (onExportarReporteDesviacion)="onExportReportePDF()">
+        (onExportInformeListaChequeoPDF)="onExportInformeListaChequeoPDF()">
         </reportes-acciones>
 `})
-export class InfAccionesComponent{
+export class InfAccionesComponent {
     constructor(
         private informeService: InformeService,
         private sharedStore: Store<fromSharedStore.SharedState>,
@@ -19,8 +20,8 @@ export class InfAccionesComponent{
     ) { }
 
 
-    onExportReportePDF() {
-        this.informeService.getReporteDesviacion().subscribe(response => {
+    onExportInformeListaChequeoPDF() {
+        this.informeService.getInformeListaChequeoPDF().subscribe(response => {
             const blob = new Blob([response], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
             window.open(url);
