@@ -8,7 +8,7 @@ import { Component, EventEmitter, Output } from "@angular/core";
         label="descargar informe lista de chequeo" (click)="exportarReporteDesviacion()"></button>
     `
 })
-export class ReporteDesviacionComponent {
+export class ReporteAccionesComponent {
 
     @Output()
     onExportarReporteDesviacion = new EventEmitter();
