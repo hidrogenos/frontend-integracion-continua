@@ -19,6 +19,15 @@ import { CapacitacionCapacitadorExternoModel } from '../../../shared/models/capa
                                 formControlName="nombre_capacitador"
                                 style="width: 100%;"/>
                              </div>
+                        <div class="ui-g-12">
+                            <label>Email: </label>
+                        </div>
+                             <div class="ui-md-8">
+                                <input pInputText  
+                                type="email"  
+                                formControlName="email"
+                                style="width: 100%;"/>
+                            </div>
 
                              <div class="ui-g-12">
                              <label>Calificacion: </label>
@@ -62,7 +71,8 @@ export class EditCapacitadoresExternosDialogComponent implements OnInit {
         this.form = this.fb.group({
             id: [''],
             nombre_capacitador: ['', Validators.required],
-            calificacion: ['', Validators.required]
+            calificacion: ['', Validators.required],
+            email: ['', Validators.required]
         });
     }
 
@@ -70,7 +80,8 @@ export class EditCapacitadoresExternosDialogComponent implements OnInit {
         this.form.setValue({
             id: newForm.id,
             nombre_capacitador: newForm.nombre_capacitador,
-            calificacion: newForm.calificacion
+            calificacion: newForm.calificacion,
+            email: newForm.email
         });
     }
 

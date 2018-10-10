@@ -12,6 +12,7 @@ import { DocumentoService } from '../../shared/services/documento/documento.serv
 import { DocumentoDivulgacionRegistroService, DocumentoAdjuntoService, DocumentoArchivoSoporteService } from '../../shared/services';
 import { DocumentoPermisoTipoDocumentoModel } from '../../shared/models/documento-permiso-tipo-documento.model';
 import { DocumentoArchivoSoporteModel } from '../../shared/models/documento-archivo-soporte.model';
+import { DocumentoModel } from '../../shared/models/documento.model';
 
 export interface DataEstado {
     estado: number,
@@ -43,6 +44,12 @@ export class DocsDocumentoService {
                     }
                 })
             );
+    }
+
+    onEliminarDocumento(event: DocumentoModel): Observable<DocumentoModel>{
+        return this.http.delete<DocumentoModel>(
+            `${environment.apiUrl}/documentos/delete-documento/${event.id}`
+        );
     }
 
     getUsuariosQuery(queryObject) {

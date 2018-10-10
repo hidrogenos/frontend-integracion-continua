@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-    production: false,
+    production: true,
     baseUrl: 'http://localhost:4200',
     apiUrl: 'http://localhost/sgd_backend_v_2_1/public/api',
     auth: {

@@ -19,6 +19,15 @@ import { CapacitacionAsistenteExternoModel } from "../../../shared/models/capaci
                                 formControlName="nombre_asistente"
                                 style="width: 100%;"/>
                              </div>
+                        <div class="ui-g-12">
+                            <label>Email: </label>
+                        </div>
+                             <div class="ui-md-8">
+                                <input pInputText  
+                                type="email"  
+                                formControlName="email"
+                                style="width: 100%;"/>
+                            </div>
 
                              <div class="ui-g-12">
                              <label>Calificacion: </label>
@@ -62,7 +71,8 @@ export class EditAsistentesExternosDialogComponent implements OnInit {
         this.form = this.fb.group({
             id: [""],
             nombre_asistente: ["", Validators.required],
-            calificacion: ["", Validators.required]
+            calificacion: ["", Validators.required],
+            email: ["",Validators.required]
         });
     }
 
@@ -70,7 +80,8 @@ export class EditAsistentesExternosDialogComponent implements OnInit {
         this.form.setValue({
             id: newForm.id,
             nombre_asistente: newForm.nombre_asistente,
-            calificacion: newForm.calificacion
+            calificacion: newForm.calificacion,
+            email: newForm.email,
         });
     }
 
