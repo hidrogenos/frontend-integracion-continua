@@ -24,6 +24,7 @@ export interface DocumentoModel {
     divulgacion_observacion?: string;
     fecha_inicio?: number;
     fecha_fin?: number;
+    activo?: boolean;
 
     responsable_elaboracion?: UsuarioModel;
     responsable_revision?: UsuarioModel;
