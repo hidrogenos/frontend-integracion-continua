@@ -13,6 +13,9 @@ export * from './docs-documentos-asociados/docs-documentos-asociados.component';
 import { DocsDetalleArchivoSoporteComponent } from './docs-detalle-archivo-soporte/docs-detalle-archivo-soporte.component';
 export * from './docs-detalle-archivo-soporte/docs-detalle-archivo-soporte.component';
 
+import { DocsEliminadosDialogComponent } from './docs-eliminados-dialog/docs-eliminados-dialog.component';
+export * from './docs-eliminados-dialog/docs-eliminados-dialog.component';
+
 import { DocsInformacionGeneralDocumentoComponent } from './docs-informacion-general-documento/docs-informacion-general-documento.component';
 export * from './docs-informacion-general-documento/docs-informacion-general-documento.component';
 
@@ -40,6 +43,7 @@ export const components: any[] = [
     DocsDetalleArchivoSoporteComponent,
     DocsDivulgacionDialogComponent,
     DocsDocumentosAsociadosComponent,
+    DocsEliminadosDialogComponent,
     DocsInformacionGeneralDocumentoComponent,
     DocsNuevoDocumentoComponent,
     DocsObservacionDialogComponent,
