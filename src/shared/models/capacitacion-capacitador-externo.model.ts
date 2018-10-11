@@ -6,6 +6,7 @@ export interface CapacitacionCapacitadorExternoModel {
     nombre_capacitador?: string;
     identificacion_capacitador?: number;
     calificacion?: number;
+    email?: string;
     id_usuario?: number;
     fecha?: number;
 }

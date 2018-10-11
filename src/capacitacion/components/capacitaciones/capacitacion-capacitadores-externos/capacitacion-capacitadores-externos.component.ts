@@ -29,6 +29,12 @@ import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/c
                             <input type="number" pInputText formControlName="identificacion_capacitador" />
                     </div>
                     <div class="ui-g-4">
+                            <div>
+                                <label>Email:</label>
+                             </div>
+                            <input type="email" pInputText formControlName="email" />
+                    </div>
+                    <div class="ui-g-4">
                     <button pButton *ngIf="!disable" type="submit"  [disabled]="!form.valid"  icon="pi pi-plus"></button>
                 </div>
                 </div>
@@ -37,6 +43,9 @@ import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/c
                                     <tr>
                                         <th>
                                          Capacitador
+                                        </th>
+                                        <th>
+                                         Email
                                         </th>
                                         <th>
                                          Identificación
@@ -52,6 +61,7 @@ import { CapacitacionCapacitadorExternoModel } from "../../../../shared/models/c
                                 <ng-template pTemplate="body" let-capacitadoresExternos>
                                     <tr>
                                         <td>{{capacitadoresExternos?.nombre_capacitador}}</td>
+                                        <td>{{capacitadoresExternos?.email}}</td>
                                         <td>{{capacitadoresExternos?.identificacion_capacitador}}</td>
                                         <td>{{capacitadoresExternos?.calificacion}}</td>
                                         <td style="text-align: center;">
@@ -97,6 +107,7 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
             id: [""],
             nombre_capacitador: ["", Validators.required],
             identificacion_capacitador: ["", Validators.required],
+            email: ["", Validators.required],
             fecha: [new Date()]
         });
     }
@@ -106,6 +117,7 @@ export class CapacitacionCapacitadoresExternosComponent implements OnInit {
             nombre_capacitador: this.form.value.nombre_capacitador,
             identificacion_capacitador: this.form.value
                 .identificacion_capacitador,
+            email: this.form.value.email,
             fecha: (this.form.value.fecha as Date).valueOf()
         };
         this.createCE.emit(NewCapacitador);

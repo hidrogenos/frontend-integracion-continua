@@ -4,9 +4,9 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-    production: false,
-    baseUrl: 'http://144.217.89.76/sgd/app',
-    apiUrl: 'http://144.217.89.76/sgd/api/public/api',
+    production: true,
+    baseUrl: 'http://localhost:4200',
+    apiUrl: 'http://localhost/sgd_backend_v_2_1/public/api',
     auth: {
         urlToken: 'http://144.217.89.76/sgd/api/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
@@ -78,7 +78,8 @@ export const environment = {
         obsoleto: 10,
         rechazado: 11,
         anulado: 12,
-        visto_bueno_calidad: 13
+        visto_bueno_calidad: 13,
+        eliminado: 14
     },
     permiso_documento: {
         crear: 1,
@@ -88,7 +89,8 @@ export const environment = {
         revisar_ajenos: 5,
         aprobar_ajenos: 6,
         ver_lista_documentos: 7,
-        ver_documentos_obsoletos: 8
+        ver_documentos_obsoletos: 8,
+        ver_documentos_eliminados: 9
     },
     nombres_modulos_visuales: {
         acciones_correctivas: 'Desviación',

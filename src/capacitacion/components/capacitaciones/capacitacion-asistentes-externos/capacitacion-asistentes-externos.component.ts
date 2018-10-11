@@ -17,11 +17,16 @@ import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/cap
                 <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-4">
-                   
                         <div>
                             <label>Asistente:</label>
                         </div>
                             <input type="text" pInputText formControlName="nombre_asistente" />
+                    </div>
+                    <div class="ui-g-4">
+                        <div>
+                            <label>Email:</label>
+                        </div>
+                            <input type="email" pInputText formControlName="email" />
                     </div>
                     <div class="ui-g-4">
                             <div>
@@ -40,6 +45,9 @@ import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/cap
                                             Asistente
                                         </th>
                                         <th>
+                                            Email
+                                        </th>
+                                        <th>
                                             Identificación
                                         </th>
                                         <th>
@@ -53,6 +61,7 @@ import { CapacitacionAsistenteExternoModel } from "../../../../shared/models/cap
                                 <ng-template pTemplate="body" let-asistenteExterno>
                                     <tr>
                                         <td>{{asistenteExterno?.nombre_asistente}} </td>
+                                        <td>{{asistenteExterno?.email}} </td>
                                         <td>{{asistenteExterno?.identificacion_asistente}} </td>
                                         <td>{{asistenteExterno?.calificacion}}</td>
                                         <td style="text-align: center;">
@@ -98,6 +107,7 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
             id: [""],
             nombre_asistente: ["", Validators.required],
             identificacion_asistente: ["", Validators.required],
+            email: ["", Validators.required],
             fecha: [new Date()]
         });
     }
@@ -106,9 +116,10 @@ export class CapacitacionAsistentesExternosComponent implements OnInit {
         const NewAsistente: CapacitacionAsistenteExternoModel = {
             nombre_asistente: this.form.value.nombre_asistente,
             identificacion_asistente: this.form.value.identificacion_asistente,
+            email: this.form.value.email,
             fecha: (this.form.value.fecha as Date).valueOf()
         };
-        this.createAE.emit(NewAsistente);
+        this.createAE.emit(NewAsistente); 
     }
     showEdit(asistenteExterno: CapacitacionAsistenteExternoModel) {
         this.editAE.emit(asistenteExterno);

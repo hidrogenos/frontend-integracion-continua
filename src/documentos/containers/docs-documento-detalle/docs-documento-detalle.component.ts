@@ -176,6 +176,13 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                                 (click)="dialogObsoleto.display = true"
                                 ></button>
                             </div>
+                            <!-- Eliminar -->
+                            <div class="ui-g-6 ui-md-4 ui-md-offset-4"
+                                *ngIf="puedePonerEliminado()">
+                                <button pButton type="button" label="Eliminar" 
+                                (click)="dialogEliminado.display = true"
+                                ></button>
+                            </div>
                             <!-- Anular -->
                             <div class="ui-g-6 ui-md-3"
                                 *ngIf="documento?.id_estado !== env?.estados_documento.anulado
@@ -258,6 +265,11 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
         (onConfirmDialog)="docObsoletoDocumento($event)"
         ></docs-obsoleto-dialog>
         
+        <docs-eliminado-dialog #dialogEliminado [tipo]="'Eliminar ' + documento?.titulo"
+        [documentoEliminado]="documentoEliminado"
+        (onConfirmDialog)="docEliminadoDocuento($event)">
+        </docs-eliminado-dialog>
+        
     `
 })
 export class DocsDocumentoDetalleComponent implements OnInit {
@@ -272,6 +284,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     filteredProcesos;
     filteredDocumento;
     documentosObsoleto;
+    documentoEliminado;
     tiposDocumento: Observable<DocumentoTipoModel[]>;
     usuarioLogged: UsuarioModel;
 
@@ -290,7 +303,9 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     permisoPuedeAprobar: boolean = false;
     permisoPuedePonerEnMarcha: boolean = false;
     permisoPuedePonerObsoleto: boolean = false;
-    permisoPuedeVerObsoleto: boolean = false;
+    permisoPuedeVerObsoleto: boolean = false; 
+    permisoPuedeEliminar: boolean = false; //eliminar
+    permisoPuedeVerEliminado: boolean = false; //eliminar
     permisoElaborarAjenos: boolean = false;
     permisoRevisarAjenos: boolean = false;
     permisoAprobarAjenos: boolean = false;
@@ -329,11 +344,12 @@ export class DocsDocumentoDetalleComponent implements OnInit {
             this.documento = documento;
             this.procesos = procesos;
             this.consultarPermisosDocumento().subscribe((
-                [permisoElaborarAjenos, permisoRevisarAjenos, permisoAprobarAjenos, permisoVerObsoleto]) => {
+                [permisoElaborarAjenos, permisoRevisarAjenos, permisoAprobarAjenos, permisoVerObsoleto, permisoVerEliminado]) => {
                 if (
                     (this.documento.id_estado == environment.estados_documento.obsoleto ||
-                        this.documento.id_estado == environment.estados_documento.anulado)
-                    && !permisoVerObsoleto) {
+                        this.documento.id_estado == environment.estados_documento.anulado ||
+                            this.documento.id_estado == environment.estados_documento.eliminado)
+                    && !permisoVerObsoleto && !permisoVerEliminado) {
                     this.hideWaitDialog();
                     this.store.dispatch(
                         new fromRouteStore.Go({
@@ -353,6 +369,8 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                     this.permisoPuedePonerEnMarcha = this.puedePonerEnMarcha();
                     this.permisoPuedePonerObsoleto = this.puedePonerObsoleto();
                     this.permisoPuedeVerObsoleto = this.puedeVerObsoleto();
+                    this.permisoPuedeVerEliminado = this.puedeVerEliminado(); 
+                    this.permisoPuedeEliminar = this.puedePonerEliminado();
 
                     this.digd.inicializarForm(this.documento, this.permisoPuedeEditar);
                     this.hideWaitDialog();
@@ -369,12 +387,14 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                     let permisoRevisarAjenos = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.revisar_ajenos);
                     let permisoAprobarAjenos = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.aprobar_ajenos);
                     let permisoVerObsoleto = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.ver_documentos_obsoletos);
-
+                    let permisoVerEliminado = this.docsDocumentoService.filtrarPermisoDocumento(response, environment.permiso_documento.ver_documentos_eliminados);
                     return forkJoin(
                         this.hasPermision(permisoElaborarAjenos),
                         this.hasPermision(permisoRevisarAjenos),
                         this.hasPermision(permisoAprobarAjenos),
-                        this.hasPermision(permisoVerObsoleto)
+                        this.hasPermision(permisoVerObsoleto),
+                        this.hasPermision(permisoVerEliminado),
+
                     )
                 })
             )
@@ -791,6 +811,17 @@ export class DocsDocumentoDetalleComponent implements OnInit {
         this.cambiarEstadoDocumento(data);
     }
 
+    docEliminadoDocuento(formData) {
+        this.showWaitDialog('Documentos', 'Eliminando documento, un momento por favor...');
+        let data = {
+            estado: environment.estados_documento.eliminado,
+            data: {
+                observacion: formData.observacion
+            }
+        };
+        this.cambiarEstadoDocumento(data);
+    }
+
     cambiarEstadoDocumento(data) {
         this.docsDocumentoService
             .updateEstadoDocumento(this.documento.id, data)
@@ -912,6 +943,22 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     puedeVerObsoleto() {
         if (this.documento.id_estado == environment.estados_documento.obsoleto &&
             this.usuarioLogged.es_jefe == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    puedeVerEliminado(){
+        if (this.documento.id_estado == environment.estados_documento.eliminado && this.usuarioLogged.es_jefe == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    puedePonerEliminado(){
+        if (this.documento.id_estado == environment.estados_documento.vigente && this.usuarioLogged.es_jefe == true) {
             return true;
         } else {
             return false;

@@ -4,6 +4,7 @@ export interface CapacitacionAsistenteExternoModel {
     nombre_asistente: string;
     identificacion_asistente?: number;
     calificacion?: number;
+    email?: string;
     id_usuario?: number;
     fecha?: number;
 }
