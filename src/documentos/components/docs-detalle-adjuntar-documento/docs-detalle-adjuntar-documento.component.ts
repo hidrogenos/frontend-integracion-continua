@@ -20,7 +20,6 @@ import { environment } from '../../../environments/environment';
                     multiple="multiple"
                     cancelLabel="Limpiar"
                     chooseLabel="Seleccionar"
-                    [disabled]="!puedeEditar"
                     uploadLabel="Adjuntar">
                 </p-fileUpload>
             </div>
@@ -47,7 +46,7 @@ import { environment } from '../../../environments/environment';
                                 class="ui-button-success"
                                 (click)="verDocumentoAdjunto(adjunto)"></button>
                                 <button pButton type="button" icon="fa fa-trash" 
-                                class="ui-button-danger" *ngIf="puedeEditar"
+                                class="ui-button-danger"
                                 (click)="deleteDocumentoAdjunto(adjunto)"></button>
                             </td>
                         </tr>
