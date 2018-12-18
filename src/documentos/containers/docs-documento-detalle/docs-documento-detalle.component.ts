@@ -155,6 +155,13 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                                 (click)="dialogVistoBueno.display = true"
                                 ></button>
                             </div>
+                            <div class="ui-g-6 ui-md-4 ui-md-offset-4"
+                            *ngIf="documento?.id_estado == env?.estados_documento.aprobado
+                                && (hasPermision(11000) | async)">
+                                    <button pButton type="button" label="Solicitar reelaboración" 
+                                    (click)="dialogReelaboracion.display = true"
+                                ></button>
+                            </div>
                             <!-- Enviar a divulgación -->
                             <div class="ui-g-6 ui-md-4 ui-md-offset-4"
                                 *ngIf="puedeDivulgar()">
