@@ -64,7 +64,8 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                         (onAdjuntarDocumento)="onAdjuntarDocumento($event)"
                         (onDeleteAdjunto)="onDeleteAdjunto($event)"
                         (onVerAdjunto)="onVerAdjunto($event)"
-                        [puedeEditar]="permisoPuedeEditarDocumento">
+                        [puedeEditar]="permisoPuedeEditarDocumento"
+                        [puedeAdjuntar]="permisoPuedePonerEnMarcha">
                     </docs-detalle-adjuntar-documento>
                     <docs-documentos-asociados #docasoc
                         [tiposDocumento]="tiposDocumento | async"

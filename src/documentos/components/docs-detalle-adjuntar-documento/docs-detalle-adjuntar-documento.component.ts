@@ -19,6 +19,7 @@ import { environment } from '../../../environments/environment';
                     (uploadHandler)="uploadFiles($event)"
                     multiple="multiple"
                     cancelLabel="Limpiar"
+                    [disabled]="!puedeEditar && !puedeAdjuntar"
                     chooseLabel="Seleccionar"
                     uploadLabel="Adjuntar">
                 </p-fileUpload>
@@ -46,7 +47,7 @@ import { environment } from '../../../environments/environment';
                                 class="ui-button-success"
                                 (click)="verDocumentoAdjunto(adjunto)"></button>
                                 <button pButton type="button" icon="fa fa-trash" 
-                                class="ui-button-danger"
+                                class="ui-button-danger" *ngIf="puedeEditar || puedeAdjuntar"
                                 (click)="deleteDocumentoAdjunto(adjunto)"></button>
                             </td>
                         </tr>
@@ -67,6 +68,9 @@ export class DocsDetalleAdjuntarDocumentoComponent {
 
     @Input()
     puedeEditar: boolean;
+
+    @Input()
+    puedeAdjuntar: boolean;
 
     @Output()
     onAdjuntarDocumento = new EventEmitter<File[]>();
