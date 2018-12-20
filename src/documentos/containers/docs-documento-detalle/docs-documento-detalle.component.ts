@@ -64,7 +64,8 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                         (onAdjuntarDocumento)="onAdjuntarDocumento($event)"
                         (onDeleteAdjunto)="onDeleteAdjunto($event)"
                         (onVerAdjunto)="onVerAdjunto($event)"
-                        [puedeEditar]="permisoPuedePonerEnMarcha">
+                        [puedeEditar]="permisoPuedeEditarDocumento"
+                        [puedeAdjuntar]="permisoPuedePonerEnMarcha">
                     </docs-detalle-adjuntar-documento>
                     <docs-documentos-asociados #docasoc
                         [tiposDocumento]="tiposDocumento | async"
@@ -82,7 +83,7 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                         (onAdjuntarDocumento)="onAdjuntarDocumentoFlujo($event)"
                         (onDeleteAdjunto)="onDeleteAdjuntoFlujo($event)"
                         (onVerAdjunto)="onVerAdjuntoFlujo($event)"
-                        [puedeEditar]="permisoPuedePonerObsoleto">
+                        [puedeEditar]="permisoPuedePonerEnMarcha">
         <!---->     </docs-detalle-adjuntar-documento>
         
                     <docs-detalle-archivo-soporte #dArchivoSoporte
