@@ -3,6 +3,8 @@ import { ModuleWithProviders } from "@angular/core";
 
 //containers
 import * as fromContainers from "./containers";
+import * as fromGuardsShareds from './../shared/guards';
+
 
 export const ROUTES: Routes = [
     {
@@ -20,7 +22,11 @@ export const ROUTES: Routes = [
                     },
                     {
                         path: "lista",
-                        component: fromContainers.AccionPreventivaListaComponent
+                        component: fromContainers.AccionPreventivaListaComponent,
+                        canActivate: [fromGuardsShareds.HasPermisionGuard],
+                        data: {
+                            requiredPermision: 11208
+                        }
                     }
                 ]
             }
