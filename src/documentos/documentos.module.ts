@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+import {CheckboxModule} from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
@@ -15,10 +16,13 @@ import { InputTextModule } from 'primeng/primeng';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+
 const primeNgModules: any[] = [
     AutoCompleteModule,
     CalendarModule,
     CardModule,
+    CheckboxModule,
     DialogModule,
     DropdownModule,
     EditorModule,
@@ -67,7 +71,9 @@ const ROUTES: Routes = [
         ),
         FormsModule,
         ReactiveFormsModule,
-        ...primeNgModules
+        ...primeNgModules,
+        FroalaEditorModule.forRoot(), 
+        FroalaViewModule.forRoot()
     ],
     declarations: [
         ...fromContainers.containers,

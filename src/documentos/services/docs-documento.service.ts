@@ -73,7 +73,7 @@ export class DocsDocumentoService {
     }
 
     getDocumentoById(idDocumento: number): any {
-        return this.http.get(`${environment.apiUrl}/documentos/get-documento-by-id/${idDocumento}`)
+        return this.http.get<DocumentoModel>(`${environment.apiUrl}/documentos/get-documento-by-id/${idDocumento}`)
             .pipe(
                 map(documento => this.documentoService.transformDocumentoResponse(documento))
             );

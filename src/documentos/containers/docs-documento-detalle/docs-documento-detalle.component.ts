@@ -54,6 +54,8 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                         [puedeEditar]="permisoPuedeEditar">
                     </docs-procesos-asociados>
                     <docs-detalle-editor-documento 
+                        [flagCabeceraPrimeraPagina]="documento?.flag_cabecera_primera_pagina"
+                        [cabeceraPrimeraPagina]="documento?.cabecera_primera_pagina"
                         [text]="documento?.documento"
                         (onGuardarDocumento)="onGuardarDocumento($event)"
                         [puedeEditar]="permisoPuedeEditarDocumento">
@@ -311,7 +313,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     permisoPuedeAprobar: boolean = false;
     permisoPuedePonerEnMarcha: boolean = false;
     permisoPuedePonerObsoleto: boolean = false;
-    permisoPuedeVerObsoleto: boolean = false; 
+    permisoPuedeVerObsoleto: boolean = false;
     permisoPuedeEliminar: boolean = false; //eliminar
     permisoPuedeVerEliminado: boolean = false; //eliminar
     permisoElaborarAjenos: boolean = false;
@@ -349,6 +351,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
 
             })
         ).subscribe(([documento, procesos]) => {
+            console.log(documento);
             this.documento = documento;
             this.procesos = procesos;
             this.consultarPermisosDocumento().subscribe((
@@ -356,7 +359,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 if (
                     (this.documento.id_estado == environment.estados_documento.obsoleto ||
                         this.documento.id_estado == environment.estados_documento.anulado ||
-                            this.documento.id_estado == environment.estados_documento.eliminado)
+                        this.documento.id_estado == environment.estados_documento.eliminado)
                     && !permisoVerObsoleto && !permisoVerEliminado) {
                     this.hideWaitDialog();
                     this.store.dispatch(
@@ -377,7 +380,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                     this.permisoPuedePonerEnMarcha = this.puedePonerEnMarcha();
                     this.permisoPuedePonerObsoleto = this.puedePonerObsoleto();
                     this.permisoPuedeVerObsoleto = this.puedeVerObsoleto();
-                    this.permisoPuedeVerEliminado = this.puedeVerEliminado(); 
+                    this.permisoPuedeVerEliminado = this.puedeVerEliminado();
                     this.permisoPuedeEliminar = this.puedePonerEliminado();
 
                     this.digd.inicializarForm(this.documento, this.permisoPuedeEditar);
@@ -615,13 +618,13 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 this.documento.archivos_soporte = [
                     ...this.documento.archivos_soporte,
                     ...response
-                ];  
+                ];
                 this.dArchivoSoporte.fu.clear();
                 this.hideWaitDialog();
             });
     }
 
-    onDeleteArchivoSoporte(event: DocumentoArchivoSoporteModel){
+    onDeleteArchivoSoporte(event: DocumentoArchivoSoporteModel) {
         this.showWaitDialog('Eliminando archivo de soporte, un momento por favor...');
         this.docsDocumentoService
             .deleteArchivoSoporte(event.id)
@@ -633,7 +636,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
             });
     }
 
-    onDescargarArchivoSoporte(event: DocumentoArchivoSoporteModel){
+    onDescargarArchivoSoporte(event: DocumentoArchivoSoporteModel) {
         this.showWaitDialog('Descargando archivo de soporte, un momento por favor...');
         this.docsDocumentoService
             .downloadArchivoSoporte({ path: event.path })
@@ -649,12 +652,12 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 window.URL.revokeObjectURL(url);
                 a.remove(); // remove the element
                 this.hideWaitDialog();
-        });
+            });
     }
 
-    consultarArchivoSoporte(archivo: DocumentoArchivoSoporteModel){
+    consultarArchivoSoporte(archivo: DocumentoArchivoSoporteModel) {
         const idTipoDocumento = environment.tipos_documento.documento_archivo_soporte.id;
-        this.store.dispatch(new fromRouteStore.Go({path: [`visor-adjunto/${idTipoDocumento}/${archivo.id}/${archivo.titulo}`]}))
+        this.store.dispatch(new fromRouteStore.Go({ path: [`visor-adjunto/${idTipoDocumento}/${archivo.id}/${archivo.titulo}`] }))
     }
 
     onFilterDocumento(filter: { query: string, id_tipo_documento: number, id_documento: number }) {
@@ -957,7 +960,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
         }
     }
 
-    puedeVerEliminado(){
+    puedeVerEliminado() {
         if (this.documento.id_estado == environment.estados_documento.eliminado && this.usuarioLogged.es_jefe == true) {
             return true;
         } else {
@@ -965,7 +968,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
         }
     }
 
-    puedePonerEliminado(){
+    puedePonerEliminado() {
         if (this.documento.id_estado == environment.estados_documento.vigente && this.usuarioLogged.es_jefe == true) {
             return true;
         } else {

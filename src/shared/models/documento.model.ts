@@ -36,4 +36,11 @@ export interface DocumentoModel {
     divulgacion_registros?: DocumentoDivulgacionRegistroModel[];
     tipo_documento?: DocumentoTipoModel;
     archivos_soporte?: DocumentoArchivoSoporteModel[];
+    disposicion_documento?: number;
+    flag_cabecera_primera_pagina?: boolean;
+    cabecera_primera_pagina?: string;
+    flag_pie_primera_pagina?: boolean;
+    pie_primera_pagina?: string;
+    cabecera_documento?: string;
+    pie_documento?: string;
 }
