@@ -5,65 +5,140 @@ import {
     Input,
     AfterViewChecked,
     ViewChild,
-    OnInit
+    OnInit,
+    AfterViewInit
 } from '@angular/core';
 import { Editor } from 'primeng/editor';
 
 @Component({
     selector: 'docs-detalle-editor-documento',
     template: `
-        <div>
-            <div class="ui-g">
-                <h2>Documento</h2>
-            </div>
-
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <label style="margin-right: 15px;"
-                        >Cabecera primera página:</label
-                    >
-                    <p-checkbox
-                        [(ngModel)]="flagCabeceraPrimeraPagina"
-                        binary="true"
-                    ></p-checkbox>
-                    <div *ngIf="flagCabeceraPrimeraPagina">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p-panel
+                    header="Editor de documento"
+                    [toggleable]="true"
+                    [style]="{ 'margin-bottom': '20px' }"
+                    [collapsed]="true"
+                >
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <label style="margin-right: 15px;">
+                                Disposición de hoja:
+                            </label>
+                            <p-dropdown
+                                [options]="disposiciones"
+                                [(ngModel)]="disposicion"
+                            ></p-dropdown>
+                        </div>
+                        <div class="ui-g-12">
+                            <label style="margin-right: 15px;">
+                                Cabecera primera página:
+                            </label>
+                            <p-checkbox
+                                [(ngModel)]="flagCabeceraPrimeraPagina"
+                                binary="true"
+                            >
+                            </p-checkbox>
+                            <div *ngIf="flagCabeceraPrimeraPagina">
+                                <div
+                                    class="ui-g-12"
+                                    [froalaEditor]="
+                                        optionsCabeceraPrimeraPagina
+                                    "
+                                    [(froalaModel)]="cabeceraPrimeraPagina"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="ui-g-12">
+                            <label style="margin-right: 15px;">
+                                Pie de página primera página:
+                            </label>
+                            <p-checkbox
+                                [(ngModel)]="flagPiePrimeraPagina"
+                                binary="true"
+                            >
+                            </p-checkbox>
+                            <div *ngIf="flagPiePrimeraPagina">
+                                <div
+                                    class="ui-g-12"
+                                    [froalaEditor]="optionsPiePrimeraPagina"
+                                    [(froalaModel)]="piePrimeraPagina"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="ui-g-12">
+                            <label style="margin-right: 15px;">
+                                Cabecera documento:
+                            </label>
+                            <div
+                                class="ui-g-12"
+                                [froalaEditor]="optionsCabeceraDocumento"
+                                [(froalaModel)]="cabeceraDocumento"
+                            ></div>
+                        </div>
+                        <div class="ui-g-12">
+                            <label style="margin-right: 15px;">
+                                Cuerpo documento:
+                            </label>
+                            <div
+                                [froalaEditor]="options"
+                                [(froalaModel)]="text"
+                            ></div>
+                        </div>
+                        <div class="ui-g-12">
+                            <label style="margin-right: 15px;">
+                                Pie de página documento:
+                            </label>
+                            <div
+                                class="ui-g-12"
+                                [froalaEditor]="optionsPieDocumento"
+                                [(froalaModel)]="pieDocumento"
+                            ></div>
+                        </div>
                         <div
-                            class="ui-g-12"
-                            [froalaEditor]="optionsCabeceraPrimeraPagina"
-                            [(froalaModel)]="cabeceraPrimeraPagina"
-                        ></div>
+                            class="ui-g-12 text-aling-right"
+                            *ngIf="puedeEditar"
+                        >
+                            <button
+                                pButton
+                                type="button"
+                                label="Editar documento"
+                                (click)="guardarDocumento()"
+                                [disabled]="!text"
+                            ></button>
+                        </div>
                     </div>
-                    <div
-                        class="ui-g-12"
-                        [froalaEditor]="options"
-                        [(froalaModel)]="text"
-                    ></div>
-                    <!-- <div class="ui-g-12">
-                <p-editor [(ngModel)]="text" [style]="{'height':'220px'}" [readonly]="!puedeEditar"></p-editor>
-            </div> -->
-                    <div class="ui-g-12 text-aling-right" *ngIf="puedeEditar">
-                        <button
-                            pButton
-                            type="button"
-                            label="Editar documento"
-                            (click)="guardarDocumento()"
-                            [disabled]="!text"
-                        ></button>
-                    </div>
-                </div>
-            </div>
-            <pre>
+                    <pre>
         {{ text | json }}
-    </pre>
+    </pre
+                    >
+                </p-panel>
+            </div>
         </div>
     `
 })
 export class DocsDetalleEditorDocumentoComponent implements OnInit {
     @Input()
+    disposicion: number;
+
+    @Input()
+    cabeceraDocumento: string;
+
+    @Input()
     cabeceraPrimeraPagina: string;
 
     @Input()
+    piePrimeraPagina: string;
+
+    @Input()
     flagCabeceraPrimeraPagina: boolean;
+
+    @Input()
+    flagPiePrimeraPagina: boolean;
+
+    @Input()
+    pieDocumento: string;
 
     @Input()
     text: string;
@@ -76,6 +151,14 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
 
     options = null;
     optionsCabeceraPrimeraPagina = null;
+    optionsPiePrimeraPagina = null;
+    optionsCabeceraDocumento = null;
+    optionsPieDocumento = null;
+
+    disposiciones = [
+        { label: 'Horizontal', value: 1 },
+        { label: 'Vertical', value: 0 }
+    ];
 
     constructor() {}
 
@@ -91,6 +174,33 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
 
         this.optionsCabeceraPrimeraPagina = {
             placeholderText: 'Edite la cabecera para la primera página',
+            events: {
+                'froalaEditor.initialized': function(e, editor) {
+                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                }
+            }
+        };
+
+        this.optionsPiePrimeraPagina = {
+            placeholderText: 'Edite el pie de página para la primera página',
+            events: {
+                'froalaEditor.initialized': function(e, editor) {
+                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                }
+            }
+        };
+
+        this.optionsCabeceraDocumento = {
+            placeholderText: 'Edite la cabecera para el documento',
+            events: {
+                'froalaEditor.initialized': function(e, editor) {
+                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                }
+            }
+        };
+
+        this.optionsPieDocumento = {
+            placeholderText: 'Edite el pie de página para el documento',
             events: {
                 'froalaEditor.initialized': function(e, editor) {
                     !this.puedeEditar ? editor.edit.on() : editor.edit.off();
