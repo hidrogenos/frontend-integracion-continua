@@ -107,6 +107,12 @@ import { Editor } from 'primeng/editor';
                                 (click)="guardarDocumento()"
                                 [disabled]="!text"
                             ></button>
+                            <button
+                                pButton
+                                type="button"
+                                label="Exportar PDF"
+                                (click)="generarPDF()"
+                            ></button>
                         </div>
                     </div>
                     <pre>
@@ -147,7 +153,19 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
     puedeEditar: boolean;
 
     @Output()
-    onGuardarDocumento = new EventEmitter<string>();
+    onGuardarDocumento = new EventEmitter<{
+        disposicion: number;
+        flagCabeceraPrimeraPagina: boolean;
+        cabeceraPrimeraPagina: string;
+        flagPiePrimeraPagina: boolean;
+        piePrimeraPagina: string;
+        cabeceraDocumento: string;
+        cuerpoDocumento: string;
+        pieDocumento: string;
+    }>();
+
+    @Output()
+    onGenerarPDF = new EventEmitter();
 
     options = null;
     optionsCabeceraPrimeraPagina = null;
@@ -209,7 +227,20 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
         };
     }
 
+    generarPDF() {
+        this.onGenerarPDF.emit();
+    }
+
     guardarDocumento() {
-        this.onGuardarDocumento.emit(this.text);
+        this.onGuardarDocumento.emit({
+            disposicion: this.disposicion,
+            flagCabeceraPrimeraPagina: this.flagCabeceraPrimeraPagina,
+            cabeceraPrimeraPagina: this.cabeceraPrimeraPagina,
+            flagPiePrimeraPagina: this.flagPiePrimeraPagina,
+            piePrimeraPagina: this.piePrimeraPagina,
+            cabeceraDocumento: this.cabeceraDocumento,
+            cuerpoDocumento: this.text,
+            pieDocumento: this.pieDocumento
+        });
     }
 }

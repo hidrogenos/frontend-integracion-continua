@@ -96,6 +96,7 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                         [cabeceraDocumento]="documento?.cabecera_documento"
                         [text]="documento?.documento"
                         (onGuardarDocumento)="onGuardarDocumento($event)"
+                        (onGenerarPDF)="onGenerarPDF($event)"
                         [puedeEditar]="permisoPuedeEditarDocumento"
                     >
                     </docs-detalle-editor-documento>
@@ -757,13 +758,13 @@ export class DocsDocumentoDetalleComponent implements OnInit {
             });
     }
 
-    onGuardarDocumento(texto) {
+    onGuardarDocumento(data) {
         this.showWaitDialog(
             'Documentos',
             'Editando documento, un momento por favor...'
         );
         this.docsDocumentoService
-            .updateDocumentoTexto(this.documento.id, texto)
+            .updateDocumentoTexto(this.documento.id, data)
             .subscribe(response => {
                 this.hideWaitDialog();
             });
@@ -1342,5 +1343,16 @@ export class DocsDocumentoDetalleComponent implements OnInit {
         } else {
             return false;
         }
+    }
+
+    onGenerarPDF() {
+        this.docsDocumentoService
+            .generarPdf(this.documento.id)
+            .subscribe(response => {
+                const blob = new Blob([response], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url);
+                this.hideWaitDialog();
+            });
     }
 }
