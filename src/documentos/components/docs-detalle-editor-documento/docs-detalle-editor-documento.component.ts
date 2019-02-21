@@ -261,6 +261,15 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             events: {
                 'froalaEditor.initialized': function(e, editor) {
                     !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                },
+                'froalaEditor.image.beforeUpload': (e, editor, files) => {
+                    console.log(files);
+                    if (files.length) {
+                        this.onUploadImageEditor.emit({ e, editor, files });
+                    }
+                    editor.popups.hideAll();
+                    // Stop default upload chain.
+                    return false;
                 }
             }
         };
