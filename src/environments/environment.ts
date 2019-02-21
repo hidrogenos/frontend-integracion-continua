@@ -7,6 +7,7 @@ export const environment = {
     production: true,
     baseUrl: 'http://localhost:4200',
     apiUrl: 'http://localhost/sgd/api/public/api',
+    publicStorageUrl: 'http://localhost/sgd/api/storage/app',
     auth: {
         urlToken: 'http://localhost/sgd/api/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',

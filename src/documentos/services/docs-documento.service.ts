@@ -17,6 +17,7 @@ import {
 import { DocumentoPermisoTipoDocumentoModel } from '../../shared/models/documento-permiso-tipo-documento.model';
 import { DocumentoArchivoSoporteModel } from '../../shared/models/documento-archivo-soporte.model';
 import { DocumentoModel } from '../../shared/models/documento.model';
+import { DocumentoImagenEditorAdjuntoModel } from 'src/shared/models/documento-imagen-editor-adjunto.model';
 
 export interface DataEstado {
     estado: number;
@@ -99,9 +100,9 @@ export class DocsDocumentoService {
         id: number,
         data: {
             disposicion: number;
-            flagCabeceraPrimeraPagina: boolean;
+            flagPrimeraPagina: boolean;
             cabeceraPrimeraPagina: string;
-            flagPiePrimeraPagina: boolean;
+            cuerpoPrimeraPagina: string;
             piePrimeraPagina: string;
             cabeceraDocumento: string;
             cuerpoDocumento: string;
@@ -112,9 +113,9 @@ export class DocsDocumentoService {
             `${environment.apiUrl}/documentos/update-documento-texto/${id}`,
             {
                 disposicion: data.disposicion,
-                flagCabeceraPrimeraPagina: data.flagCabeceraPrimeraPagina,
+                flagPrimeraPagina: data.flagPrimeraPagina,
                 cabeceraPrimeraPagina: data.cabeceraPrimeraPagina,
-                flagPiePrimeraPagina: data.flagPiePrimeraPagina,
+                cuerpoPrimeraPagina: data.cuerpoPrimeraPagina,
                 piePrimeraPagina: data.piePrimeraPagina,
                 cabeceraDocumento: data.cabeceraDocumento,
                 cuerpoDocumento: data.cuerpoDocumento,
@@ -165,6 +166,18 @@ export class DocsDocumentoService {
                     );
                 })
             );
+    }
+
+    uploadImagenEditorByDocumento(
+        idDocumento: number,
+        data
+    ): Observable<DocumentoImagenEditorAdjuntoModel> {
+        return this.http.post<DocumentoImagenEditorAdjuntoModel>(
+            `${
+                environment.apiUrl
+            }/documentos/upload-imagen-editor-by-documento/${idDocumento}`,
+            data
+        );
     }
 
     uploadAdjuntoFlujoByDocumento(

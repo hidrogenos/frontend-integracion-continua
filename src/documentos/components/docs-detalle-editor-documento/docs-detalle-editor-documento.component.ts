@@ -1,14 +1,4 @@
-import {
-    Component,
-    Output,
-    EventEmitter,
-    Input,
-    AfterViewChecked,
-    ViewChild,
-    OnInit,
-    AfterViewInit
-} from '@angular/core';
-import { Editor } from 'primeng/editor';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'docs-detalle-editor-documento',
@@ -33,39 +23,61 @@ import { Editor } from 'primeng/editor';
                         </div>
                         <div class="ui-g-12">
                             <label style="margin-right: 15px;">
-                                Cabecera primera página:
+                                Primera página:
                             </label>
                             <p-checkbox
-                                [(ngModel)]="flagCabeceraPrimeraPagina"
+                                [(ngModel)]="flagPrimeraPagina"
                                 binary="true"
                             >
                             </p-checkbox>
-                            <div *ngIf="flagCabeceraPrimeraPagina">
-                                <div
-                                    class="ui-g-12"
-                                    [froalaEditor]="
-                                        optionsCabeceraPrimeraPagina
-                                    "
-                                    [(froalaModel)]="cabeceraPrimeraPagina"
-                                ></div>
-                            </div>
-                        </div>
-                        <div class="ui-g-12">
-                            <label style="margin-right: 15px;">
-                                Pie de página primera página:
-                            </label>
-                            <p-checkbox
-                                [(ngModel)]="flagPiePrimeraPagina"
-                                binary="true"
+                            <p-panel
+                                *ngIf="flagPrimeraPagina"
+                                header="Primera página"
+                                [toggleable]="true"
+                                [style]="{ 'margin-bottom': '20px' }"
+                                [collapsed]="true"
                             >
-                            </p-checkbox>
-                            <div *ngIf="flagPiePrimeraPagina">
-                                <div
-                                    class="ui-g-12"
-                                    [froalaEditor]="optionsPiePrimeraPagina"
-                                    [(froalaModel)]="piePrimeraPagina"
-                                ></div>
-                            </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12">
+                                        <h3>Cabecera primera pagina</h3>
+                                        <div
+                                            class="ui-g-12"
+                                            [froalaEditor]="
+                                                optionsCabeceraPrimeraPagina
+                                            "
+                                            [(froalaModel)]="
+                                                cabeceraPrimeraPagina
+                                            "
+                                        ></div>
+                                    </div>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12">
+                                        <h3>Cuerpo primera pagina</h3>
+                                        <div
+                                            class="ui-g-12"
+                                            [froalaEditor]="
+                                                optionsCuerpoPrimeraPagina
+                                            "
+                                            [(froalaModel)]="
+                                                cuerpoPrimeraPagina
+                                            "
+                                        ></div>
+                                    </div>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12">
+                                        <h3>Cuerpo primera pagina</h3>
+                                        <div
+                                            class="ui-g-12"
+                                            [froalaEditor]="
+                                                optionsPiePrimeraPagina
+                                            "
+                                            [(froalaModel)]="piePrimeraPagina"
+                                        ></div>
+                                    </div>
+                                </div>
+                            </p-panel>
                         </div>
                         <div class="ui-g-12">
                             <label style="margin-right: 15px;">
@@ -138,10 +150,10 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
     piePrimeraPagina: string;
 
     @Input()
-    flagCabeceraPrimeraPagina: boolean;
+    flagPrimeraPagina: boolean;
 
     @Input()
-    flagPiePrimeraPagina: boolean;
+    cuerpoPrimeraPagina: string;
 
     @Input()
     pieDocumento: string;
@@ -155,14 +167,16 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
     @Output()
     onGuardarDocumento = new EventEmitter<{
         disposicion: number;
-        flagCabeceraPrimeraPagina: boolean;
+        flagPrimeraPagina: boolean;
         cabeceraPrimeraPagina: string;
-        flagPiePrimeraPagina: boolean;
         piePrimeraPagina: string;
+        cuerpoPrimeraPagina: string;
         cabeceraDocumento: string;
         cuerpoDocumento: string;
         pieDocumento: string;
     }>();
+
+    @Output() onUploadImageEditor = new EventEmitter<any>();
 
     @Output()
     onGenerarPDF = new EventEmitter();
@@ -170,6 +184,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
     options = null;
     optionsCabeceraPrimeraPagina = null;
     optionsPiePrimeraPagina = null;
+    optionsCuerpoPrimeraPagina = null;
     optionsCabeceraDocumento = null;
     optionsPieDocumento = null;
 
@@ -186,6 +201,30 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             events: {
                 'froalaEditor.initialized': function(e, editor) {
                     !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                },
+                'froalaEditor.image.beforeUpload': (e, editor, files) => {
+                    console.log(files);
+                    if (files.length) {
+                        this.onUploadImageEditor.emit({ e, editor, files });
+                        // // Create a File Reader.
+                        // var reader = new FileReader();
+                        // // Set the reader to insert images when they are loaded.
+                        // reader.onload = function(e) {
+                        //     let x: any = e.target;
+                        //     var result = x.result;
+                        //     editor.image.insert(
+                        //         result,
+                        //         null,
+                        //         null,
+                        //         editor.image.get()
+                        //     );
+                        // };
+                        // // Read image as base64.
+                        // reader.readAsDataURL(files[0]);
+                    }
+                    //editor.popups.hideAll();
+                    // // Stop default upload chain.
+                    // return false;
                 }
             }
         };
@@ -201,6 +240,15 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
 
         this.optionsPiePrimeraPagina = {
             placeholderText: 'Edite el pie de página para la primera página',
+            events: {
+                'froalaEditor.initialized': function(e, editor) {
+                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                }
+            }
+        };
+
+        this.optionsCuerpoPrimeraPagina = {
+            placeholderText: 'Edite el cuerpo de la primera página',
             events: {
                 'froalaEditor.initialized': function(e, editor) {
                     !this.puedeEditar ? editor.edit.on() : editor.edit.off();
@@ -234,9 +282,9 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
     guardarDocumento() {
         this.onGuardarDocumento.emit({
             disposicion: this.disposicion,
-            flagCabeceraPrimeraPagina: this.flagCabeceraPrimeraPagina,
+            flagPrimeraPagina: this.flagPrimeraPagina,
             cabeceraPrimeraPagina: this.cabeceraPrimeraPagina,
-            flagPiePrimeraPagina: this.flagPiePrimeraPagina,
+            cuerpoPrimeraPagina: this.cuerpoPrimeraPagina,
             piePrimeraPagina: this.piePrimeraPagina,
             cabeceraDocumento: this.cabeceraDocumento,
             cuerpoDocumento: this.text,

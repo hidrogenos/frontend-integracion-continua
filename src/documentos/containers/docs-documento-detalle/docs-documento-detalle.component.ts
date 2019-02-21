@@ -82,22 +82,19 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                     <docs-detalle-editor-documento
                         *ngIf="documento"
                         [disposicion]="documento?.disposicion_documento"
-                        [flagCabeceraPrimeraPagina]="
-                            documento?.flag_cabecera_primera_pagina
-                        "
+                        [flagPrimeraPagina]="documento?.flag_primera_pagina"
                         [cabeceraPrimeraPagina]="
                             documento?.cabecera_primera_pagina
                         "
-                        [flagPiePrimeraPagina]="
-                            documento?.flag_pie_primera_pagina
-                        "
                         [piePrimeraPagina]="documento?.pie_primera_pagina"
-                        [pieDocumento]="documento?.pie_documento"
+                        [cuerpoPrimeraPagina]="documento?.cuerpo_primera_pagina"
                         [cabeceraDocumento]="documento?.cabecera_documento"
+                        [pieDocumento]="documento?.pie_documento"
                         [text]="documento?.documento"
                         (onGuardarDocumento)="onGuardarDocumento($event)"
                         (onGenerarPDF)="onGenerarPDF($event)"
                         [puedeEditar]="permisoPuedeEditarDocumento"
+                        (onUploadImageEditor)="onUploadImageEditor($event)"
                     >
                     </docs-detalle-editor-documento>
                     <docs-detalle-adjuntar-documento
@@ -1353,6 +1350,35 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 const url = window.URL.createObjectURL(blob);
                 window.open(url);
                 this.hideWaitDialog();
+            });
+    }
+
+    onUploadImageEditor(event) {
+        console.log(event.files);
+
+        const formData: FormData = new FormData();
+        // event.files.forEach(archivo => {
+        //     formData.append('uploads[]', archivo, 'test');
+        // });
+
+        formData.append('upload', event.files[0], 'imagen');
+
+        this.docsDocumentoService
+            .uploadImagenEditorByDocumento(this.documento.id, formData)
+            .subscribe(response => {
+                event.editor.popups.hideAll();
+                event.editor.image.insert(
+                    environment.publicStorageUrl + '/' + response.path,
+                    null,
+                    null,
+                    event.editor.image.get()
+                );
+                // this.documento.adjuntos = [
+                //     ...this.documento.adjuntos,
+                //     ...response
+                // ];
+                // this.ddad.fu.clear();
+                // this.hideWaitDialog();
             });
     }
 }

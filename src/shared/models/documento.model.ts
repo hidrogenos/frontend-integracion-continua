@@ -37,10 +37,10 @@ export interface DocumentoModel {
     tipo_documento?: DocumentoTipoModel;
     archivos_soporte?: DocumentoArchivoSoporteModel[];
     disposicion_documento?: number;
-    flag_cabecera_primera_pagina?: boolean;
+    flag_primera_pagina?: boolean;
     cabecera_primera_pagina?: string;
-    flag_pie_primera_pagina?: boolean;
     pie_primera_pagina?: string;
+    cuerpo_primera_pagina?: string;
     cabecera_documento?: string;
     pie_documento?: string;
 }
