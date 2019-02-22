@@ -174,6 +174,9 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
     generalOptions = {
         language: 'es',
         heightMax: 300,
+        tableCellStyles: {
+            'custom-borde': 'Borde'
+        },
         toolbarButtons: [
             'fullscreen',
             'bold',
