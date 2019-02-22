@@ -544,7 +544,6 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 })
             )
             .subscribe(([documento, procesos]) => {
-                console.log(documento);
                 this.documento = documento;
                 this.procesos = procesos;
                 this.consultarPermisosDocumento().subscribe(
@@ -1354,12 +1353,9 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     }
 
     onUploadImageEditor(event) {
-        console.log(event.files);
+        this.showWaitDialog('Registrando iamgen, un momento por favor ...');
 
         const formData: FormData = new FormData();
-        // event.files.forEach(archivo => {
-        //     formData.append('uploads[]', archivo, 'test');
-        // });
 
         formData.append('upload', event.files[0], 'imagen');
 
@@ -1373,12 +1369,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                     null,
                     event.editor.image.get()
                 );
-                // this.documento.adjuntos = [
-                //     ...this.documento.adjuntos,
-                //     ...response
-                // ];
-                // this.ddad.fu.clear();
-                // this.hideWaitDialog();
+                this.hideWaitDialog();
             });
     }
 }

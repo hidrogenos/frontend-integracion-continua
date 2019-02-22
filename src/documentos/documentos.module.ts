@@ -16,10 +16,12 @@ import { InputTextModule } from 'primeng/primeng';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
+import { AccordionModule } from 'primeng/accordion';
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 const primeNgModules: any[] = [
+    AccordionModule,
     AutoCompleteModule,
     CalendarModule,
     CardModule,

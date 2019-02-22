@@ -16,10 +16,7 @@
                         "main": "src/main.ts",
                         "tsConfig": "src/tsconfig.app.json",
                         "polyfills": "src/polyfills.ts",
-                        "assets": [
-                            "src/assets",
-                            "src/upload.php"
-                        ],
+                        "assets": ["src/assets", "src/upload.php"],
                         "styles": [
                             "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/fullcalendar/dist/fullcalendar.min.css",
@@ -29,6 +26,7 @@
                             "./node_modules/font-awesome/css/font-awesome.css",
                             "node_modules/font-awesome/css/font-awesome.min.css",
                             "node_modules/primeicons/primeicons.css",
+                            "./node_modules/froala-editor/css/third_party/spell_checker.min.css",
                             "src/styles.scss"
                         ],
                         "scripts": [
@@ -38,7 +36,9 @@
                             "node_modules/fullcalendar/dist/fullcalendar.js",
                             "node_modules/quill/dist/quill.js",
                             "./node_modules/jquery/dist/jquery.min.js",
-                            "./node_modules/froala-editor/js/froala_editor.pkgd.min.js"
+                            "./node_modules/froala-editor/js/froala_editor.pkgd.min.js",
+                            "./node_modules/froala-editor/js/languages/es.js",
+                            "./node_modules/froala-editor/js/third_party/spell_checker.min.js"
                         ]
                     },
                     "configurations": {
@@ -99,10 +99,7 @@
                             "node_modules/font-awesome/css/font-awesome.min.css",
                             "src/styles.scss"
                         ],
-                        "assets": [
-                            "src/assets",
-                            "src/upload.php"
-                        ]
+                        "assets": ["src/assets", "src/upload.php"]
                     }
                 },
                 "lint": {
@@ -112,9 +109,7 @@
                             "src/tsconfig.app.json",
                             "src/tsconfig.spec.json"
                         ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
@@ -134,12 +129,8 @@
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
-                        "tsConfig": [
-                            "e2e/tsconfig.e2e.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "tsConfig": ["e2e/tsconfig.e2e.json"],
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
