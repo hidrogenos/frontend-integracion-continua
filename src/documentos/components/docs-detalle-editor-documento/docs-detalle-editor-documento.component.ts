@@ -173,6 +173,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
 
     generalOptions = {
         language: 'es',
+        heightMax: 300,
         toolbarButtons: [
             'fullscreen',
             'bold',

@@ -1342,6 +1342,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     }
 
     onGenerarPDF() {
+        this.showWaitDialog('Generando documento, un momento por favor ...');
         this.docsDocumentoService
             .generarPdf(this.documento.id)
             .subscribe(response => {
