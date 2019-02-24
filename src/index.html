@@ -15,6 +15,28 @@
     <!-- Layout CSS -->
     <link id="theme-css" rel="stylesheet" type="text/css" href="assets/theme/theme-blue.css">
     <link id="layout-css" rel="stylesheet" type="text/css" href="assets/layout/css/layout-blue.css">
+    <script type='text/javascript'>
+        document.oncontextmenu = function(){return false}
+
+        document.onkeydown = function(e){
+
+            if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+                alert("no esta habilitada la impresión.");
+                e.cancelBubble = true;
+                e.preventDefault();
+
+                e.stopImmediatePropagation();
+            }
+
+            if(e.ctrlKey && (e.key == "s" || e.key == "S" || e.keyCode == 83) ){
+                alert("no esta habilitado el guardado.");
+                e.cancelBubble = true;
+                e.preventDefault();
+
+                e.stopImmediatePropagation();
+            }
+        }
+    </script>
 </head>
 
 <body>
