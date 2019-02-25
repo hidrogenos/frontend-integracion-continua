@@ -33,6 +33,7 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { CustomPdfViewerComponent } from './../../components/custom-pdf-viewer/custom-pdf-viewer.component';
 import { ImageViewerComponentComponent } from '../../components';
+import { forkJoin, zip } from 'rxjs';
 
 @Component({
     selector: 'visor-adjunto',
@@ -159,6 +160,8 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             case environment.tipos_documento.documento_archivo_soporte.id:
                 this.getDocumentoArchivoSoporte(idDocumento);
                 break;
+            case environment.tipos_documento.documento_editor.id:
+                this.getDocumentoEditor(idDocumento);
             default:
                 break;
         }
@@ -451,13 +454,6 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 type: 'application/pdf'
             });
             const url = window.URL.createObjectURL(blob);
-            // const URL = permisoImpresion
-            //     ? this.sanitizer.bypassSecurityTrustResourceUrl(
-            //           `${url}#toolbar=1&navpanes=1`
-            //       )
-            //     : this.sanitizer.bypassSecurityTrustResourceUrl(
-            //           `${url}#toolbar=0&navpanes=1`
-            //       );
 
             const URL = this.sanitizer.bypassSecurityTrustResourceUrl(`${url}`);
 
@@ -577,6 +573,48 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                         response.documento.titulo
                     );
                 }
+            });
+    }
+
+    getDocumentoEditor(idDocumento: number) {
+        this.getPermisoModuloDocumentosAdjunto(
+            idDocumento,
+            environment.permiso_documento.imprimir_editor
+        )
+            .pipe(
+                switchMap(response => {
+                    return zip(
+                        this.hasPermisionService.hasPermision(response),
+                        this.documentoService.getPdfEditorDocumento({
+                            idDocumento
+                        })
+                    );
+                })
+            )
+            .subscribe(response => {
+                console.log(response);
+                const blob = new Blob([response[1]], {
+                    type: 'application/pdf'
+                });
+                const url = window.URL.createObjectURL(blob);
+
+                const URL = this.sanitizer.bypassSecurityTrustResourceUrl(
+                    `${url}`
+                );
+
+                let componentFactory = this.resolver.resolveComponentFactory(
+                    CustomPdfViewerComponent
+                );
+
+                const component = this.container.createComponent(
+                    componentFactory
+                );
+
+                component.instance.url = URL;
+                component.instance.basicUrl = url;
+                component.instance.puedeImprimir = response[0];
+
+                this.hideWaitDialog();
             });
     }
 }

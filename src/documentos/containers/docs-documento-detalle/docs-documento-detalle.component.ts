@@ -1342,15 +1342,25 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     }
 
     onGenerarPDF() {
-        this.showWaitDialog('Generando documento, un momento por favor ...');
-        this.docsDocumentoService
-            .generarPdf(this.documento.id)
-            .subscribe(response => {
-                const blob = new Blob([response], { type: 'application/pdf' });
-                const url = window.URL.createObjectURL(blob);
-                window.open(url);
-                this.hideWaitDialog();
-            });
+        // this.showWaitDialog('Generando documento, un momento por favor ...');
+        // this.docsDocumentoService
+        //     .generarPdf(this.documento.id)
+        //     .subscribe(response => {
+        //         const blob = new Blob([response], { type: 'application/pdf' });
+        //         const url = window.URL.createObjectURL(blob);
+        //         window.open(url);
+        //         this.hideWaitDialog();
+        //     });
+
+        this.store.dispatch(
+            new fromRouteStore.Go({
+                path: [
+                    `visor-adjunto/13/${this.documento.id}/${
+                        this.documento.codigo
+                    }`
+                ]
+            })
+        );
     }
 
     onUploadImageEditor(event) {

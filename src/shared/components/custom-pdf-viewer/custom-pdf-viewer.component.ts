@@ -21,7 +21,7 @@ import { DomSanitizer } from '@angular/platform-browser';
     template: `
         <div *ngIf="url">
             <object
-                *ngIf="!puedeImprimir"
+                *ngIf="puedeImprimir"
                 [data]="url"
                 type="application/pdf"
                 width="100%"
@@ -29,7 +29,7 @@ import { DomSanitizer } from '@angular/platform-browser';
             >
             </object>
             <pdf-viewer
-                *ngIf="puedeImprimir"
+                *ngIf="!puedeImprimir"
                 [src]="basicUrl"
                 [render-text]="false"
                 style="display: block;"
