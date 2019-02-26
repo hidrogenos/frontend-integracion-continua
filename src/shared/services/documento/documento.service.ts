@@ -73,6 +73,14 @@ export class DocumentoService {
         };
     }
 
+    getPermisoByIdDocumento(idDocumento: number, idPermisoDocumento: number): Observable<number>{
+        return this.http.get<number>(
+            `${
+                environment.apiUrl
+            }/documentos/get-permiso-by-id-documento/${idDocumento}/${idPermisoDocumento}`
+        );
+    }
+
     getPermisoByIdDocAdjunto(
         idDoc: number,
         idPermisoDocumento

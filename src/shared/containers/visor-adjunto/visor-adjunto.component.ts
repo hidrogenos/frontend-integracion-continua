@@ -167,6 +167,13 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         }
     }
 
+    getPermisoModuloDocumento(idDocumento: number, idPermisoDocumento: number) {
+        return this.documentoService.getPermisoByIdDocumento(
+            idDocumento,
+            idPermisoDocumento
+        );
+    }
+
     getPermisoModuloDocumentosAdjunto(
         idDocumento: number,
         idPermisoDocumento: number
@@ -577,16 +584,14 @@ export class VisorAdjuntoComponent implements AfterContentInit {
     }
 
     getDocumentoEditor(idDocumento: number) {
-        this.getPermisoModuloDocumentosAdjunto(
+        this.getPermisoModuloDocumento(
             idDocumento,
             environment.permiso_documento.imprimir_editor
         )
             .pipe(
                 switchMap(response => {
                     return zip(
-                        this.hasPermisionService.hasPermision(
-                            response.id_permiso
-                        ),
+                        this.hasPermisionService.hasPermision(response),
                         this.documentoService.getPdfEditorDocumento({
                             idDocumento
                         })
@@ -594,7 +599,6 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 })
             )
             .subscribe(response => {
-                console.log(response);
                 const blob = new Blob([response[1]], {
                     type: 'application/pdf'
                 });
