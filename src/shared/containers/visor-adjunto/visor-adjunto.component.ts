@@ -584,7 +584,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             .pipe(
                 switchMap(response => {
                     return zip(
-                        this.hasPermisionService.hasPermision(response),
+                        this.hasPermisionService.hasPermision(
+                            response.id_permiso
+                        ),
                         this.documentoService.getPdfEditorDocumento({
                             idDocumento
                         })
