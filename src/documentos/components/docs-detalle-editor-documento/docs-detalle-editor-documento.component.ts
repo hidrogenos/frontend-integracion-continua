@@ -85,11 +85,9 @@ import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
                                 </p-accordionTab>
                             </p-accordion>
                         </div>
-                        <div
-                            class="ui-g-12 text-aling-right"
-                            *ngIf="puedeEditar"
-                        >
+                        <div class="ui-g-12 text-aling-right">
                             <button
+                                *ngIf="puedeEditar"
                                 pButton
                                 class="ui-button-success"
                                 style="margin-right: 15px;"
@@ -225,7 +223,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -243,7 +241,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -260,7 +258,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -277,7 +275,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -294,7 +292,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -311,7 +309,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    !this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
