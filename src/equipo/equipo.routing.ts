@@ -6,6 +6,8 @@ import * as fromContainers from './containers';
 
 //guards
 import * as fromGuards from './../auth/guards';
+import * as fromGuardsShareds from './../shared/guards';
+
 
 export const ROUTES: Routes = [
     {
@@ -19,7 +21,11 @@ export const ROUTES: Routes = [
             },
             {
                 path: 'equipos',
-                component: fromContainers.EquipoComponent
+                component: fromContainers.EquipoComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                data: {
+                    requiredPermision: 11206
+                }
             }
         ]
     }

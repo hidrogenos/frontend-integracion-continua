@@ -7,6 +7,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import * as fromServices from "./services";
 import * as fromContainers from "./containers";
 import * as fromComponents from "./components";
+import * as fromGuardsShareds from './../shared/guards';
+
 
 // PrimeNg Module
 import {
@@ -41,7 +43,11 @@ const ROUTES: Route[] = [
                     },
                     {
                         path: "lista",
-                        component: fromContainers.AccionCorrectivaListaComponent
+                        component: fromContainers.AccionCorrectivaListaComponent,
+                        canActivate: [fromGuardsShareds.HasPermisionGuard],
+                        data: {
+                            requiredPermision: 11209
+                        }
                     }
                 ]
             }

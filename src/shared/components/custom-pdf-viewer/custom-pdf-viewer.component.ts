@@ -16,19 +16,33 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-    selector: 'pdf-viewer',
-    styleUrls: ['pdf-viewer.component.scss'],
+    selector: 'custom-pdf-viewer',
+    styleUrls: ['custom-pdf-viewer.component.scss'],
     template: `
         <div *ngIf="url">
-            <object [data]="url" type="application/pdf" width="100%" height="800px">
+            <object
+                *ngIf="puedeImprimir"
+                [data]="url"
+                type="application/pdf"
+                width="100%"
+                height="800px"
+            >
             </object>
+            <pdf-viewer
+                *ngIf="!puedeImprimir"
+                [src]="basicUrl"
+                [render-text]="false"
+                style="display: block;"
+            ></pdf-viewer>
         </div>
     `
 })
-export class PdfViewerComponent implements OnInit {
+export class CustomPdfViewerComponent implements OnInit {
     page: number = 1;
     zoom: number = 1;
     url;
+    basicUrl;
+    puedeImprimir;
 
     constructor() {}
 

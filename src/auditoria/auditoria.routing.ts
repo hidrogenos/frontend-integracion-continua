@@ -6,6 +6,7 @@ import * as fromContainers from './containers';
 
 //guards
 import * as fromGuards from './../auth/guards';
+import * as fromGuardsShareds from './../shared/guards';
 
 export const ROUTES: Routes = [
     {
@@ -14,7 +15,11 @@ export const ROUTES: Routes = [
             { path: '', redirectTo: 'administrador-listas', pathMatch: 'full' },
             {
                 path: 'administrador-listas',
-                component: fromContainers.AdministradorListasComponent
+                component: fromContainers.AdministradorListasComponent,
+                canActivate: [fromGuardsShareds.HasPermisionGuard],
+                    data: {
+                        requiredPermision: 11211
+                    }
             },
             {
                 path: 'externa',
@@ -26,7 +31,11 @@ export const ROUTES: Routes = [
                     },
                     {
                         path: 'lista',
-                        component: fromContainers.ListaAuditoriaExternaComponent
+                        component: fromContainers.ListaAuditoriaExternaComponent,
+                        canActivate: [fromGuardsShareds.HasPermisionGuard],
+                        data: {
+                            requiredPermision: 11212
+                        }
                     }
                 ]
             }

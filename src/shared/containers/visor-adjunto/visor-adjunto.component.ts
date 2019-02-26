@@ -5,14 +5,14 @@ import {
     ComponentFactoryResolver,
     AfterContentInit,
     OnInit
-} from "@angular/core";
-import { StoreModel } from "../../models/store.model";
-import { Store } from "@ngrx/store";
-import * as fromRoot from "./../../../app/store";
-import * as fromShared from "./../../../shared/store";
-import * as fromAuth from "./../../../auth/store";
-import { take, switchMap, map, last } from "rxjs/operators";
-import { environment } from "../../../environments/environment";
+} from '@angular/core';
+import { StoreModel } from '../../models/store.model';
+import { Store } from '@ngrx/store';
+import * as fromRoot from './../../../app/store';
+import * as fromShared from './../../../shared/store';
+import * as fromAuth from './../../../auth/store';
+import { take, switchMap, map, last } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import {
     CalidadService,
     HasPermisionService,
@@ -29,26 +29,28 @@ import {
     DocumentoService,
     CapacitacionDocumentoService,
     DocumentoArchivoSoporteService
-} from "../../services";
-import { DomSanitizer } from "@angular/platform-browser";
-import { PdfViewerComponent } from "./../../components/pdf-viewer/pdf-viewer.component";
-import { ImageViewerComponentComponent } from "../../components";
+} from '../../services';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CustomPdfViewerComponent } from './../../components/custom-pdf-viewer/custom-pdf-viewer.component';
+import { ImageViewerComponentComponent } from '../../components';
+import { forkJoin, zip } from 'rxjs';
 
 @Component({
-    selector: "visor-adjunto",
-    styleUrls: ["visor-adjunto.component.scss"],
+    selector: 'visor-adjunto',
+    styleUrls: ['visor-adjunto.component.scss'],
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
-                <div #container>
-                </div>
+                <div #container style="display: block;"></div>
             </div>
         </div>
     `
 })
 export class VisorAdjuntoComponent implements AfterContentInit {
+    pdfSrc;
+
     //viewChild
-    @ViewChild("container", { read: ViewContainerRef })
+    @ViewChild('container', { read: ViewContainerRef })
     container: ViewContainerRef;
 
     constructor(
@@ -69,11 +71,11 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private documentoArchivoSoporteService: DocumentoArchivoSoporteService,
         private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
         private capacitacionDocumentoService: CapacitacionDocumentoService,
-        private documentoService: DocumentoService,
-    ) { }
+        private documentoService: DocumentoService
+    ) {}
 
     ngAfterContentInit() {
-        this.showWaitDialog("Consultado adjunto, un momento por favor...");
+        this.showWaitDialog('Consultado adjunto, un momento por favor...');
         this.store
             .select(fromRoot.getRouterState)
             .pipe(take(1))
@@ -91,9 +93,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             const blob = new Blob([file], { type: file.type });
 
             var url = window.URL.createObjectURL(blob);
-            var a = document.createElement("a");
+            var a = document.createElement('a');
             document.body.appendChild(a);
-            a.setAttribute("style", "display: none");
+            a.setAttribute('style', 'display: none');
             a.href = url;
             a.download = nombre;
             a.click();
@@ -112,16 +114,26 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 this.getUsuarioDestrezaDocumento(idDocumento);
                 break;
             case environment.tipos_documento.documento_adjunto_doc.id:
-                this.getPermisoModuloDocumentosAdjunto(idDocumento, environment.permiso_documento.imprimir_adjuntos)
-                    .subscribe((response: any) => {
-                        this.getDocumentoAdjuntoDoc(idDocumento, response.id_permiso);
-                    })
+                this.getPermisoModuloDocumentosAdjunto(
+                    idDocumento,
+                    environment.permiso_documento.imprimir_adjuntos
+                ).subscribe((response: any) => {
+                    this.getDocumentoAdjuntoDoc(
+                        idDocumento,
+                        response.id_permiso
+                    );
+                });
                 break;
             case environment.tipos_documento.documento_adjunto_flujo_doc.id:
-                this.getPermisoModuloDocumentosAdjuntoFlujo(idDocumento, environment.permiso_documento.imprimir_adjuntos_flujo)
-                    .subscribe((response: any) => {
-                        this.getDocumentoAdjuntoFlujoDoc(idDocumento, response.id_permiso);
-                    })
+                this.getPermisoModuloDocumentosAdjuntoFlujo(
+                    idDocumento,
+                    environment.permiso_documento.imprimir_adjuntos_flujo
+                ).subscribe((response: any) => {
+                    this.getDocumentoAdjuntoFlujoDoc(
+                        idDocumento,
+                        response.id_permiso
+                    );
+                });
                 break;
             case environment.tipos_documento.documento_capacitacion.id:
                 this.getDocumentoCapacitacion(idDocumento);
@@ -148,24 +160,38 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             case environment.tipos_documento.documento_archivo_soporte.id:
                 this.getDocumentoArchivoSoporte(idDocumento);
                 break;
+            case environment.tipos_documento.documento_editor.id:
+                this.getDocumentoEditor(idDocumento);
             default:
                 break;
         }
     }
 
-    getPermisoModuloDocumentosAdjunto(idDocumento: number, idPermisoDocumento: number) {
-        return this.documentoService.getPermisoByIdDocAdjunto(idDocumento, idPermisoDocumento);
+    getPermisoModuloDocumentosAdjunto(
+        idDocumento: number,
+        idPermisoDocumento: number
+    ) {
+        return this.documentoService.getPermisoByIdDocAdjunto(
+            idDocumento,
+            idPermisoDocumento
+        );
     }
 
-    getPermisoModuloDocumentosAdjuntoFlujo(idDocumento: number, idPermisoDocumento: number) {
-        return this.documentoService.getPermisoByIdDocAdjuntoFlujo(idDocumento, idPermisoDocumento);
+    getPermisoModuloDocumentosAdjuntoFlujo(
+        idDocumento: number,
+        idPermisoDocumento: number
+    ) {
+        return this.documentoService.getPermisoByIdDocAdjuntoFlujo(
+            idDocumento,
+            idPermisoDocumento
+        );
     }
 
     getFacturaProveedorDocumento(idDocumento) {
         this.proveedorFacturaService
             .getProveedorFactura(idDocumento)
             .subscribe(response => {
-                if (response.extension == "pdf") {
+                if (response.extension == 'pdf') {
                     this.hasPermisionService
                         .hasPermision(
                             environment.tipos_documento
@@ -188,7 +214,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
 
     getPlanoDocumento(idDocumento) {
         this.planoService.getPlano(idDocumento).subscribe(response => {
-            if (response.extension == "pdf") {
+            if (response.extension == 'pdf') {
                 this.hasPermisionService
                     .hasPermision(
                         environment.tipos_documento.plano_documento
@@ -210,33 +236,35 @@ export class VisorAdjuntoComponent implements AfterContentInit {
     }
 
     getDocumentoArchivoSoporte(idDocumento) {
-        this.documentoArchivoSoporteService.getArchivoSoporte(idDocumento).subscribe(response => {
-            if (response.extension == "pdf") {
-                this.hasPermisionService
-                    .hasPermision(
-                        environment.tipos_documento.documento_archivo_soporte
-                            .permiso_impresion
-                    )
-                    .subscribe(permisoImpresion => {
-                        this.showPdf(response.path, permisoImpresion);
-                    });
-            } else if (
-                environment.extensiones_imagen.findIndex(
-                    e => e == response.extension
-                ) != -1
-            ) {
-                this.showImage(response.path);
-            } else {
-                this.downloadFile(response.path, response.titulo);
-            }
-        });
+        this.documentoArchivoSoporteService
+            .getArchivoSoporte(idDocumento)
+            .subscribe(response => {
+                if (response.extension == 'pdf') {
+                    this.hasPermisionService
+                        .hasPermision(
+                            environment.tipos_documento
+                                .documento_archivo_soporte.permiso_impresion
+                        )
+                        .subscribe(permisoImpresion => {
+                            this.showPdf(response.path, permisoImpresion);
+                        });
+                } else if (
+                    environment.extensiones_imagen.findIndex(
+                        e => e == response.extension
+                    ) != -1
+                ) {
+                    this.showImage(response.path);
+                } else {
+                    this.downloadFile(response.path, response.titulo);
+                }
+            });
     }
 
     getAccionCorrectivaAdjunto(idAdjunto) {
         this.accionCorrectivaAdjuntoService
             .getAccionCorrectivaAdjunto(idAdjunto)
             .subscribe(response => {
-                if (response.extension == "pdf") {
+                if (response.extension == 'pdf') {
                     this.hasPermisionService
                         .hasPermision(
                             environment.tipos_documento
@@ -261,7 +289,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         this.accionCorrectivaTareaAdjuntoService
             .getAccionCorrectivaTareaAdjunto(idAdjunto)
             .subscribe(response => {
-                if (response.extension == "pdf") {
+                if (response.extension == 'pdf') {
                     this.hasPermisionService
                         .hasPermision(
                             environment.tipos_documento
@@ -287,7 +315,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         this.accionPreventivaAdjuntoService
             .getAccionPreventivaAdjunto(idAdjunto)
             .subscribe(response => {
-                if (response.extension == "pdf") {
+                if (response.extension == 'pdf') {
                     this.hasPermisionService
                         .hasPermision(
                             environment.tipos_documento
@@ -312,7 +340,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         this.accionPreventivaTareaAdjuntoService
             .getAccionPreventivaTareaAdjunto(idAdjunto)
             .subscribe(response => {
-                if (response.extension == "pdf") {
+                if (response.extension == 'pdf') {
                     this.hasPermisionService
                         .hasPermision(
                             environment.tipos_documento
@@ -380,7 +408,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 )
             )
             .subscribe(response => {
-                if (response.documento.extension == "pdf") {
+                if (response.documento.extension == 'pdf') {
                     this.showPdf(
                         response.documento.path,
                         response.permisoImpresion
@@ -403,7 +431,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
     showImage(path: string) {
         this.adjuntoService.getAdjunto({ path }).subscribe(response => {
             const blob = new Blob([response], {
-                type: "application/pdf"
+                type: 'application/pdf'
             });
             const url = window.URL.createObjectURL(blob);
             const URL = this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -423,24 +451,21 @@ export class VisorAdjuntoComponent implements AfterContentInit {
     showPdf(path: string, permisoImpresion: boolean) {
         this.adjuntoService.getAdjunto({ path }).subscribe(response => {
             const blob = new Blob([response], {
-                type: "application/pdf"
+                type: 'application/pdf'
             });
             const url = window.URL.createObjectURL(blob);
-            const URL = permisoImpresion
-                ? this.sanitizer.bypassSecurityTrustResourceUrl(
-                    `${url}#toolbar=1&navpanes=1`
-                )
-                : this.sanitizer.bypassSecurityTrustResourceUrl(
-                    `${url}#toolbar=0&navpanes=1`
-                );
+
+            const URL = this.sanitizer.bypassSecurityTrustResourceUrl(`${url}`);
 
             let componentFactory = this.resolver.resolveComponentFactory(
-                PdfViewerComponent
+                CustomPdfViewerComponent
             );
 
             const component = this.container.createComponent(componentFactory);
 
             component.instance.url = URL;
+            component.instance.basicUrl = url;
+            component.instance.puedeImprimir = permisoImpresion;
 
             this.hideWaitDialog();
         });
@@ -450,7 +475,7 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         this.capacitacionDocumentoService
             .getDocumentoCapacitacion(id_documento)
             .subscribe(response => {
-                if (response.extension == "pdf") {
+                if (response.extension == 'pdf') {
                     this.hasPermisionService
                         .hasPermision(
                             environment.tipos_documento.documento_capacitacion
@@ -484,20 +509,18 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             .getDocumentoAdjunto(idDocumento)
             .pipe(
                 switchMap(documento =>
-                    this.hasPermisionService
-                        .hasPermision(idPermiso)
-                        .pipe(
-                            map(permisoImpresion => {
-                                return {
-                                    documento,
-                                    permisoImpresion
-                                };
-                            })
-                        )
+                    this.hasPermisionService.hasPermision(idPermiso).pipe(
+                        map(permisoImpresion => {
+                            return {
+                                documento,
+                                permisoImpresion
+                            };
+                        })
+                    )
                 )
             )
             .subscribe(response => {
-                if (response.documento.extension == "pdf") {
+                if (response.documento.extension == 'pdf') {
                     this.showPdf(
                         response.documento.path,
                         response.permisoImpresion
@@ -522,20 +545,18 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             .getDocumentoDivulgacionRegistro(idDocumento)
             .pipe(
                 switchMap(documento =>
-                    this.hasPermisionService
-                        .hasPermision(idPermiso)
-                        .pipe(
-                            map(permisoImpresion => {
-                                return {
-                                    documento,
-                                    permisoImpresion
-                                };
-                            })
-                        )
+                    this.hasPermisionService.hasPermision(idPermiso).pipe(
+                        map(permisoImpresion => {
+                            return {
+                                documento,
+                                permisoImpresion
+                            };
+                        })
+                    )
                 )
             )
             .subscribe(response => {
-                if (response.documento.extension == "pdf") {
+                if (response.documento.extension == 'pdf') {
                     this.showPdf(
                         response.documento.path,
                         response.permisoImpresion
@@ -552,6 +573,48 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                         response.documento.titulo
                     );
                 }
+            });
+    }
+
+    getDocumentoEditor(idDocumento: number) {
+        this.getPermisoModuloDocumentosAdjunto(
+            idDocumento,
+            environment.permiso_documento.imprimir_editor
+        )
+            .pipe(
+                switchMap(response => {
+                    return zip(
+                        this.hasPermisionService.hasPermision(response),
+                        this.documentoService.getPdfEditorDocumento({
+                            idDocumento
+                        })
+                    );
+                })
+            )
+            .subscribe(response => {
+                console.log(response);
+                const blob = new Blob([response[1]], {
+                    type: 'application/pdf'
+                });
+                const url = window.URL.createObjectURL(blob);
+
+                const URL = this.sanitizer.bypassSecurityTrustResourceUrl(
+                    `${url}`
+                );
+
+                let componentFactory = this.resolver.resolveComponentFactory(
+                    CustomPdfViewerComponent
+                );
+
+                const component = this.container.createComponent(
+                    componentFactory
+                );
+
+                component.instance.url = URL;
+                component.instance.basicUrl = url;
+                component.instance.puedeImprimir = response[0];
+
+                this.hideWaitDialog();
             });
     }
 }
