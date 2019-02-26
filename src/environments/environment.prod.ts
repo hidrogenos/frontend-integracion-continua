@@ -2,6 +2,7 @@ export const environment = {
     production: true,
     baseUrl: 'http://144.217.89.76/sgd/app',
     apiUrl: 'http://144.217.89.76/sgd/api/public/api',
+    publicStorageUrl: 'http://144.217.89.76/sgd/api/storage/app',
     auth: {
         urlToken: 'http://144.217.89.76/sgd/api/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
@@ -57,6 +58,10 @@ export const environment = {
         documento_archivo_soporte: {
             id: 12,
             permiso_impresion: 900
+        },
+        documento_editor: {
+            id: 13,
+            permiso_impresion: 100
         }
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
@@ -85,7 +90,8 @@ export const environment = {
         aprobar_ajenos: 6,
         ver_lista_documentos: 7,
         ver_documentos_obsoletos: 8,
-        ver_documentos_eliminados: 9
+        ver_documentos_eliminados: 8,
+        imprimir_editor: 9
     },
     nombres_modulos_visuales: {
         acciones_correctivas: 'Desviación',
