@@ -6,9 +6,10 @@
 export const environment = {
     production: true,
     baseUrl: 'http://localhost:4200',
-    apiUrl: 'http://localhost/sgd_backend_v_2_1/public/api',
+    apiUrl: 'http://localhost/sgd/api/public/api',
+    publicStorageUrl: 'http://localhost/sgd/api/storage/app',
     auth: {
-        urlToken: 'http://localhost/sgd_backend_v_2_1/public/oauth/token',
+        urlToken: 'http://localhost/sgd/api/public/oauth/token',
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },
@@ -62,6 +63,10 @@ export const environment = {
         documento_archivo_soporte: {
             id: 12,
             permiso_impresion: 900
+        },
+        documento_editor: {
+            id: 13,
+            permiso_impresion: 100
         }
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
@@ -90,7 +95,8 @@ export const environment = {
         aprobar_ajenos: 6,
         ver_lista_documentos: 7,
         ver_documentos_obsoletos: 8,
-        ver_documentos_eliminados: 9
+        ver_documentos_eliminados: 8,
+        imprimir_editor: 9
     },
     nombres_modulos_visuales: {
         acciones_correctivas: 'Desviación',

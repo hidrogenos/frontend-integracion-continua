@@ -7,3 +7,8 @@
 .text-aling-center {
     text-align: center;
 }
+
+.fr-view table td.custom-borde,
+.fr-view table th.custom-borde {
+    border: 1px double black;
+}

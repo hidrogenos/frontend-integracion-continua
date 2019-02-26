@@ -17,7 +17,7 @@ export class DocumentoService {
         private documentoAdjuntoService: DocumentoAdjuntoService,
         private documentoDivulgacionService: DocumentoDivulgacionRegistroService,
         private documentoArchivosSoporte: DocumentoArchivoSoporteService
-    ) { }
+    ) {}
 
     getDocumentoById(idDocumento: number) {
         return this.http.get(`${environment.apiUrl}/documento/${idDocumento}`);
@@ -25,44 +25,80 @@ export class DocumentoService {
 
     transformDocumentoRequest(documento: DocumentoModel) {
         if (documento.adjuntos) {
-            documento.adjuntos = documento.adjuntos.map(
-                adjunto => this.documentoAdjuntoService.transformDocumentoAdjuntoRequest(adjunto)
-            )
+            documento.adjuntos = documento.adjuntos.map(adjunto =>
+                this.documentoAdjuntoService.transformDocumentoAdjuntoRequest(
+                    adjunto
+                )
+            );
         }
         return {
             ...documento,
             fecha_fin: documento.fecha_fin ? documento.fecha_fin / 1000 : null,
-            fecha_inicio: documento.fecha_fin ? documento.fecha_fin / 1000 : null
-        }
+            fecha_inicio: documento.fecha_fin
+                ? documento.fecha_fin / 1000
+                : null
+        };
     }
 
     transformDocumentoResponse(documento: DocumentoModel) {
         if (documento.adjuntos) {
-            documento.adjuntos = documento.adjuntos.map(
-                adjunto => this.documentoAdjuntoService.transformDocumentoAdjuntoResponse(adjunto)
-            )
+            documento.adjuntos = documento.adjuntos.map(adjunto =>
+                this.documentoAdjuntoService.transformDocumentoAdjuntoResponse(
+                    adjunto
+                )
+            );
         }
         if (documento.divulgacion_registros) {
             documento.divulgacion_registros = documento.divulgacion_registros.map(
-                adjunto => this.documentoDivulgacionService.transformDocumentoDivulgacionRegistroResponse(adjunto)
-            )
-        }if (documento.archivos_soporte) {
+                adjunto =>
+                    this.documentoDivulgacionService.transformDocumentoDivulgacionRegistroResponse(
+                        adjunto
+                    )
+            );
+        }
+        if (documento.archivos_soporte) {
             documento.archivos_soporte = documento.archivos_soporte.map(
-                archivo_soporte => this.documentoArchivosSoporte.transformDocumentoArchivoSoporteResponse(archivo_soporte)
-            )
+                archivo_soporte =>
+                    this.documentoArchivosSoporte.transformDocumentoArchivoSoporteResponse(
+                        archivo_soporte
+                    )
+            );
         }
         return {
             ...documento,
             fecha_fin: documento.fecha_fin ? documento.fecha_fin * 1000 : null,
-            fecha_inicio: documento.fecha_fin ? documento.fecha_fin * 1000 : null
-        }
+            fecha_inicio: documento.fecha_fin
+                ? documento.fecha_fin * 1000
+                : null
+        };
     }
 
-    getPermisoByIdDocAdjunto(idDoc: number, idPermisoDocumento) {
-        return this.http.get(`${environment.apiUrl}/documentos/get-permiso-by-id-doc-adjunto/${idDoc}/${idPermisoDocumento}`);
+    getPermisoByIdDocAdjunto(
+        idDoc: number,
+        idPermisoDocumento
+    ): Observable<number> {
+        return this.http.get<number>(
+            `${
+                environment.apiUrl
+            }/documentos/get-permiso-by-id-doc-adjunto/${idDoc}/${idPermisoDocumento}`
+        );
     }
 
     getPermisoByIdDocAdjuntoFlujo(idDoc: number, idPermisoDocumento) {
-        return this.http.get(`${environment.apiUrl}/documentos/get-permiso-by-id-doc-adjunto-flujo/${idDoc}/${idPermisoDocumento}`);
+        return this.http.get(
+            `${
+                environment.apiUrl
+            }/documentos/get-permiso-by-id-doc-adjunto-flujo/${idDoc}/${idPermisoDocumento}`
+        );
+    }
+
+    getPdfEditorDocumento(data: { idDocumento: number }): Observable<Blob> {
+        return this.http.post(
+            `${environment.apiUrl}/documentos/get-pdf-editor-documento`,
+            data,
+            {
+                responseType: 'blob'
+            }
+        );
     }
 }
