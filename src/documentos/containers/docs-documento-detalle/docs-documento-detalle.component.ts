@@ -555,14 +555,15 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                         permisoVerEliminado
                     ]) => {
                         if (
-                            (this.documento.id_estado ==
+                            ((this.documento.id_estado ==
                                 environment.estados_documento.obsoleto ||
                                 this.documento.id_estado ==
                                     environment.estados_documento.anulado ||
                                 this.documento.id_estado ==
                                     environment.estados_documento.eliminado) &&
                             !permisoVerObsoleto &&
-                            !permisoVerEliminado
+                            !permisoVerEliminado) || 
+                            (this.documento.fecha_fin < (new Date()).valueOf() && !permisoVerObsoleto)
                         ) {
                             this.hideWaitDialog();
                             this.store.dispatch(
@@ -602,6 +603,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
             .getPermisosByDoc(this.documento.id)
             .pipe(
                 switchMap((response: DocumentoPermisoTipoDocumentoModel[]) => {
+                    console.log(response);
                     let permisoElaborarAjenos = this.docsDocumentoService.filtrarPermisoDocumento(
                         response,
                         environment.permiso_documento.elaborar_ajenos
