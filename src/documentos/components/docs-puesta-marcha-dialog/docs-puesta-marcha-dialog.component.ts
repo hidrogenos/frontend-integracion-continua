@@ -114,9 +114,11 @@ export class DocsPuestaMarchaDialogComponent implements OnInit {
     constructor(
         private fb: FormBuilder
     ) {
+        let auxFehcaFin = new Date();
+        auxFehcaFin.setUTCFullYear(auxFehcaFin.getFullYear() + 5);
         this.form = this.fb.group({
             fecha_inicio: [new Date(), Validators.required],
-            fecha_fin: [new Date(), Validators.required],
+            fecha_fin: [auxFehcaFin, Validators.required],
             observacion: [null, Validators.required],
         })
     }
