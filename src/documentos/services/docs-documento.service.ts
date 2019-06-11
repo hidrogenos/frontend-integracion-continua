@@ -328,4 +328,12 @@ export class DocsDocumentoService {
             }
         );
     }
+
+    deleteDocumento(idDocumento:number){
+        return this.http.get(
+            `${
+                environment.apiUrl
+            }/documentos/eliminar-documento/${idDocumento}`
+        );
+    }
 }
