@@ -48,6 +48,16 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                         {{ documento?.tipo_documento.nombre }} -
                         {{ documento?.titulo }}
                     </h1>
+                    <div style="text-align: right;">
+                        <button
+                            *ngIf="hasPermision(11001) | async"
+                            pButton
+                            type="button"
+                            label="Eliminar de forma permanente el documento"
+                            class="ui-button-danger"
+                            (click)="eliminacionPermanenteDocuemnto()"
+                        ></button>
+                    </div>
                     <docs-informacion-general-documento
                         #digd
                         [filteredRespAprobacion]="filteredRespAprobacion"
@@ -505,6 +515,7 @@ export class DocsDocumentoDetalleComponent implements OnInit {
     permisoElaborarAjenos: boolean = false;
     permisoRevisarAjenos: boolean = false;
     permisoAprobarAjenos: boolean = false;
+    permisoEliminacionPermanente: boolean = false;
 
     env = environment;
 
@@ -1384,5 +1395,20 @@ export class DocsDocumentoDetalleComponent implements OnInit {
                 );
                 this.hideWaitDialog();
             });
+    }
+
+    eliminacionPermanenteDocuemnto(){
+        this.showWaitDialog('Eliminando documento, un momento por favor ...');
+        this.docsDocumentoService
+            .deleteDocumento(this.documento.id)
+            .subscribe( response => {
+                this.hideWaitDialog();
+                this.store.dispatch(
+                    new fromRouteStore.Go({
+                        path: [``]
+                    })
+                );
+            });
+
     }
 }
