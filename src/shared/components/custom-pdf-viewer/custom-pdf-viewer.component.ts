@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 //store
-import { Store } from '../../../../node_modules/@ngrx/store';
+import {Store} from '../../../../node_modules/@ngrx/store';
 import * as fromRoot from './../../../app/store';
 import * as fromShared from './../../../shared/store';
 //models
-import { StoreModel } from '../../models/store.model';
-import { HasPermisionService, PdfViewerService } from '../../services';
+import {StoreModel} from '../../models/store.model';
+import {HasPermisionService, PdfViewerService} from '../../services';
 import {
     tap,
     take,
     switchMap,
     map
 } from '../../../../node_modules/rxjs/operators';
-import { DomSanitizer } from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
     selector: 'custom-pdf-viewer',
@@ -21,30 +21,61 @@ import { DomSanitizer } from '@angular/platform-browser';
     template: `
         <div *ngIf="url">
             <object
-                *ngIf="puedeImprimir"
-                [data]="url"
-                type="application/pdf"
-                width="100%"
-                height="800px"
+                    *ngIf="puedeImprimir"
+                    [data]="url"
+                    type="application/pdf"
+                    width="100%"
+                    height="800px"
             >
             </object>
             <pdf-viewer
-                *ngIf="!puedeImprimir"
-                [src]="basicUrl"
-                [render-text]="false"
-                style="display: block;"
+                    *ngIf="!puedeImprimir"
+                    [src]="basicUrl"
+                    [render-text]="false"
+                    [show-all]="false"
+                    [(page)]="page"
+                    [zoom]="zoom"
+                    style="display: block;"
             ></pdf-viewer>
+            <div class="test-fix" *ngIf="!puedeImprimir">
+                <div class="boton-p" (click)="pageNext($event)"><i class="fa fa-angle-right fa-2x" aria-hidden="true"></i></div>
+                <div class="boton-p" (click)="pagePrev($event)"><i class="fa fa-angle-left fa-2x" aria-hidden="true"></i></div>
+                <div class="boton" (click)="zoomIn($event)"><i class="fa fa-plus" aria-hidden="true"></i></div>
+                <div class="boton" (click)="zoomOut($event)"><i class="fa fa-minus" aria-hidden="true"></i></div>
+            </div>
         </div>
     `
 })
 export class CustomPdfViewerComponent implements OnInit {
-    page: number = 1;
-    zoom: number = 1;
+    page = 1;
+    zoom = 1;
     url;
     basicUrl;
     puedeImprimir;
 
-    constructor() {}
+    constructor() {
+    }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
+
+    zoomIn(e) {
+        if (this.zoom < 4) {
+            this.zoom *= 2;
+        }
+    }
+
+    zoomOut(e) {
+        if (this.zoom > 0.25) {
+            this.zoom = this.zoom / 2;
+        }
+    }
+
+    pageNext($event){
+        this.page++;
+    }
+
+    pagePrev($event){
+        this.page--;
+    }
 }
