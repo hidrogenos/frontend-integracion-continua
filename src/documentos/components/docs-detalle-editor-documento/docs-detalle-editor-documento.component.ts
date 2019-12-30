@@ -170,6 +170,7 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
     ];
 
     generalOptions = {
+        key: 'tD1A1C1A5A6B4oF4I4B3B9A3A5F5B2B3C3bPELb1OMFCIe1LUE1IT==',
         language: 'es',
         heightMax: 300,
         tableCellStyles: {
