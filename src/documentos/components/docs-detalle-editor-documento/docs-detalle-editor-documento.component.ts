@@ -243,7 +243,8 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    // this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.on();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -260,7 +261,8 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    // this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.on();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -277,7 +279,8 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    // this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.on();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -294,7 +297,8 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    // this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.on();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
@@ -311,7 +315,8 @@ export class DocsDetalleEditorDocumentoComponent implements OnInit {
             ...this.generalOptions,
             events: {
                 'froalaEditor.initialized': function(e, editor) {
-                    this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    // this.puedeEditar ? editor.edit.on() : editor.edit.off();
+                    this.puedeEditar ? editor.edit.on() : editor.edit.on();
                 },
                 'froalaEditor.image.beforeUpload': (e, editor, files) => {
                     if (files.length) {
