@@ -139,6 +139,16 @@ export class AppMenuComponent implements OnInit {
                     routerLink: ['/planos/lista']
                 },
                 {
+                    label: 'Registros',
+                    icon: 'fa fa-folder-open',
+                    routerLink: ['/registros/lista']
+                },
+                {
+                    label: 'Documentos Externos',
+                    icon: 'fa fa-fw fa-folder-open-o',
+                    routerLink: ['/documentos-externos/lista']
+                },
+                {
                     label: 'Capacitaciones',
                     icon: 'fa fa-fw fa-graduation-cap',
                     routerLink: ['/capacitaciones/lista']
