@@ -28,6 +28,12 @@ export interface DataEstado {
     };
 }
 
+export interface DataObservacion {
+    data: {
+        observacion?: string;
+      
+    };}
+
 @Injectable()
 export class DocsDocumentoService {
     constructor(
@@ -336,4 +342,6 @@ export class DocsDocumentoService {
             }/documentos/eliminar-documento/${idDocumento}`
         );
     }
+    
+   
 }

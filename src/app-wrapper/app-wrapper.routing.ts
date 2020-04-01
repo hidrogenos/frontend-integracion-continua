@@ -84,6 +84,15 @@ export const ROUTES: Routes = [
                 path: 'planos',
                 loadChildren: './../plano/plano.module#PlanoModule'
             },
+
+            {
+                path: 'registros',
+                loadChildren: './../registros/registros.module#RegistroModule'
+            },
+            {
+                path: 'documentos-externos',
+                loadChildren: './../documentos-externos/documentos-externos.module#DocumentoExternoModule'
+            },
             {
                 path:
                     'visor-adjunto/:id_tipo_documento/:id_documento/:nombre_doc',

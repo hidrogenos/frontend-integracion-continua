@@ -55,7 +55,7 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
                             type="button"
                             label="Eliminar de forma permanente el documento"
                             class="ui-button-danger"
-                            (click)="eliminacionPermanenteDocuemnto()"
+                            (click)="dialogEliminarDocumento.display = true"
                         ></button>
                     </div>
                     <docs-informacion-general-documento
@@ -443,6 +443,12 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
             #dialogVistoBueno
             [tipo]="'Dar visto bueno ' + documento?.titulo"
             (onConfirmDialog)="darVistoBuenoDocumento($event)"
+        ></docs-observaciones-dialog>
+
+        <docs-observaciones-dialog
+            #dialogEliminarDocumento
+            [tipo]="'Eliminar documento ' + documento?.titulo"
+            (onConfirmDialog)="eliminacionPermanenteDocuemnto($event)"
         ></docs-observaciones-dialog>
 
         <docs-divulgacion-dialog

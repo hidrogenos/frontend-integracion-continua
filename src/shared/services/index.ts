@@ -73,6 +73,9 @@ export * from "./documento-divulgacion-registro/documento-divulgacion-registro.s
 import { DocumentoEstadoService } from "./documento-estado/documento-estado.service";
 export * from "./documento-estado/documento-estado.service";
 
+import { DocumentoExternoService } from "./documento-externo/documento-externo.service";
+export * from "./documento-externo/documento-externo.service";
+
 import { DocumentoProcesoService } from "./documento-proceso/documento-proceso.service";
 export * from "./documento-proceso/documento-proceso.service";
 
@@ -117,6 +120,9 @@ export * from './pais/pais.service';
 
 import { RegimenService } from "./regimen/regimen.service";
 export * from "./regimen/regimen.service";
+
+import { RegistroService } from "./registro/registro.service";
+export * from "./registro/registro.service";
 
 import { TipoCuentaService } from "./tipo-cuenta/tipo-cuenta.service";
 export * from "./tipo-cuenta/tipo-cuenta.service";
@@ -202,6 +208,9 @@ export const services: any[] = [
     UsuarioDocumentoService,
     UsuarioService,
     PlanoService,
+    DocumentoExternoService,
+
+    RegistroService,
     AccionCorrectivaService,
     UsuarioDocumentoService,
     CiudadService,

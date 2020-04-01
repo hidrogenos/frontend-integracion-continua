@@ -34,6 +34,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CustomPdfViewerComponent } from './../../components/custom-pdf-viewer/custom-pdf-viewer.component';
 import { ImageViewerComponentComponent } from '../../components';
 import { forkJoin, zip } from 'rxjs';
+import { RegistroService } from '../../services/registro/registro.service';
+import { DocumentoExternoService } from '../../services/documento-externo/documento-externo.service';
 
 @Component({
     selector: 'visor-adjunto',
@@ -64,6 +66,9 @@ export class VisorAdjuntoComponent implements AfterContentInit {
         private hasPermisionService: HasPermisionService,
         private proveedorFacturaService: ProveedorFacturaService,
         private planoService: PlanoService,
+        private registroService: RegistroService,
+        private documentoExternoService: DocumentoExternoService,
+
         private sanitizer: DomSanitizer,
         private store: Store<StoreModel>,
         private usuarioDestrezaDocumentoService: UsuarioDestrezaDocumentoService,
@@ -144,6 +149,12 @@ export class VisorAdjuntoComponent implements AfterContentInit {
                 break;
             case environment.tipos_documento.plano_documento.id:
                 this.getPlanoDocumento(idDocumento);
+                break;
+            case environment.tipos_documento.registro_documento.id:
+                this.getRegistroDocumento(idDocumento);
+                break;
+            case environment.tipos_documento.documento_externo.id:
+                this.getDocumentoExterno(idDocumento);
                 break;
             case environment.tipos_documento.accion_correctiva_adjunto.id:
                 this.getAccionCorrectivaAdjunto(idDocumento);
@@ -241,6 +252,54 @@ export class VisorAdjuntoComponent implements AfterContentInit {
             }
         });
     }
+
+    
+    getRegistroDocumento(idDocumento) {
+        this.registroService.getRegistro(idDocumento).subscribe(response => {
+            if (response.extension == 'pdf') {
+                this.hasPermisionService
+                    .hasPermision(
+                        environment.tipos_documento.plano_documento
+                            .permiso_impresion
+                    )
+                    .subscribe(permisoImpresion => {
+                        this.showPdf(response.path, permisoImpresion);
+                    });
+            } else if (
+                environment.extensiones_imagen.findIndex(
+                    e => e == response.extension
+                ) != -1
+            ) {
+                this.showImage(response.path);
+            } else {
+                this.downloadFile(response.path, response.nombre);
+            }
+        });
+    }
+
+    getDocumentoExterno(idDocumento) {
+        this.documentoExternoService.getRegistro(idDocumento).subscribe(response => {
+            if (response.extension == 'pdf') {
+                this.hasPermisionService
+                    .hasPermision(
+                        environment.tipos_documento.plano_documento
+                            .permiso_impresion
+                    )
+                    .subscribe(permisoImpresion => {
+                        this.showPdf(response.path, permisoImpresion);
+                    });
+            } else if (
+                environment.extensiones_imagen.findIndex(
+                    e => e == response.extension
+                ) != -1
+            ) {
+                this.showImage(response.path);
+            } else {
+                this.downloadFile(response.path, response.nombre);
+            }
+        });
+    }
+
 
     getDocumentoArchivoSoporte(idDocumento) {
         this.documentoArchivoSoporteService
