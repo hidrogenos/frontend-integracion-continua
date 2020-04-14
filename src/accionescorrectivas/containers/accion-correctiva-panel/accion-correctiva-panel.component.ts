@@ -513,7 +513,10 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                             this.desabilitarComponentes();
                         }, 1);
                         this.hideWaitDialog();
+                        console.log("HOLA" , this.accionCorrectivaActual);
+
                     }
+                    
                 );
 
                 let aux2 = forkJoin([
@@ -526,6 +529,7 @@ export class AccionCorrectivaPanel extends ComponenteCargado implements OnInit {
                     this.usuarios = usuarios;
                 });
             });
+            console.log("HOLA" , this.accionCorrectivaActual);
     }
 
     updateAccionCorrectiva(data: AccionCorrectivaModel) {

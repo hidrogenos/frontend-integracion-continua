@@ -43,4 +43,5 @@ export interface DocumentoModel {
     cuerpo_primera_pagina?: string;
     cabecera_documento?: string;
     pie_documento?: string;
+    motivo_eliminado?: string;
 }

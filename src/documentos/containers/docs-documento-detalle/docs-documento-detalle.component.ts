@@ -448,7 +448,7 @@ import { DocumentoArchivoSoporteModel } from '../../../shared/models/documento-a
         <docs-observaciones-dialog
             #dialogEliminarDocumento
             [tipo]="'Eliminar documento ' + documento?.titulo"
-            (onConfirmDialog)="eliminacionPermanenteDocuemnto($event)"
+            (onConfirmDialog)="eliminarDocumento($event)"
         ></docs-observaciones-dialog>
 
         <docs-divulgacion-dialog
@@ -1183,6 +1183,19 @@ export class DocsDocumentoDetalleComponent implements OnInit {
         };
         this.cambiarEstadoDocumento(data);
     }
+    
+    eliminarDocumento(formData) {
+        this.showWaitDialog(
+            'Documentos',
+            'Eliminando documento, un momento por favor...'
+        );
+        let data = {
+            data:{
+                observacion: formData
+            }
+        };
+        this.eliminacionPermanenteDocuemnto(data);
+    }
 
     cambiarEstadoDocumento(data) {
         this.docsDocumentoService
@@ -1403,10 +1416,10 @@ export class DocsDocumentoDetalleComponent implements OnInit {
             });
     }
 
-    eliminacionPermanenteDocuemnto(){
+    eliminacionPermanenteDocuemnto(data){
         this.showWaitDialog('Eliminando documento, un momento por favor ...');
         this.docsDocumentoService
-            .deleteDocumento(this.documento.id)
+            .deleteDocumento(this.documento.id,data)
             .subscribe( response => {
                 this.hideWaitDialog();
                 this.store.dispatch(

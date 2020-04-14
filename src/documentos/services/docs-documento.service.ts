@@ -28,11 +28,7 @@ export interface DataEstado {
     };
 }
 
-export interface DataObservacion {
-    data: {
-        observacion?: string;
-      
-    };}
+
 
 @Injectable()
 export class DocsDocumentoService {
@@ -335,13 +331,15 @@ export class DocsDocumentoService {
         );
     }
 
-    deleteDocumento(idDocumento:number){
-        return this.http.get(
+
+    
+    deleteDocumento(idDocumento: number, data: DataEstado) {
+        return this.http.post(
             `${
                 environment.apiUrl
-            }/documentos/eliminar-documento/${idDocumento}`
+            }/documentos/eliminar-documento/${idDocumento}`,
+            data
         );
     }
-    
    
 }

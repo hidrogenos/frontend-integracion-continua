@@ -87,7 +87,6 @@ import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
                         </div>
                         <div class="ui-g-12 text-aling-right">
                             <button
-                                *ngIf="puedeEditar"
                                 pButton
                                 class="ui-button-success"
                                 style="margin-right: 15px;"
