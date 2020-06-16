@@ -62,7 +62,15 @@ export const environment = {
         documento_editor: {
             id: 13,
             permiso_impresion: 100
-        }
+        },
+        registro_documento: {
+            id: 14,
+            permiso_impresion: 903
+        },
+        documento_externo: {
+            id: 14,
+            permiso_impresion: 903
+        },
     },
     extensiones_imagen: ['jpg', 'gif', 'png', 'svg', 'bmp', 'jpeg'],
     estados_documento: {
