@@ -94,6 +94,16 @@ export const environment = {
         visto_bueno_calidad: 13,
         eliminado: 14
     },
+    
+    estados_auditoria: {
+        creada: 1,
+        reunion_programada: 2,
+        inicio_preguntas: 3,
+        fin_preguntas: 4,
+        conclusiones_auditoria: 5,
+        pre_finalizacion: 6,
+        finalizacion: 7,
+    },
     permiso_documento: {
         crear: 1,
         imprimir_adjuntos: 2,

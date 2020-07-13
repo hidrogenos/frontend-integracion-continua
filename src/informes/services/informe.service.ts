@@ -36,4 +36,16 @@ export class InformeService {
             responseType: 'blob'
         });
     }
+
+    
+    exportPDFAuditoriaExterna(idAuditoria: number,filtros) {
+        return this.http.post(`${environment.apiUrl}/informes/export-informe-auditoria-externa/${idAuditoria}`, filtros,{                
+            responseType: 'blob'});
+    }
+
+    exportPDF2AuditoriaExterna(idAuditoria: number,filtros) {
+        return this.http.post(`${environment.apiUrl}/informes/export-informe-plan-estudio-externa/${idAuditoria}`, filtros,{
+            responseType: 'blob'});
+    }
+
 }
