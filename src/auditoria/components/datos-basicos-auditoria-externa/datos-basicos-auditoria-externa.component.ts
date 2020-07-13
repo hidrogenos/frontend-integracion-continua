@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuditoriaExternaModel } from '../../../shared/models/auditoria-externa.model';
 import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { ProveedorModel } from '../../../shared/models/proveedor.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'datos-basicos-auditoria-externa',
@@ -16,7 +17,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                             <div>
                                 <label>Fecha</label>
                             </div>
-                            <p-calendar formControlName="fecha"></p-calendar>
+                            <p-calendar  dateFormat="yy/mm/dd"  [locale]="es" formControlName="fecha"></p-calendar>
                         </div>
                         <div class="ui-g-8 ui-fluid">
                             <div>
@@ -129,6 +130,7 @@ import { ProveedorModel } from '../../../shared/models/proveedor.model';
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right" *ngIf="readonlyEditors">
                             <button pButton 
+                                [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion || auditoria?.id_estado == env?.estados_auditoria.pre_finalizacion || auditoria?.id_estado == env?.estados_auditoria.fin_preguntas "
                                 (click)="toogleEdit()"
                                 type="button" 
                                 label="Editar datos basicos" 
@@ -162,7 +164,8 @@ export class DatosBasicosAuditoriaExternaComponent implements OnInit {
     form: FormGroup;
     filteredProveedores: ProveedorModel[];
     readonlyEditors: boolean;
-
+    env = environment;
+    es: any;
     //events
     @Output()
     onSearchProveedor = new EventEmitter<string>();
@@ -179,6 +182,7 @@ export class DatosBasicosAuditoriaExternaComponent implements OnInit {
 
     ngOnInit() {
         this.createForm();
+        this.es = environment.dateProperties.calendarProperties;
     }
 
     createForm() {

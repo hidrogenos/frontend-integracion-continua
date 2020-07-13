@@ -5,6 +5,7 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 import { AuditoriaExternaModel } from '../../../shared/models/auditoria-externa.model';
 import { ArrayType } from '@angular/compiler/src/output/output_ast';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
     selector: 'create-auditoria-externa-dialog',
@@ -13,14 +14,14 @@ import { ArrayType } from '@angular/compiler/src/output/output_ast';
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
             <p-dialog [(visible)]="display" (onHide)="onHideDIalog()" modal="true" [width]="800">
                 <p-header>
-                    Crear nueva auditoria externa
+                    Crear nueva auditoria a proveedor
                 </p-header>
                 <div class="ui-g">
                     <div class="ui-g-4 ui-fluid">
                         <div>
                             <label>Fecha</label>
                         </div>
-                        <p-calendar formControlName="fecha"></p-calendar>
+                        <p-calendar  dateFormat="yy/mm/dd"  [locale]="es" yearRange="2017:2022"  [yearNavigator]="true" formControlName="fecha"></p-calendar>
                     </div>
                     <div class="ui-g-8 ui-fluid">
                         <div>
@@ -89,6 +90,7 @@ import { ArrayType } from '@angular/compiler/src/output/output_ast';
                         </p-dropdown>
                     </div>
                 </div>
+            
                 <div class="ui-g">
                     <div class="ui-g-6 ui-fluid">
                         <div>
@@ -108,6 +110,7 @@ import { ArrayType } from '@angular/compiler/src/output/output_ast';
                         </p-multiSelect>
                     </div>
                 </div>
+               
                 <div class="ui-g">
                     <div class="ui-g-12 ui-fluid">
                         <p-editor  [style]="{'height':'120px'}" formControlName="objetivo">
@@ -163,6 +166,7 @@ export class CreateAuditoriaExternaDialogComponent implements OnInit {
     //atributos
     display: boolean;
     form: FormGroup;
+    es: any;
 
     //event
     @Output()
@@ -185,6 +189,7 @@ export class CreateAuditoriaExternaDialogComponent implements OnInit {
 
     ngOnInit() {
         this.createForm();
+        this.es = environment.dateProperties.calendarProperties;
     }
 
     createForm() {

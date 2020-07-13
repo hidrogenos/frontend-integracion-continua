@@ -11,6 +11,8 @@ import * as fromRoot from './../../../app/store';
 import { StoreModel } from '../../../shared/models/store.model';
 import { Store } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
+import { InformeService } from '../../../informes/services';
+import { UsuarioService } from '../../../shared/services';
 
 @Component({
     selector: 'lista-auditoria-externa',
@@ -19,7 +21,7 @@ import { environment } from '../../../environments/environment';
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card card-w-title">
-                    <h1>Auditorias externas</h1>
+                    <h1>Auditorías a proveedores</h1>
                     <div class="ui-g">
                         <div class="ui-g-12 text-aling-right">
                             <button pButton 
@@ -77,7 +79,7 @@ import { environment } from '../../../environments/environment';
                                             <input style="width: 100%;" pInputText type="number" (input)="dt.filter($event.target.value, 'id', 'contains')">
                                         </th>
                                         <th>
-                                            <p-calendar [inputStyle]="{'width': '100%'}" selectionMode="range" (onSelect)="onSelectFecha($event)" #calendarFecha></p-calendar>
+                                            <p-calendar  dateFormat="yy/mm/dd"  [locale] ="es" [inputStyle]="{'width': '100%'}" selectionMode="range" (onSelect)="onSelectFecha($event)" #calendarFecha></p-calendar>
                                         </th>
                                         <th>
                                             <input style="width: 100%;" pInputText type="text" (input)="dt.filter($event.target.value, 'estado', 'contains')">
@@ -101,27 +103,41 @@ import { environment } from '../../../environments/environment';
                                         <td>{{ auditoria.fecha | date: dateFormatAngular }}</td>
                                         <td>{{ auditoria.estado }}</td>
                                         <td>
-                                            <p>{{ auditoria.auditor_principal }}</p>
-                                            <p>{{ auditoria.auditor_apoyo }}</p>
+                                            {{ auditoria.auditor_principal }}
+                                            {{ auditoria.auditor_apoyo }}
                                         </td>
                                         <td>{{ auditoria.proveedor }}</td>
                                         <td [innerHTML]="auditoria.objetivo"></td>
                                         <td style="text-align: center;">
                                             <button pButton 
-                                                style="margin-right: 5px;"
-                                                (click)="detalleAuditoria(auditoria.id, $event)"
+                                            style="margin-right: 5px;width: 25px; height:25px;"
+                                            (click)="detalleAuditoria(auditoria.id, $event)"
                                                 type="button" 
                                                 icon="fa fa-search"
                                                 class="ui-button-primary">
                                             </button> 
                                             <button pButton 
+                                                style="margin-right: 5px;width: 25px; height:25px;"
+                                                type="button" 
+                                                (click)="onExportPDF2(auditoria.id)"  
+                                                icon="fa fa-file-text-o" 
+                                                class="ui-button-warning" >
+                                            </button>
+                                            <button pButton 
+                                            style="margin-right: 5px;width: 25px; height:25px;"
+                                            type="button" 
+                                                (click)="onExportPDF(auditoria.id)"  
+                                                icon="fa fa-file-text-o" 
+                                                class="ui-button-success" >
+                                            </button>
+                                            <button pButton 
+                                            style="margin-right: 5px;width: 25px; height:25px;"
                                                 (click)="deleteAuditoria(auditoria.id)"
                                                 type="button" 
                                                 icon="fa fa-trash"
                                                 class="ui-button-danger">
                                             </button> 
                                         </td>
-
                                     </tr>
                                 </ng-template>
                             </p-table>
@@ -146,6 +162,7 @@ export class ListaAuditoriaExternaComponent implements OnInit {
     loading: boolean = true;
     totalRecords: number;
     dateFormatAngular: string = environment.dateFormatAngular;
+    es: any;
 
     //viewchild
     @ViewChild('caed')
@@ -157,11 +174,15 @@ export class ListaAuditoriaExternaComponent implements OnInit {
 
     constructor(
         private listaAuditoriaExternaService: ListaAuditoriaExternaService,
-        private store: Store<StoreModel>
+        private store: Store<StoreModel>,
+        private usuarioService: UsuarioService,
+        private informeService: InformeService,
+
     ) {}
 
     ngOnInit() {
         this.getInitialInfo();
+        this.es = environment.dateProperties.calendarProperties;
     }
 
     createAuditoria(data: {
@@ -223,6 +244,30 @@ export class ListaAuditoriaExternaComponent implements OnInit {
             });
     }
 
+     getUsuarios() {
+        return this.usuarioService.getUsuarios();
+    }
+
+    onExportPDF(event) {
+        this.showWaitDialog('Informes', 'Generando informe, un momento por favor...')
+        this.informeService.exportPDFAuditoriaExterna(event,event.id).subscribe(response => {
+            const blob = new Blob([response], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+            this.hideWaitDialog();
+        })
+    }
+
+    onExportPDF2(event) {
+        this.showWaitDialog('Informes', 'Generando informe, un momento por favor...')
+        this.informeService.exportPDF2AuditoriaExterna(event,event.id).subscribe(response => {
+            const blob = new Blob([response], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+            this.hideWaitDialog();
+        })
+    }
+
     onSelectFecha(event) {
         let inicio = new Date(1900, 1, 1).valueOf() / 1000;
         let fin = new Date(3000, 1, 1).valueOf() / 1000;
@@ -240,6 +285,7 @@ export class ListaAuditoriaExternaComponent implements OnInit {
         this.dt.filter({ inicio, fin }, 'fecha', 'between');
     }
 
+    
     searchProveedor(query: string) {
         this.listaAuditoriaExternaService
             .getFilteredProveedores({ query })

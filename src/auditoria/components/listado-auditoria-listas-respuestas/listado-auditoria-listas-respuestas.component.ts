@@ -2,8 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 
 @Component({
-    selector: 'listado-auditoria-listas',
-    styleUrls: ['listado-auditoria-listas.component.scss'],
+    selector: 'listado-auditoria-listas-respuestas',
     template: `
         <div class="ui-g">
             <div class="ui-g-12">
@@ -23,7 +22,7 @@ import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model
         </div>
     `
 })
-export class ListadoAuditoriaListasComponent {
+export class ListadoAuditoriaListasRepuestasComponent {
     //events
     @Output()
     onSelectLista = new EventEmitter<number>();

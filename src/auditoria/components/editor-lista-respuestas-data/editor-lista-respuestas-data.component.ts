@@ -13,27 +13,23 @@ import {
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Table } from 'primeng/table';
+import { AuditoriaExternaEstadoModel } from '../../../shared/models/auditoria-externa-estado.model';
+import { AuditoriaExternaModel } from '../../../shared/models/auditoria-externa.model';
 
 @Component({
-    selector: 'editor-lista',
+    selector: 'editor-lista-respuestas',
     styleUrls: ['editor-lista.component.scss'],
     template: `
         
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                    <div *ngIf="!editNombre">
-                    <div *ngIf="!lista.id_auditoria_externa">
-                        <h1 style="display: inline; margin-right: 15px;">Autor: {{lista.usuario.nombre}} {{lista.usuario.apellido}}</h1>
-                    </div>
-                </div>
-                <br>
+        <div class="ui-g">
+            <div class="ui-g-12">
                 <div *ngIf="!editNombre">
                     <h1 style="display: inline; margin-right: 15px;">{{ lista.nombre }}</h1>
-                    <button class="ui-button-primary"  pButton 
+                    <!--<button class="ui-button-primary"  pButton 
                         type="button" 
                         icon="fa fa-pencil" 
                         (click)="toggleEditNombreLista()">
-                    </button>
+                    </button>-->
                 </div>
                 <div *ngIf="editNombre">
                     <input pInputText style="margin-right: 15px;" type="text" [(ngModel)]="lista.nombre">
@@ -43,13 +39,12 @@ import { Table } from 'primeng/table';
                         (click)="updateListaNombre()">
                     </button>
                 </div>
-                
                 <p-accordion>
                     <ng-template ngFor let-titulo [ngForOf]="lista.data.titulos" let-iTitulo="index">
                         <p-accordionTab>
                             <p-header>
                                 {{ titulo.id + ' ' + titulo.titulo }}
-                                <button class="button-edit-titulo ui-button-danger" pButton 
+                                <!--<button class="button-edit-titulo ui-button-danger" pButton 
                                     *ngIf="lista.data.titulos.length > 1"
                                     (click)="deleteTitulo($event, iTitulo)"
                                     type="button" 
@@ -71,7 +66,7 @@ import { Table } from 'primeng/table';
                                     type="button" 
                                     icon="fa fa-pencil" 
                                     (click)="editTitulo(titulo, iTitulo)">
-                                </button>
+                                </button>-->
                             </p-header>
                             <div class="ui-g">
                                 <div class="ui-g-12">
@@ -83,26 +78,28 @@ import { Table } from 'primeng/table';
                                                 <th style="width: 120px;">Evidencia</th>
                                                 <!--<th>Responsable</th>
                                                 <th style="width: 100px;">Fecha</th>-->
+                                                <th style="width: 120px;">Respuesta</th>
                                                 <th style="width: 120px;">Observaciones</th>
-                                                <th style="width: 50px;">Acciones</th>
+
+                                                <th style="width: 60px;">Acciones</th>
                                             </tr>
                                         </ng-template>
                                         <ng-template pTemplate="body" let-pregunta let-iPregunta="rowIndex">
                                             <tr>
-                                                <td pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'id'">
-                                                    <p-cellEditor>
+                                                <td  [pEditableColumn]="pregunta" [pEditableColumnField]="'id'">
+                                                    <p-cellEditor >
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText type="text" [(ngModel)]="pregunta.id">
+                                                            <input [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion" pInputText type="text" [(ngModel)]="pregunta.id">
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{ pregunta.id }}
                                                         </ng-template>
                                                     </p-cellEditor>
                                                 </td>
-                                                <td pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'aspecto_evaluar'">
+                                                <td  pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'aspecto_evaluar'">
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <textarea  [rows]="8"  pInputTextarea [(ngModel)]="pregunta.aspecto_evaluar"></textarea>
+                                                            <textarea [rows]="8" [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion" pInputTextarea [(ngModel)]="pregunta.aspecto_evaluar"></textarea>
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{ pregunta.aspecto_evaluar }}
@@ -112,7 +109,7 @@ import { Table } from 'primeng/table';
                                                 <td pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'actividad_realizar'">
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <textarea  [rows]="8"  pInputTextarea [(ngModel)]="pregunta.actividad_realizar"></textarea>
+                                                            <textarea [rows]="8" [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion" pInputTextarea [(ngModel)]="pregunta.actividad_realizar"></textarea>
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{ pregunta.actividad_realizar }}
@@ -122,7 +119,7 @@ import { Table } from 'primeng/table';
                                                 <!--<td pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'responsable'">
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText type="text" [(ngModel)]="pregunta.responsable">
+                                                            <input [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion" pInputText type="text" [(ngModel)]="pregunta.responsable">
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{ pregunta.responsable }}
@@ -132,17 +129,31 @@ import { Table } from 'primeng/table';
                                                 <td pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'fecha'">
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <p-calendar  dateFormat="yy/mm/dd"  [locale]="es" [(ngModel)]="pregunta.fecha" (onClose)="onCloseFechaPregunta($event)"></p-calendar>
+                                                            <p-calendar  dateFormat="yy/mm/dd"  [locale]="es" [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion" [(ngModel)]="pregunta.fecha" (onClose)="onCloseFechaPregunta($event)"></p-calendar>
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{ pregunta.fecha | date: formatDateAngular  }}
                                                         </ng-template>
                                                     </p-cellEditor>
                                                 </td>-->
+                                            
+                                                <!--Aqui van las respuestas-->
+                                                <td pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'resultado'">
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <p-dropdown [style]="{'width':'100%'}" [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion" [options]="resultado" pInputDropdown optionLabel = "label"  [(ngModel)]="pregunta.resultado" ></p-dropdown>
+
+                                                            <!--<textarea [disabled]="auditoria.id_estado != env.estados_auditoria.inicio_preguntas " pInputTextarea [(ngModel)]="pregunta.resultado"></textarea>-->
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                                {{ pregunta.resultado?.label}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
                                                 <td pEditableColumn [pEditableColumn]="pregunta" [pEditableColumnField]="'ponderado'">
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText type="text" [(ngModel)]="pregunta.ponderado">
+                                                            <input [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion" pInputText type="text" [(ngModel)]="pregunta.ponderado">
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{ pregunta.ponderado }}
@@ -167,12 +178,13 @@ import { Table } from 'primeng/table';
                                                         class="ui-button-success">
                                                     </button>
                                                     <button pButton 
-                                                        *ngIf="titulo.preguntas.length > 0"
-                                                        (click)="deletePregunta(titulo, iPregunta)"
-                                                        type="button" 
-                                                        icon="fa fa-trash"
-                                                        class="ui-button-danger">
-                                                    </button>
+                                                    [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion"
+                                                    *ngIf="titulo.preguntas.length > 0"
+                                                    (click)="deletePregunta(titulo, iPregunta)"
+                                                    type="button" 
+                                                    icon="fa fa-trash"
+                                                    class="ui-button-danger">
+                                                </button>
                                                 </td>
                                             </tr>
                                         </ng-template>
@@ -181,13 +193,13 @@ import { Table } from 'primeng/table';
                             </div>
                             <div class="ui-g">
                                 <div class="ui-g-12 text-aling-right">
-                                    <button pButton 
+                                    <!--<button pButton 
                                         (click)="addPregunta(titulo)"
                                         type="button" 
                                         label="Agregar pregunta" 
                                         icon="fa fa-plus"
                                         class="ui-button-info">
-                                    </button>
+                                    </button>-->
                                 </div>
                             </div>
                         </p-accordionTab>
@@ -197,18 +209,19 @@ import { Table } from 'primeng/table';
         </div>
         <div class="ui-g">
             <div class="ui-g-12 text-aling-right">
-                <button pButton 
+                <!--<button pButton 
                     (click)="addTitulo()"
                     type="button" 
                     label="Agregar titulo" 
                     icon="fa fa-plus"
                     class="ui-button-success">
-                </button>
+                </button>-->
             </div>
         </div>
+        
         <div class="ui-g">
             <div class="ui-g-12 ui-fluid">
-                <button pButton 
+                <button pButton [disabled]="auditoria?.id_estado == env?.estados_auditoria.finalizacion"
                     (click)="updateListaData()"
                     type="button" 
                     label="Guardar datos de la lista" 
@@ -256,22 +269,26 @@ import { Table } from 'primeng/table';
         </form>
     `
 })
-export class EditorListaComponent implements OnInit {
+export class EditorListaRespuestasComponent implements OnInit {
     // atributos
     displayEditTitulo: boolean;
     editNombre: boolean;
     formEditTitulo: FormGroup;
     formatDateAngular: string = environment.dateFormatAngular;
+    env = environment;
     es: any;
     //events
     @Output()
     onUpdateListaData = new EventEmitter<ListaPreguntaModel>();
     @Output()
     onUpdateListaNombre = new EventEmitter<ListaPreguntaModel>();
-
+    @Output()
+    onPdf = new EventEmitter<any>();
     //properties
     @Input()
     lista: ListaPreguntaModel;
+    @Input()
+    auditoria: AuditoriaExternaModel;
     constructor(private fb: FormBuilder) {}
 
     //viewChildren
@@ -292,11 +309,19 @@ export class EditorListaComponent implements OnInit {
         this.lista.data.titulos.push(titulo);
     }
 
+    resultado = [
+        { label: 'Seleccione', value: '3' },
+        { label: 'Cumple', value: '1' },
+        { label: 'No cumple', value: '2' },
+        { label: 'Observación', value: '0' },
+    ];
+
+
     addPregunta(titulo: ListaPreguntaDataTituloModel) {
         titulo.preguntas.push({
             id: '0',
             aspecto_evaluar: 'Aspecto a evaluar',
-            actividad_realizar: 'Evidencia',
+            actividad_realizar: 'Evidencia1111',
             responsable: 'responsable',
             fecha: new Date(),
             ponderado: 'NA',
@@ -414,5 +439,10 @@ export class EditorListaComponent implements OnInit {
     updateListaNombre() {
         this.toggleEditNombreLista();
         this.onUpdateListaNombre.emit(this.lista);
+    }
+
+    exportInforme( event:number)
+    {
+        this.onPdf.emit( event );
     }
 }

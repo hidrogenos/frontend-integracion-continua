@@ -2,12 +2,15 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { CreateListaDialogComponent } from '../../components';
 import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 import { AdministradorListasService } from '../../services';
+import { UsuarioService } from '../../../shared/services';
+
 import { forkJoin } from 'rxjs';
 import { StoreModel } from '../../../shared/models/store.model';
 import { Store } from '@ngrx/store';
 
 import * as fromShared from './../../../shared/store';
 import { MessageService } from 'primeng/api';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
 
 @Component({
     selector: 'administrador-listas',
@@ -48,6 +51,7 @@ import { MessageService } from 'primeng/api';
         <create-lista-dialog #cld
             *ngIf="listas"
             [listas]="listas"
+            [usuarios]="usuarios"
             (onCreateLista)="createLista($event)">
         </create-lista-dialog>
     `
@@ -55,6 +59,8 @@ import { MessageService } from 'primeng/api';
 export class AdministradorListasComponent implements OnInit {
     //atributos
     listas: ListaPreguntaModel[];
+    usuarios: UsuarioModel[];
+
     selectedLista: ListaPreguntaModel;
 
     //viewChild
@@ -63,6 +69,8 @@ export class AdministradorListasComponent implements OnInit {
 
     constructor(
         private administradorListasService: AdministradorListasService,
+        private usuarioService: UsuarioService,
+
         private messageService: MessageService,
         private store: Store<StoreModel>
     ) {}
@@ -72,8 +80,10 @@ export class AdministradorListasComponent implements OnInit {
     }
 
     loadInitialInfo() {
-        forkJoin([this.getListas()]).subscribe(([listas]) => {
+        forkJoin([this.getListas(),this.getUsuarios()]).subscribe(([listas,usuarios]) => {
             this.listas = listas;
+            this.usuarios = usuarios;
+            console.log("Usuarios", usuarios)
         });
     }
 
@@ -95,6 +105,10 @@ export class AdministradorListasComponent implements OnInit {
         return this.administradorListasService.getListas();
     }
 
+    getUsuarios() {
+        return this.usuarioService.getUsuarios();
+    }
+
     hideWaitDialog() {
         this.store.dispatch(new fromShared.HideWaitDialog());
     }
@@ -102,6 +116,7 @@ export class AdministradorListasComponent implements OnInit {
     selectLista(id: number) {
         this.administradorListasService.getLista(id).subscribe(response => {
             this.selectedLista = response;
+            console.log("HOLA", response)
         });
     }
     showWaitDialog(header: string, body?: string) {

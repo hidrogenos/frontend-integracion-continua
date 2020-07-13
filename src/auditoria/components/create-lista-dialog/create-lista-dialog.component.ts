@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 import { MessageService } from 'primeng/api';
+import { UsuarioModel } from '../../../shared/models/usuario.model';
 
 @Component({
     selector: 'create-lista-dialog',
@@ -20,6 +21,33 @@ import { MessageService } from 'primeng/api';
                             <input type="text" pInputText formControlName="nombre"/>
                         </div>
                     </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-fluid">
+                        <div>
+                            <label>Autor:</label>
+                        </div>
+                        <p-dropdown 
+                            [options]="usuarios" 
+                            appendTo="body"
+                            formControlName="id_usuario"
+                            optionLabel="nombre"
+                            autoWidth="false"
+                            [style]="{'width': '100%'}"
+                            placeholder="seleccione...">
+                            <ng-template let-usuario pTemplate="selectedItem"> 
+                                <span style="vertical-align:middle">
+                                    {{ usuario.value.nombre + ' ' + usuario.value.apellido }}
+                                </span>
+                            </ng-template> 
+                            <ng-template let-usuario pTemplate="item"> 
+                                <div>
+                                    {{ usuario.value.nombre + ' ' + usuario.value.apellido }}
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
                 <p-footer>
                     <button pButton 
                         type="button" 
@@ -50,6 +78,8 @@ export class CreateListaDialogComponent implements OnInit {
     //properties
     @Input()
     listas: ListaPreguntaModel[];
+    @Input()
+    usuarios: UsuarioModel[];
 
     constructor(
         private fb: FormBuilder,
@@ -62,7 +92,9 @@ export class CreateListaDialogComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
-            nombre: ['', Validators.required]
+            nombre: ['', Validators.required],
+            id_usuario: [null, Validators.required],
+
         });
     }
 
@@ -74,6 +106,8 @@ export class CreateListaDialogComponent implements OnInit {
         if (this.form.valid) {
             const lista: ListaPreguntaModel = {
                 nombre: this.form.value.nombre,
+                id_usuario: this.form.value.id_usuario.id,
+
                 activo: true,
                 data: {
                     titulos: [
@@ -84,10 +118,10 @@ export class CreateListaDialogComponent implements OnInit {
                                 {
                                     id: '1.1',
                                     aspecto_evaluar: 'Aspecto a evaluar',
-                                    actividad_realizar: 'Actividad a realizar',
+                                    actividad_realizar: 'Evidencia',
                                     responsable: 'responsable',
                                     fecha: new Date().valueOf(),
-                                    ponderado: 1,
+                                    ponderado: 'NA',
                                     resultado: null
                                 }
                             ]

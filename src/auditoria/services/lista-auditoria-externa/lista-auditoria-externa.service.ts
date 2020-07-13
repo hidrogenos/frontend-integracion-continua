@@ -8,7 +8,17 @@ import { UsuarioModel } from '../../../shared/models/usuario.model';
 import { ListaPreguntaModel } from '../../../shared/models/auditoria-lista.model';
 import { AuditoriaExternaModel } from '../../../shared/models/auditoria-externa.model';
 import { AuditoriaExternaService } from '../../../shared/services';
-
+export interface DataEstado {
+    estado: number;
+    data: {
+        observacion?: string;
+        conclusion?: string;
+        fortaleza?:string;
+        fecha_reunion?: number;
+        fecha_inicio?: number;
+        fecha_fin?: number;
+    };
+}
 @Injectable()
 export class ListaAuditoriaExternaService {
     constructor(
@@ -95,4 +105,16 @@ export class ListaAuditoriaExternaService {
                 catchError(error => throwError(error))
             );
     }
+
+    updateEstadoAuditoria(idAuditoria: number, data: DataEstado) {
+        return this.http.post<any>(
+            `${
+                environment.apiUrl
+            }/auditoria/externa/detalle/update-estado-auditoria/${idAuditoria}`,
+            data
+        )
+    }
+
+   
+
 }

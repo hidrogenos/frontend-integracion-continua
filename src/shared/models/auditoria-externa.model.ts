@@ -5,7 +5,7 @@ import { AuditoriaExternaEstadoModel } from './auditoria-externa-estado.model';
 
 export interface AuditoriaExternaModel {
     id?: number;
-    id_estado: number;
+    id_estado?: number;
     activo: boolean;
     fecha: number;
     id_proveedor: number;
@@ -20,4 +20,6 @@ export interface AuditoriaExternaModel {
     auditor_apoyo?: UsuarioModel;
     proveedor?: ProveedorModel;
     estado?: AuditoriaExternaEstadoModel;
+    conclusion?: string;
+    fortaleza?:string;
 }
