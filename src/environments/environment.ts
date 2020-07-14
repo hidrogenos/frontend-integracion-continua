@@ -13,6 +13,21 @@ export const environment = {
         secret: 'GzjgA5FBjRtF270LjKN9WUTRojaTg6v0uCN37Dfq',
         clientId: 2
     },
+    dateProperties: {
+        calendarProperties: {
+            firstDayOfWeek: 1,
+            dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+            dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+            dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+            today: 'Hoy',
+            clear: 'Borrar'
+        },
+        dateFormatCalendar: 'dd/mm/yy',
+        dateFormatAngularPipe: 'dd/MM/yy',
+        dateTimeFormatAngularPipe: 'dd/MM/yy HH:mm:ss'
+    },
     dateFormatAngular: 'yyyy-MM-dd',
     dateFormatPrimeNg: 'yy-mm-dd',
     tipos_documento: {
