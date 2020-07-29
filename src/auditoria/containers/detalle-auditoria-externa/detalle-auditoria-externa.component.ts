@@ -379,7 +379,7 @@ export class DetalleAuditoriaExternaComponent implements OnInit {
 
     onExportPDF2(event) {
         this.showWaitDialog('Informes', 'Generando informe, un momento por favor...')
-        this.informeService.exportPDFRegHallazgosExterna(event,event.id).subscribe(response => {
+        this.informeService.exportPDF2AuditoriaExterna(event,event.id).subscribe(response => {
             const blob = new Blob([response], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
             window.open(url);
