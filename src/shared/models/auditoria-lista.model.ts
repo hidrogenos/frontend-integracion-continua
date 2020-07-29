@@ -1,6 +1,7 @@
 export interface ListaPreguntaModel {
     id?: number;
     nombre: string;
+    id_usuario: number;
     activo: boolean;
     data?: ListaPreguntaDataModel;
 }
@@ -21,6 +22,6 @@ export interface ListaPreguntaDataPreguntaModel {
     actividad_realizar: string;
     responsable: string;
     fecha: any;
-    ponderado: number;
-    resultado: boolean;
+    ponderado: string;
+    resultado: string;
 }
