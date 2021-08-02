@@ -9,13 +9,13 @@ import { FileUpload } from 'primeng/primeng';
     template: `
     <div>
     <form [formGroup]="form">
-        <p-dialog 
-            header="{{ tipo }}" 
-            [(visible)]="display" 
-            [modal]="true" 
-            [responsive]="true" 
-            [width]="800" 
-            [maximizable]="true" 
+        <p-dialog
+            header="{{ tipo }}"
+            [(visible)]="display"
+            [modal]="true"
+            [responsive]="true"
+            [width]="800"
+            [maximizable]="true"
             (onHide)="onHideDialog()">
             <div class="ui-g">
                 <div class="ui-g-6 ui-fluid">
@@ -70,7 +70,7 @@ import { FileUpload } from 'primeng/primeng';
                                 <td>{{adjunto.titulo}}</td>
                                 <td>{{adjunto.fecha_carga | date: formatDateAngular}}</td>
                                 <td style="text-align: center;">
-                                    <button pButton type="button" icon="fa fa-trash" 
+                                    <button pButton type="button" icon="fa fa-trash"
                                     class="ui-button-danger"
                                     (click)="deleteDocumentoAdjunto(adjunto)"></button>
                                 </td>
@@ -81,7 +81,7 @@ import { FileUpload } from 'primeng/primeng';
             </div>
             <p-footer>
                 <button type="button" pButton icon="pi pi-times" (click)="onHideDialog()" (click)="form.reset()" label="Cancelar" class="ui-button-danger"></button>
-                <button type="button" pButton icon="pi pi-save" label="Vigente" 
+                <button type="button" pButton icon="pi pi-save" label="Vigente"
                 (click)="confirmDialog()" class="ui-button-primary" [disabled]="form.invalid"></button>
             </p-footer>
         </p-dialog>
@@ -115,7 +115,7 @@ export class DocsPuestaMarchaDialogComponent implements OnInit {
         private fb: FormBuilder
     ) {
         let auxFehcaFin = new Date();
-        auxFehcaFin.setUTCFullYear(auxFehcaFin.getFullYear() + 5);
+        auxFehcaFin.setUTCFullYear(auxFehcaFin.getFullYear() + 3);
         this.form = this.fb.group({
             fecha_inicio: [new Date(), Validators.required],
             fecha_fin: [auxFehcaFin, Validators.required],
