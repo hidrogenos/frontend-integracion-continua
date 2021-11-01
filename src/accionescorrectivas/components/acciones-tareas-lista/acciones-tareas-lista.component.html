@@ -10,6 +10,9 @@
                         Tarea
                     </th>
                     <th>
+                        Responsables internos
+                    </th>
+                    <th>
                         Responsables terceros
                     </th>
                     <th>
@@ -30,6 +33,11 @@
                 <tr>
                     <td> {{ accionCorrectivaTarea?.prioridad }} </td>
                     <td> {{ accionCorrectivaTarea?.tarea }} </td>
+                    <td>
+                        <p *ngFor="let responsable of accionCorrectivaTarea?.responsables">
+                            {{ responsable?.responsable?.nombre}} {{responsable?.responsable?.apellido}}
+                        </p>
+                    </td>
                     <td> {{ accionCorrectivaTarea?.responsables_terceros }} </td>
                     <td> {{ accionCorrectivaTarea?.fecha_cumplimiento | date: dateFormatAngular }} </td>
                     <td style="text-align: center">
