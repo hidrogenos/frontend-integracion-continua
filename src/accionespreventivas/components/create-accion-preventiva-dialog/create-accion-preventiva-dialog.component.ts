@@ -48,7 +48,7 @@ export class CreateAccionPreventivaDialogComponent implements OnInit {
             codigo: ["", Validators.required],
             titulo: ["", Validators.required],
             proceso: [null],
-            importancia: [null, Validators.required],
+            importancia: [{id: 1}],
             fecha_compromiso: [null, Validators.required],
             descripcion: ["", Validators.required]
         });

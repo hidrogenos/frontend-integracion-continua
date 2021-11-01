@@ -15,7 +15,7 @@ export interface AccionPreventivaModel {
     cierre_accion_fecha?: number;
     id_estado: number;
     accion_estado?: any;
-    id_importancia: number;
+    id_importancia?: number;
     importancia?: AccionImportanciaModel;
     id_responsable?: number;
     responsable?: any;
