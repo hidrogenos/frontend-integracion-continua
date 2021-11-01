@@ -8,8 +8,8 @@ import { environment } from "../../../environments/environment.prod";
     template: `<div class="ui-g">
     <div class="ui-g-12">
         <div class="card card-w-title">
-            <h1>Mis acciones correctivas asociadas</h1>
-            <p-table #dt [columns]="cols" [value]="accionesCorrectivas" [lazy]="true" (onLazyLoad)="loadAccionesCorrectivasLazy($event)" [paginator]="true" 
+            <h1>Mis desviciones asociadas</h1>
+            <p-table #dt [columns]="cols" [value]="accionesCorrectivas" [lazy]="true" (onLazyLoad)="loadAccionesCorrectivasLazy($event)" [paginator]="true"
                 [rows]="10" [totalRecords]="total" lazyLoadOnInit="false" [loading]="loading">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -29,7 +29,7 @@ import { environment } from "../../../environments/environment.prod";
                     <tr [pSelectableRow]="rowData">
                         <td>
                             <button pButton class="ui-button-rounded shadow-box ui-shadow-2" (click)="verDetalleAccionCorrectiva(rowData.id, $event)"
-                            [ngStyle]="{'background-color': rowData.accion_estado.color ,'border-radius': '100%'}">                
+                            [ngStyle]="{'background-color': rowData.accion_estado.color ,'border-radius': '100%'}">
                             </button>
                         </td>
                         <td *ngFor="let col of columns" [ngSwitch]="col.field">

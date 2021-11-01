@@ -9,8 +9,8 @@ import { AccionCorrectivaTareaModel } from "../../../shared/models/accion-correc
     template: `<div class="ui-g">
     <div class="ui-g-12">
         <div class="card card-w-title">
-            <h1>Mis tareas de acciones correctivas</h1>
-            <p-table #dt [columns]="cols" [value]="tareasAccionesCorrectivas" [lazy]="true" (onLazyLoad)="loadTareasAccionesCorrectivasLazy($event)" [paginator]="true" 
+            <h1>Mis tareas de desviciones</h1>
+            <p-table #dt [columns]="cols" [value]="tareasAccionesCorrectivas" [lazy]="true" (onLazyLoad)="loadTareasAccionesCorrectivasLazy($event)" [paginator]="true"
                 [rows]="10" [totalRecords]="total" lazyLoadOnInit="false" [loading]="loading">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -29,9 +29,9 @@ import { AccionCorrectivaTareaModel } from "../../../shared/models/accion-correc
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr [pSelectableRow]="rowData">
                         <td>
-                            <button *ngIf="!rowData.realizada" pButton class="ui-button-success" icon="pi pi-check" (click)="verDetalleTareaAccionCorrectiva(rowData)">                
+                            <button *ngIf="!rowData.realizada" pButton class="ui-button-success" icon="pi pi-check" (click)="verDetalleTareaAccionCorrectiva(rowData)">
                             </button>
-                            <button *ngIf="rowData.realizada" pButton class="ui-button" icon="pi pi-search" (click)="verDetalleTareaAccionCorrectiva(rowData)">                
+                            <button *ngIf="rowData.realizada" pButton class="ui-button" icon="pi pi-search" (click)="verDetalleTareaAccionCorrectiva(rowData)">
                             </button>
                         </td>
                         <td *ngFor="let col of columns" [ngSwitch]="col.field">
